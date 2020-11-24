@@ -31,14 +31,14 @@ namespace GoldLeaf.Tiles.Waters
 
         public override void LightColorMultiplier(ref float r, ref float g, ref float b)
         {
-            r = 0.135f;
-            g = 0.244f;
-            b = 0.255f;
+            r = 0.50f;
+            g = 0.88f;
+            b = 1f;
         }
 
         public override Color BiomeHairColor()
         {
-            return Color.Fuchsia;
+            return new Color(208, 158, 68);
         }
     }
 

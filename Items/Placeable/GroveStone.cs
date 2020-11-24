@@ -14,6 +14,7 @@ namespace GoldLeaf.Items.Placeable
             Main.tileSolid[Type] = true;
 			Main.tileMergeDirt[Type] = true;
             Main.tileMerge[Type][TileType<GroveGrassT>()] = true;
+            Main.tileMerge[Type][TileType<GroveBrickT>()] = true;
             drop = ItemType<GroveStone>();
             AddMapEntry(new Color(93, 81, 80));
             Main.tileBlockLight[Type] = true;

@@ -1,21 +1,27 @@
-using Microsoft.Xna.Framework;
 using Terraria;
 using static Terraria.ModLoader.ModContent;
 using Terraria.ModLoader;
 using GoldLeaf.Dusts;
 using System;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 using Terraria.DataStructures;
 using Terraria.ID;
 
 namespace GoldLeaf.Items.Wisp
 {
-	public class Aether : ModItem
-	{
-		public override void SetDefaults()
+	public class Aether : ModItem, IGlowingItem
+    {
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Aether");
+            Tooltip.SetDefault("Channels a bolt that bursts on command\nChanneling the bolt for long enough makes it shoot beams at nearby enemies");
+        }
+
+        public override void SetDefaults()
 		{
 			item.width = 28;
-            item.mana = 5;
+            item.mana = 20;
 			item.height = 28;
 			item.useStyle = 5;
 			Item.staff[item.type] = true;
@@ -24,12 +30,12 @@ namespace GoldLeaf.Items.Wisp
             item.reuseDelay = 10;
 			item.shootSpeed = 6f;
 			item.knockBack = 2f;
-            item.damage = 14;
+            item.damage = 18;
             item.UseSound = SoundID.DD2_EtherianPortalOpen;
             item.shoot = ProjectileType<AetherBolt>();
 			item.rare = 3;
 			item.noMelee = true;
-			item.magic = true;
+			item.summon = true;
 			item.channel = true;
 		}
 
@@ -47,16 +53,46 @@ namespace GoldLeaf.Items.Wisp
 			return true;
 		}
 
-        public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Aether");
-			Tooltip.SetDefault("Channels a bolt that bursts on command");
-		}
+        public void DrawGlowmask(PlayerDrawInfo info)
+        {
+            Player player = info.drawPlayer;
+
+            if (player.itemAnimation != 0)
+            {
+                Texture2D tex = GetTexture(Texture + "Glow");
+
+                float turn = info.spriteEffects == SpriteEffects.None ? 10 : tex.Width - 10;
+                Main.playerDrawData.Add(new DrawData(tex, player.Center - Main.screenPosition, tex.Frame(), Color.White, player.itemRotation, new Vector2(turn, tex.Height / 2), 1, info.spriteEffects, 0));
+            }
+        }
+
+        public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+        {
+            Texture2D texture;
+            texture = Main.itemTexture[item.type];
+            spriteBatch.Draw
+            (
+                GetTexture(Texture + "Glow"),
+                new Vector2
+                (
+                    item.position.X - Main.screenPosition.X + item.width * 0.5f,
+                    item.position.Y - Main.screenPosition.Y + item.height - texture.Height * 0.5f + 2f
+                ),
+                new Rectangle(0, 0, texture.Width, texture.Height),
+                Color.White,
+                rotation,
+                texture.Size() * 0.5f,
+                scale,
+                SpriteEffects.None,
+                0f
+            );
+        }
 	}
 
     public class AetherBolt : ModProjectile
     {
         int counter = 0;
+        int shootcounter = 0;
         public override void SetDefaults()
         {
             projectile.width = 2;
@@ -93,8 +129,13 @@ namespace GoldLeaf.Items.Wisp
 
                 Dust d = Dust.NewDustPerfect(projectile.Center, DustType<AetherDust>(), pos, 0, default, 1f);
             }
-            if (counter == 100) for (float k = 0; k < 6.28f; k += 0.25f)
-                    Dust.NewDustPerfect(projectile.position, DustType<AetherDust>(), Vector2.One.RotatedBy(k) * 2, Scale:0.5f);
+            if (counter == 80)
+            {
+                projectile.penetrate += 4;
+
+                for (float k = 0; k < 6.28f; k += 0.25f)
+                    Dust.NewDustPerfect(projectile.position, DustType<AetherDust>(), Vector2.One.RotatedBy(k) * 2, Scale: 0.4f);
+            }
 
             Player player = Main.player[projectile.owner];
             if (!player.channel)
@@ -123,16 +164,57 @@ namespace GoldLeaf.Items.Wisp
             player.itemRotation = vectorToCursor.ToRotation();
             player.itemTime = 10;
             player.itemAnimation = 10;
+
+            if (counter >= 80)
+            {
+                shootcounter++;
+                if (shootcounter >= 16)
+                {
+                    shootcounter = 0;
+                    float num = 8000f;
+                    int num2 = -1;
+                    for (int i = 0; i < 200; i++)
+                    {
+                        float num3 = Vector2.Distance(projectile.Center, Main.npc[i].Center);
+                        if (num3 < num && num3 < 450f && Main.npc[i].CanBeChasedBy(projectile, false))
+                        {
+                            num2 = i;
+                            num = num3;
+                        }
+                    }
+                    if (num2 != -1)
+                    {
+                        bool flag = Collision.CanHit(projectile.position, projectile.width, projectile.height, Main.npc[num2].position, Main.npc[num2].width, Main.npc[num2].height);
+                        if (flag)
+                        {
+                            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SE/AetherBeam"), player.Center);
+                            Vector2 value = Main.npc[num2].Center - projectile.Center;
+                            float num4 = 25f;
+                            float num5 = (float)Math.Sqrt((double)(value.X * value.X + value.Y * value.Y));
+                            if (num5 > num4)
+                            {
+                                num5 = num4 / num5;
+                            }
+                            value *= num5;
+                            projectile.timeLeft += 8;
+                            Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, value.X, value.Y, ProjectileType<AetherBeam>(), (int)(projectile.damage * 0.8f), projectile.knockBack / 2f, projectile.owner, 0f, 0f);
+                        }
+                    }
+                }
+
+                projectile.velocity += Vector2.Normalize(Main.MouseWorld - projectile.Center) * 0.15f;
+                if (projectile.velocity.Length() > 5) projectile.velocity = Vector2.Normalize(projectile.velocity) * 5;
+            }
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            if (counter > 100) return false; else return true;
+            if (counter >= 80) return false; else return true;
         }
 
         public override void Kill(int timeLeft)
         {
-            for (float k = 0; k < 6.28f; k += 0.25f)
-                Dust.NewDustPerfect(projectile.position, DustType<AetherDust>(), Vector2.One.RotatedBy(k) * 2, Scale:1.4f);
+            for (float k = 0; k < 6.28f; k += 0.25f-(counter/1000))
+                Dust.NewDustPerfect(projectile.position, DustType<AetherDust>(), Vector2.One.RotatedBy(k) * 2, Scale:1.4f+(counter/60));
 
             Player player = Main.player[projectile.owner];
             Main.PlaySound(2, (int)player.position.X, (int)player.position.Y, 14);
@@ -140,7 +222,7 @@ namespace GoldLeaf.Items.Wisp
             Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SE/AetherBurst"), player.Center);
             Main.PlaySound(SoundID.DD2_WitherBeastAuraPulse, player.Center);
             int explosion = Projectile.NewProjectile(projectile.Center, new Vector2(0f, 0f), ProjectileType<AetherBurst>(), projectile.damage+(counter)/4, projectile.knockBack, player.whoAmI);
-            if (counter > 100) Main.projectile[explosion].ai[0] = 80f + 100; else Main.projectile[explosion].ai[0] = 80f + counter;
+            if (counter >= 80) Main.projectile[explosion].ai[0] = 80f + 100; else Main.projectile[explosion].ai[0] = 80f + counter;
             
         }
     }
@@ -164,9 +246,42 @@ namespace GoldLeaf.Items.Wisp
 
         public override void AI()
         {
-            projectile.height = (int)projectile.ai[0] *(int)1.3;
-            projectile.width = (int)projectile.ai[0] *(int)1.3;
+            projectile.height = (int)projectile.ai[0];
+            projectile.width = (int)projectile.ai[0];
             Lighting.AddLight((int)(projectile.position.X/16), (int)(projectile.position.Y/16), 2.1f, 0.6f, 2.7f);
+        }
+    }
+
+    public class AetherBeam : ModProjectile
+    {
+        public override void SetDefaults()
+        {
+            projectile.friendly = true;
+            projectile.penetrate = 1;
+            projectile.width = 8;
+            projectile.height = 8;
+            projectile.timeLeft = 80;
+            projectile.tileCollide = true;
+            projectile.ignoreWater = true;
+        }
+
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Aether Beam");
+        }
+
+        public override void AI()
+        {
+            projectile.rotation = projectile.velocity.ToRotation();
+
+            for (int i = 0; i < 10; i++)
+            {
+                Dust num;
+                num = Dust.NewDustPerfect(projectile.position, DustType<AetherDust>(), new Vector2(0f, 0f), 0, new Color(255, 255, 255), 1f);
+                num.velocity = projectile.velocity/2;
+                num.rotation = projectile.velocity.ToRotation();
+                num.noGravity = true;
+            }
         }
     }
 }

@@ -1,12 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using static Terraria.ModLoader.ModContent;
+using static Terraria.WorldGen;
 using Terraria;
 using Terraria.GameContent.Generation;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.World.Generation;
 using GoldLeaf.Items.Placeable;
+using GoldLeaf.Tiles;
 
 namespace GoldLeaf.World
 {
@@ -20,11 +22,11 @@ namespace GoldLeaf.World
             {
                 tasks.Insert(ShiniesIndex - 1, new PassLegacy("Planting the Grove", delegate (GenerationProgress progress)
                 {
-                    for (int i = 0; i < Main.maxTilesX / 500; ++i) //Repeats ~8 times on a small world (i.e. 8 biomes/world)
+                    for (int i = 0; i < Main.maxTilesX / 1200; ++i) //Repeats ~8 times on a small world (i.e. 8 biomes/world)
                           {
-                        Point pos = new Point(WorldGen.genRand.Next(70, Main.maxTilesX - 70), WorldGen.genRand.Next((int)Main.worldSurface + 40, Main.maxTilesY - 800)); //Position of the biome
+                        Point pos = new Point(genRand.Next(180, Main.maxTilesX - 180), genRand.Next((int)Main.worldSurface + 40, Main.maxTilesY - 800)); //Position of the biome
                               if (!AreaContains(pos, 60, TileID.BlueDungeonBrick) && !AreaContains(pos, 50, TileID.GreenDungeonBrick) && !AreaContains(pos, 50, TileID.PinkDungeonBrick) && !AreaContains(pos, 50, TileID.LihzahrdBrick) && !AreaContains(pos, 20, TileID.Ash)) //checks for unwanted blocks
-                                  GenerateGrove(pos, WorldGen.genRand.Next(2)); 
+                                  GenerateGrove(pos, genRand.Next(2)); 
                               else
                             i--; //Repeat until valid placement
                           }
@@ -35,54 +37,63 @@ namespace GoldLeaf.World
         public void GenerateGrove(Point pos,  int size)
         {
             int[] types = new int[] { TileType<GroveGrassT>(), TileType<GroveStoneT>(), WallID.None, WallType<AutumnWallT>() };
-            int reps = WorldGen.genRand.Next(4,  15); //number of holes
-            int sizeCircle = WorldGen.genRand.Next(4,  20); //size of holes
-            int[] randSiz = new int[] { -16,  16 }; //random offset
+            int reps = genRand.Next(12, 24); //number of holes
+            int sizeCircle = genRand.Next(3, 10); //size of holes
+            int[] randSiz = new int[] { -30, 32 }; //random offset
             if (size == 1) //Size 2
             {
-                reps = WorldGen.genRand.Next(8,  12);
-                sizeCircle = WorldGen.genRand.Next(6,  26);
-                randSiz = new int[] { -24,  26 };
+                reps = genRand.Next(22, 44);
+                sizeCircle = genRand.Next(8, 24);
+                randSiz = new int[] { -42, 42 };
             }
             else if (size == 2) //Size 3
             {
-                reps = WorldGen.genRand.Next(12,  18);
-                sizeCircle = WorldGen.genRand.Next(7,  32);
+                reps = genRand.Next(48,  82);
+                sizeCircle = genRand.Next(3,  12);
                 randSiz = new int[] { -30,  32 };
             }
+            else if (size == 3) //Size 4
+            {
+                reps = genRand.Next(30, 51);
+                sizeCircle = genRand.Next(3, 8);
+                randSiz = new int[] { -30, 32 };
+            }
             List<Point> centres = new List<Point>(); //List of centres
-            for (int i = 0; i < reps; ++i) //Places actual holes/outlines
-            {
-                Point placePos = new Point(pos.X + WorldGen.genRand.Next(randSiz[0],  randSiz[1]),  pos.Y + WorldGen.genRand.Next(randSiz[0],  randSiz[1]));
-                SmoothRunner(placePos,  sizeCircle + 24,  types[1],  types[2]);
-                SmoothWallRunner(pos,  sizeCircle,  types[2]);
-                centres.Add(placePos);
-            }
-            /*for (int i = 0; i < reps; ++i) //Places actual holes/outlines
-            {
-                Point placePos = new Point(pos.X + WorldGen.genRand.Next(randSiz[0], randSiz[1]), pos.Y + WorldGen.genRand.Next(randSiz[0], randSiz[1]));
-                SmoothRunner(placePos, sizeCircle, types[0], types[2]);
-                centres.Add(placePos);
-                SmoothTunnel(placePos, sizeCircle - 1);
-            }*/
-            for (int i = 0; i < reps; ++i) //Places actual holes/outlines
-            {
-                Point placePos = centres[i];
-                SmoothRunner(placePos, sizeCircle, types[0], types[2]);
-                centres.Add(placePos);
-                SmoothTunnel(placePos, sizeCircle - 1);
-            }
 
+            for (int i = 0; i < reps; ++i) //Places holes
+            {
+                Point placePos = new Point(pos.X + genRand.Next(randSiz[0], randSiz[1]), pos.Y + genRand.Next(randSiz[0], randSiz[1]));
+                SmoothTunnel(placePos, sizeCircle - genRand.Next(1, 3));
+                centres.Add(placePos);
+            }
 
             //Places walls
-            for (int i = 0; i < (int)(reps *6); ++i)
+            for (int i = 0; i < (int)(reps *3); ++i)
             {
-                Point placePos = new Point(pos.X + WorldGen.genRand.Next(randSiz[0], randSiz[1]), pos.Y + WorldGen.genRand.Next(randSiz[0], randSiz[1]));
-                SmoothWallRunner(placePos,  WorldGen.genRand.Next(3,  8),  types[3]);
+                Point placePos = new Point(pos.X + genRand.Next(randSiz[0], randSiz[1])*2, pos.Y + genRand.Next(randSiz[0], randSiz[1])*2);
+                for (int v = 0; v < (int)(reps /3); ++v)
+                {
+                    Point wallPos = new Point(placePos.X + genRand.Next(-6, 6), placePos.Y + genRand.Next(-6, 6));
+                    SmoothWallRunner(wallPos, genRand.Next(2, 7), types[3]);
+                }
             }
 
-            ShapeData shapeData = new ShapeData();
-            WorldUtils.Gen(pos, new ModShapes.InnerOutline(shapeData), Actions.Chain(new Actions.SetTile((ushort)types[0]), new Actions.SetFrames(frameNeighbors: true)));
+            for (int x = 0; x < Main.maxTilesX; x++) //Grows grass
+            {
+                for (int y = 0; y < Main.maxTilesY; y++)
+                {
+                    if (Main.tile[x, y].active())
+                    {
+                        WorldGen.SpreadGrass(x, y, types[1], types[0], repeat: true, 0);
+                        if (Main.tile[x, y].type == types[0] && !Main.tile[x, y - 1].active()&& genRand.Next(4) >= 3)
+                        {
+                            WorldGen.PlaceTile(x, y - 1, TileType<GroveFlora>(), mute: true, style: genRand.Next(1, 11)); //places flora
+                        }
+                    }
+                }
+            }
+
+            
         }
 
         

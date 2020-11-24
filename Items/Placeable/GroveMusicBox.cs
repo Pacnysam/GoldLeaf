@@ -39,7 +39,7 @@ namespace GoldLeaf.Items.Placeable
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Music Box (Grove)");
+            DisplayName.SetDefault("Music Box (Whispering Grove)");
         }
 
         public override void SetDefaults()

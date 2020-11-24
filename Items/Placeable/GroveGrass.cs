@@ -21,6 +21,7 @@ namespace GoldLeaf.Items.Placeable
             Main.tileMergeDirt[Type] = false;
             Main.tileBlockLight[Type] = true;
             Main.tileMerge[Type][TileType<GroveStoneT>()] = true;
+            Main.tileMerge[Type][TileType<GroveBrickT>()] = true;
             Main.tileLighted[Type] = true;
             TileID.Sets.Grass[Type] = true;
             AddMapEntry(new Color(190, 99, 37));
@@ -57,37 +58,13 @@ namespace GoldLeaf.Items.Placeable
             g = 0.099f * 3f;
             b = 0.037f * 3f;
         }
-        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-            Texture2D texture = mod.GetTexture("Items/Placeable/GroveGrassShine");
-            Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
-            Vector2 pos = new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero + new Vector2(8, 8);
-            
-                int length = 10;
-                float rotation = -(float)Math.PI / 2 + ((float)Math.Sin(SharedShine.shineCounter * (2 * (float)Math.PI) / 3 + ((i % 7) * 2 * (float)Math.PI) / 7) * (float)Math.PI / 4);
-                if (Main.drawToScreen)
-                {
-                    zero = Vector2.Zero;
-                }
-                for (int d = 0; d < length; d++)
-                {
-                    spriteBatch.Draw(texture,
-                        pos + new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation)) * d * 2, //position
-                        new Rectangle(0, 0, 2, 2), //source Rectangle
-                        Color.Lerp(new Color(255, 255, 255, 255), new Color(0, 0, 0, 0), (float)d / (float)length), //transparency
-                        rotation, //rotation
-                        new Vector2(1, 1), //origin
-                        3f, //scale
-                        SpriteEffects.None, 0f);
-            }
-            return true;
-        }
+        
         public override void FloorVisuals(Player player)
         {
             Vector2 playerFeet = player.Center + new Vector2(-8, player.height / 2);
             if (player.velocity.X != 0)
             {
-                if (Main.rand.Next(9) == 0) Dust.NewDust(playerFeet, 16, 1, DustType<AutumnLeaves>(), 0, 0.6f);
+                if (Main.rand.Next(6) == 0) Dust.NewDust(playerFeet, 16, 1, DustType<AutumnLeaves>(), 0, 0.6f, Scale: 1.2f);
             }
         }
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
@@ -109,18 +86,7 @@ namespace GoldLeaf.Items.Placeable
             Main.spriteBatch.Draw(mod.GetTexture("Items/Placeable/GroveGrassGlow"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.frameX, tile.frameY, 16, height), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
     }
-    public class SharedShine : ModWorld
-    {
-        public static float shineAngle;
-        public static float shineCounter;
-        public static float shineLength;
-        public override void PreUpdate()
-        {
-            shineCounter += (float)Math.PI / 240;
-            shineAngle = -(float)Math.PI / 2 + ((float)Math.Sin(shineCounter) * (float)Math.PI / 4);
-            shineLength = Math.Abs((float)Math.Sin(shineCounter * 1.5f));
-        }
-    }
+
     public class GroveGrass : ModItem
     {
         public override void SetDefaults()

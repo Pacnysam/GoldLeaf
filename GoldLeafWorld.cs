@@ -19,6 +19,7 @@ namespace GoldLeaf
 
         public override void PreUpdate()
         {
+            //World Rotation Timer
             Timer++;
             rottime += (float)Math.PI / 60;
             if (rottime >= Math.PI * 2) rottime = 0;
