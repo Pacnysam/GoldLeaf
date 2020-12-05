@@ -13,7 +13,7 @@ namespace GoldLeaf.Items.Wisp
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Wisp Hook");
-			Tooltip.SetDefault("Damages Enemies");
+			Tooltip.SetDefault("Damages enemies\nMinions target damaged enemies");
 		}
 		public override void SetDefaults()
 		{
@@ -27,7 +27,7 @@ namespace GoldLeaf.Items.Wisp
 			item.shoot = ProjectileType<WispHookP>();
 			item.autoReuse = false;
 			item.knockBack = 2;
-			item.shootSpeed = 30f;
+			item.shootSpeed = 15f;
 			item.useStyle = 1;
             item.noUseGraphic = true;
 			item.rare = 4;
@@ -44,10 +44,13 @@ namespace GoldLeaf.Items.Wisp
             projectile.width = 20;
             projectile.height = 20;
             projectile.aiStyle = 7;
-            projectile.penetrate = 1;
-            projectile.timeLeft = 600;
+			projectile.extraUpdates = 1;
+            projectile.penetrate = 2;
+            projectile.timeLeft = 1200;
             projectile.CloneDefaults(ProjectileID.Hook);
         }
+
+		
 
         public override void SetStaticDefaults()
         {
@@ -60,7 +63,27 @@ namespace GoldLeaf.Items.Wisp
             return 360f;
         }
 
-        public override void AI()
+		public override void GrappleRetreatSpeed(Player player, ref float speed) { speed = 9.5f; }
+		public override void GrapplePullSpeed(Player player, ref float speed) { speed = 30f; }
+		public override void NumGrappleHooks(Player player, ref int numHooks) { numHooks = 2; }
+
+		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		{
+			Player player = Main.player[projectile.owner];
+			int num = -1;
+			for (int i = 0; i < 200; i++)
+			{
+				if (Main.npc[i].CanBeChasedBy(player, false) && Main.npc[i] == target)
+				{
+					num = i;
+				}
+			}
+			{
+				player.MinionAttackTargetNPC = num;
+			}
+		}
+
+		public override void AI()
         {
             Player p = Main.player[(int)projectile.ai[0]];
             if (a == false)
@@ -79,7 +102,7 @@ namespace GoldLeaf.Items.Wisp
         
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
-            Texture2D texture = ModContent.GetTexture("GoldLeaf/Items/Wisp/WispHookChain");
+            Texture2D texture = GetTexture("GoldLeaf/Items/Wisp/WispHookChain");
             Vector2 position = projectile.Center;
             Vector2 mountedCenter = Main.player[projectile.owner].MountedCenter;
             Rectangle? sourceRectangle = new Rectangle?();
@@ -115,7 +138,7 @@ namespace GoldLeaf.Items.Wisp
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             Texture2D face = mod.GetTexture("Items/Wisp/WispHookPGlow");
-            spriteBatch.Draw(mod.GetTexture("Items/Wisp/WispHookPGlow"), new Vector2(projectile.position.X - Main.screenPosition.X + projectile.width * 0.5f, projectile.position.Y - Main.screenPosition.Y + projectile.height - face.Height * 0.5f + 2f), new Rectangle((int)projectile.position.X, (int)projectile.position.Y, projectile.width, projectile.height), Color.White, projectile.rotation, face.Size(), projectile.scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(face, new Vector2(projectile.position.X - Main.screenPosition.X + projectile.width * 0.5f, projectile.position.Y - Main.screenPosition.Y + projectile.height - face.Height * 0.5f + 2f), new Rectangle((int)projectile.position.X, (int)projectile.position.Y, projectile.width, projectile.height), Color.White, projectile.rotation, face.Size(), projectile.scale, SpriteEffects.None, 0f);
         }
     }
 }

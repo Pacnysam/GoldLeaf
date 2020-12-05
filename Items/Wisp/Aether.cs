@@ -55,16 +55,18 @@ namespace GoldLeaf.Items.Wisp
 
         public void DrawGlowmask(PlayerDrawInfo info)
         {
-            Player player = info.drawPlayer;
+			Player player = info.drawPlayer;
 
-            if (player.itemAnimation != 0)
-            {
-                Texture2D tex = GetTexture(Texture + "Glow");
+			if (player.itemAnimation != 0)
+			{
+				Texture2D tex = GetTexture(Texture + "Glow");
+				Rectangle frame = new Rectangle(0, 0, 28, 28);
+				Color color = Lighting.GetColor((int)player.Center.X / 16, (int)player.Center.Y / 16);
+				Vector2 origin = new Vector2(player.direction == 1 ? 0 : frame.Width, frame.Height);
 
-                float turn = info.spriteEffects == SpriteEffects.None ? 10 : tex.Width - 10;
-                Main.playerDrawData.Add(new DrawData(tex, player.Center - Main.screenPosition, tex.Frame(), Color.White, player.itemRotation, new Vector2(turn, tex.Height / 2), 1, info.spriteEffects, 0));
-            }
-        }
+				Main.playerDrawData.Add(new DrawData(tex, info.itemLocation - Main.screenPosition, frame, color, player.itemRotation, origin, player.HeldItem.scale, info.spriteEffects, 0));
+			}
+		}
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {

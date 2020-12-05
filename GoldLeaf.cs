@@ -30,7 +30,8 @@ namespace GoldLeaf
         public override void Load()
         {
         AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/WhisperingGrove"), ItemType("GroveMusicBox"), TileType("GroveMusicBoxT"));
-            AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/ToxinGrove"), ItemType("ToxinMusicBox"), TileType("ToxinMusicBoxT"));
+        AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/ToxinGrove"), ItemType("ToxinMusicBox"), TileType("ToxinMusicBoxT"));
+	AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/WhisperingForest"), ItemType("ForestMusicBox"), TileType("ForestMusicBoxT"));
         }
     }
 }

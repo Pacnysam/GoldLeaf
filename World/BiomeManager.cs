@@ -65,16 +65,16 @@ namespace GoldLeaf.World
                 DustType<Dusts.GroveDust2>(), Vector2.Zero, 0, new Color(255, 249, 166) * 0.06f, 2);
             }
 
-            if (ZoneGrove && Main.rand.Next(8) == 0)
+            if (ZoneGrove && Main.rand.Next(2) == 0)
             {
                 Dust.NewDustPerfect(Main.screenPosition - Vector2.One * 100 + new Vector2(Main.rand.Next(Main.screenWidth + 200), Main.rand.Next(Main.screenHeight + 200)),
-                DustType<Dusts.Fog>(), Vector2.Zero, 0, default, 8);
+                DustType<Dusts.Fog>(), Vector2.Zero, 0, default, Scale:18f);
             }
 
-            if (ZoneToxin && Main.rand.Next(6) == 0)
+            if (ZoneToxin && Main.rand.Next(1) == 0)
             {
                 Dust.NewDustPerfect(Main.screenPosition - Vector2.One * 100 + new Vector2(Main.rand.Next(Main.screenWidth + 200), Main.rand.Next(Main.screenHeight + 200)),
-                DustType<Dusts.Miasma>(), Vector2.Zero, 0, default, 8);
+                DustType<Dusts.Miasma>(), Vector2.Zero, 0, default, Scale: 18f);
             }
         }
     }
