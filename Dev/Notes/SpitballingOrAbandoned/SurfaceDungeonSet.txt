@@ -1,0 +1,42 @@
+Surface Dungeon Set
+post evil surface dungeon; themed around old magic, water theming is still present but more loose
+-obtainment method TBD, different for every item?
+
+reflection: - Sword
+
+-killing an enemy with a melee attack will give you a mirror shield (1 max)
+-right clicking with a shield shoots it forward, reflecting any projectile that touches it and increasing their damage, breaks if it takes too much damage
+-getting hit with a shield reduces damage and negates knockback but gets rid of the shield and damages nearby enemies
+
+riptide: - Launcher
+uses water candles as ammo, 5% chance to consume one
+
+-shoots water projectiles that move similarly to magic missile, worm like
+-carries enemies along with it
+
+cascade staff: - Magic Weapon
+
+-shoots whirlpools that explode into miniature water bolts
+-trajectory can be controlled briefly when fired 
+
+rampart cube: - Summon Weapon
+magic blocks may spawn on surface dungeon after evil boss has been destroyed. right clicking activates it, becoming a small enemy before using it as an item
+-hold and release left mouse to throw a cube
+-standing on the cube makes it expand into a mini tower
+-tower shoots projectiles at nearby enemies
+-hopping off the tower destroys it
+
+ghost in a jar: - Minion
+hanging jars may spawn on surface dungeon after evil boss has been destroyed, shooting the string drops it, allowing you to collect it
+
+-you can chose between 4 minions, ghosts, crazy ghosts, ice ghosts and lost souls
+-ghosts hang near you and shoot small fireballs at enemies
+-crazy ghosts move near enemies and make close range flame bursts
+-ice ghosts shoot slower but slow enemies and apply frostburn
+-lost souls very slowly shoot 3 projectiles that home slightly, they decrease the damage enemies do
+
+warden armor: - Armor
+warmage getup, light armor combined with robes (candle head?)
+-charges up water energy by doing melee damage, double tap down to release water energy empowering you
+-hitting an enemy while empowered will summon a water sword that strikes a nearby enemy
+-increased melee speed when empowered

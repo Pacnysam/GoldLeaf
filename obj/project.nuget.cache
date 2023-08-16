@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "m4U4O8ywVGIWsNfDBy4SuCvrZA/ZG2eSdrvyRi6fmjLPMPZAaL7MW4LoizuYogCZBwsrOyRqv11i8MAGTNpUSw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\pacny\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\GoldLeaf\\GoldLeaf.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\pacny\\.nuget\\packages\\tmodloader.codeassist\\0.1.5\\tmodloader.codeassist.0.1.5.nupkg.sha512"
+  ],
+  "logs": []
+}

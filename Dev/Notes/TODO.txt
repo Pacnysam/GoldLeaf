@@ -1,0 +1,3 @@
+TODO:
+-port and clean up Vampire Bat
+-implement loot chests

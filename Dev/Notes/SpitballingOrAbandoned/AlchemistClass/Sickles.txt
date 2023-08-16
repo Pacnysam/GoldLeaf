@@ -1,0 +1,46 @@
+✅ wooden sickle: - Sickle - does nothing, wow!
+
+
+poison ivy: - Sickle - pre QB jungle theme
+
+-poisons enemies on hit
+-gets stuck in enemies when returning (1 max)
+-enemies with sickles are poisoned
+
+
+ sediment: - Sickle - pre boss underground theme
+
+-place a gem in its socket to add an effect
+
+amythest: crit damage increased by 30%
+topaz: hits twice on return
+sapphire: enemies stunned for 1s if hit when returning
+emerald: pierces infinitely
+ruby: you heal if enemies are hit while returning, decreased damage
+diamond: slight homing (edited)
+
+
+ igneous: - Sickle - pre evil underground theme
+
+-enemies killed explode into blobs of magma
+-magma blobs form pools on the ground, doing damage over time
+-enemies killed by magma do not explode into more magma (edited)
+
+
+ antlion incubator: - Sickle - post evil desert theme
+
+-enemies struck while returning are planted an antlion egg (5 max)
+-killing the enemy causes the eggs to burst spawning antlion larvae minions
+
+
+aerogel sickle: - Sickle - pre skeletron space theme
+
+-struck enemies that have aerogel debuff explode into aerogel cubes
+-aerogel cubes confuse enemies on critical hits
+
+
+✅ vortex: - Sickle - post skeletron theme
+
+-sucks enemies toward it
+-goes up rather than back to you
+-explodes after floating up

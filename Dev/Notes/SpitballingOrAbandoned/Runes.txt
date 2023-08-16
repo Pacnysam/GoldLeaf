@@ -1,0 +1,33 @@
+Runes (name pending...?)
+new summon subclass, can be applied to individual minions or sentries to give them special effects, used by right clicking a minion with one in hand. could have its own slots or take up unused minion/sentry slots 
+
+efficiency rune:
+-increases movement speed by 50%
+-increases attack speed by 20%
+
+prowice rune:
+-increases contact damage by 50%
+-decreases projectile damage 50%
+
+resilience rune: 
+-decreases contact damage by 50%
+-increases projectile damage by 50%
+
+spiritual rune: 
+-locks away mana based on amount used to summon the minion, hits restore 10% of it
+
+bloodlust rune:
+-hits restore some HP, hits only do 1 damage
+
+elation rune:
+-decreases contact and projectile damage by 30%
+-hitting an enemy puts a bubble on them, continued hits grow it
+-after a few seconds the bubble pops, doing half of the damage accumulated during the time, short cooldown
+
+world rune:
+-increases movement speed by 20%
+-increases attack speed by 20%
+-increases projectile and contact damage by 30%
+-hits restore 2 mana and 1 HP
+-hitting an enemy puts a bubble on them, continued hits grow it
+-after a few seconds the bubble pops, doing 30% of the damage accumulated during the time, short cooldown

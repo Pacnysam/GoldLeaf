@@ -1,0 +1,64 @@
+# This file will automatically update with entries for new content after a build and reload
+
+Items: {
+	sadcat: {
+		DisplayName: sadcat
+		Tooltip: ""
+	}
+
+	BatPlushie: {
+		DisplayName: Bat Plushie
+		Tooltip: It's sooooooo cute!
+	}
+
+	MadcapPainting: {
+		DisplayName: Madcap Painting
+		Tooltip: ""
+	}
+
+	GroveStone: {
+		DisplayName: Grove Stone
+		Tooltip: ""
+	}
+
+	VampireBat: {
+		DisplayName: Vampire Bat
+		Tooltip:
+			'''
+			Hits give you a stack of nightshade
+			Right clicking shoots a bolt that heals you for every stack
+			Nightshade increases movement speed, acceleration and damage
+			'''
+	}
+
+	Aether: {
+		DisplayName: Aether's Comet
+		Tooltip:
+			'''
+			Casts a flame that follows the cursor and bursts on command
+			Channeling the flame for long enough makes it shoot beams at nearby enemies, damage ramps up over time
+			'''
+	}
+}
+
+Biomes: {
+	WhisperingGrove: {
+		DisplayName: Whispering Grove
+		TownNPCDialogueName: the Whispering Grove
+	}
+
+	WhisperingGroveSurface: {
+		TownNPCDialogueName: the Whispering Grove Surface
+		DisplayName: Whispering Grove Surface
+	}
+}
+
+Tiles.MadcapPaintingT.MapEntry: Madcap Painting T
+
+Projectiles: {
+	VampireBatP.DisplayName: Vampire Bat P
+	VampireBolt.DisplayName: Vampire Bolt
+	AetherBeam.DisplayName: Aether Beam
+	AetherBolt.DisplayName: Aether Bolt
+	AetherBurst.DisplayName: Aether Burst
+}

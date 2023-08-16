@@ -1,0 +1,53 @@
+toxic positivity: - Accessory - underground chests
+
+-critical strikes inflict poison, duration and crit chance increases by 1 for every buff you have
+-getting hit may poison you, chance increases by 2% for every buff you have
+
+
+meteor missile: - Accessory - meteorite theme
+
+-doing 500 damage allows you to release 4 small missiles on next attack, homing onto nearby enemies
+
+
+granite ward: - Accessory - granite chests
+
+-creates a circular energy shield to damage and electrify enemies inside of it
+-getting hit turns it off for a few seconds
+
+
+tragic 8 ball: - Accessory - underground chests
+
+-will buff greatly damage, defense, item speed or regeneration; decreases all of the others slightly
+-this changes every time you take damage
+
+
+vampire heart: - Accessory - idk
+
+-hearts heal more, health regenerated decreases the longer they remain uncollected
+
+
+clown wig: - Accessory - travelling merchant sell
+
+-increases minion damage by 15%
+-all minions have HP that slowly reduces overtime 
+
+
+normalizer: - Accessory - idk
+
+-all weapons are classless, increases damage by 15%
+-no damage variation
+
+
+paperweight: - Accessory - surface chests
+
+-all projectiles spawned from weapons have gravity and gain 15% velocity
+
+
+flamingo: - Flamingo - flamingo
+now playing flamingo by kero kero bonito
+
+-kills reduce potion sickness
+-critical hits reduce mana sickness
+-you get to put a whole-ass flamingo in your pocket
+
+

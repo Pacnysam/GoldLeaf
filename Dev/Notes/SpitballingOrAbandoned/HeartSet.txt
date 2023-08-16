@@ -1,0 +1,27 @@
+Heart Set
+pre boss; crafted using gold and heart crystals
+
+Infatuation:
+-enemies do less damage to the player that infatuated them
+-all kills drop mini hearts healing 5 hp
+
+heart rod - Tool
+-heals friendly npcs
+
+valentine: - Flail
+-while traveling forward, shoots bolts forward
+-being near the flail while on the ground increases regeneration
+-flail infatuates enemies
+
+heartstring: - Bow
+-hold right-click and release to shoot an infatuating arrow attached to a tether
+-damaging a tethered enemy heals you
+-getting hit or moving to far away breaks the tether, giving a 10 second cooldown to use the tether arrow again
+
+venus flask: - Flask - pre WoF theme
+
+-leaves a lingering mist, any projectile that passes through it infatuates enemies
+
+heart armor: - Armor
+-infatuation hearts provide increased regeneration for a few seconds, heals 10
+-other forms of healing are increased by 10%
