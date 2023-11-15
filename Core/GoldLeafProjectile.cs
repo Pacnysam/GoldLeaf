@@ -32,12 +32,10 @@ namespace GoldLeaf.Core
         {
             Player player = Main.player[projectile.owner];
 
-            if (lifestealMax > 1 && lifesteal > 0) 
+            if (lifestealMax >= 1 && lifesteal > 0) 
             {
-                player.Heal(lifesteal);
-                player.HealEffect(lifesteal);
                 lifestealMax--;
-                lifesteal = 0;
+                player.Heal(lifesteal);
             }
         }
 

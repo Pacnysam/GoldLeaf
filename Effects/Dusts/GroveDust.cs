@@ -35,7 +35,7 @@ namespace GoldLeaf.Effects.Dusts
                 }
                 else
                 {
-                    dust.scale *= 0.99f;
+                    dust.scale *= 0.998f;
                 }
                 dust.position.Y += (dust.scale * 0.3f) + (dust.velocity.Y * 0.6f);
 

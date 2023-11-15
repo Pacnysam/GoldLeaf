@@ -39,6 +39,41 @@ Items: {
 			Channeling the flame for long enough makes it shoot beams at nearby enemies, damage ramps up over time
 			'''
 	}
+
+	GraniteWard: {
+		DisplayName: Granite Ward
+		Tooltip: ""
+	}
+
+	MeteorMissile: {
+		DisplayName: Meteor Missile
+		Tooltip: ""
+	}
+
+	ToxicPositivity: {
+		DisplayName: Toxic Positivity
+		Tooltip: ""
+	}
+
+	ArcticFlower: {
+		DisplayName: Arctic Flower
+		Tooltip: ""
+	}
+
+	EveDroplet: {
+		DisplayName: Eve Droplet
+		Tooltip: ""
+	}
+
+	Quetzalcoatl: {
+		DisplayName: Quetzalcoatl
+		Tooltip: ""
+	}
+
+	DebugItem: {
+		DisplayName: Debug Item
+		Tooltip: ""
+	}
 }
 
 Biomes: {

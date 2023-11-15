@@ -16,6 +16,7 @@ namespace GoldLeaf.Effects.Dusts
             dust.frame = new Rectangle(0, 0, 6, 8);
             dust.scale *= 3;
             dust.velocity *= 1.8f;
+            dust.alpha = 300;
         }
         
 
@@ -37,6 +38,7 @@ namespace GoldLeaf.Effects.Dusts
 
         public override bool Update(Dust dust)
         {
+            dust.alpha -= 1;
             dust.position += dust.velocity;
             dust.velocity *= 0.96f;
             dust.rotation = (float)Math.Atan2(dust.velocity.Y, dust.velocity.X) + 1.57f;
@@ -50,6 +52,6 @@ namespace GoldLeaf.Effects.Dusts
         }
 
         public override Color? GetAlpha(Dust dust, Color lightColor)
-            => new Color(lightColor.R, lightColor.G, lightColor.B, 50);
+            => new Color(lightColor.R, lightColor.G, lightColor.B, 0);
     }
 }

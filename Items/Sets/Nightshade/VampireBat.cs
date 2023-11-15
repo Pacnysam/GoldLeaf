@@ -79,7 +79,8 @@ namespace GoldLeaf.Items.Sets.Nightshade
 
 		public override void SetDefaults()
 		{
-			Projectile.extraUpdates = 1;
+			Projectile.DamageType = DamageClass.Generic;
+            Projectile.extraUpdates = 1;
 			Projectile.width = 10;
 			Projectile.height = 32;
 			Projectile.aiStyle = 1;
@@ -128,6 +129,7 @@ namespace GoldLeaf.Items.Sets.Nightshade
 		public override string Texture => "GoldLeaf/Items/Sets/Nightshade/VampireBolt";
 
 		bool a = false;
+		int counter = 0;
 
 		public override void SetStaticDefaults()
 		{
@@ -138,7 +140,8 @@ namespace GoldLeaf.Items.Sets.Nightshade
 
 		public override void SetDefaults()
 		{
-			Projectile.extraUpdates = 2;
+            Projectile.DamageType = DamageClass.Generic;
+            Projectile.extraUpdates = 2;
 			Projectile.width = 16;
 			Projectile.height = 36;
 			Projectile.aiStyle = 1;
@@ -159,6 +162,11 @@ namespace GoldLeaf.Items.Sets.Nightshade
             Player player = Main.player[Projectile.owner];
             if (a == false)
             {
+				if (counter == 7) 
+				{
+					Dust.NewDust(Projectile.Center, 8, 8, DustType<VampireDust2>(), Projectile.velocity.X + Main.rand.Next(-7, 7), Projectile.velocity.Y + Main.rand.Next(-7, 7));
+                }
+
                 Projectile.GetGlobalProjectile<GoldLeafProjectile>().lifesteal = player.GetModPlayer<GoldLeafPlayer>().nightshade * 2;
                 Projectile.GetGlobalProjectile<GoldLeafProjectile>().lifestealMax = 1;
                 player.GetModPlayer<GoldLeafPlayer>().nightshade = 0;
@@ -172,6 +180,8 @@ namespace GoldLeaf.Items.Sets.Nightshade
 
             for (float k = 0; k < 6.28f; k += 0.20f)
                 Dust.NewDustPerfect(Projectile.position, DustType<VampireDust>(), Vector2.One.RotatedBy(k) * 2);
+			for (int k = 0; k < Main.rand.Next(8, 11); k++)
+				Dust.NewDustPerfect(Projectile.position, DustType<VampireDust2>(), new Vector2(Main.rand.Next(8, 12)), Main.rand.Next(8, 12));
 
             SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Monolith/GhostWhistle"), player.Center);
         }

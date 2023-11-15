@@ -36,11 +36,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\pacny\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\GoldLeaf\\GoldLeaf.csproj",
+      "projectUniqueName": "C:\\Users\\pacny\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\GoldLeaf\\GoldLeaf.csproj",
       "projectName": "GoldLeaf",
-      "projectPath": "C:\\Users\\pacny\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\GoldLeaf\\GoldLeaf.csproj",
+      "projectPath": "C:\\Users\\pacny\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\GoldLeaf\\GoldLeaf.csproj",
       "packagesPath": "C:\\Users\\pacny\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\pacny\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\GoldLeaf\\obj\\",
+      "outputPath": "C:\\Users\\pacny\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\GoldLeaf\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\pacny\\AppData\\Roaming\\NuGet\\NuGet.Config",

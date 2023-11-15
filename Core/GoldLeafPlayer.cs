@@ -13,6 +13,8 @@ namespace GoldLeaf.Core
 {
     public partial class GoldLeafPlayer : ModPlayer
     {
+        public float temp1, temp2, temp3;
+
         public int Timer { get; private set; }
 
         public int Shake = 0;
