@@ -35,12 +35,6 @@ soul gun: - Gun - idk
 -gathering enough souls will allow you to heal a bit by holding right click
 
 
-paycheck rifle: - Gun - idk
-
--right click to toss a coin
--shooting the coin will increase the damage and velocity, inflict midas, and direct the bullet toward the nearest enemy
-
-
 hot sauce: - Magic Weapon - cavern chests
 
 -splashes hot sauce on enemies, giving them hot sauce debuff

@@ -17,6 +17,7 @@ namespace GoldLeaf.Core
         public float gravity = 0f;
         public int lifesteal;
         public int lifestealMax;
+        public int counter = 0;
 
         public void ChangeDebuffDuration(NPC target, float amount)
         {

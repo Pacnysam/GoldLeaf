@@ -115,7 +115,7 @@ namespace GoldLeaf.Items.Sets.Nightshade
 
 		public override void PostDraw(Color lightColor)
 		{
-			Texture2D texture = Request<Texture2D>("GoldLeaf/Items/Sets/Nightshade/VampireBatGlow").Value;
+			Texture2D texture = Request<Texture2D>("GoldLeaf/Items/Sets/Nightshade/VampireBatGlowOutline").Value;
 			Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
 			Vector2 drawPos = Projectile.position - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
 
@@ -190,7 +190,7 @@ namespace GoldLeaf.Items.Sets.Nightshade
 			}
 
 
-			/*Texture2D tex = GetTexture("GoldLeaf/Items/Sets/Nightshade/VampireBatGlow");
+			/*Texture2D tex = GetTexture("GoldLeaf/Items/Sets/Nightshade/VampireBatGlowOutline");
 
 			SpriteEffects effect = projectile.direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 

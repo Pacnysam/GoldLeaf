@@ -115,7 +115,7 @@ namespace GoldLeaf.Items.Sets.Nightshade
 
 		public override void PostDraw(Color lightColor)
 		{
-			Texture2D texture = Request<Texture2D>("GoldLeaf/Items/Sets/Nightshade/VampireBatGlow").Value;
+			Texture2D texture = Request<Texture2D>("GoldLeaf/Items/Sets/Nightshade/VampireBatGlowOutline").Value;
 			Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
 			Vector2 drawPos = Projectile.position - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
 
@@ -127,9 +127,6 @@ namespace GoldLeaf.Items.Sets.Nightshade
 	public class VampireBolt : ModProjectile
 	{
 		public override string Texture => "GoldLeaf/Items/Sets/Nightshade/VampireBolt";
-
-		bool a = false;
-		int counter = 0;
 
 		public override void SetStaticDefaults()
 		{
@@ -150,28 +147,21 @@ namespace GoldLeaf.Items.Sets.Nightshade
 			Projectile.timeLeft = 500;
 			Projectile.penetrate = 1;
 			Projectile.scale = 1f;
+			Projectile.ai[0] = 7;
 
 			Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.1f;
 
 			Projectile.GetGlobalProjectile<GoldLeafProjectile>().lifesteal = 2;
 			Projectile.GetGlobalProjectile<GoldLeafProjectile>().lifestealMax = 1;
-		}
+        }
 
-        public override void AI()
+        public override void OnSpawn(IEntitySource source)
         {
             Player player = Main.player[Projectile.owner];
-            if (a == false)
-            {
-				if (counter == 7) 
-				{
-					Dust.NewDust(Projectile.Center, 8, 8, DustType<VampireDust2>(), Projectile.velocity.X + Main.rand.Next(-7, 7), Projectile.velocity.Y + Main.rand.Next(-7, 7));
-                }
 
-                Projectile.GetGlobalProjectile<GoldLeafProjectile>().lifesteal = player.GetModPlayer<GoldLeafPlayer>().nightshade * 2;
-                Projectile.GetGlobalProjectile<GoldLeafProjectile>().lifestealMax = 1;
-                player.GetModPlayer<GoldLeafPlayer>().nightshade = 0;
-                a = true;
-            }
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().lifesteal = player.GetModPlayer<GoldLeafPlayer>().nightshade * 2;
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().lifestealMax = 1;
+            player.GetModPlayer<GoldLeafPlayer>().nightshade = 0;
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -179,9 +169,9 @@ namespace GoldLeaf.Items.Sets.Nightshade
             Player player = Main.player[Projectile.owner];
 
             for (float k = 0; k < 6.28f; k += 0.20f)
-                Dust.NewDustPerfect(Projectile.position, DustType<VampireDust>(), Vector2.One.RotatedBy(k) * 2);
+                Dust.NewDustPerfect(Projectile.position, DustType<VampireDust>(), Vector2.One.RotatedBy(k) * 1.6f);
 			for (int k = 0; k < Main.rand.Next(8, 11); k++)
-				Dust.NewDustPerfect(Projectile.position, DustType<VampireDust2>(), new Vector2(Main.rand.Next(8, 12)), Main.rand.Next(8, 12));
+				Dust.NewDustPerfect(Projectile.position, DustType<VampireDust2>(), Vector2.One.RotatedBy(k) * Main.rand.NextFloat(1.5f, 2.5f));
 
             SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Monolith/GhostWhistle"), player.Center);
         }
@@ -198,7 +188,7 @@ namespace GoldLeaf.Items.Sets.Nightshade
 			}
 
 
-			Texture2D tex = (Texture2D)Request<Texture2D>("GoldLeaf/Items/Sets/Nightshade/VampireBatGlow");
+			Texture2D tex = (Texture2D)Request<Texture2D>("GoldLeaf/Items/Sets/Nightshade/VampireBatGlowOutline");
 
 			SpriteEffects effect = Projectile.direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
@@ -223,7 +213,7 @@ namespace GoldLeaf.Items.Sets.Nightshade
 					effects2 = Projectile.oldSpriteDirection[reps] == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 				}
 				Vector2 drawPos = oldPo + Projectile.Size / 2f - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
-				Main.spriteBatch.Draw(tex, drawPos, frame, drawCol, rotation + Projectile.rotation * (reps - 1) * -effect.HasFlag(SpriteEffects.FlipHorizontally).ToDirectionInt(), origin, MathHelper.Lerp(Projectile.scale, 3f, reps / 15f), effects2, 0.0f);
+				//Main.spriteBatch.Draw(tex, drawPos, frame, drawCol, rotation + Projectile.rotation * (reps - 1) * -effect.HasFlag(SpriteEffects.FlipHorizontally).ToDirectionInt(), origin, MathHelper.Lerp(Projectile.scale, 3f, reps / 15f), effects2, 0.0f);
 				reps++;
 			}
 			Main.spriteBatch.Draw(texture, basePos, frame, new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 175), Projectile.rotation, origin, Projectile.scale, effect, 0.0f);

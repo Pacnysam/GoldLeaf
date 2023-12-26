@@ -31,9 +31,9 @@ namespace GoldLeaf.Tiles.Grove
             //SoundType = SoundID.Tink;
             //SoundStyle = 1;
             Main.tileSolid[Type] = true;
-			Main.tileMergeDirt[Type] = true;
-            //Main.tileMerge[Type][TileType<GroveGrassT>()] = true;
-            //Main.tileMerge[Type][TileType<GroveBrickT>()] = true;
+			//Main.tileMergeDirt[Type] = true;
+            Main.tileMerge[Type][TileType<GroveGrassT>()] = true;
+            Main.tileMerge[Type][TileID.Mud] = true;
             RegisterItemDrop(ItemType<GroveStone>());
             AddMapEntry(new Color(118, 108, 98));
             Main.tileBlockLight[Type] = true;

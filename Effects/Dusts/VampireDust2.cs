@@ -7,45 +7,42 @@ namespace GoldLeaf.Effects.Dusts
 {
 	public class VampireDust2 : ModDust
 	{
-        public override void OnSpawn(Dust dust)
+        public override Color? GetAlpha(Dust dust, Color lightColor)
         {
-            dust.noGravity = false;
-            dust.noLight = false;
-            dust.frame = new Rectangle(0, 0, 18, 18);
-            dust.velocity *= Main.rand.NextFloat(0.8f, 1.4f);
-            dust.customData = 0;
+            return Color.White;
         }
 
-        public override bool MidUpdate(Dust dust)
+        public override void OnSpawn(Dust dust)
         {
-            if (!dust.noGravity)
-            {
-                dust.velocity.Y = 0f;
-            }
-
-            if (dust.noLight)
-            {
-                return false;
-            }
-
-            return false;
+            dust.fadeIn = 0;
+            dust.noLight = false;
+            dust.frame = new Rectangle(0, 0, 18, 18);
+            dust.velocity *= 1.75f;
         }
 
         public override bool Update(Dust dust)
         {
-            //dust.customData = dust.customData + 1; if (dust.customData >= 10) { dust.customData = 0; dust.frame.Y += 18; }
+            if (dust.customData is null)
+            {
+                dust.position -= new Vector2(9, 9) * dust.scale;
+                dust.customData = 1;
+            }
 
-            dust.velocity *= 0.98f;
+            if (dust.alpha % 40 == 35)
+                dust.frame.Y += 18;
+
+            Lighting.AddLight(dust.position, Color.Cyan.ToVector3() * 0.02f);
+
+            dust.alpha += 5;
+
+            if (dust.alpha > 255)
+                dust.active = false;
+
+            dust.velocity *= 0.95f;
             dust.position += dust.velocity;
-
-            //if (framecount >= 6) { dust.active = false; }
-            // FIX
 
             return false;
         }
-
-        public override Color? GetAlpha(Dust dust, Color lightColor)
-            => new Color(255, 255, 255, 0);
     }
 }
 

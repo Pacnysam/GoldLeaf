@@ -74,6 +74,16 @@ Items: {
 		DisplayName: Debug Item
 		Tooltip: ""
 	}
+
+	GroveGrassSeeds: {
+		Tooltip: ""
+		DisplayName: Grove Grass Seeds
+	}
+
+	GroveGrass: {
+		Tooltip: ""
+		DisplayName: Grove Grass
+	}
 }
 
 Biomes: {
@@ -85,6 +95,11 @@ Biomes: {
 	WhisperingGroveSurface: {
 		TownNPCDialogueName: the Whispering Grove Surface
 		DisplayName: Whispering Grove Surface
+	}
+
+	UndergroundWhisperingGrove: {
+		DisplayName: Underground Whispering Grove
+		TownNPCDialogueName: the Underground Whispering Grove
 	}
 }
 

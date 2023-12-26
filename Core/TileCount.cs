@@ -10,7 +10,7 @@ namespace GoldLeaf.Core
 		public int groveTileCount;
 
 		public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts) {
-			groveTileCount = tileCounts[TileType<GroveStoneT>()];
+			groveTileCount = tileCounts[TileType<GroveStoneT>()] + tileCounts[TileType<GroveGrassT>()];
 		}
 	}
 }

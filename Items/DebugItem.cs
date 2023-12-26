@@ -1,7 +1,6 @@
 ﻿using Terraria;
 using static Terraria.ModLoader.ModContent;
 using Terraria.ModLoader;
-using GoldLeaf.Effects.Gores.Base;
 using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
@@ -27,7 +26,6 @@ namespace GoldLeaf.Items
             Item.autoReuse = true;
             Item.useAnimation = 15;
             Item.useTime = 15;
-            Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/RoR2/FireCast");
             Item.rare = ItemRarityID.Quest;
 
         }
@@ -37,7 +35,7 @@ namespace GoldLeaf.Items
             float temp1 = player.GetModPlayer<GoldLeafPlayer>().temp1;
             float temp2 = player.GetModPlayer<GoldLeafPlayer>().temp2;
 
-            Gore.NewGorePerfect(Terraria.Entity.GetSource_None(), Main.MouseWorld, Vector2.Zero, GoreType<RingGoreRewrite>(), Scale: 0.7f + Main.rand.NextFloat(temp1, temp2) / 30f);
+            //Gore.NewGorePerfect(Terraria.Entity.GetSource_None(), Main.MouseWorld, Vector2.Zero, GoreType<RingGoreRewrite>(), Scale: 0.7f + Main.rand.NextFloat(temp1, temp2) / 30f);
             return true;
         }
     }
