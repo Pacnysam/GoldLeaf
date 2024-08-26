@@ -15,7 +15,7 @@ namespace GoldLeaf.Items
 {
     public class DebugItem : ModItem
     {
-        public override string Texture => "GoldLeaf/Items/Sets/Blizzard/ArcticFlower";
+        public override string Texture => "GoldLeaf/Items/Blizzard/ArcticFlower";
         public override void SetDefaults()
         {
             Item.width = 34;

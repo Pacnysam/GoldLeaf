@@ -15,6 +15,7 @@ namespace GoldLeaf.Core
         public override bool InstancePerEntity => true;
 
         public float gravity = 0f;
+        public int gravityDelay = 0;
         public int lifesteal;
         public int lifestealMax;
         public int counter = 0;
@@ -40,9 +41,14 @@ namespace GoldLeaf.Core
             }
         }
 
-        public override void AI(Projectile projectile) 
+        public override void AI(Projectile projectile)
         {
-			projectile.position += new Vector2(0, gravity);
+            if (gravity != 0f && counter >= gravityDelay)
+            {
+                projectile.velocity += new Vector2(0, gravity);
+            }
+
+            counter++;
         }
     }
 }

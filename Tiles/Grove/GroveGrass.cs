@@ -6,6 +6,8 @@ using Terraria.ID;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using GoldLeaf.Effects.Dusts;
+using GoldLeaf.Tiles.Grove;
+using Terraria.DataStructures;
 
 namespace GoldLeaf.Tiles.Grove
 {
@@ -21,7 +23,11 @@ namespace GoldLeaf.Tiles.Grove
             Item.rare = 1;
             Item.autoReuse = true;
             Item.createTile = TileType<GroveGrassT>();
-            Item.maxStack = 9999;
+            Item.maxStack = Item.CommonMaxStack;
+            Item.useTime = 10;
+            Item.useAnimation = 15;
+
+            ItemID.Sets.GrassSeeds[Item.type] = true;
         }
     }
 
@@ -34,7 +40,7 @@ namespace GoldLeaf.Tiles.Grove
             Item.useStyle = ItemUseStyleID.Swing;
             Item.useTime = 15;
             Item.useAnimation = 15;
-            Item.maxStack = 9999;
+            Item.maxStack = Item.CommonMaxStack;
             Item.rare = ItemRarityID.Green;
             Item.placeStyle = 0;
             Item.width = 22;
@@ -43,19 +49,23 @@ namespace GoldLeaf.Tiles.Grove
         }
 
         public override bool? UseItem(Player player)
-        {
-            if (Main.netMode == NetmodeID.Server)
-                return false;
+		{
+			if (Main.myPlayer != player.whoAmI)
+				return false;
 
-            Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
-            if (tile.HasTile && tile.TileType == TileID.Mud ) //& player.IsWithinSnappngRangeToTile(Player.tileTargetX, Player.tileTargetY)
-            {
-                WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileType<GroveGrassT>(), forced: true);
-                player.inventory[player.selectedItem].stack--;
-            }
+			Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
 
-            return null;
-        }
+			if (tile.HasTile && (tile.TileType == TileID.Mud || tile.TileType == TileID.JungleGrass || tile.TileType == TileID.MushroomGrass) && player.IsInTileInteractionRange(Player.tileTargetX, Player.tileTargetY, TileReachCheckSettings.Simple))
+			{
+				WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileType<GroveGrassT>(), forced: true);
+				player.inventory[player.selectedItem].stack--;
+
+				if (Main.netMode != NetmodeID.SinglePlayer)
+					NetMessage.SendTileSquare(player.whoAmI, Player.tileTargetX, Player.tileTargetY);
+			}
+
+			return true;
+		}
     }
 
     public class GroveGrassT : ModTile
@@ -65,14 +75,24 @@ namespace GoldLeaf.Tiles.Grove
         public override void SetStaticDefaults()
         {
             Main.tileSolid[Type] = true;
-            Main.tileMergeDirt[Type] = false;
-            Main.tileBlockLight[Type] = true;
             Main.tileMerge[Type][TileID.Mud] = true;
-            Main.tileLighted[Type] = true;
-            TileID.Sets.Grass[Type] = true;
+            Main.tileBlendAll[Type] = true;
+			Main.tileMergeDirt[Type] = true;
+			Main.tileBlockLight[Type] = true;
+			Main.tileLighted[Type] = true;
+
+			Main.tileMerge[Type][TileID.Grass] = true;
+			Main.tileMerge[TileID.Grass][Type] = true;
+
+			TileID.Sets.Grass[Type] = true;
+			TileID.Sets.Conversion.Grass[Type] = true;
+			TileID.Sets.CanBeDugByShovel[Type] = true;
+
             AddMapEntry(new Color(190, 99, 37));
-            Main.tileBrick[Type] = true;
             RegisterItemDrop(ItemType<GroveStone>());
+
+            DustType = DustType<AutumnGrass>();
+
             //soundType = SoundID.Grass;
             //soundStyle = 6;
 
@@ -115,11 +135,23 @@ namespace GoldLeaf.Tiles.Grove
             Vector2 playerFeet = player.Center + new Vector2(-8, player.height / 2);
             if (player.velocity.X != 0)
             {
-                if (Main.rand.Next(6) == 0) Dust.NewDust(playerFeet, 16, 1, DustType<AutumnLeaves>(), 0, 0.6f, Scale: 1.2f);
+                if (Main.rand.NextBool(6)) Dust.NewDust(playerFeet, 16, 1, DustType<AutumnGrass>(), 0, 0.6f, Scale: 0.9f);
             }
         }
-        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+        /*public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
+            Tile tile = Main.tile[i, j];
+            Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+            if (Main.drawToScreen)
+            {
+                zero = Vector2.Zero;
+            }
+            int height = tile.TileFrameY == 36 ? 18 : 16;
+            //if (tile.Slope() == 0 && !tile.halfBrick())
+            {
+                Main.spriteBatch.Draw(Request<Texture2D>(Texture + "Glow").Value, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero, new Rectangle(tile.frameX, tile.frameY, 16, height), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            }
+
             Tile tile = Main.tile[i, j];
             Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
             if (Main.drawToScreen) zero = Vector2.Zero;
@@ -135,6 +167,7 @@ namespace GoldLeaf.Tiles.Grove
             }
             int height = tile.TileFrameY == 36 ? 18 : 16;
             Main.spriteBatch.Draw(Request<Texture2D>(Texture + "Glow").Value, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, height), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-        }
+            
+        }*/
     }
 }

@@ -14,8 +14,8 @@ namespace GoldLeaf.Tiles.Decor
 		{
 			Item.width = 20;
 			Item.height = 24;
-			Item.maxStack = 999;
-			Item.useTurn = true;
+			Item.maxStack = Item.CommonMaxStack;
+            Item.useTurn = true;
 			Item.autoReuse = true;
 			Item.useAnimation = 15;
 			Item.useTime = 10;
@@ -23,7 +23,9 @@ namespace GoldLeaf.Tiles.Decor
 			Item.consumable = true;
 			Item.createTile = TileType<BatPlushieT>();
 			Item.rare = ItemRarityID.Purple;
-		}
+
+            Item.value = Item.sellPrice(0, 0, 60, 0);
+        }
 	}
 
 	public class BatPlushieT : ModTile

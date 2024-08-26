@@ -1,0 +1,13 @@
+﻿/App.config
+/.git/
+/.vs/
+/bin/
+/obj/
+/Properties/
+*.user
+*.sln
+*.cache
+*.zip
+*.rar
+*.ini
+*.sfk

@@ -19,7 +19,6 @@ namespace GoldLeaf.Effects.Dusts
             dust.alpha = 300;
         }
         
-
         public override bool MidUpdate(Dust dust)
         {
             if (!dust.noGravity)
@@ -40,7 +39,7 @@ namespace GoldLeaf.Effects.Dusts
         {
             dust.alpha -= 1;
             dust.position += dust.velocity;
-            dust.velocity *= 0.96f;
+            dust.velocity *= 0.95f;
             dust.rotation = (float)Math.Atan2(dust.velocity.Y, dust.velocity.X) + 1.57f;
             dust.scale *= 0.88f;
             if (dust.scale < 0.25f)
@@ -52,6 +51,6 @@ namespace GoldLeaf.Effects.Dusts
         }
 
         public override Color? GetAlpha(Dust dust, Color lightColor)
-            => new Color(lightColor.R, lightColor.G, lightColor.B, 0);
+            => new Color(255, 255, 255, 0);
     }
 }

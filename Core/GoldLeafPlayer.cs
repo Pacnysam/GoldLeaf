@@ -1,4 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GoldLeaf.Effects.Dusts;
+using GoldLeaf.Items.Grove;
+using GoldLeaf.Items.Nightshade;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,8 +35,15 @@ namespace GoldLeaf.Core
 
         public int nightshade = 0;
         public int nightshadeTimer = 60;
+
+        public float itemSpeed;
         
-		public override void PreUpdate()
+        public override float UseTimeMultiplier(Item Item)
+		{
+			return itemSpeed;
+		}
+
+        public override void PreUpdate()
 		{
             //platformTimer--;
 
@@ -56,9 +66,34 @@ namespace GoldLeaf.Core
                 }
             }
 
-            Player.maxRunSpeed += .1f * nightshade;
-            Player.runAcceleration += .05f * nightshade;
+            Player.maxRunSpeed += .08f * nightshade;
+            Player.runAcceleration += .02f * nightshade;
+            itemSpeed += .02f * nightshade;
+
             Player.GetDamage(DamageClass.Generic) += (3 * nightshade);
+
+            if (Main.rand.NextFloat() < 0.011627907f * nightshade && nightshade >= 1)
+            {
+                Dust dust;
+                Color color = new(210, 136, 107);
+                Vector2 position = Main.LocalPlayer.Center;
+                
+                if (Main.LocalPlayer.HasBuff(BuffType<NightshadeHeistBuff>()) && Main.LocalPlayer.HeldItem.type != ItemType<VampireBat>()) 
+                {
+                    color = new(178, 0, 226);
+                }
+
+                dust = Main.dust[Dust.NewDust(position, 0, 0, DustType<SparkDust>(), 0f, -3.0232563f, 0, color, 1f)];
+            }
+
+        }
+
+        public delegate void ResetEffectsDelegate(GoldLeafPlayer Player);
+        public static event ResetEffectsDelegate ResetEffectsEvent;
+        public override void ResetEffects()
+        {
+            ResetEffectsEvent?.Invoke(this);
+            itemSpeed = 1;
         }
 
         public override void PostUpdate()
@@ -107,6 +142,11 @@ namespace GoldLeaf.Core
             Main.screenPosition.Y += Main.rand.Next(-Shake, Shake) + panDown;
             Main.screenPosition.X += Main.rand.Next(-Shake, Shake);
             if (Shake > 0) { Shake--; }
+        }
+
+        public override void Unload()
+        {
+            ResetEffectsEvent = null;
         }
     }
 }

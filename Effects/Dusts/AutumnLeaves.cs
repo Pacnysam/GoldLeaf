@@ -35,4 +35,24 @@ namespace GoldLeaf.Effects.Dusts
             return false;
         }
     }
+
+    public class AutumnGrass : AutumnLeaves 
+    {
+        public override string Texture => "GoldLeaf/Effects/Dusts/AutumnGrass";
+
+        public override bool Update(Dust dust)
+        {
+            dust.position.Y += dust.velocity.Y;
+            dust.velocity.Y += 0.01f;
+            dust.position.X += (float)Math.Sin(GoldLeafWorld.rottime + dust.fadeIn) * dust.scale * dust.velocity.X * 0.4f;
+            dust.rotation = (float)Math.Sin(GoldLeafWorld.rottime + dust.fadeIn) * 0.5f;
+            dust.scale *= 0.96f;
+            dust.color *= 0.9f;
+            if (dust.scale <= 0.4)
+            {
+                dust.active = false;
+            }
+            return false;
+        }
+    }
 }

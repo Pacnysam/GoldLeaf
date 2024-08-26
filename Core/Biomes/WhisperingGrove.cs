@@ -12,7 +12,7 @@ namespace GoldLeaf.Core.Biomes
 	{
         public override LocalizedText DisplayName => base.DisplayName.WithFormatArgs("Whispering Grove");
 
-        public override int Music => MusicLoader.GetMusicSlot(Mod, "Sounds/Music/WhisperingForestPH");
+        public override int Music => MusicLoader.GetMusicSlot(Mod, "Sounds/Music/WhisperingGrove");
         public override CaptureBiome.TileColorStyle TileColorStyle => CaptureBiome.TileColorStyle.Normal;
         public override SceneEffectPriority Priority => SceneEffectPriority.BiomeHigh; 
 
@@ -33,7 +33,7 @@ namespace GoldLeaf.Core.Biomes
     {
         public override LocalizedText DisplayName => base.DisplayName.WithFormatArgs("Whispering Undergrove");
 
-        public override int Music => MusicLoader.GetMusicSlot(Mod, "Sounds/Music/WhisperingGrovePH");
+        public override int Music => MusicLoader.GetMusicSlot(Mod, "Sounds/Music/WhisperingGrove");
         public override CaptureBiome.TileColorStyle TileColorStyle => CaptureBiome.TileColorStyle.Normal;
         public override SceneEffectPriority Priority => SceneEffectPriority.BiomeHigh;
 

@@ -15,7 +15,7 @@ using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Core
 {
-    public static class Helper
+    public static class Helper //most of this is stolen from starlight river and spirit, i (pacnysam) did not code any of this!
     {
         public static Rectangle ToRectangle(this Vector2 vector) => new Rectangle(0, 0, (int)vector.X, (int)vector.Y);
         public static Vector2 ScreenSize => new Vector2(Main.screenWidth, Main.screenHeight);

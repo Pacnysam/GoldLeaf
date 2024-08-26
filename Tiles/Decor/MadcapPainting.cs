@@ -17,8 +17,8 @@ namespace GoldLeaf.Tiles.Decor
 			Item.width = 40;
 			Item.height = 40;
 
-			Item.maxStack = 999;
-			Item.rare = ItemRarityID.Purple;
+            Item.maxStack = Item.CommonMaxStack;
+            Item.rare = ItemRarityID.Purple;
 
 			Item.useTurn = true;
 			Item.autoReuse = true;

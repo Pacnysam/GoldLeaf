@@ -25,9 +25,8 @@ Items: {
 		DisplayName: Vampire Bat
 		Tooltip:
 			'''
-			Hits give you a stack of nightshade
-			Right clicking shoots a bolt that heals you for every stack
-			Nightshade increases movement speed, acceleration and damage
+			Damaging enemies accumulates nightshade, increasing movement and attack speed
+			<right> to consume nightshade and leech health <e> <interact>
 			'''
 	}
 
@@ -35,14 +34,14 @@ Items: {
 		DisplayName: Aether's Comet
 		Tooltip:
 			'''
-			Casts a flame that follows the cursor and bursts on command
-			Channeling the flame for long enough makes it shoot beams at nearby enemies, damage ramps up over time
+			Casts a flame that bursts on command, damage ramps up over time
+			Channeling the flame for long enough makes it shoot beams at nearby enemies
 			'''
 	}
 
 	GraniteWard: {
 		DisplayName: Granite Ward
-		Tooltip: ""
+		Tooltip: Dealing damage or mining generates a decaying energy barrier that keeps enemies away
 	}
 
 	MeteorMissile: {
@@ -67,7 +66,11 @@ Items: {
 
 	Quetzalcoatl: {
 		DisplayName: Quetzalcoatl
-		Tooltip: ""
+		Tooltip:
+			'''
+			Shoots an explosive cluster of light
+			<right> to summon a rift to teleport through
+			'''
 	}
 
 	DebugItem: {
@@ -84,6 +87,40 @@ Items: {
 		Tooltip: ""
 		DisplayName: Grove Grass
 	}
+
+	Whirlpool: {
+		DisplayName: Cascade Staff
+		Tooltip: Shoots explosive whirlpools that slightly home toward the cursor
+	}
+
+	NoxGauntlet: {
+		DisplayName: Nox Gauntlet
+		Tooltip:
+			'''
+			<left> to punch, stuns at the cost of nightshade
+			<right> to launch the gauntlet forward and steal some nightshade
+			'''
+	}
+
+	SilenceMusicBox: {
+		DisplayName: Silence Music Box
+		Tooltip: ""
+	}
+
+	ToxinGroveMusicBox: {
+		DisplayName: Toxin Grove Music Box
+		Tooltip: ""
+	}
+
+	UndergroveMusicBox: {
+		DisplayName: Undergrove Music Box
+		Tooltip: ""
+	}
+
+	OxeyeDaisy: {
+		DisplayName: Oxeye Daisy
+		Tooltip: Loves me... loves me not...
+	}
 }
 
 Biomes: {
@@ -93,22 +130,32 @@ Biomes: {
 	}
 
 	WhisperingGroveSurface: {
-		TownNPCDialogueName: the Whispering Grove Surface
-		DisplayName: Whispering Grove Surface
+		TownNPCDialogueName: the Whispering Forest
+		DisplayName: Whispering Forest
 	}
 
 	UndergroundWhisperingGrove: {
-		DisplayName: Underground Whispering Grove
-		TownNPCDialogueName: the Underground Whispering Grove
+		DisplayName: Whispering Grove
+		TownNPCDialogueName: the Whispering Grove
 	}
 }
 
 Tiles.MadcapPaintingT.MapEntry: Madcap Painting T
 
 Projectiles: {
-	VampireBatP.DisplayName: Vampire Bat P
+	VampireBatP.DisplayName: Vampire Bat
 	VampireBolt.DisplayName: Vampire Bolt
 	AetherBeam.DisplayName: Aether Beam
 	AetherBolt.DisplayName: Aether Bolt
 	AetherBurst.DisplayName: Aether Burst
+	WhirlpoolP.DisplayName: Whirlpool
+	QuetzalP.DisplayName: Quetzal Bolt
+	QuetzalSmallP.DisplayName: Quetzal Fragment
+}
+
+Buffs: {
+	NightshadeHeistBuff: {
+		DisplayName: Nightshade Heist
+		Description: WIP
+	}
 }

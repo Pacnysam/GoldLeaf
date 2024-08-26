@@ -20,7 +20,8 @@ namespace GoldLeaf.Tiles.Grove
             Item.useAnimation = 15;
             Item.autoReuse = true;
             Item.createTile = TileType<GroveStoneT>();
-            Item.maxStack = 999;
+            Item.maxStack = Item.CommonMaxStack;
+            Item.value = Item.buyPrice(0, 0, 0, 10);
         }
     }
 
@@ -31,7 +32,7 @@ namespace GoldLeaf.Tiles.Grove
             //SoundType = SoundID.Tink;
             //SoundStyle = 1;
             Main.tileSolid[Type] = true;
-			//Main.tileMergeDirt[Type] = true;
+			Main.tileMergeDirt[Type] = true;
             Main.tileMerge[Type][TileType<GroveGrassT>()] = true;
             Main.tileMerge[Type][TileID.Mud] = true;
             RegisterItemDrop(ItemType<GroveStone>());
