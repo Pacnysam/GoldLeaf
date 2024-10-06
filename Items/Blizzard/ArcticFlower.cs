@@ -17,7 +17,7 @@ namespace GoldLeaf.Items.Blizzard
             Item.noMelee = true;
             Item.noUseGraphic = true;
 			Item.value = 50000;
-			Item.rare = ItemRarityID.Green;
+			Item.rare = ItemRarityID.Blue;
 			Item.autoReuse = false;
 		}
 

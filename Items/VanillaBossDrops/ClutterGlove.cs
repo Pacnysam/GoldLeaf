@@ -1,0 +1,278 @@
+﻿using Terraria;
+using static Terraria.ModLoader.ModContent;
+using Terraria.ID;
+using Terraria.ModLoader;
+using GoldLeaf.Effects.Dusts;
+using Terraria.Localization;
+using Microsoft.Xna.Framework;
+using GoldLeaf.Core;
+using Mono.Cecil;
+using Terraria.DataStructures;
+using System;
+using System.Diagnostics.Metrics;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.GameContent;
+using Terraria.Audio;
+using GoldLeaf.Items.Grove;
+
+namespace GoldLeaf.Items.VanillaBossDrops
+{
+    public abstract class ClutterGlove : ModItem
+    {
+        public override void SetDefaults()
+        {
+            Item.damage = 10;
+            Item.DamageType = DamageClass.Ranged;
+            Item.knockBack = 2;
+
+            //Item.ammo = 0;
+
+            Item.width = 28;
+            Item.height = 38;
+
+            Item.useTime = 20;
+            Item.useAnimation = 20;
+            Item.useStyle = ItemUseStyleID.Swing;
+            Item.noMelee = true;
+            Item.noUseGraphic = true;
+            Item.UseSound = SoundID.Item1;
+            Item.autoReuse = true;
+
+            Item.value = Item.sellPrice(0, 1, 50, 0);
+            Item.rare = ItemRarityID.Blue;
+
+            Item.shootSpeed = 11f;
+            Item.useAmmo = ItemType<EveDroplet>();
+            Item.shoot = ProjectileType<EveDropletP>();
+        }
+
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+            int p = Projectile.NewProjectile(source, position, velocity.RotatedBy(MathHelper.ToRadians(Main.rand.Next(-3, 3))), type, damage, knockback, player.whoAmI);
+            
+            if (type == ProjectileType<EveDropletP>()) { Main.projectile[p].timeLeft = Main.rand.Next(115, 200); Main.projectile[p].velocity *= 0.7f; }
+            if (type == ProjectileType<ClutterScale>() || type == ProjectileType<ClutterTissue>()) { Main.projectile[p].damage += 14; }
+
+            return false;
+        }
+    }
+
+    public class ClutterGloveCorruption : ClutterGlove 
+    {
+        public override bool CanConsumeAmmo(Item ammo, Player player)
+        {
+            if (ammo.type == ItemID.ShadowScale)
+            {
+                return Main.rand.NextBool(5);
+            }
+            else
+            { 
+                return true; 
+            }
+        }
+    }
+
+    public class ClutterGloveCrimson : ClutterGlove
+    {
+        public override bool CanConsumeAmmo(Item ammo, Player player)
+        {
+            if (ammo.type == ItemID.TissueSample)
+            {
+                return Main.rand.NextBool(5);
+            }
+            else
+            {
+                return true;
+            }
+        }
+    }
+
+    public class ClutterScale : ModProjectile
+    {
+        public override void SetStaticDefaults()
+        {
+            Main.projFrames[Projectile.type] = 5;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+        }
+
+        public override void SetDefaults()
+        {
+            Projectile.aiStyle = -1;
+            Projectile.width = 16;
+            Projectile.height = 18;
+            Projectile.friendly = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = false;
+            Projectile.ArmorPenetration = 8;
+            Projectile.penetrate = 3;
+            Projectile.extraUpdates = 1;
+
+            Projectile.DamageType = DamageClass.Ranged;
+
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.08f;
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravityDelay = 15;
+        }
+
+        public override void AI()
+        {
+            Projectile.rotation = Projectile.velocity.ToRotation() + 1.57f;
+
+            Projectile.spriteDirection = Projectile.direction;
+            if (++Projectile.frameCounter >= 3)
+            {
+                Projectile.frameCounter = 0;
+                Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
+            }
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
+
+            Vector2 drawOrigin = new(texture.Width * 0.5f, Projectile.height * 0.5f);
+            for (int k = 0; k < Projectile.oldPos.Length; k++)
+            {
+                var effects = Projectile.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+                Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
+                Color color = Projectile.GetAlpha(lightColor) * (float)(((float)(Projectile.oldPos.Length - k) / Projectile.oldPos.Length) / 2);
+
+                Main.spriteBatch.Draw(texture, drawPos, new Microsoft.Xna.Framework.Rectangle?(texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), color, Projectile.rotation, drawOrigin, Projectile.scale, effects, 0f);
+            }
+            return true;
+        }
+
+        public override void OnKill(int timeLeft)
+        {
+            Player player = Main.player[Projectile.owner];
+
+            SoundEngine.PlaySound(SoundID.DD2_CrystalCartImpact, Projectile.Center);
+
+            for (int k = 0; k < 12; ++k)
+            {
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.PurpleCrystalShard, Main.rand.NextFloat(-3, 3) + Projectile.velocity.X / 3, Main.rand.NextFloat(-3, 3) + Projectile.velocity.Y / 3, 0, new Color(), 1f);
+                Main.dust[dust].noGravity = true;
+            }
+        }
+    }
+
+    public class ClutterTissue : ModProjectile
+    {
+        private int bounces = 2;
+        public override void SetStaticDefaults()
+        {
+            Main.projFrames[Projectile.type] = 5;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 2;
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+        }
+
+        public override void SetDefaults()
+        {
+            Projectile.aiStyle = -1;
+            Projectile.width = 16;
+            Projectile.height = 18;
+            Projectile.friendly = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = false;
+
+            Projectile.DamageType = DamageClass.Ranged;
+
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.15f;
+        }
+
+        public override void AI()
+        {
+            Projectile.rotation = Projectile.velocity.ToRotation() + 1.57f;
+
+            Projectile.spriteDirection = Projectile.direction;
+            if (++Projectile.frameCounter >= 6)
+            {
+                Projectile.frameCounter = 0;
+                Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
+            }
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
+
+            Vector2 drawOrigin = new(texture.Width * 0.5f, Projectile.height * 0.5f);
+            for (int k = 0; k < Projectile.oldPos.Length; k++)
+            {
+                var effects = Projectile.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+                Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
+                Color color = Projectile.GetAlpha(lightColor) * (float)(((float)(Projectile.oldPos.Length - k) / Projectile.oldPos.Length) / 2);
+
+                Main.spriteBatch.Draw(texture, drawPos, new Microsoft.Xna.Framework.Rectangle?(texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), color, Projectile.rotation, drawOrigin, Projectile.scale, effects, 0f);
+            }
+            return true;
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            SoundEngine.PlaySound(SoundID.DD2_LightningBugHurt, Projectile.Center);
+
+            target.SimpleStrikeNPC(damageDone, 0, false, 0, DamageClass.Ranged);
+        }
+
+        public override void OnKill(int timeLeft)
+        {
+            for (int i = 0; i < 12; i++)
+            {
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Crimslime, Main.rand.NextFloat(-3, 3) + Projectile.velocity.X / 3, Main.rand.Next(-3, 3) + Projectile.velocity.Y / 3);
+            }
+        }
+
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+            Player player = Main.player[Projectile.owner];
+
+            if (Projectile.velocity.X != oldVelocity.X)
+            {
+                Projectile.velocity.X = -oldVelocity.X;
+            }
+
+            if (Projectile.velocity.Y != oldVelocity.Y)
+            {
+                Projectile.velocity.Y = -oldVelocity.Y;
+            }
+
+            Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Crimslime);
+
+            SoundEngine.PlaySound(SoundID.DD2_LightningBugZap, Projectile.Center);
+
+            Projectile.velocity *= 0.7f;
+
+            if (bounces <= 0)
+            {
+                Projectile.Kill(); return true;
+            }
+            else
+            {
+                bounces--; return false;
+            }
+        }
+    }
+
+    public class ClutterAmmo : GlobalItem
+    {
+        public override void SetDefaults(Item item)
+        {
+            if (item.type == ItemID.ShadowScale)
+            {
+                item.ammo = ItemType<EveDroplet>();
+                item.shoot = ProjectileType<ClutterScale>();
+            }
+            if (item.type == ItemID.TissueSample)
+            {
+                item.ammo = ItemType<EveDroplet>();
+                item.shoot = ProjectileType<ClutterTissue>();
+            }
+            if (item.type == ItemID.Bone)
+            {
+                item.ammo = ItemType<EveDroplet>();
+                item.shoot = ProjectileID.BoneGloveProj;
+            }
+        }
+    }
+}

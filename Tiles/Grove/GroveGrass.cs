@@ -41,7 +41,7 @@ namespace GoldLeaf.Tiles.Grove
             Item.useTime = 15;
             Item.useAnimation = 15;
             Item.maxStack = Item.CommonMaxStack;
-            Item.rare = ItemRarityID.Green;
+            Item.rare = ItemRarityID.White;
             Item.placeStyle = 0;
             Item.width = 22;
             Item.height = 20;
@@ -86,7 +86,8 @@ namespace GoldLeaf.Tiles.Grove
 
 			TileID.Sets.Grass[Type] = true;
 			TileID.Sets.Conversion.Grass[Type] = true;
-			TileID.Sets.CanBeDugByShovel[Type] = true;
+            TileID.Sets.Conversion.JungleGrass[Type] = true;
+            TileID.Sets.CanBeDugByShovel[Type] = true;
 
             AddMapEntry(new Color(190, 99, 37));
             RegisterItemDrop(ItemType<GroveStone>());
@@ -135,7 +136,7 @@ namespace GoldLeaf.Tiles.Grove
             Vector2 playerFeet = player.Center + new Vector2(-8, player.height / 2);
             if (player.velocity.X != 0)
             {
-                if (Main.rand.NextBool(6)) Dust.NewDust(playerFeet, 16, 1, DustType<AutumnGrass>(), 0, 0.6f, Scale: 0.9f);
+                if (Main.rand.NextBool(6)) Dust.NewDust(playerFeet, 16, 1, DustType<AutumnGrass>(), 0, Main.rand.NextFloat(-0.05f, -0.3f), Scale: 0.9f);
             }
         }
         /*public override void PostDraw(int i, int j, SpriteBatch spriteBatch)

@@ -10,6 +10,8 @@ using Terraria.Localization;
 using GoldLeaf.Core;
 using Terraria.Audio;
 using System.Diagnostics.Metrics;
+using GoldLeaf.Items.Pickups;
+using GoldLeaf.Items.Misc;
 
 namespace GoldLeaf.Items
 {
@@ -26,6 +28,7 @@ namespace GoldLeaf.Items
             Item.autoReuse = true;
             Item.useAnimation = 15;
             Item.useTime = 15;
+            //Item.createTile = TileType<OxeyeDaisyT>();
             Item.rare = ItemRarityID.Quest;
 
         }
@@ -35,6 +38,7 @@ namespace GoldLeaf.Items
             float temp1 = player.GetModPlayer<GoldLeafPlayer>().temp1;
             float temp2 = player.GetModPlayer<GoldLeafPlayer>().temp2;
 
+            //Helper.NewItemPerfect(Main.MouseWorld, Vector2.Zero, ItemID.Heart);
             //Gore.NewGorePerfect(Terraria.Entity.GetSource_None(), Main.MouseWorld, Vector2.Zero, GoreType<RingGoreRewrite>(), Scale: 0.7f + Main.rand.NextFloat(temp1, temp2) / 30f);
             return true;
         }

@@ -1,0 +1,17 @@
+hemolash: - Sword
+
+-right click to give it some of your blood, greatly increasing damage, attack speed and crit chance but decreasing max health and removing natural regeneration
+-health taken restores immediately if you take back your blood
+-shoot short range beams of light when giving blood
+
+
+salvation: - Flask
+idk
+
+
+pale rosary: - Accessory
+summons an angel minion that has 2 behavioral modes
+
+-attack mode sticks near you and shoots beams at enemies
+-support mode heals you overtime and increases damage reduction, but doesnt attack
+-right click the minion to switch

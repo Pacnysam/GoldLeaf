@@ -1,6 +1,7 @@
 ﻿using GoldLeaf.Effects.Dusts;
 using GoldLeaf.Items.Grove;
 using GoldLeaf.Items.Nightshade;
+using GoldLeaf.Tiles.Decor;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -33,60 +34,12 @@ namespace GoldLeaf.Core
 
         //public int platformTimer = 0;
 
-        public int nightshade = 0;
-        public int nightshadeTimer = 60;
-
         public float itemSpeed;
         
         public override float UseTimeMultiplier(Item Item)
 		{
 			return itemSpeed;
 		}
-
-        public override void PreUpdate()
-		{
-            //platformTimer--;
-
-            if (nightshade < 0)
-            {
-                nightshade = 0;
-            }
-            if (nightshade > 12)
-			{
-                nightshade = 12;
-			}
-
-            nightshadeTimer--;
-            if (nightshadeTimer <= 0)
-			{
-                nightshadeTimer = 60;
-                if (nightshade > 0) 
-                {
-                    nightshade--;
-                }
-            }
-
-            Player.maxRunSpeed += .08f * nightshade;
-            Player.runAcceleration += .02f * nightshade;
-            itemSpeed += .02f * nightshade;
-
-            Player.GetDamage(DamageClass.Generic) += (3 * nightshade);
-
-            if (Main.rand.NextFloat() < 0.011627907f * nightshade && nightshade >= 1)
-            {
-                Dust dust;
-                Color color = new(210, 136, 107);
-                Vector2 position = Main.LocalPlayer.Center;
-                
-                if (Main.LocalPlayer.HasBuff(BuffType<NightshadeHeistBuff>()) && Main.LocalPlayer.HeldItem.type != ItemType<VampireBat>()) 
-                {
-                    color = new(178, 0, 226);
-                }
-
-                dust = Main.dust[Dust.NewDust(position, 0, 0, DustType<SparkDust>(), 0f, -3.0232563f, 0, color, 1f)];
-            }
-
-        }
 
         public delegate void ResetEffectsDelegate(GoldLeafPlayer Player);
         public static event ResetEffectsDelegate ResetEffectsEvent;
@@ -142,6 +95,36 @@ namespace GoldLeaf.Core
             Main.screenPosition.Y += Main.rand.Next(-Shake, Shake) + panDown;
             Main.screenPosition.X += Main.rand.Next(-Shake, Shake);
             if (Shake > 0) { Shake--; }
+        }
+
+        public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)
+        {
+            switch (Main.LocalPlayer.name) 
+            {
+                case "Pacnysam":
+                case "Pacny":
+                case "Pac":
+                case "Sylvia":
+                    {
+                        return [new Item(ItemType<BatPlushie>())];
+                    }
+                case "Scout":
+                case "Emperor":
+                    {
+                        return Enumerable.Empty<Item>();
+                        //return [new Item(ItemType<EmperorScoutTrousers>())];
+                        //return [new Item(ItemType<EmperorScoutTunic>())];
+                        //return [new Item(ItemType<EmperorScoutHood>())];
+                    }
+                case "Cypher":
+                    {
+                        return Enumerable.Empty<Item>();
+                        //return [new Item(ItemType<CypherHat>())];
+                        //return [new Item(ItemType<CypherCoat>())];
+                        //return [new Item(ItemType<CypherPants>())];
+                    }
+            }
+            return Enumerable.Empty<Item>();
         }
 
         public override void Unload()

@@ -27,24 +27,24 @@ namespace GoldLeaf.Items.Nightshade
 			Item.DamageType = DamageClass.Magic;
             Item.knockBack = 2;
 
-			Item.mana = 10;
+			Item.mana = 8;
 			
 			Item.shoot = ProjectileType<VampireBatP>();
 			Item.shootSpeed = 12f;
-
+			
 			Item.width = 22;
 			Item.height = 42;
 
-			Item.useTime = 26;
-			Item.useAnimation = 26;
+			Item.useTime = 20;
+			Item.useAnimation = 20;
 			Item.useStyle = ItemUseStyleID.Swing;
 			Item.noMelee = true;
 			Item.noUseGraphic = true;
-			Item.UseSound = SoundID.Item1;
-			Item.autoReuse = true;
+            Item.UseSound = SoundID.Item1;
+            Item.autoReuse = true;
 
 			Item.value = Item.sellPrice(0, 0, 60, 0);
-			Item.rare = ItemRarityID.Pink;
+			Item.rare = ItemRarityID.Orange;
 		}
 
 		public override bool AltFunctionUse(Player player)
@@ -56,15 +56,19 @@ namespace GoldLeaf.Items.Nightshade
 		{
 			if (player.altFunctionUse == 2)
 			{
-				if (player.GetModPlayer<GoldLeafPlayer>().nightshade == 0) 
+				if (player.GetModPlayer<NightshadePlayer>().nightshade == player.GetModPlayer<NightshadePlayer>().nightshadeMin) 
 				{
 					return false;
 				}
-				Item.shoot = ProjectileType<VampireBolt>();
+                Item.mana = 0;
+				Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/Monolith/Dash");
+                Item.shoot = ProjectileType<VampireBolt>();
 			}
 			else
 			{
-				Item.shoot = ProjectileType<VampireBatP>();
+                Item.mana = 8;
+                Item.UseSound = SoundID.Item1;
+                Item.shoot = ProjectileType<VampireBatP>();
 			}
 			return base.CanUseItem(player);
 		}
@@ -83,10 +87,9 @@ namespace GoldLeaf.Items.Nightshade
 
 		public override void SetDefaults()
 		{
-			Projectile.DamageType = DamageClass.Generic;
             Projectile.extraUpdates = 1;
-			Projectile.width = 12;
-			Projectile.height = 36;
+			Projectile.width = 8;
+			Projectile.height = 28;
 			Projectile.aiStyle = 1;
 			Projectile.friendly = true;
 			Projectile.tileCollide = true;
@@ -94,17 +97,36 @@ namespace GoldLeaf.Items.Nightshade
 			Projectile.penetrate = 2;
 			Projectile.scale = 1f;
 
-			Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.01f;
-		}
+            Projectile.DamageType = DamageClass.Magic;
+
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.012f;
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravityDelay = 10;
+        }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-			if (IsTargetValid(target)) 
+			Player player = Main.player[Projectile.owner];
+			player.GetModPlayer<NightshadePlayer>().nightshade++;
+			player.GetModPlayer<NightshadePlayer>().nightshadeTimer = 300;
+
+			if (player.GetModPlayer<NightshadePlayer>().nightshade == player.GetModPlayer<NightshadePlayer>().nightshadeMax) 
 			{
-                Player player = Main.player[Projectile.owner];
-                player.GetModPlayer<GoldLeafPlayer>().nightshade++;
-                player.GetModPlayer<GoldLeafPlayer>().nightshadeTimer = 180;
+				SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Monolith/BombClick") { Volume = 0.6f }, player.Center);
+			}
+            else if (player.GetModPlayer<NightshadePlayer>().nightshade <= player.GetModPlayer<NightshadePlayer>().nightshadeMax)
+            {
+                SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Deltarune/FountainTarget") { Pitch = -0.5f + ((player.GetModPlayer<NightshadePlayer>().nightshade - player.GetModPlayer<NightshadePlayer>().nightshadeMin) * 0.1f), Volume = 0.8f }, player.Center);
+                for (int i = 0; i < 5; i++)
+                {
+                    Dust.NewDust(target.position, target.width, target.height, DustType<SparkDustTiny>(), 0f, Main.rand.NextFloat(-2f, -5f), 0, new Color(210, 136, 107), Main.rand.NextFloat(0.6f, 0.9f));
+                }
             }
+        }
+
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+            SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
+            return true;
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -129,7 +151,16 @@ namespace GoldLeaf.Items.Nightshade
 			Main.spriteBatch.Draw(texture, drawPos, null, Color.White, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
 			//spriteBatch.Draw(texture, projectile.position + projectile.Size / 2 - Main.screenPosition, new Rectangle(0, 0, 26, 48), Color.White, projectile.rotation, texture.Size(), projectile.scale, SpriteEffects.None, 0f);
 		}
-	}
+
+        public override void OnKill(int timeLeft)
+        {
+			int t = Main.rand.Next(4, 8);
+            for (int i = 0; i < t; i++)
+            {
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<SparkDustTiny>(), Projectile.velocity.X * 0.7f, Projectile.velocity.Y * 0.7f, 0, new Color(210, 136, 107), Main.rand.NextFloat(0.4f, 0.7f));
+            }
+        }
+    }
 
 	public class VampireBolt : ModProjectile
 	{
@@ -144,21 +175,21 @@ namespace GoldLeaf.Items.Nightshade
 
 		public override void SetDefaults()
 		{
-            Projectile.DamageType = DamageClass.Generic;
             Projectile.extraUpdates = 2;
-			Projectile.width = 12;
-			Projectile.height = 36;
+			Projectile.width = 8;
+			Projectile.height = 28;
 			Projectile.aiStyle = 1;
 			Projectile.friendly = true;
 			Projectile.tileCollide = true;
-			Projectile.timeLeft = 500;
 			Projectile.penetrate = 1;
 			Projectile.scale = 1f;
-			Projectile.ai[0] = 7;
 
-			Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.01f;
+			Projectile.DamageType = DamageClass.Magic;
 
-			Projectile.GetGlobalProjectile<GoldLeafProjectile>().lifesteal = 2;
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.012f;
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravityDelay = 10;
+
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().lifesteal = 2;
 			Projectile.GetGlobalProjectile<GoldLeafProjectile>().lifestealMax = 1;
         }
 
@@ -166,9 +197,18 @@ namespace GoldLeaf.Items.Nightshade
         {
             Player player = Main.player[Projectile.owner];
 
-            Projectile.GetGlobalProjectile<GoldLeafProjectile>().lifesteal = player.GetModPlayer<GoldLeafPlayer>().nightshade * 2;
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().lifesteal = player.GetModPlayer<NightshadePlayer>().nightshade * 2;
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().lifestealMax = 1;
-            player.GetModPlayer<GoldLeafPlayer>().nightshade = 0;
+            player.GetModPlayer<NightshadePlayer>().nightshade = player.GetModPlayer<NightshadePlayer>().nightshadeMin;
+            //SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Monolith/GhostChirp") { Volume = 0.35f, Pitch = -0.8f }, player.Center);
+        }
+
+        public override void AI()
+        {
+            if (Main.rand.NextBool(5))
+            {
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<SparkDustTiny>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, new Color(210, 136, 107), 0.6f);
+            }
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -176,11 +216,23 @@ namespace GoldLeaf.Items.Nightshade
             Player player = Main.player[Projectile.owner];
 
             for (float k = 0; k < 6.28f; k += 0.20f)
-                Dust.NewDustPerfect(Projectile.position, DustType<VampireDust>(), Vector2.One.RotatedBy(k) * 1.6f);
+                Dust.NewDustPerfect(Projectile.Center, DustType<SparkDustTiny>(), Vector2.One.RotatedBy(k) * 1.6f, 0, new Color(210, 136, 107));
 			for (int k = 0; k < Main.rand.Next(8, 11); k++)
-				Dust.NewDustPerfect(Projectile.position, DustType<SparkDust>(), Vector2.One.RotatedBy(k) * Main.rand.NextFloat(1.5f, 2.5f), 0, new Color(210, 136, 107), 1f);
+				Dust.NewDustPerfect(Projectile.Center, DustType<SparkDust>(), Vector2.One.RotatedBy(k) * Main.rand.NextFloat(1.5f, 2.5f), 0, new Color(210, 136, 107), 1f);
 
             SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Monolith/GhostWhistle"), player.Center);
+        }
+
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+            SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Monolith/GhostChirp") { Volume = 0.25f }, Main.player[Projectile.owner].Center);
+
+            int t = Main.rand.Next(4, 8);
+            for (int i = 0; i < t; i++)
+            {
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<SparkDustTiny>(), Projectile.velocity.X * 0.7f, Projectile.velocity.Y * 0.7f, 0, new Color(210, 136, 107), Main.rand.NextFloat(0.4f, 0.7f));
+            }
+            return true;
         }
 
         public override bool PreDraw(ref Color lightColor)

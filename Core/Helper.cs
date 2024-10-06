@@ -13,9 +13,9 @@ using static Terraria.WorldGen;
 using static Terraria.ModLoader.ModContent;
 
 
-namespace GoldLeaf.Core
+namespace GoldLeaf.Core //most of this is snatched from starlight river and spirit, i (pacnysam) did not code any of this!
 {
-    public static class Helper //most of this is stolen from starlight river and spirit, i (pacnysam) did not code any of this!
+    public static class Helper 
     {
         public static Rectangle ToRectangle(this Vector2 vector) => new Rectangle(0, 0, (int)vector.X, (int)vector.Y);
         public static Vector2 ScreenSize => new Vector2(Main.screenWidth, Main.screenHeight);
@@ -177,12 +177,12 @@ namespace GoldLeaf.Core
             {
                 Item item = inventory[items[i]];
 
-                // If we're at the last item stack, and we're not going to consume the whole thing, just decrease its count by the amount needed.
+                // If we're at the last item stack, and we're not going to consume the whole thing, just decrease its segmentTimer by the amount needed.
                 if (i == items.Count - 1 && count < item.stack)
                 {
                     item.stack -= count;
                 }
-                // Otherwise, delete the item and decrement count as needed.
+                // Otherwise, delete the item and decrement segmentTimer as needed.
                 else
                 {
                     count -= item.stack;
@@ -373,6 +373,25 @@ namespace GoldLeaf.Core
                 item.playerIndexTheItemIsReservedFor = Main.myPlayer;
             }
             return item;
+        }
+
+        public static bool IsWeapon(this Item item) => item.type != ItemID.None && item.stack > 0 && item.useStyle > ItemUseStyleID.None && (item.damage > 0 || item.useAmmo > 0 && item.useAmmo != AmmoID.Solution);
+
+        public static void DropItem(this Entity ent, int type, IEntitySource source, int stack = 1)
+        {
+            int i = Item.NewItem(source, ent.Hitbox, type, stack);
+            if (Main.netMode != NetmodeID.SinglePlayer)
+                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, i);
+        }
+
+        public static void DropItem(this Entity ent, int type, float chance, IEntitySource source, int stack = 1)
+        {
+            if (Main.rand.NextDouble() < chance)
+            {
+                int i = Item.NewItem(source, ent.Hitbox, type, stack);
+                if (Main.netMode != NetmodeID.SinglePlayer)
+                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, i);
+            }
         }
 
         public static bool IsTargetValid(NPC npc) => npc.active && !npc.friendly && !npc.immortal && !npc.dontTakeDamage;

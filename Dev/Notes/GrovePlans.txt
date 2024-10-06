@@ -1,0 +1,10 @@
+in the beginning the only items that can be obtained are echobark items from the trees and eve droplet items from the environment and common enemies
+
+after an evil boss is defeated, fallen wraiths and warriors start spawning in the lowest parts of the grove, dropping broken blades on death
+
+
+after an evil boss is defeated, fallen wraiths start spawning in the lowest parts of the grove, dropping gold leaves on death. gold leaves can be combined with eve droplets at the swordsman's grave to create a dormant whispering bloom, immediately summoning the boss. the boss drop shards of heaven, which can be used to craft its set. defeating it also awakens the whispering bloom, having one in your inventory will make the grove's fallen spirits recognize you, and they can be talked to like npcs. the swordsman can also be talked to or challenged to refight. hostile enemy spawnrates in the grove are drastically reduced when holding a whispering bloom, losing the flower will cause the grove to go back to its previous state
+
+The toxin grove is a hardmode event that is started by burning a whispering bloom with cursed flame/dissolving it with ichor in one of the towers. this act causes the spirits of the grove to lose themselves, the flora starts to release toxins and the entire biome becomes hostile. the grove can only go back to its previous state by returning to the swordsman's tomb and defeating the corrupted version of them, giving you a repaired bloom
+
+echobark can be used to make tools, a furniture set and armor

@@ -1,6 +1,6 @@
 displayName = Gold Leaf
 author = Pacnysam
 version = 0.1
-hideCode = true
-includeSource = false
+hideCode = false
+includeSource = true
 buildIgnore = .gitignore, *.sln, *.csproj, *.user, obj\*, bin\*, .vs\*, Properties\*, .git\*

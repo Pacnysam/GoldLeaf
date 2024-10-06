@@ -25,18 +25,14 @@ Items: {
 		DisplayName: Vampire Bat
 		Tooltip:
 			'''
-			Damaging enemies accumulates nightshade, increasing movement and attack speed
-			<right> to consume nightshade and leech health <e> <interact>
+			Damaging enemies accumulates nightshade, increasing movement speed and acceleration
+			<right> to consume nightshade and leech health
 			'''
 	}
 
 	Aether: {
 		DisplayName: Aether's Comet
-		Tooltip:
-			'''
-			Casts a flame that bursts on command, damage ramps up over time
-			Channeling the flame for long enough makes it shoot beams at nearby enemies
-			'''
+		Tooltip: Casts an explosive flame that sparks at nearby enemies
 	}
 
 	GraniteWard: {
@@ -46,7 +42,7 @@ Items: {
 
 	MeteorMissile: {
 		DisplayName: Meteor Missile
-		Tooltip: ""
+		Tooltip: Kills and critical strikes release homing missiles
 	}
 
 	ToxicPositivity: {
@@ -90,7 +86,7 @@ Items: {
 
 	Whirlpool: {
 		DisplayName: Cascade Staff
-		Tooltip: Shoots explosive whirlpools that slightly home toward the cursor
+		Tooltip: Casts explosive whirlpools that slightly home toward the cursor
 	}
 
 	NoxGauntlet: {
@@ -113,13 +109,67 @@ Items: {
 	}
 
 	UndergroveMusicBox: {
-		DisplayName: Undergrove Music Box
+		DisplayName: Whispering Grove Music Box
 		Tooltip: ""
 	}
 
 	OxeyeDaisy: {
 		DisplayName: Oxeye Daisy
 		Tooltip: Loves me... loves me not...
+	}
+
+	HeartTiny: {
+		DisplayName: Small Heart
+		Tooltip: ""
+	}
+
+	HeartLarge: {
+		DisplayName: Big Heart
+		Tooltip: ""
+	}
+
+	StarLarge: {
+		DisplayName: Big Star
+		Tooltip: ""
+	}
+
+	StarTiny: {
+		DisplayName: Small Star
+		Tooltip: ""
+	}
+
+	NightshadeRing: {
+		Tooltip: Increases nightshade capacity
+		DisplayName: Nightshade Ring
+	}
+
+	ClutterGlove: {
+		DisplayName: Clutter Glove
+		Tooltip: ""
+	}
+
+	ClutterGloveCrimson: {
+		DisplayName: Clutter Glove
+		Tooltip: 80% chance to not consume tissue samples
+	}
+
+	ClutterGloveCorruption: {
+		DisplayName: Clutter Glove
+		Tooltip: 80% chance to not consume shadow scales
+	}
+
+	Echobark: {
+		DisplayName: Echobark
+		Tooltip: ""
+	}
+
+	Constellation: {
+		DisplayName: Constellation
+		Tooltip:
+			'''
+			6 summon tag damage
+			Strike enemies to lengthen the whip
+			'''
 	}
 }
 
@@ -140,22 +190,34 @@ Biomes: {
 	}
 }
 
-Tiles.MadcapPaintingT.MapEntry: Madcap Painting T
+Tiles.MadcapPaintingT.MapEntry: Madcap Painting
 
 Projectiles: {
 	VampireBatP.DisplayName: Vampire Bat
 	VampireBolt.DisplayName: Vampire Bolt
-	AetherBeam.DisplayName: Aether Beam
-	AetherBolt.DisplayName: Aether Bolt
-	AetherBurst.DisplayName: Aether Burst
+	AetherBeam.DisplayName: Aether Spark
+	AetherBolt.DisplayName: Aether's Comet
+	AetherBurst.DisplayName: Aether's Comet
 	WhirlpoolP.DisplayName: Whirlpool
-	QuetzalP.DisplayName: Quetzal Bolt
-	QuetzalSmallP.DisplayName: Quetzal Fragment
+	QuetzalP.DisplayName: Quetzalcoatl
+	QuetzalSmallP.DisplayName: Quetzalcoatl
+	EveDropletP.DisplayName: Eve Droplet
+	ClutterScale.DisplayName: Shadow Scale
+	ClutterTissue.DisplayName: Tissue Sample
+	MeteorMissileP.DisplayName: Meteor Missile P
+	Ember.DisplayName: Ember
+	AetherEmber.DisplayName: Aether Ember
+	ConstellationP.DisplayName: Constellation P
 }
 
 Buffs: {
 	NightshadeHeistBuff: {
 		DisplayName: Nightshade Heist
 		Description: WIP
+	}
+
+	ConstellationDebuff: {
+		DisplayName: Constellation Debuff
+		Description: Mods.GoldLeaf.Buffs.ConstellationDebuff.Description
 	}
 }

@@ -9,7 +9,6 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Localization;
-using static System.Net.Mime.MediaTypeNames;
 using GoldLeaf.Effects.Gores;
 
 namespace GoldLeaf.Items.Dungeon
@@ -21,7 +20,8 @@ namespace GoldLeaf.Items.Dungeon
 
         public override void SetDefaults() 
 		{
-			Item.damage = 26;
+			Item.damage = 30;
+			ItemID.Sets.ToolTipDamageMultiplier[Item.type] = 0.8f;
 			Item.DamageType = DamageClass.Magic;
 			Item.mana = 27;
 			Item.width = 44;
@@ -32,9 +32,9 @@ namespace GoldLeaf.Items.Dungeon
 			Item.useStyle = ItemUseStyleID.Shoot;
             Item.staff[Item.type] = true;
             Item.shoot = ProjectileType<WhirlpoolP>();
-			Item.knockBack = 10;
+			Item.knockBack = 9;
 			Item.value = 100000;
-			Item.rare = ItemRarityID.Blue;
+			Item.rare = ItemRarityID.Green;
 			Item.UseSound = SoundID.Item1;
 			Item.autoReuse = false;
 			Item.channel = true;
@@ -98,7 +98,9 @@ namespace GoldLeaf.Items.Dungeon
 			Projectile.timeLeft = 200;
 			Projectile.ignoreWater = true;
 
-			counter = Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
+            Projectile.DamageType = DamageClass.Magic;
+
+            counter = Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
 
 			Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.35f;
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravityDelay = 15;

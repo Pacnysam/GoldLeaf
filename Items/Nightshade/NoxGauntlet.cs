@@ -35,7 +35,7 @@ namespace GoldLeaf.Items.Nightshade
 			Item.autoReuse = true;
 
             Item.value = Item.sellPrice(0, 0, 60, 0);
-            Item.rare = ItemRarityID.Green;
+            Item.rare = ItemRarityID.Orange;
 			
 			Item.UseSound = SoundID.Item1;
 
@@ -71,5 +71,16 @@ namespace GoldLeaf.Items.Nightshade
 			recipe.AddTile(TileID.WorkBenches);
 			recipe.Register();
 		}*/
+    }
+
+    public class NightshadeHeistBuff : ModBuff
+    {
+        public override void SetStaticDefaults()
+        {
+            //DisplayName.SetDefault("Nightshade Heist");
+            //Description.SetDefault("WIP");
+            Main.pvpBuff[Type] = true;
+            Main.buffNoTimeDisplay[Type] = false;
+        }
     }
 }

@@ -1,0 +1,35 @@
+Nightshade Set
+post skeletron, lticlassing is encouraged
+nightshade mechanic makes players choose between power and survival, while letting a very skilled player have both
+keeping high nightshade improves power and reliability while maintaining low nightshade provides extra utility and safety
+obtained late prehardmode, stays strong until early hardmode, a very good player can find them useful for much longer
+
+Nightshade:
+-NOT A BUFF, stacks up to 12, damage increases and defense decreases with every stack, fades over time
+
+vampire bat: - Ranged Weapon
+basic weapon with solid damage, serves to introduce mechanics and bring the whole kit together
+-hits give you a stack of nightshade, right clicking shoots a bolt that heals you for each stack, but removes all of them
+
+nox gauntlets: - Hybrid Weapon
+should be the thing to really push the multiclassing aspect, very high damage but risky to use
+-left click to punch; a slow, powerful, high knockback attack providing 2 nightshade each hit; does melee damage
+-hold right mouse to briefly sustain a void, soaking up damage and gaining capacity for each stack of nightshade
+-after cancelling or reaching capacity, left click to launch the void
+
+witness: - Minion
+doesnt have a way to increase nightshade on its own, requires using weapons of other classes
+-locks onto an enemy and shoots inaccurate projectiles, locked on enemies do not deal contact damage
+-every stack of nightshade closes its eye a little bit, slowly increasing contact damage to normal levels while growing more accurate
+-at 12 nightshade they will stick to the player and psychicly damage enemies in range
+
+venus pocketwatch: - Magic Weapon
+supplimental item, main multiclasser role given back to nox; primarily supports vampire bat healing
+-shoots a clock hand that slowly bleeds an enemy, sucking nightshade each time
+-right click to rip it out doing damage and returing to you, increasing self healing by 20%, duration determined by nightshade
+
+nightshade syringe: - Health Potion
+might need some balancing, almost useless when used on its own; much, much better when used with nightshade set
+-heals incrementally, getting damaged interrupts healing
+-10hp for every stack of nightshade, provides 6 seconds of nightshade sickness for every stack
+-nightshade sickness functions like potion sickness but also disables natural healing
