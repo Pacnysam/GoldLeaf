@@ -39,7 +39,7 @@ namespace GoldLeaf.Items.Dungeon
 			Item.autoReuse = false;
 			Item.channel = true;
 			Item.noMelee = true;
-		}
+        }
 		
 
 		public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)

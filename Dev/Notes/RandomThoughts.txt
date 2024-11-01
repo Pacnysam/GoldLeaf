@@ -1,0 +1,16 @@
+rockfish sounds slightly annoying they should be semi passive
+
+cartographer npc that you can take on adventures with you and periodically reveals the nearby area on the map. wormholes out if they get damaged too much or you run out of money to pay them. has okay happiness living in any biome, but charges more if exploring evil biomes, cavern layer, or underground desert/snow/jungle. wormholes out instantly if in dungeon or hell, drinks gills potions to prevent them from drowning, will wormhole out if player dies, attacks by throwing clutter
+
+maybe after evil boss theres a warrior npc that you can hire and fights with you
+
+idk i wanna have an npc that you can go on adventures with
+
+underground enemies
+
+-rift construct, enemy: floats around slowly, shoots beams at you with a lil windup. killing them spawns a portal that upon interaction teleports you to a random spot nearby (i can reuse quetzal portal for this)
+-beheaded, enemy: big skeleton with an axe, at 50% HP their skull pops off, and it runs around looking for it, finding the skull makes it recover all health
+
+ill do evil boss drops next, they already have all sprites done. after that ill do nightshade items, prehm blizzard content and THEN ill get started on whispering grove
+
+minion weapon based on twinkle popper?

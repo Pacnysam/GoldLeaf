@@ -14,6 +14,9 @@ namespace GoldLeaf.Core
     {
         public override bool InstancePerEntity => true;
 
+        public bool canSpawnMiniHearts = true;
+        public bool canSpawnMiniStars = true;
+
         public float gravity = 0f;
         public int gravityDelay = 0;
         public int lifesteal;

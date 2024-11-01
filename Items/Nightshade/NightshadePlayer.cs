@@ -21,13 +21,13 @@ namespace GoldLeaf.Items.Nightshade
         public int nightshadeMin = 0;
         public int nightshadeMax = 12;
 
-        //public bool nightshadeRing = false;
+        public bool nightshadeRing = false;
 
         public override void ResetEffects()
         {
             nightshadeMin = 0;
             nightshadeMax = 12;
-            //nightshadeRing = false;
+            nightshadeRing = false;
         }
 
         public override void PreUpdate()
@@ -43,7 +43,6 @@ namespace GoldLeaf.Items.Nightshade
                 nightshade = nightshadeMax;
             }
 
-            nightshadeTimer--;
             if (nightshadeTimer <= 0)
             {
                 nightshadeTimer = 6 + (4 * (nightshade - nightshadeMin));
@@ -53,34 +52,33 @@ namespace GoldLeaf.Items.Nightshade
                     nightshade--;
                 }
             }
-
-            Player.maxRunSpeed += .08f * nightshade;
-            Player.runAcceleration += .02f * nightshade;
-            Main.LocalPlayer.GetModPlayer<GoldLeafPlayer>().itemSpeed += .02f * nightshade;
+            if (nightshadeTimer > 0) { nightshadeTimer--; }
 
             if (Main.LocalPlayer.dead) nightshade = nightshadeMin;
 
             if (Main.rand.NextFloat() < 0.011627907f * nightshade && nightshade > nightshadeMin)
             {
                 Dust dust;
+                int type = DustType<SparkDustTiny>();
                 Color color = new(210, 136, 107);
                 Vector2 position = Main.LocalPlayer.Center;
 
-                if (Main.LocalPlayer.HasBuff(BuffType<NightshadeHeistBuff>()) && Main.LocalPlayer.HeldItem.type != ItemType<VampireBat>())
+                if (nightshadeRing)
+                {
+                    color = new(166, 172, 167);
+                }
+                if (Main.LocalPlayer.HasBuff(BuffType<NightshadeHeist>()))
                 {
                     color = new(178, 0, 226);
                 }
 
                 if (nightshade == nightshadeMax) 
                 { 
-                    dust = Main.dust[Dust.NewDust(position, 0, 0, DustType<SparkDust>(), 0f, -3.0232563f, 0, color, 1f)];
+                    type = DustType<SparkDust>();
                 }
-                else 
-                {
-                    dust = Main.dust[Dust.NewDust(position, 0, 0, DustType<SparkDustTiny>(), 0f, -3.0232563f, 0, color, 1f)];
-                }
-            }
 
+                dust = Main.dust[Dust.NewDust(position, 0, 0, type, 0f, -3.0232563f, 0, color, 1f)];
+            }
         }
     }
 }

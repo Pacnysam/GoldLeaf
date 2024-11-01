@@ -12,8 +12,8 @@ almost all heaven's gate content is LONG gone and not even being considered, fro
 -mimic, heretic and scrap collector npcs [pointless bloat
 
 the only heaven's gate content that i might revisit (with major reworks), from least to most likely this includes:
--desert and snow outposts [the only part of the surface reworks that are possible, VERY low priority though
 -dry/temperate forest biomes [interesting and very fun idea but far too large of a scope than i can manage
+-desert and snow outposts [the only part of the surface reworks that are possible, VERY low priority though
 -misc earlygame items (nemesis, toxic positivity, aurora, evil boss summon weapons, etc) [would need major reworks
 -prehardmode sandstorm content/sunstone [really cool but overly complex for it's point in progression
 
@@ -23,6 +23,7 @@ old gold leaf content is most likely staying, from least to most likely this inc
 -surface dungeon items (runestone items and ghost bottle) [partially completed, but low priority
 
 content that is in the works currently, from lowest to highest priority this includes:
--misc earlygame items (meteor missile, constellation, paperweight, granite ward, etc) [getting reworks, should be simple
+-granite enemies [im inexperienced with NPCs
+-misc earlygame items (paperweight, granite ward, etc) [getting reworks, should be simple
 -blizzard and nightshade item sets [getting major reworks but ideas are fun and fill progression gaps
 -whispering grove biome [literally what the mod is named after

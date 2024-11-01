@@ -1,0 +1,15 @@
+fallen wraiths: teeny, variants based around each of the 4 classes and only have one arm, spawn in the underground whispering grove frequently
+melee ones have a sword and dash slash at players, ranged ones shoot a lil bow with their mouth, magic ones have a spellbook and cast a volley of explosive fireballs, summon ones have a staff and 4 butterflies orbiting them, sends them at players one at a time
+
+fallen warriors: slightly above player size, has 2 arms, both with swords, spawn in the underground whispering grove more rarely, drops broken spirit swords on death
+dash slash at the player twice then slashes both swords, sending a wave projectile go forward, short cooldown period
+
+fallen swordsman boss: very high defense for a boss on its tier, summoned by using a broken spirit sword in the swordsman's tomb, i could do a cool intro animation where the sword spins around above the player and its arm comes out of nowhere to snatch it before fully materializing
+
+ur supposed to damage all 3 of the other swords to break similarly to the first one
+
+once all 4 swords are broken his main body bevomes vulnerable, giving him a plethora of new (more magical) attacks
+
+desperation grapple phase, after getting him to 30% HP he will discard the swords, ditching almost all previous attacks. and try to rush down the player at a crazy speed, defense and damage is reduced, maybe he sheds his armor? idk. anyways attacks are much simpler and less numerous, but go rly quickly, he tries to punch, swipe and dash grab the player
+
+expert makes him do idk om not sure

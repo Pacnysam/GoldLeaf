@@ -12,6 +12,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Localization;
+using Terraria.GameContent.Drawing;
 
 namespace GoldLeaf.Items.Nightshade
 {
@@ -220,6 +221,10 @@ namespace GoldLeaf.Items.Nightshade
 			for (int k = 0; k < Main.rand.Next(8, 11); k++)
 				Dust.NewDustPerfect(Projectile.Center, DustType<SparkDust>(), Vector2.One.RotatedBy(k) * Main.rand.NextFloat(1.5f, 2.5f), 0, new Color(210, 136, 107), 1f);
 
+            ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,
+                new ParticleOrchestraSettings { PositionInWorld = Projectile.Center },
+                Projectile.owner);
+
             SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Monolith/GhostWhistle"), player.Center);
         }
 
@@ -277,7 +282,7 @@ namespace GoldLeaf.Items.Nightshade
 			}
 			Main.spriteBatch.Draw(texture, basePos, frame, new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 175), Projectile.rotation, origin, Projectile.scale, effect, 0.0f);
 
-			return false;
+			return true;
 		}
 	}
 }

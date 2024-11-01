@@ -1,0 +1,12 @@
+prehm blizzard items
+
+chunks of enchanted ice crystals grow on the surface during a blizzard, attacking these with a hammer breaks them, dropping dormant shards. killing enemies during a blizzard will transform them into aroura shards, used to craft these items
+
+-avalanche, gun: not missing shots increases firerate and velocity
+-nitrogen perfume, magic weapon: sprays a short range cloud of perfume that slows enemies
+-arctic flower, minion: summons wraiths that shoot cold energy, applying a stack of frost, enemies with 8 stacks get frozen in place briefly, ghosts cant target frozen enemies
+-aurora mirror, block: projectiles bounce off of it
+-frosty masquerade, summon armor: summons a customizable minion that slowly shoots projectiles inflicting debuffs. frosty robe makes it stick near you with 2+ damage, flinx fur coat makes it seek out enemies applying longer debuffs. skull mask summons a skull that shoots fireballs inflicting frostburn; bird mask summons a lil bird that shoots feathers inflicting deep chill (15% reduced damage); monster mask summons a demon that shoots icicles inflicting cold snap (5 armor penetration)
+frosty masks: 3 def, mana increased by 20
+frosty robe: 1 def, minion damage increased by 5%, +1 sentry slot
+frosty boots 1 def, magic damage increased by 8%

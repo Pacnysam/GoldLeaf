@@ -46,7 +46,7 @@ namespace GoldLeaf.Items.Grove
 			Item.UseSound = SoundID.Item1;
 			Item.autoReuse = true;
 
-			//ItemID.Sets.ItemIconPulse[Item.type] = true;
+            //ItemID.Sets.ItemIconPulse[Item.type] = true;
 
             Item.shoot = ProjectileType<EveDropletP>();
 			Item.shootSpeed = 10f;

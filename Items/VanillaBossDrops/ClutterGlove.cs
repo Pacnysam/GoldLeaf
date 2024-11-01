@@ -14,16 +14,21 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.Audio;
 using GoldLeaf.Items.Grove;
+using Terraria.GameContent.ItemDropRules;
+using Terraria.UI;
+using Terraria.ModLoader.IO;
 
 namespace GoldLeaf.Items.VanillaBossDrops
 {
     public abstract class ClutterGlove : ModItem
     {
+
         public override void SetDefaults()
         {
             Item.damage = 10;
             Item.DamageType = DamageClass.Ranged;
             Item.knockBack = 2;
+            Item.crit = 6;
 
             //Item.ammo = 0;
 
@@ -41,6 +46,8 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Item.value = Item.sellPrice(0, 1, 50, 0);
             Item.rare = ItemRarityID.Blue;
 
+            ItemID.Sets.IsRangedSpecialistWeapon[Item.type] = true;
+
             Item.shootSpeed = 11f;
             Item.useAmmo = ItemType<EveDroplet>();
             Item.shoot = ProjectileType<EveDropletP>();
@@ -49,11 +56,19 @@ namespace GoldLeaf.Items.VanillaBossDrops
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             int p = Projectile.NewProjectile(source, position, velocity.RotatedBy(MathHelper.ToRadians(Main.rand.Next(-3, 3))), type, damage, knockback, player.whoAmI);
-            
-            if (type == ProjectileType<EveDropletP>()) { Main.projectile[p].timeLeft = Main.rand.Next(115, 200); Main.projectile[p].velocity *= 0.7f; }
-            if (type == ProjectileType<ClutterScale>() || type == ProjectileType<ClutterTissue>()) { Main.projectile[p].damage += 14; }
+
+            if (type == ProjectileType<EveDropletP>()) { Main.projectile[p].timeLeft = Main.rand.Next(115, 200); Main.projectile[p].velocity *= 0.7f; Main.projectile[p].damage -= 9;}
+            if (type == ProjectileType<ClutterScale>() || type == ProjectileType<ClutterTissue>()) { Main.projectile[p].damage += 11; }
+            if (type == ProjectileID.SpikyBall) { Main.projectile[p].velocity *= 0.5f; Main.projectile[p].damage -= 6; }
+            if (type == ProjectileID.SporeTrap) { Main.projectile[p].velocity *= Main.rand.NextFloat(0.3f, 0.5f); Main.projectile[p].timeLeft = 900; Main.projectile[p].GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.005f; }
+            if (type == ProjectileID.HornetStinger) { Main.projectile[p].GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.12f; Main.projectile[p].damage += 14; }
 
             return false;
+        }
+
+        public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
+        {
+            if (type == ProjectileID.Bone) { type = ProjectileID.BoneGloveProj; velocity *= 0.7f; }
         }
     }
 
@@ -104,7 +119,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Projectile.friendly = true;
             Projectile.tileCollide = true;
             Projectile.ignoreWater = false;
-            Projectile.ArmorPenetration = 8;
+            Projectile.ArmorPenetration = 10;
             Projectile.penetrate = 3;
             Projectile.extraUpdates = 1;
 
@@ -140,6 +155,11 @@ namespace GoldLeaf.Items.VanillaBossDrops
                 Main.spriteBatch.Draw(texture, drawPos, new Microsoft.Xna.Framework.Rectangle?(texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), color, Projectile.rotation, drawOrigin, Projectile.scale, effects, 0f);
             }
             return true;
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            Projectile.damage = (int)(Projectile.damage * 0.7f);
         }
 
         public override void OnKill(int timeLeft)
@@ -212,7 +232,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
         {
             SoundEngine.PlaySound(SoundID.DD2_LightningBugHurt, Projectile.Center);
 
-            target.SimpleStrikeNPC(damageDone, 0, false, 0, DamageClass.Ranged);
+            target.SimpleStrikeNPC((int)(damageDone * 0.7), hit.HitDirection, hit.Crit, 0, DamageClass.Ranged);
         }
 
         public override void OnKill(int timeLeft)
@@ -258,20 +278,48 @@ namespace GoldLeaf.Items.VanillaBossDrops
     {
         public override void SetDefaults(Item item)
         {
-            if (item.type == ItemID.ShadowScale)
+            switch (item.type)
             {
-                item.ammo = ItemType<EveDroplet>();
-                item.shoot = ProjectileType<ClutterScale>();
-            }
-            if (item.type == ItemID.TissueSample)
-            {
-                item.ammo = ItemType<EveDroplet>();
-                item.shoot = ProjectileType<ClutterTissue>();
-            }
-            if (item.type == ItemID.Bone)
-            {
-                item.ammo = ItemType<EveDroplet>();
-                item.shoot = ProjectileID.BoneGloveProj;
+                /*case ItemID.StoneBlock:
+                    {
+                        item.ammo = ItemType<EveDroplet>();
+                        item.shoot = ProjectileID.PewMaticHornShot;
+                        break;
+                    }*/
+                case ItemID.SpikyBall:
+                    {
+                        item.ammo = ItemType<EveDroplet>();
+                        break;
+                    }
+                case ItemID.ShadowScale:
+                    {
+                        item.ammo = ItemType<EveDroplet>();
+                        item.shoot = ProjectileType<ClutterScale>();
+                        break;
+                    }
+                case ItemID.TissueSample:
+                    {
+                        item.ammo = ItemType<EveDroplet>();
+                        item.shoot = ProjectileType<ClutterTissue>();
+                        break;
+                    }
+                /*case ItemID.Stinger:
+                    {
+                        item.ammo = ItemType<EveDroplet>();
+                        item.shoot = ProjectileID.HornetStinger;
+                        break;
+                    }
+                case ItemID.JungleSpores:
+                    {
+                        item.ammo = ItemType<EveDroplet>();
+                        item.shoot = ProjectileID.SporeTrap;
+                        break;
+                    }*/
+                case ItemID.Bone:
+                    {
+                        item.ammo = ItemType<EveDroplet>();
+                        break;
+                    }
             }
         }
     }

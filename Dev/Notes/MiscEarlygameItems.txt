@@ -1,0 +1,55 @@
+-relic whip: 2 tag damage, can be charged and released to add tag critical strike chance and apply midas (found in gold chests)
+ALT: hits seep mana from enemies, charging right click rapidly summons homing spirits using 20 mana each (found in desert chests)
+
+low priority misc items
+
+-bomb glove, ranged weapon: toss up to 4 bombs that stick to enemies, tossing a ninth will detonate the first, right click to detonate all at once. spawns in underground chests
+
+-gilded pauldron, armor piece: increases melee speed, when worn with gold armor it makes melee weapons inflict midas on crit, found in cavern chests
+-shining gauntlet, armor piece: reduces mana consumption, when worn with platinum armor it makes magic weapons sap mana on crit, found in cavern chests
+
+-hot sauce, accessory: critical strikes burn, burning enemies have increased speed, random chance to be confused, and drop damaging flamelets periodically. found in ice chests
+-beast's tail, flail: swings around the player faster over time, releases automatically after a few seconds, pulls the player along with it. found in ice chests
+
+-wanted poster, accessory: marks a random enemy every 5 seconds, delays on hit, marked enemies have midas, killing them stops ammo consumption for 5 seconds, tile, randomly placed in underground desert
+
+-idk, sword: sword strikes summon orbs that shoot projectiles at the cursor on swing
+-idk, flail: swinging it around builds a flame in the lantern, dropping it makes it shatter and explode into bouncing flamelets. crafted
+
+-idk, accessory: mini health hearts are replaced with normal hearts
+
+-event horizon, flail: pulls in nearby enemies and items when on the ground
+-spirit bow, bow: hold left click to charge up to 5 arrows, release to fire out a spirit; if an enemy is near the spirit it will halt its movement and fire the arrows at them
+
+insect scepter, minion: summons a king fly that tosses coins and at enemies, enemies killed by coins drop gems. collecting the gems will increase minion attack speed by 10% (found in desert chests)
+
+rattleworm: summons a worm that functions like stardust dragon, gains a segment on eliminating an enemy or reaching a damage threshold on bosses (max 10), poisons enemies at max length (drops from evil boss) "summons a worm to devour your enemies, does not occupy minion slots"
+discolored creeper, accessory: summons a brain that rushes to an enemy, taking control of them and making them shoot beams at other nearby enemies, they are slowed and confused, if no other enemies are nearby it will damage them over time (drops from evil boss) "summons a brain to hypnotize your enemies, does not occupy minion slots"
+
+-bladecaster, melee weapon: launches a bladed weapon that does no damage but starts spinning and returning to you in an arc, dealing damage to every enemy on the way back, spawns in granite chests
+-springwater flask, magic weapon: releases defense lowering mist, spawns in marble chests
+-granite cluster, sentry: summons a granite cluster that slowly seeps homing energy, whipping it releases it all at once but discharges it for a sec, made with granite and silver/tungsten
+-rampart staff, sentry: spawns a tower that summons mini hoplites to attack your enemies, made with marble and silver/tungsten
+
+mining focused granite armor, crafted with granite and silver/tungsten: set bonus makes a ring around the user on breaking tiles or hitting enemies, keeping enemies away, radius decreases slowly over time or when it hits an enemy
+-granite helmet: 3 defense, +10% mining speed
+-granite breastplate: 5 defense, +2 tile mining range
+-granite greaves: 5 defense, +1 tile placement range
+
+earlygame throwing focused ranger armor crafted from leather (now sold by merchant), set bonus gives a 30% chance not to consume thrown items
+-bandit hood: -150 aggro
+-bandit cloak: +5% ranged damage
+-bandit boots: +10% projectile velocity
+
+
+IDK IF I WANNA INCLUDE:
+
+bubble flask, throwing weapon: does nothing idk. crafted with gel and a bottle
+
+tragic 8 ball: - Accessory - underground chests
+-will greatly buff damage, defense, item speed or regeneration; decreases all of the others slightly
+-this changes every time you take damage 
+
+-guardian armor, melee armor: individual pieces buff melee stats and have higher defense than armors of a similar tier, increases aggro. double press down to transfer all of your defense to a teammate, do it again anywhere to return it. gain healing overtime while armor is missing
+-parasite armor, melee armor: individual pieces buff melee stats and have higher defense than armors of a similar tier, massively increases aggro. set bonus steals all armor from nearby allies, decreases their aggro massively, all attacks heal nearby allies
+

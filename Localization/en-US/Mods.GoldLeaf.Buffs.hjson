@@ -1,0 +1,14 @@
+NightshadeHeist: {
+	DisplayName: Nightshade Heist
+	Description: You're the getaway driver!
+}
+
+ConstellationTag: {
+	DisplayName: Constellated
+	Description: Decorated By a constellation...
+}
+
+AmberStun: {
+	DisplayName: Amber Stun
+	Description: No moving!
+}

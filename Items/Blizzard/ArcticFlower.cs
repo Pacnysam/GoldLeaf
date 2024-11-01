@@ -19,7 +19,7 @@ namespace GoldLeaf.Items.Blizzard
 			Item.value = 50000;
 			Item.rare = ItemRarityID.Blue;
 			Item.autoReuse = false;
-		}
+        }
 
 		/*public override void AddRecipes()
 		{

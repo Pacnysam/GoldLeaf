@@ -38,9 +38,11 @@ namespace GoldLeaf.Tiles.MusicBoxes
 			TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
 			TileObjectData.newTile.Origin = new Point16(0, 1);
 			TileObjectData.newTile.LavaDeath = false;
-			TileObjectData.addTile(Type);
-			TileID.Sets.DisableSmartCursor[Type] = true;
             TileObjectData.newTile.CoordinateHeights = new int[] { 16, 18 };
+            TileObjectData.addTile(Type);
+			
+            TileID.Sets.DisableSmartCursor[Type] = true;
+            
 
             AddMapEntry(new Color(200, 200, 200), Language.GetText("ItemName.MusicBox"));
 			RegisterItemDrop(ItemType<UndergroveMusicBox>());

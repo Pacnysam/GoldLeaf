@@ -7,6 +7,7 @@ using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
 using GoldLeaf.Items.Misc;
+using GoldLeaf.Tiles.Decor;
 
 namespace GoldLeaf.Items.VanillaBossDrops
 {
@@ -52,43 +53,25 @@ namespace GoldLeaf.Items.VanillaBossDrops
                     }
                 case NPCID.HallowBoss:
                     {
-                        LeadingConditionRule noDaylightRule = new(new IsNighttime());
+                        LeadingConditionRule noDaylightRule = new(new GoldLeafConditions.IsNighttime());
                         npcLoot.Add(noDaylightRule);
                         noDaylightRule.OnSuccess(ItemDropRule.Common(ItemID.EmpressBlade, 20));
                         break;
                     }
-            }
-        }
-    }
-
-    public class IsDaytime : IItemDropRuleCondition, IProvideItemConditionDescription
-    {
-        public bool CanDrop(DropAttemptInfo info) => Main.dayTime;
-        public bool CanShowItemDropInUI() => true;
-        public string GetConditionDescription() => null;
-    }
-    public class IsNighttime : IItemDropRuleCondition, IProvideItemConditionDescription
-    {
-        public bool CanDrop(DropAttemptInfo info) => !Main.dayTime;
-        public bool CanShowItemDropInUI() => true;
-        public string GetConditionDescription() => null;
-    }
-
-    public class VanillaBossBagLoot : GlobalItem
-    {
-        public override void SetDefaults(Item item)
-        {
-            switch (item.type)
-            {
-                case ItemID.SlimeStaff: 
+                case NPCID.MoonLordCore: //i'll move these to grove boss when i'm done with that
                     {
-                        item.rare = ItemRarityID.Blue;
-                        item.damage = 10;
+                        LeadingConditionRule notExpertRule = new(new Conditions.NotExpert());
+                        notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<MadcapPainting>(), 1));
+                        notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<BatPlushie>(), 1));
+                        npcLoot.Add(notExpertRule);
                         break;
                     }
             }
         }
+    }
 
+    public class VanillaBossBagLoot : GlobalItem
+    {
         public override void ModifyItemLoot(Item item, ItemLoot itemLoot)
         {
             switch (item.type)
@@ -111,6 +94,12 @@ namespace GoldLeaf.Items.VanillaBossDrops
                 case ItemID.SkeletronBossBag:
                     {
                         itemLoot.Add(ItemDropRule.Common(ItemID.Bone, 1, 25, 35));
+                        break;
+                    }
+                case ItemID.MoonLordBossBag:
+                    {
+                        itemLoot.Add(ItemDropRule.Common(ItemType<MadcapPainting>(), 1));
+                        itemLoot.Add(ItemDropRule.Common(ItemType<BatPlushie>(), 1));
                         break;
                     }
             }

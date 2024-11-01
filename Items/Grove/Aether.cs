@@ -1,4 +1,4 @@
-using Terraria;
+    using Terraria;
 using static Terraria.ModLoader.ModContent;
 using Terraria.ModLoader;
 using GoldLeaf.Effects.Dusts;
@@ -12,6 +12,7 @@ using GoldLeaf.Core;
 using Terraria.Audio;
 using Microsoft.CodeAnalysis;
 using GoldLeaf.Items.Misc;
+using Terraria.GameContent.Drawing;
 
 namespace GoldLeaf.Items.Grove
 {
@@ -30,10 +31,11 @@ namespace GoldLeaf.Items.Grove
 			Item.noMelee = true;
 			Item.useAnimation = 10;
 			Item.useTime = 10;
-            Item.reuseDelay = 35;
+            Item.reuseDelay = 25;
 			Item.shootSpeed = 6f;
 			Item.knockBack = 6;
-            Item.damage = 18;
+            Item.crit = -2;
+            Item.damage = 19;
             //Item.UseSound = SoundID.DD2_EtherianPortalOpen;
             Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/RoR2/FireCast");
             Item.shoot = ProjectileType<AetherBolt>();
@@ -80,17 +82,21 @@ namespace GoldLeaf.Items.Grove
         public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient(ItemType<EveDroplet>(), 80);
-			recipe.AddTile(TileID.WorkBenches);
-            recipe.AddCondition();
+            recipe.AddIngredient(ItemType<Echobark>(), 20);
+            recipe.AddIngredient(ItemType<EveDroplet>(), 60);
+            recipe.AddIngredient(ItemType<WaxCandle>(), 1);
+            recipe.AddCondition(Condition.NearLava);
+            recipe.AddOnCraftCallback(RecipeCallbacks.AetherCraftEffect);
+            recipe.AddTile(TileID.WorkBenches);
 			recipe.Register();
-		}
+        }
     }
 
     public class AetherBolt : ModProjectile
     {
         int counter = 0;
-        int shootcounter = 0;
+        int shootCounter = 0;
+        int shotsFired = 0;
 
         public override void SetStaticDefaults()
         {
@@ -112,22 +118,6 @@ namespace GoldLeaf.Items.Grove
         }
 
         public override LocalizedText DisplayName => base.DisplayName.WithFormatArgs("Aether Flame");
-
-        /*public override bool PreDraw(ref Color lightColor)
-        {
-            Texture2D tex = Request<Texture2D>("GoldLeaf/Items/Grove/AetherBolt").Value;
-            Texture2D tex = Request<Texture2D>("GoldLeaf/Textures/Flares/diamond").Value;
-
-            Vector2 drawOrigin = new Vector2(tex.Width * 0.5f, Projectile.height * 0.5f);
-            Vector2 drawOrigin2 = new Vector2(tex.Width * 0.5f, Projectile.height * 0.5f);
-            for (int k = 0; k < Projectile.oldPos.Length; k++)
-            {
-                Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                Main.spriteBatch.Draw(tex, drawPos, null, Color.White * (1.0f - (0.05f * k)), Projectile.rotation, drawOrigin, Projectile.scale * 1.2f - (0.06f * k), SpriteEffects.None, 0f);
-            }
-            Main.spriteBatch.Draw(tex, Projectile.Center, null, new Color(255, 119, 246, 125), Projectile.rotation, drawOrigin2, Projectile.scale * 2f, SpriteEffects.None, 1f);
-            return true;
-        }*/
 
         public override void PostDraw(Color lightColor)
         {
@@ -206,10 +196,10 @@ namespace GoldLeaf.Items.Grove
                 Projectile.velocity += Vector2.Normalize(Main.MouseWorld - Projectile.Center) * 0.65f;
                 if (Projectile.velocity.Length() > 4) Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 4;
 
-                shootcounter++;
-                if (shootcounter >= 17 - (counter/40))
+                shootCounter++;
+                if (shootCounter >= 16 - (shotsFired / 3))
                 {
-                    shootcounter = 0;
+                    shootCounter = 0;
                     float num = 8000f;
                     int num2 = -1;
                     for (int i = 0; i < 200; i++)
@@ -223,10 +213,10 @@ namespace GoldLeaf.Items.Grove
                     }
                     if (num2 != -1)
                     {
-                        bool flag = Collision.CanHit(Projectile.position, Projectile.width, Projectile.height, Main.npc[num2].position, Main.npc[num2].width, Main.npc[num2].height) && player.CheckMana(5, true);
+                        bool flag = Collision.CanHit(Projectile.position, Projectile.width, Projectile.height, Main.npc[num2].position, Main.npc[num2].width, Main.npc[num2].height) && player.CheckMana(3, true);
                         if (flag)
                         {
-                            SoundStyle sound1 = new("GoldLeaf/Sounds/SE/RoR2/WispDeath") { Volume = 0.7f, Pitch = -0.5f + (counter * 0.003f) };
+                            SoundStyle sound1 = new("GoldLeaf/Sounds/SE/RoR2/WispDeath") { Volume = 0.7f, Pitch = -0.35f + (shotsFired * 0.035f) };
 
                             //SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/AetherBeam"), player.Center);
                             SoundEngine.PlaySound(sound1, player.Center);
@@ -238,11 +228,12 @@ namespace GoldLeaf.Items.Grove
                                 num5 = num4 / num5;
                             }
                             value *= num5;
-                            Projectile.timeLeft += 11 - (counter / 40);
+                            Projectile.timeLeft += 11 - (shotsFired / 3);
                             //Projectile.damage += 1 + cooldown/120;
 
                             Vector2 perturbedSpeed = value.RotatedByRandom(MathHelper.ToRadians(8f));
 
+                            shotsFired++;
                             Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center.X, Projectile.Center.Y, perturbedSpeed.X * 0.3f, perturbedSpeed.Y * 0.3f, ProjectileType<AetherBeam>(), (int)(Projectile.damage * 0.7f), Projectile.knockBack * 0.35f, Projectile.owner, 0f, 0f);
                         }
                     }
@@ -287,7 +278,7 @@ namespace GoldLeaf.Items.Grove
 
             SoundEngine.PlaySound(sound1, player.Center);
             SoundEngine.PlaySound(sound2, player.Center);
-            int explosion = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ProjectileType<AetherBurst>(), Projectile.damage+(counter)/6, Projectile.knockBack, player.whoAmI);
+            int explosion = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ProjectileType<AetherBurst>(), Projectile.damage + (int)(shotsFired * 2.2) /*Projectile.damage+(counter)/6*/, Projectile.knockBack, player.whoAmI);
             if (counter >= 80) Main.projectile[explosion].ai[0] = 90f; else Main.projectile[explosion].ai[0] = 30f + (counter * 0.65f);
             //Main.projectile[explosion].ai[0] = 60f + (cooldown * 0.65f);
             if (counter < 40) Main.projectile[explosion].damage = (int)(Projectile.damage * 1.35f);
@@ -320,37 +311,32 @@ namespace GoldLeaf.Items.Grove
 
         public override void OnSpawn(IEntitySource source)
         {
-            for (int j = 0; j < 10; j++)
+            for (int j = 0; j < 10 + (Projectile.ai[0]/ 15); j++)
             {
                 var dust = Dust.NewDustDirect(Projectile.Center - new Vector2(16, 16), 0, 0, DustType<AetherSmoke>());
-                dust.velocity = Main.rand.NextVector2Circular(4, 4);
+                dust.velocity = Main.rand.NextVector2Circular(7.5f, 7.5f) * Projectile.ai[0] / 65;
                 dust.scale = Main.rand.NextFloat(0.9f, 1.2f);
                 dust.alpha = 20 + Main.rand.Next(60);
                 dust.rotation = Main.rand.NextFloat(6.28f);
             }
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 3 + (Projectile.ai[0]/40); i++)
             {
                 Projectile.NewProjectileDirect(Projectile.GetSource_Death(), Projectile.Center, Main.rand.NextFloat(6.28f).ToRotationVector2() * Main.rand.NextFloat(2, 3), ProjectileType<AetherEmber>(), 0, 0, Projectile.owner).scale = Main.rand.NextFloat(0.85f, 1.15f);
             }
+
+            ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.TrueExcalibur,
+                new ParticleOrchestraSettings { PositionInWorld = Projectile.Center },
+                Projectile.owner);
         }
 
         public override void AI()
         {
             Lighting.AddLight((int)(Projectile.position.X / 16), (int)(Projectile.position.Y / 16), 1.4f, 0.4f, 1.8f);
 
-            if (Main.netMode != NetmodeID.Server)
-            {
-                for (int k = 0; k < 6 + (Radius * 0.05); k++)
-                {
-                    float rot = Main.rand.NextFloat(0, 6.28f);
-                    //Dust.NewDustPerfect(Projectile.Center + Vector2.One.RotatedBy(rot) * (Radius), DustType<AetherDust>(), Vector2.One.RotatedBy(rot + Main.rand.NextFloat(0.85f, 1f)) * 1.7f, 0, new Color(255, 120 + (int)(100 * (float)Math.Sin(TimeFade * 3.14f)), 125), 0.7f);
-                }
-            }
-
             counter++;
 
-            if (counter > 16) 
+            if (counter > 18) 
             {
                 Projectile.damage = 0;
             }
@@ -384,39 +370,6 @@ namespace GoldLeaf.Items.Grove
                 SpriteEffects.None,
                 0f
             );
-            /* flares
-            Main.spriteBatch.Draw
-            (
-                tex,
-                new Vector2
-                (
-                    Projectile.position.X - Main.screenPosition.X + Projectile.width * 0.5f,
-                    Projectile.position.Y - Main.screenPosition.Y + Projectile.height * 0.5f
-                ),
-                new Rectangle(0, 0, tex.Width, tex.Height),
-                new Color(255, 119, 246) * (2f - (cooldown * 0.05f)),
-                GoldLeafWorld.rottime - (cooldown * 0.3f),
-                tex.Size() * 0.5f,
-                Projectile.scale + (Radius * 0.005f),
-                SpriteEffects.None,
-                0f
-            );
-            Main.spriteBatch.Draw
-            (
-                tex,
-                new Vector2
-                (
-                    Projectile.position.X - Main.screenPosition.X + Projectile.width * 0.5f,
-                    Projectile.position.Y - Main.screenPosition.Y + Projectile.height * 0.5f
-                ),
-                new Rectangle(0, 0, tex.Width, tex.Height),
-                new Color(255, 119, 246) * (2f - (cooldown * 0.05f)),
-                GoldLeafWorld.rottime * -1f + (cooldown * 0.3f),
-                tex.Size() * 0.5f,
-                Projectile.scale + (Radius * 0.005f),
-                SpriteEffects.None,
-                0f
-            );*/
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -509,6 +462,7 @@ namespace GoldLeaf.Items.Grove
             Projectile.width = Projectile.height = 12;
             //ProjectileID.Sets.TrailCacheLength[Projectile.type] = 9;
             //ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+            Projectile.timeLeft = 90;
             Projectile.extraUpdates = 1;
             Projectile.alpha = 255;
         }
@@ -520,7 +474,7 @@ namespace GoldLeaf.Items.Grove
             if (Main.rand.NextBool(2))
             {
                 var dust = Dust.NewDustPerfect(Projectile.Center, DustType<AetherSmokeFast>(), Main.rand.NextVector2Circular(1.5f, 1.5f));
-                dust.scale = 0.45f * Projectile.scale;
+                dust.scale = 0.5f * Projectile.scale;
                 dust.rotation = Main.rand.NextFloatDirection();
             }
         }
@@ -540,10 +494,12 @@ namespace GoldLeaf.Items.Grove
         public override Color? GetAlpha(Dust dust, Color lightColor)
         {
             Color color;
-            if (dust.alpha < 110)
-                color = Color.Lerp(new Color(255, 119, 246), new Color(196, 43, 255), dust.alpha / 80f);
+            if (dust.alpha < 30)
+                color = new Color(255, 119, 246);
+            else if (dust.alpha < 110)
+                color = Color.Lerp(new Color(255, 119, 246), new Color(196, 43, 255), (dust.alpha - 30) / 80f);
             else if (dust.alpha < 140)
-                color = Color.Lerp(new Color(196, 43, 255), new Color(54, 47, 56), (dust.alpha - 80) / 80f);
+                color = Color.Lerp(new Color(196, 43, 255), new Color(54, 47, 56), (dust.alpha - 110) / 50f);
             else
                 color = new Color(54, 47, 56);
 
@@ -592,10 +548,12 @@ namespace GoldLeaf.Items.Grove
         public override Color? GetAlpha(Dust dust, Color lightColor)
         {
             Color color;
-            if (dust.alpha < 55)
-                color = Color.Lerp(new Color(179, 255, 224), new Color(255, 119, 246), dust.alpha / 40f);
-            else if (dust.alpha < 90)
-                color = Color.Lerp(new Color(255, 119, 246), new Color(54, 47, 56), (dust.alpha - 40) / 40f);
+            if (dust.alpha < 20)
+                color = new Color(179, 255, 224);
+            else if (dust.alpha < 60)
+                color = Color.Lerp(new Color(179, 255, 224), new Color(255, 119, 246), (dust.alpha - 20) / 40f);
+            else if (dust.alpha < 100)
+                color = Color.Lerp(new Color(255, 119, 246), new Color(54, 47, 56), (dust.alpha - 60) / 60f);
             else
                 color = new Color(54, 47, 56);
 

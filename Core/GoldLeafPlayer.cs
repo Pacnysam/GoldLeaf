@@ -34,12 +34,18 @@ namespace GoldLeaf.Core
 
         //public int platformTimer = 0;
 
+        public int craftTimer = 0;
         public float itemSpeed;
         
         public override float UseTimeMultiplier(Item Item)
 		{
 			return itemSpeed;
 		}
+
+        public override float UseAnimationMultiplier(Item item)
+        {
+            return itemSpeed;
+        }
 
         public delegate void ResetEffectsDelegate(GoldLeafPlayer Player);
         public static event ResetEffectsDelegate ResetEffectsEvent;
@@ -95,6 +101,7 @@ namespace GoldLeaf.Core
             Main.screenPosition.Y += Main.rand.Next(-Shake, Shake) + panDown;
             Main.screenPosition.X += Main.rand.Next(-Shake, Shake);
             if (Shake > 0) { Shake--; }
+            if (craftTimer > 0) { craftTimer--; }
         }
 
         public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)

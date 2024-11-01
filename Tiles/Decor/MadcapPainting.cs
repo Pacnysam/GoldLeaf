@@ -37,8 +37,7 @@ namespace GoldLeaf.Tiles.Decor
 		public override void SetStaticDefaults()
 		{
             LocalizedText name = CreateMapEntryName();
-			//name.SetDefault("Painting");
-			AddMapEntry(new Color(150, 150, 150), name);
+			AddMapEntry(new Color(99, 50, 30), name);
 
 			RegisterItemDrop(ItemType<MadcapPainting>());
 

@@ -48,7 +48,7 @@ namespace GoldLeaf.Effects.Dusts
         {
             Color color;
             if (dust.alpha < 70)
-                color = Color.Lerp(new Color(255, 237, 187), new Color(44, 207, 244), (dust.alpha - 70) / 80f);
+                color = Color.Lerp(new Color(255, 237, 187), new Color(44, 207, 244), 70f);
             else
                 color = new Color(44, 207, 244);
 

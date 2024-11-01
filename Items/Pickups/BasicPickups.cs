@@ -24,6 +24,8 @@ namespace GoldLeaf.Items.Pickups
 
         public override void SetDefaults()
         {
+            Item.CloneDefaults(ItemID.Heart);
+
             Item.width = 8;
             Item.height = 8;
             Item.alpha = 200;
@@ -64,6 +66,8 @@ namespace GoldLeaf.Items.Pickups
 
         public override void SetDefaults()
         {
+            Item.CloneDefaults(ItemID.Heart);
+
             Item.width = 16;
             Item.height = 16;
             Item.alpha = 200;
@@ -104,6 +108,8 @@ namespace GoldLeaf.Items.Pickups
 
         public override void SetDefaults()
         {
+            Item.CloneDefaults(ItemID.Star);
+
             Item.width = 8;
             Item.height = 8;
             Item.alpha = 200;
@@ -145,6 +151,8 @@ namespace GoldLeaf.Items.Pickups
 
         public override void SetDefaults()
         {
+            Item.CloneDefaults(ItemID.Star);
+
             Item.width = 16;
             Item.height = 16;
             Item.alpha = 200;

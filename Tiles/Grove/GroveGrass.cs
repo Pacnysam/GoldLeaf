@@ -8,6 +8,7 @@ using System;
 using GoldLeaf.Effects.Dusts;
 using GoldLeaf.Tiles.Grove;
 using Terraria.DataStructures;
+using Terraria.Audio;
 
 namespace GoldLeaf.Tiles.Grove
 {
@@ -26,8 +27,6 @@ namespace GoldLeaf.Tiles.Grove
             Item.maxStack = Item.CommonMaxStack;
             Item.useTime = 10;
             Item.useAnimation = 15;
-
-            ItemID.Sets.GrassSeeds[Item.type] = true;
         }
     }
 
@@ -46,6 +45,9 @@ namespace GoldLeaf.Tiles.Grove
             Item.width = 22;
             Item.height = 20;
             Item.value = Item.buyPrice(0, 0, 5, 0);
+
+            ItemID.Sets.GrassSeeds[Item.type] = true;
+            ItemID.Sets.AlsoABuildingItem[Item.type] = true;
         }
 
         public override bool? UseItem(Player player)
@@ -70,8 +72,8 @@ namespace GoldLeaf.Tiles.Grove
 
     public class GroveGrassT : ModTile
     {
-        int GroveGrassDrawOffset = 0;
-        int GroveGrassDrawOffDir = 1;
+        private float glow = 0;
+
         public override void SetStaticDefaults()
         {
             Main.tileSolid[Type] = true;
@@ -90,7 +92,7 @@ namespace GoldLeaf.Tiles.Grove
             TileID.Sets.CanBeDugByShovel[Type] = true;
 
             AddMapEntry(new Color(190, 99, 37));
-            RegisterItemDrop(ItemType<GroveStone>());
+            RegisterItemDrop(ItemID.MudBlock);
 
             DustType = DustType<AutumnGrass>();
 
@@ -133,12 +135,21 @@ namespace GoldLeaf.Tiles.Grove
 
         public override void FloorVisuals(Player player)
         {
+            glow += 0.03f;
+            if (glow > 1) glow = 1;
+
             Vector2 playerFeet = player.Center + new Vector2(-8, player.height / 2);
             if (player.velocity.X != 0)
             {
                 if (Main.rand.NextBool(6)) Dust.NewDust(playerFeet, 16, 1, DustType<AutumnGrass>(), 0, Main.rand.NextFloat(-0.05f, -0.3f), Scale: 0.9f);
             }
         }
+
+        public override void RandomUpdate(int i, int j)
+        {
+            glow -= 0.2f;
+        }
+
         /*public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
             Tile tile = Main.tile[i, j];
@@ -150,7 +161,7 @@ namespace GoldLeaf.Tiles.Grove
             int height = tile.TileFrameY == 36 ? 18 : 16;
             //if (tile.Slope() == 0 && !tile.halfBrick())
             {
-                Main.spriteBatch.Draw(Request<Texture2D>(Texture + "Glow").Value, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero, new Rectangle(tile.frameX, tile.frameY, 16, height), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(Request<Texture2D>(Texture + "Glow").Value, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, height), Color.White * glow, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             }
 
             Tile tile = Main.tile[i, j];

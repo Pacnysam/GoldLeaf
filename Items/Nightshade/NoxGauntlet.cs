@@ -15,9 +15,6 @@ namespace GoldLeaf.Items.Nightshade
 {
 	public class NoxGauntlet : ModItem
 	{
-		//public override LocalizedText DisplayName => base.DisplayName.WithFormatArgs("Eve Droplet");
-		//public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs("Removes immunities");
-
 		public override void SetDefaults()
 		{
 			Item.damage = 19;
@@ -63,24 +60,20 @@ namespace GoldLeaf.Items.Nightshade
                 0f
             );
         }
-
-        /*public override void AddRecipes()
-		{
-			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient(ItemID.DirtBlock, 10);
-			recipe.AddTile(TileID.WorkBenches);
-			recipe.Register();
-		}*/
     }
 
-    public class NightshadeHeistBuff : ModBuff
+    public class NightshadeHeist : ModBuff
     {
         public override void SetStaticDefaults()
         {
-            //DisplayName.SetDefault("Nightshade Heist");
-            //Description.SetDefault("WIP");
             Main.pvpBuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = false;
+        }
+
+        public override void Update(Player player, ref int buffIndex)
+        {
+            player.maxRunSpeed += .1f * player.GetModPlayer<NightshadePlayer>().nightshade;
+            player.runAcceleration += .03f * player.GetModPlayer<NightshadePlayer>().nightshade;
         }
     }
 }

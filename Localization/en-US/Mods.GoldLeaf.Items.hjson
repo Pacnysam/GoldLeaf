@@ -1,0 +1,199 @@
+sadcat: {
+	DisplayName: sadcat
+	Tooltip: ""
+}
+
+BatPlushie: {
+	DisplayName: Bat Plushie
+	Tooltip: It's sooooooo cute!
+}
+
+MadcapPainting: {
+	DisplayName: Madcap
+	Tooltip: "'P. Nysam'"
+}
+
+GroveStone: {
+	DisplayName: Grove Stone
+	Tooltip: ""
+}
+
+VampireBat: {
+	DisplayName: Vampire Bat
+	Tooltip:
+		'''
+		Damaging enemies accumulates nightshade, increasing movement speed and acceleration
+		<right> to consume nightshade and leech health
+		'''
+}
+
+Aether: {
+	DisplayName: Aether's Comet
+	Tooltip: Casts an explosive flame that sparks at nearby enemies
+}
+
+GraniteWard: {
+	DisplayName: Granite Ward
+	Tooltip: Dealing damage or mining generates a decaying energy barrier that keeps enemies away
+}
+
+MeteorMissile: {
+	DisplayName: Meteor Missile
+	Tooltip: Kills and critical strikes release homing missiles
+}
+
+ToxicPositivity: {
+	DisplayName: Toxic Positivity
+	Tooltip: ""
+}
+
+ArcticFlower: {
+	DisplayName: Arctic Flower
+	Tooltip: ""
+}
+
+EveDroplet: {
+	DisplayName: Eve Droplet
+	Tooltip: ""
+}
+
+Quetzalcoatl: {
+	DisplayName: Quetzalcoatl
+	Tooltip:
+		'''
+		Shoots an explosive cluster of light
+		<right> to summon a rift to teleport through
+		'''
+}
+
+DebugItem: {
+	DisplayName: Debug Item
+	Tooltip: ""
+}
+
+GroveGrassSeeds: {
+	DisplayName: Grove Grass Seeds
+	Tooltip: Can be placed
+}
+
+GroveGrass: {
+	DisplayName: Grove Grass
+	Tooltip: ""
+}
+
+Whirlpool: {
+	DisplayName: Cascade Staff
+	Tooltip: Casts explosive whirlpools that slightly home toward the cursor
+}
+
+NoxGauntlet: {
+	DisplayName: Nox Gauntlet
+	Tooltip:
+		'''
+		<left> to punch, stuns at the cost of nightshade
+		<right> to launch the gauntlet forward and steal some nightshade
+		'''
+}
+
+SilenceMusicBox: {
+	DisplayName: Silence Music Box
+	Tooltip: ""
+}
+
+ToxinGroveMusicBox: {
+	DisplayName: Toxin Grove Music Box
+	Tooltip: ""
+}
+
+UndergroveMusicBox: {
+	DisplayName: Whispering Grove Music Box
+	Tooltip: ""
+}
+
+OxeyeDaisy: {
+	DisplayName: Oxeye Daisy
+	Tooltip: Loves me... loves me not...
+}
+
+HeartTiny: {
+	DisplayName: Small Heart
+	Tooltip: ""
+}
+
+HeartLarge: {
+	DisplayName: Big Heart
+	Tooltip: ""
+}
+
+StarLarge: {
+	DisplayName: Big Star
+	Tooltip: ""
+}
+
+StarTiny: {
+	DisplayName: Small Star
+	Tooltip: ""
+}
+
+NightshadeRing: {
+	Tooltip: Nightshade makes your items lighter
+	DisplayName: Nightshade Ring
+}
+
+ClutterGlove: {
+	DisplayName: Clutter Glove
+	Tooltip: ""
+}
+
+ClutterGloveCrimson: {
+	DisplayName: Clutter Glove
+	Tooltip: 80% chance to not consume tissue samples
+}
+
+ClutterGloveCorruption: {
+	DisplayName: Clutter Glove
+	Tooltip: 80% chance to not consume shadow scales
+}
+
+Echobark: {
+	DisplayName: Echobark
+	Tooltip: ""
+}
+
+Constellation: {
+	DisplayName: Constellation
+	Tooltip:
+		'''
+		{$CommonItemTooltip.SummonTagDamage}
+		{$CommonItemTooltip.Whips}
+		Strike enemies to lengthen the whip
+		'''
+}
+
+WaxCandle: {
+	DisplayName: Remorse Candle
+	Tooltip: Enemies are less likely to target you when placed nearby
+}
+
+Demitoxin: {
+	Tooltip: ""
+	DisplayName: Demitoxin
+}
+
+HeavenShard: {
+	Tooltip: ""
+	DisplayName: Heaven Shard
+}
+
+Sediment: {
+	DisplayName: Sediment
+	Tooltip: ""
+	Gem0: Place gems in the slot to add different effects
+	Gem1: "[i:181]: Pierces armor and curves toward the cursor"
+	Gem2: "[i:180]: Bounces and throws 2 at once"
+	Gem3: "[i:177]: Explodes upon hitting an enemy"
+	Gem4: "[i:179]: Drops falling emeralds"
+	Gem5: "[i:178]: Shoots at enemies while returning"
+	Gem6: "[i:182]: Fast as light"
+	Gem7: "[i:999]: Stuns enemies"
+}

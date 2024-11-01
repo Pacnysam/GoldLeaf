@@ -1,0 +1,14 @@
+WhisperingGrove: {
+	DisplayName: Whispering Grove
+	TownNPCDialogueName: the Whispering Grove
+}
+
+WhisperingGroveSurface: {
+	TownNPCDialogueName: the Whispering Forest
+	DisplayName: Whispering Forest
+}
+
+UndergroundWhisperingGrove: {
+	DisplayName: Whispering Grove
+	TownNPCDialogueName: the Whispering Grove
+}

@@ -15,7 +15,7 @@ using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Core //most of this is snatched from starlight river and spirit, i (pacnysam) did not code any of this!
 {
-    public static class Helper 
+    public static class Helper
     {
         public static Rectangle ToRectangle(this Vector2 vector) => new Rectangle(0, 0, (int)vector.X, (int)vector.Y);
         public static Vector2 ScreenSize => new Vector2(Main.screenWidth, Main.screenHeight);
@@ -395,7 +395,7 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
         }
 
         public static bool IsTargetValid(NPC npc) => npc.active && !npc.friendly && !npc.immortal && !npc.dontTakeDamage;
-        
+
         public static double Distribution(int pos, int maxVal, float posOffset = 0.5f, float maxChance = 100f)
         {
             return -Math.Pow((20 * (pos - (posOffset * maxVal))) / maxVal, 2) + maxChance;
@@ -421,6 +421,50 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
             int bufftype = player.buffType[buffindex];
             bool vitalbuff = (bufftype == BuffID.PotionSickness || bufftype == BuffID.ManaSickness || bufftype == BuffID.ChaosState);
             return player.buffTime[buffindex] > 2 && Main.debuff[bufftype] && !Main.buffNoTimeDisplay[bufftype] && !Main.vanityPet[bufftype] && !vitalbuff;
+        }
+
+        public static Color GetGemColor(int gem) 
+        {
+            switch (gem) 
+            {
+                case 1: //amethyst
+                case ItemID.Amethyst:
+                    {
+                        return new Color(193, 47, 246);
+                    }
+                case 2: //topaz
+                case ItemID.Topaz:
+                    {
+                        return new Color(246, 188, 0);
+                    }
+                case 3: //sapphire
+                case ItemID.Sapphire:
+                    {
+                        return new Color(86, 135, 255);
+                    }
+                case 4: //emerald
+                case ItemID.Emerald:
+                    {
+                        return new Color(41, 206, 131);
+                    }
+                case 5: //rubyCounter
+                case ItemID.Ruby:
+                    {
+                        return new Color(237, 26, 30);
+                    }
+                case 6: //diamond
+                case ItemID.Diamond:
+                    {
+                        return Color.White;
+                    }
+                case 7: //amber
+                case ItemID.Amber:
+                    {
+                        return new Color(244, 133, 27);
+                    }
+
+            }
+            return Color.White;
         }
     }
 

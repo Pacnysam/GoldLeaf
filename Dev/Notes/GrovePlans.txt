@@ -8,3 +8,17 @@ after an evil boss is defeated, fallen wraiths start spawning in the lowest part
 The toxin grove is a hardmode event that is started by burning a whispering bloom with cursed flame/dissolving it with ichor in one of the towers. this act causes the spirits of the grove to lose themselves, the flora starts to release toxins and the entire biome becomes hostile. the grove can only go back to its previous state by returning to the swordsman's tomb and defeating the corrupted version of them, giving you a repaired bloom
 
 echobark can be used to make tools, a furniture set and armor
+
+-echobark armor: repeatedly being damaged by the same enemy increases defense up to 5, other loot has no special effects
+
+-forbidden fruit, food: gain a powerful lifesteal but take heavy damage over time. drops from echobark trees rarely
+-remorse candle, decor: increases minion attack speed by 2% per candle, stacks up to 10 times. found around the grove, a bunch are in the swordsman's tomb, spirits place these by gravestones in the grove
+
+whispering grove loot
+
+-idk, sword: damaging enemies with the sword charges spirit energy, right click to summon fallen wraiths to hunt down your foes, max energy summons the fallen swordsman himself (made with shards of heaven and metal)
+-pappiliodya, whip: hitting an enemy with the tip swarms nearby enemies with butterflies (made with shards of heaven, eve droplets, metal and a butterfly)
+-prism bow, bow: glowing crystals grow on enemies and tiles it hits, these block enemy damage and bump them away (made with shards of heaven and eve droplets)
+-idk, armor: (made with shards of heaven and metal)
+-wisp hook: has very long range and moves fast but pulls the player slowly (made with eve droplets and metal)
+-idk, accessory: mini mana stars are promoted to normal ones (made with eve droplets and echobark)

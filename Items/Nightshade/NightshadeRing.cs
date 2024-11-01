@@ -32,16 +32,8 @@ namespace GoldLeaf.Items.Nightshade
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<NightshadePlayer>().nightshadeMin = 2;
-            player.GetModPlayer<NightshadePlayer>().nightshadeMax = 16;
+            player.GetModPlayer<GoldLeafPlayer>().itemSpeed *= 1f - (player.GetModPlayer<NightshadePlayer>().nightshade * 0.02f);
+            player.GetModPlayer<NightshadePlayer>().nightshadeRing = true;
         }
-
-        /*public override void AddRecipes()
-		{
-			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient(ItemID.DirtBlock, 10);
-			recipe.AddTile(TileID.WorkBenches);
-			recipe.Register();
-		}*/
     }
 }

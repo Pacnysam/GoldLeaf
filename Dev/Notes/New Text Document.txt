@@ -1,0 +1,5 @@
+prehm sandstorm loot
+
+-duststorm disc, boomerang: hold mouse to make it move slower and create a sandstorm, tossing enemies upward
+-magnetic railgun, gun: bullets launch enemies into the air and make them take more fall damage, bullets do not lose their properties
+-sunstone whip: makes the next minion hit sear enemies for 2x damage

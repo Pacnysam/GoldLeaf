@@ -12,11 +12,13 @@ using Terraria.Audio;
 using System.Diagnostics.Metrics;
 using GoldLeaf.Items.Pickups;
 using GoldLeaf.Items.Misc;
+using Terraria.GameContent.Drawing;
 
 namespace GoldLeaf.Items
 {
     public class DebugItem : ModItem
     {
+        public int temp = 1;
         public override string Texture => "GoldLeaf/Items/Blizzard/ArcticFlower";
         public override void SetDefaults()
         {
@@ -35,8 +37,10 @@ namespace GoldLeaf.Items
 
         public override bool? UseItem(Player player)
         {
-            float temp1 = player.GetModPlayer<GoldLeafPlayer>().temp1;
-            float temp2 = player.GetModPlayer<GoldLeafPlayer>().temp2;
+
+            ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, (ParticleOrchestraType)temp,
+                new ParticleOrchestraSettings { PositionInWorld = Main.MouseWorld },
+                Main.LocalPlayer.whoAmI);
 
             //Helper.NewItemPerfect(Main.MouseWorld, Vector2.Zero, ItemID.Heart);
             //Gore.NewGorePerfect(Terraria.Entity.GetSource_None(), Main.MouseWorld, Vector2.Zero, GoreType<RingGoreRewrite>(), Scale: 0.7f + Main.rand.NextFloat(temp1, temp2) / 30f);

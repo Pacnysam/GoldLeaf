@@ -33,8 +33,8 @@ namespace GoldLeaf.Items.Grove
             Item.useAnimation = 15;
             Item.useTurn = true;
             Item.autoReuse = true;
-            Item.consumable = true;
             Item.rare = ItemRarityID.White;
+
             //Item.createTile = TileType<EchobarkT>();
 		}
     }
