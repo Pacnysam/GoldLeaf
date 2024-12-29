@@ -57,7 +57,7 @@ namespace GoldLeaf.Items.GemSickles
             Item.shoot = ProjectileType<SedimentP>();
             Item.shootSpeed = 8f;
 
-            Item.damage = 14;
+            Item.damage = 15;
             Item.DamageType = DamageClass.Melee;
 
             Item.width = 26;
@@ -105,14 +105,12 @@ namespace GoldLeaf.Items.GemSickles
         #region Stats
         public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
         {
-            if (gem == (int)Gem.Amethyst)
-                damage *= 1.1f;
+            if (gem == (int)Gem.Amethyst || gem == (int)Gem.Emerald)
+                damage *= 1.25f;
             else if (gem == (int)Gem.Sapphire)
-                damage *= 0.8f;
-            else if (gem == (int)Gem.Emerald)
-                damage *= 1.2f;
+                damage *= 0.75f;
             else if (gem == (int)Gem.Diamond)
-                damage *= 0.5f;
+                damage *= 0.6f;
             else
                 damage *= 1;
         }
@@ -156,10 +154,11 @@ namespace GoldLeaf.Items.GemSickles
 
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
+            if (gem == (int)Gem.Amethyst) velocity *= 1.4f;
             if (gem == (int)Gem.Topaz) velocity = velocity.RotatedBy(MathHelper.ToRadians(Main.rand.Next(-10, 10)));
             if (gem == (int)Gem.Emerald) velocity *= 2f;
             if (gem == (int)Gem.Ruby) velocity *= 1.6f;
-            if (gem == (int)Gem.Diamond) velocity *= 1.4f; knockback *= 0.3f;
+            if (gem == (int)Gem.Diamond) knockback *= 0.3f;
             if (gem == (int)Gem.Amber) knockback *= 0f;
         }
 
@@ -202,14 +201,14 @@ namespace GoldLeaf.Items.GemSickles
             }
         }
 
-        public override void AddRecipes()
+        /*public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.StoneBlock, 20);
             recipe.AddIngredient(ItemID.FallenStar, 5);
             recipe.AddTile(TileID.Anvils);
             recipe.Register();
-        }
+        }*/
 
         #region Save & Load Stuff
         public override ModItem Clone(Item item)
@@ -370,7 +369,7 @@ namespace GoldLeaf.Items.GemSickles
         {
             if (gem == (int)Gem.Amethyst && empowered && Main.myPlayer == Projectile.owner)
             {
-                Projectile.velocity = Projectile.velocity.Length() * Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.MouseWorld) * Projectile.velocity.Length() * 0.5f, 0.2f).SafeNormalize(Vector2.Normalize(Projectile.velocity));
+                Projectile.velocity = Projectile.velocity.Length() * Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.MouseWorld) * Projectile.velocity.Length() * 0.5f, 0.3f).SafeNormalize(Vector2.Normalize(Projectile.velocity));
                 Projectile.netUpdate = true;
             }
             if (gem == (int)Gem.Emerald && empowered)
@@ -438,15 +437,14 @@ namespace GoldLeaf.Items.GemSickles
             if (gem == (int)Gem.Sapphire && empowered)
             {
                 empowered = false;
-                int explosion = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ProjectileType<SapphireBurst>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 60f);
+                int explosion = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ProjectileType<SapphireBurst>(), Projectile.damage, 0, Projectile.owner, 60f);
                 SoundEngine.PlaySound(SoundID.NPCDeath7, Projectile.Center);
                 SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact, Projectile.Center);
+                target.immune[Projectile.owner] = 4;
             }
             if (gem == (int)Gem.Emerald && empowered)
             {
-                target.SimpleStrikeNPC((int)(damageDone * 0.5), hit.HitDirection, hit.Crit, 0, DamageClass.Melee);
-
-                Projectile.velocity.Y -= 7;
+                Projectile.velocity.Y -= 9;
 
                 ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.TrueNightsEdge,
                     new ParticleOrchestraSettings { PositionInWorld = target.Center },
@@ -455,6 +453,8 @@ namespace GoldLeaf.Items.GemSickles
             if (gem == (int)Gem.Ruby && !empowered)
             {
                 empowered = true;
+                for (float k = 0; k < 6.28f; k += 0.4f)
+                    Dust.NewDustPerfect(Projectile.Center, DustType<LightDust>(), Vector2.One.RotatedBy(k) * 0.65f, 0, GetGemColor(gem));
             }
             if (gem == (int)Gem.Diamond && empowered)
             {
@@ -731,6 +731,13 @@ namespace GoldLeaf.Items.GemSickles
                 0f
             );
         }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            target.velocity += Vector2.Normalize(target.Center - Projectile.Center) * 4.6f * target.knockBackResist;
+
+            target.immune[Projectile.owner] = 8;
+        }
     }
 
     public class FallingEmerald : ModProjectile
@@ -781,6 +788,8 @@ namespace GoldLeaf.Items.GemSickles
 
     public class AmberStun : ModBuff
     {
+        public override string Texture => CoolBuffTex(base.Texture);
+        
         public override void SetStaticDefaults()
         {
             Main.debuff[Type] = true;
@@ -790,9 +799,15 @@ namespace GoldLeaf.Items.GemSickles
 
         public override void Update(NPC npc, ref int buffIndex)
         {
-            npc.GetGlobalNPC<GoldLeafNPC>().slowDegree = 1f;
+            npc.GetGlobalNPC<GoldLeafNPC>().stunned = true;
 
-            if (Main.rand.NextBool(15))
+            if (!npc.boss)
+            {
+                npc.velocity *= 0;
+                npc.frame.Y = 0;
+            }
+
+            if (Main.rand.NextBool(20))
             {
                 ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.AshTreeShake,
                     new ParticleOrchestraSettings { PositionInWorld = npc.Center },

@@ -35,7 +35,7 @@ namespace GoldLeaf.Items.Dungeon
 			Item.knockBack = 9;
 			Item.value = 100000;
 			Item.rare = ItemRarityID.Green;
-			Item.UseSound = SoundID.Item1;
+			Item.UseSound = SoundID.Item167;
 			Item.autoReuse = false;
 			Item.channel = true;
 			Item.noMelee = true;
@@ -167,7 +167,7 @@ namespace GoldLeaf.Items.Dungeon
 
             SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Monolith/CrashShock"), player.Center);
 
-            player.GetModPlayer<GoldLeafPlayer>().Shake += 11;
+			Helper.AddScreenshake(player, 24, Projectile.Center);
 
             /*for (float k = 0; k < 6.28f; k += 0.25f)
 				Dust.NewDustPerfect(Projectile.position, DustID.DungeonWater, Vector2.One.RotatedBy(k) * 2, Scale: 2f);

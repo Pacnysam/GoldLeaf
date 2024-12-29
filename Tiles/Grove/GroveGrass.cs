@@ -77,7 +77,7 @@ namespace GoldLeaf.Tiles.Grove
         public override void SetStaticDefaults()
         {
             Main.tileSolid[Type] = true;
-            Main.tileMerge[Type][TileID.Mud] = true;
+            Main.tileMerge[TileID.Mud][Type] = true;
             Main.tileBlendAll[Type] = true;
 			Main.tileMergeDirt[Type] = true;
 			Main.tileBlockLight[Type] = true;
@@ -86,7 +86,12 @@ namespace GoldLeaf.Tiles.Grove
 			Main.tileMerge[Type][TileID.Grass] = true;
 			Main.tileMerge[TileID.Grass][Type] = true;
 
-			TileID.Sets.Grass[Type] = true;
+            TileID.Sets.JungleSpecial[Type] = true;
+            TileID.Sets.ChecksForMerge[Type] = true;
+            TileID.Sets.NeedsGrassFraming[Type] = true;
+            TileID.Sets.NeedsGrassFramingDirt[Type] = TileID.Mud;
+
+            TileID.Sets.Grass[Type] = true;
 			TileID.Sets.Conversion.Grass[Type] = true;
             TileID.Sets.Conversion.JungleGrass[Type] = true;
             TileID.Sets.CanBeDugByShovel[Type] = true;

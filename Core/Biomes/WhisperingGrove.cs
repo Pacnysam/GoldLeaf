@@ -42,8 +42,8 @@ namespace GoldLeaf.Core.Biomes
         public override SceneEffectPriority Priority => SceneEffectPriority.BiomeHigh;
 
         public override string BestiaryIcon => "GoldLeaf/Core/Biomes/WhisperingGroveSurface_Icon";
-        //public override string BackgroundPath => base.BackgroundPath;
-        //public override Color? BackgroundColor => base.BackgroundColor;
+        public override string BackgroundPath => base.BackgroundPath;
+        public override Color? BackgroundColor => base.BackgroundColor;
 
         public override bool IsBiomeActive(Player player)
         {
@@ -56,9 +56,9 @@ namespace GoldLeaf.Core.Biomes
 
     public class WhisperingGroveBackgroundStyle : ModSurfaceBackgroundStyle
     {
-        public override int ChooseFarTexture() => BackgroundTextureLoader.GetBackgroundSlot(Mod, "Core/Biomes/GroveBackgroundFar");
-        public override int ChooseMiddleTexture() => BackgroundTextureLoader.GetBackgroundSlot(Mod, "Core/Biomes/GroveBackgroundMid");
-        public override int ChooseCloseTexture(ref float scale, ref double parallax, ref float a, ref float b) => BackgroundTextureLoader.GetBackgroundSlot(Mod, "Core/Biomes/GroveBackgroundNear");
+        public override int ChooseFarTexture() => BackgroundTextureLoader.GetBackgroundSlot(Mod, "Goldleaf/Core/Biomes/GroveBackgroundFar");
+        public override int ChooseMiddleTexture() => BackgroundTextureLoader.GetBackgroundSlot(Mod, "Goldleaf/Core/Biomes/GroveBackgroundMid");
+        //public override int ChooseCloseTexture(ref float scale, ref double parallax, ref float a, ref float b) => BackgroundTextureLoader.GetBackgroundSlot(Mod, "Goldleaf/Core/Biomes/GroveBackgroundNear");
 
         public override void ModifyFarFades(float[] fades, float transitionSpeed)
         {

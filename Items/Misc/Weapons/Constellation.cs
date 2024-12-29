@@ -17,11 +17,18 @@ using System.Diagnostics.Metrics;
 using System;
 using System.Threading;
 using GoldLeaf.Effects.Dusts;
+using ReLogic.Content;
 namespace GoldLeaf.Items.Misc.Weapons
 {
     public class Constellation : ModItem
     {
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(ConstellationTag.TagDamage);
+
+        private static Asset<Texture2D> glowTex;
+        public override void Load()
+        {
+            glowTex = Request<Texture2D>(Texture + "Glow");
+        }
 
         public override void SetDefaults()
         {
@@ -56,18 +63,19 @@ namespace GoldLeaf.Items.Misc.Weapons
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
             Texture2D tex = Request<Texture2D>(Texture + "Glow").Value;
+
             spriteBatch.Draw
             (
-                tex,
+                glowTex.Value,
                 new Vector2
                 (
                     Item.position.X - Main.screenPosition.X + Item.width * 0.5f,
-                    Item.position.Y - Main.screenPosition.Y + Item.height - tex.Height * 0.5f
+                    Item.position.Y - Main.screenPosition.Y + Item.height - glowTex.Height() * 0.5f
                 ),
-                new Rectangle(0, 0, tex.Width, tex.Height),
+                new Rectangle(0, 0, glowTex.Width(), glowTex.Height()),
                 Color.White,
                 rotation,
-                tex.Size() * 0.5f,
+                glowTex.Size() * 0.5f,
                 scale,
                 SpriteEffects.None,
                 0f
@@ -97,8 +105,13 @@ namespace GoldLeaf.Items.Misc.Weapons
     {
         int counter = 0;
 
+        private static Asset<Texture2D> glowTex;
+
         public override void SetStaticDefaults()
         {
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 8;
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
+
             ProjectileID.Sets.IsAWhip[Type] = true;
         }
 
@@ -113,6 +126,11 @@ namespace GoldLeaf.Items.Misc.Weapons
         {
             get => Projectile.ai[0];
             set => Projectile.ai[0] = value;
+        }
+
+        public override void Load()
+        {
+            glowTex = Request<Texture2D>(Texture + "Glow");
         }
 
         public override void OnSpawn(IEntitySource source)
@@ -189,14 +207,13 @@ namespace GoldLeaf.Items.Misc.Weapons
             List<Vector2> list = new List<Vector2>();
             Projectile.FillWhipControlPoints(Projectile, list);
             Vector2 pos = list[0];
+            //Vector2 tipPos = list[list.Count - 1];
 
             //DrawLine(list);
 
             SpriteEffects flip = Projectile.spriteDirection < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
             Main.instance.LoadProjectile(Type);
-            Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Texture2D glowtex = Request<Texture2D>("GoldLeaf/Items/Misc/Weapons/ConstellationPGlow").Value;
 
             for (int i = 0; i < list.Count - 1; i++)
             {
@@ -237,17 +254,14 @@ namespace GoldLeaf.Items.Misc.Weapons
                 float rotation = diff.ToRotation() - MathHelper.PiOver2;
                 Color color = Lighting.GetColor(element.ToTileCoordinates());
 
-                Main.EntitySpriteDraw(texture, pos - Main.screenPosition, frame, color, rotation, origin, scale, flip, 0);
-                Main.spriteBatch.Draw(glowtex, pos - Main.screenPosition, frame, Color.White, rotation, origin, scale, flip, 0);
+                Vector2 drawOrigin = new Vector2(glowTex.Width() * 0.5f, Projectile.height * 0.5f);
+
+                Main.EntitySpriteDraw(TextureAssets.Projectile[Type].Value, pos - Main.screenPosition, frame, color, rotation, origin, scale, flip, 0);
+                Main.spriteBatch.Draw(glowTex.Value, pos - Main.screenPosition, frame, Color.White, rotation, origin, scale, flip, 0);
 
                 pos += diff;
             }
             return false;
-        }
-
-        public override void PostDraw(Color lightColor)
-        {
-            base.PostDraw(lightColor);
         }
     }
 
@@ -268,7 +282,7 @@ namespace GoldLeaf.Items.Misc.Weapons
 
     public class ConstellationTag : ModBuff
     {
-        //public override string Texture => "GoldLeaf/Textures/Specific/Debuff";
+        public override string Texture => CoolBuffTex(base.Texture);
 
         public static readonly int TagDamage = 5;
 

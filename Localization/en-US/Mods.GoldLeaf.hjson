@@ -1,1 +1,4 @@
-GoldLeafConditions.InSurface: On Surface
+GoldLeafConditions: {
+	InSurface: On Surface
+	UsingGameboy: Mods.GoldLeaf.GoldLeafConditions.UsingGameboy
+}

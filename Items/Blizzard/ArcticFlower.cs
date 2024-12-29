@@ -6,27 +6,27 @@ namespace GoldLeaf.Items.Blizzard
 {
 	public class ArcticFlower : ModItem
 	{
-        // The Display Name and Tooltip of this item can be edited in the Localization/en-US_Mods.GoldLeaf.hjson file.
-
-		public override void SetDefaults()
+        public override void SetDefaults()
 		{
-			Item.damage = 16;
+			Item.damage = 35;
 			Item.DamageType = DamageClass.Summon;
-			Item.width = 34;
-			Item.height = 40;
+			Item.width = 30;
+			Item.height = 36;
             Item.noMelee = true;
             Item.noUseGraphic = true;
-			Item.value = 50000;
-			Item.rare = ItemRarityID.Blue;
+            Item.value = Item.sellPrice(0, 1, 20, 0);
+            Item.rare = ItemRarityID.Blue;
 			Item.autoReuse = false;
         }
 
-		/*public override void AddRecipes()
+        public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient(ItemID.DirtBlock, 10);
-			recipe.AddTile(TileID.WorkBenches);
+			recipe.AddIngredient(ItemID.BorealWood, 15);
+			recipe.AddRecipeGroup("GoldLeaf:GoldBars", 5);
+            //recipe.AddIngredient(ItemType<AuroraShard>(), 8);
+            recipe.AddTile(TileID.WorkBenches);
 			recipe.Register();
-		}*/
-	}
+		}
+    }
 }

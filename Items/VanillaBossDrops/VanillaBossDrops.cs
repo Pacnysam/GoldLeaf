@@ -51,13 +51,13 @@ namespace GoldLeaf.Items.VanillaBossDrops
                         npcLoot.Add(notExpertRule);
                         break;
                     }
-                case NPCID.HallowBoss:
+                /*case NPCID.HallowBoss:
                     {
                         LeadingConditionRule noDaylightRule = new(new GoldLeafConditions.IsNighttime());
                         npcLoot.Add(noDaylightRule);
                         noDaylightRule.OnSuccess(ItemDropRule.Common(ItemID.EmpressBlade, 20));
                         break;
-                    }
+                    }*/
                 case NPCID.MoonLordCore: //i'll move these to grove boss when i'm done with that
                     {
                         LeadingConditionRule notExpertRule = new(new Conditions.NotExpert());

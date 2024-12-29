@@ -12,3 +12,17 @@ AmberStun: {
 	DisplayName: Amber Stun
 	Description: No moving!
 }
+
+ToxicPositivityBuff: {
+	DisplayName: Toxic Positivity
+	Description: Toxic and Positive!
+}
+
+Vanilla: {
+	OnFire:
+		'''
+
+		Defense is reduced by 4
+		'''
+	Ichor: Defense is reduced by 15
+}

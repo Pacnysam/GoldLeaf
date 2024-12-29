@@ -10,6 +10,7 @@ using Mono.Cecil;
 using Terraria.DataStructures;
 using GoldLeaf.Items.Grove;
 using Microsoft.Xna.Framework.Graphics;
+using static GoldLeaf.Core.Helper;
 
 namespace GoldLeaf.Items.Nightshade
 {
@@ -64,6 +65,8 @@ namespace GoldLeaf.Items.Nightshade
 
     public class NightshadeHeist : ModBuff
     {
+        public override string Texture => CoolBuffTex(base.Texture);
+
         public override void SetStaticDefaults()
         {
             Main.pvpBuff[Type] = true;

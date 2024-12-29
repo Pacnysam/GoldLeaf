@@ -37,12 +37,13 @@ namespace GoldLeaf.Items
 
         public override bool? UseItem(Player player)
         {
+            //Vector3 coords = Helper.ScreenCoord(new Vector3(Main.MouseScreen.X, Main.MouseScreen.Y, 0));
+            //Main.NewText("cursor coords: (" + coords.X + "," + coords.Y + ")");
 
             ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, (ParticleOrchestraType)temp,
                 new ParticleOrchestraSettings { PositionInWorld = Main.MouseWorld },
                 Main.LocalPlayer.whoAmI);
 
-            //Helper.NewItemPerfect(Main.MouseWorld, Vector2.Zero, ItemID.Heart);
             //Gore.NewGorePerfect(Terraria.Entity.GetSource_None(), Main.MouseWorld, Vector2.Zero, GoreType<RingGoreRewrite>(), Scale: 0.7f + Main.rand.NextFloat(temp1, temp2) / 30f);
             return true;
         }

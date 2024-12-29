@@ -65,12 +65,16 @@ namespace GoldLeaf.Items.Nightshade
 
                 if (nightshadeRing)
                 {
-                    color = new(166, 172, 167);
+                    color = new(182, 158, 235);
                 }
                 if (Main.LocalPlayer.HasBuff(BuffType<NightshadeHeist>()))
                 {
                     color = new(178, 0, 226);
                 }
+                /*if (Main.LocalPlayer.HasBuff(BuffType<NightshadeGuard>()))
+                {
+                    color = new(53, 183, 169);
+                }*/
 
                 if (nightshade == nightshadeMax) 
                 { 

@@ -1,5 +1,7 @@
 ﻿using GoldLeaf.Effects.Dusts;
 using GoldLeaf.Items.Grove;
+using GoldLeaf.Items.Misc.Vanity;
+using GoldLeaf.Items.Misc.Vanity.Dyes;
 using GoldLeaf.Items.Nightshade;
 using GoldLeaf.Tiles.Decor;
 using Microsoft.Xna.Framework;
@@ -21,7 +23,7 @@ namespace GoldLeaf.Core
 
         public int Timer { get; private set; }
 
-        public int Shake = 0;
+        public int screenshake = 0;
 
         public bool ZoneGrove = false;
 
@@ -98,9 +100,9 @@ namespace GoldLeaf.Core
                     ScreenMoveTimer++;
             }
 
-            Main.screenPosition.Y += Main.rand.Next(-Shake, Shake) + panDown;
-            Main.screenPosition.X += Main.rand.Next(-Shake, Shake);
-            if (Shake > 0) { Shake--; }
+            Main.screenPosition.Y += (Main.rand.Next(-screenshake, screenshake) + panDown);
+            Main.screenPosition.X += Main.rand.Next(-screenshake, screenshake);
+            if (screenshake > 0) { screenshake--; }
             if (craftTimer > 0) { craftTimer--; }
         }
 
@@ -113,20 +115,25 @@ namespace GoldLeaf.Core
                 case "Pac":
                 case "Sylvia":
                     {
-                        return [new Item(ItemType<BatPlushie>())];
+                        return [new Item(ItemType<BatPlushie>(), 9999), new Item(ItemType<MadcapPainting>())];
                     }
                 case "Scout":
+                case "King":
                 case "Emperor":
                     {
                         return Enumerable.Empty<Item>();
-                        //return [new Item(ItemType<EmperorScoutTrousers>())];
-                        //return [new Item(ItemType<EmperorScoutTunic>())];
-                        //return [new Item(ItemType<EmperorScoutHood>())];
+                        //return [new Item(ItemType<EmperorScoutTrousers>()), new Item(ItemType<EmperorScoutTunic>()), new Item(ItemType<EmperorScoutHood>())];
                     }
                 case "Cypher":
                     {
                         return Enumerable.Empty<Item>();
-                        //return [new Item(ItemType<CypherHat>())];
+                        //return [new Item(ItemType<CypherHat>()), new Item(ItemType<CypherCoat>()), new Item(ItemType<CypherPants>())];
+                    }
+                case "Gamer":
+                case "Gameboy":
+                case "Gamer Girl":
+                    {
+                        return [new Item(ItemType<Gameboy>()), new Item(ItemType<RetroDye>(), 9999)];
                         //return [new Item(ItemType<CypherCoat>())];
                         //return [new Item(ItemType<CypherPants>())];
                     }

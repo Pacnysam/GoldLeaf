@@ -26,9 +26,11 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
 
         public static bool OnScreen(Vector2 pos, Vector2 size) => OnScreen(new Rectangle((int)pos.X, (int)pos.Y, (int)size.X, (int)size.Y));
 
+        public static float Ratio(float width, float height) => height / width;
+
         public static Vector3 Vec3(this Vector2 vector) => new Vector3(vector.X, vector.Y, 0);
 
-        public static Vector3 ScreenCoord(this Vector3 vector) => new Vector3(-1 + vector.X / Main.screenWidth * 2, (-1 + vector.Y / Main.screenHeight * 2f) * -1, 0);
+        public static Vector3 ScreenCoord(this Vector3 vector) => new(-1 + (vector.X / Main.screenWidth * 2), (-1 + (vector.Y / Main.screenHeight * 2f)) * -1, 0);
 
         public static Color IndicatorColor => Color.White * (float)(0.2f + 0.8f * (1 + Math.Sin(GoldLeafWorld.rottime)) / 2f);
 
@@ -423,6 +425,25 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
             return player.buffTime[buffindex] > 2 && Main.debuff[bufftype] && !Main.buffNoTimeDisplay[bufftype] && !Main.vanityPet[bufftype] && !vitalbuff;
         }
 
+        public static void AddScreenshake(Player player, float amount, Vector2 position)
+        {
+            position -= Main.screenPosition;
+            Vector3 coords = ScreenCoord(new Vector3(position.X, -position.Y, 0));
+            float mult = Vector3.Distance(coords, Vector3.Zero);
+
+            if (!OnScreen(new Vector2(position.X, position.Y)))
+            {
+                amount /= mult;
+                if (amount < 0) amount = 0;
+            }
+
+            player.GetModPlayer<GoldLeafPlayer>().screenshake += (int)(amount * GetInstance<GraphicsConfig>().ShakeIntensity);
+        }
+        public static void AddScreenshake(Player player, int amount)
+        {
+            player.GetModPlayer<GoldLeafPlayer>().screenshake += (int)(amount * GetInstance<GraphicsConfig>().ShakeIntensity);
+        }
+        
         public static Color GetGemColor(int gem) 
         {
             switch (gem) 
@@ -462,10 +483,26 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
                     {
                         return new Color(244, 133, 27);
                     }
-
             }
             return Color.White;
         }
+
+        public static string CoolBuffTex(string input)
+        {
+            if (GetInstance<GraphicsConfig>().CoolBuffs)
+            {
+                return input + "Cool";
+            }
+            return input;
+        }
+        /*public static string RadcapTex(string input)
+        {
+            if (GetInstance<GraphicsConfig>().Radcap)
+            {
+                return input + "Rad";
+            }
+            return input;
+        }*/
     }
 
     public static class DustHelper

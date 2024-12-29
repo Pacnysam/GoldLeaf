@@ -1,9 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GoldLeaf.Effects.Dusts;
+using GoldLeaf.Items.Misc.Accessories;
+using GoldLeaf.Items.Nightshade;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -51,7 +55,25 @@ namespace GoldLeaf.Core
                 projectile.velocity += new Vector2(0, gravity);
             }
 
+            if ((projectile.type == ProjectileID.FallingStar) && counter % 15 == 0) 
+            {
+                DustHelper.DrawStar(projectile.Center, DustID.FireworkFountain_Blue, 5, 1.8f, 0.65f, 0.55f, 0.6f, 0.5f, true, 0, -1);
+            }
+
             counter++;
+        }
+
+        public override void OnKill(Projectile projectile, int timeLeft)
+        {
+            if (projectile.type == ProjectileID.BeeHive && Main.rand.NextBool(10)) 
+            {
+                Item.NewItem(projectile.GetSource_Death(), projectile.Hitbox, ItemType<HiveCarcass>());
+                SoundEngine.PlaySound(SoundID.Item87, projectile.Center);
+                for (int i = 0; i < 8; i++)
+                {
+                    Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Honey2, Main.rand.NextFloat(-2f, 2f), Main.rand.NextFloat(-3f, -6f));
+                }
+            }
         }
     }
 }

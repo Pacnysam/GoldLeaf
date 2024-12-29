@@ -13,13 +13,19 @@ using System.Diagnostics.Metrics;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.Audio;
+using ReLogic.Content;
 
 namespace GoldLeaf.Items.Grove
 {
 	public class EveDroplet : ModItem
 	{
-        //public override LocalizedText DisplayName => base.DisplayName.WithFormatArgs("Eve Droplet");
-        //public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs("Removes immunities");
+        private static Asset<Texture2D> tex;
+        public override void Load()
+        {
+            tex = Request<Texture2D>(Texture);
+        }
+
+        int dustTime = 12;
 
         public override void SetStaticDefaults()
         {
@@ -65,12 +71,45 @@ namespace GoldLeaf.Items.Grove
 
         public override void Update(ref float gravity, ref float maxFallSpeed)
         {
-            if (Main.rand.NextBool(16))
-            { 
-                var dust = Dust.NewDustDirect(Item.position, Item.width, Item.height, DustID.FireworksRGB, 0f, -1.7f, 0, new Color(255, 152, 221), 0.65f);
+            if (Item.timeSinceItemSpawned % dustTime == 0) 
+            {
+                dustTime = Main.rand.Next(9, 38);
+
+                var dust = Dust.NewDustPerfect(new Vector2(Item.position.X + Main.rand.Next(0, Item.width), Item.position.Y + Main.rand.Next(0, Item.height)), DustType<LightDust>(), new Vector2(0, Main.rand.NextFloat(-0.4f, -1.2f)), 0, new Color(255, 152, 221), Main.rand.NextFloat(0.3f, 0.7f));
                 dust.noGravity = true;
                 dust.fadeIn = 1.4f;
             }
+
+            /*if (Main.rand.NextBool(20))
+            {
+                //var dust = Dust.NewDustDirect(Item.position, Item.width, Item.height, DustID.FireworksRGB, 0f, -1.7f, 0, new Color(255, 152, 221), 0.65f);
+                var dust = Dust.NewDustPerfect(new Vector2(Item.position.X + Main.rand.Next(0, Item.width), Item.position.Y + Main.rand.Next(0, Item.height)), DustType<LightDust>(), new Vector2(0, Main.rand.NextFloat(-0.4f, -1.2f)), 0, new Color(255, 152, 221), Main.rand.NextFloat(0.4f, 0.8f));
+                dust.noGravity = true;
+                dust.fadeIn = 1.4f;
+            }*/
+        }
+
+        public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+        {
+            Color color = Color.White; color.A = 0;
+
+            spriteBatch.Draw
+            (
+
+                tex.Value,
+                new Vector2
+                (
+                    Item.position.X - Main.screenPosition.X + Item.width * 0.5f,
+                    Item.position.Y - Main.screenPosition.Y + Item.height - tex.Height() * 0.5f
+                ),
+                new Rectangle(0, 0, tex.Width(), tex.Height()),
+                color * ((float)Math.Sin(GoldLeafWorld.rottime) * 0.5f),
+                rotation,
+                tex.Size() * 0.5f,
+                scale,
+                SpriteEffects.None,
+                0f
+            );
         }
     }
 

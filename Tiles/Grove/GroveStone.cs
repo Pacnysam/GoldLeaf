@@ -34,11 +34,15 @@ namespace GoldLeaf.Tiles.Grove
             Main.tileSolid[Type] = true;
 			Main.tileMergeDirt[Type] = true;
             Main.tileMerge[Type][TileType<GroveGrassT>()] = true;
-            Main.tileMerge[Type][TileID.Mud] = true;
+            Main.tileMerge[TileID.Mud][Type] = true;
             RegisterItemDrop(ItemType<GroveStone>());
             AddMapEntry(new Color(118, 108, 98));
             Main.tileBlockLight[Type] = true;
+
+            TileID.Sets.JungleSpecial[Type] = true;
             TileID.Sets.ChecksForMerge[Type] = true;
+            TileID.Sets.NeedsGrassFraming[Type] = true;
+            TileID.Sets.NeedsGrassFramingDirt[Type] = TileID.Mud;
         }
 
         public override bool CreateDust(int i, int j, ref int type)

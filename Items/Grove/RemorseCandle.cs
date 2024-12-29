@@ -16,7 +16,7 @@ using Terraria.Audio;
 
 namespace GoldLeaf.Items.Grove
 {
-	public class WaxCandle : ModItem
+	public class RemorseCandle : ModItem
 	{
         public override void SetStaticDefaults()
         {

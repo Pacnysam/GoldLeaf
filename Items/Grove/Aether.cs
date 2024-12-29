@@ -1,4 +1,4 @@
-    using Terraria;
+using Terraria;
 using static Terraria.ModLoader.ModContent;
 using Terraria.ModLoader;
 using GoldLeaf.Effects.Dusts;
@@ -13,6 +13,7 @@ using Terraria.Audio;
 using Microsoft.CodeAnalysis;
 using GoldLeaf.Items.Misc;
 using Terraria.GameContent.Drawing;
+using GoldLeaf.Items.Grove.Boss;
 
 namespace GoldLeaf.Items.Grove
 {
@@ -43,7 +44,6 @@ namespace GoldLeaf.Items.Grove
             Item.DamageType = DamageClass.Magic;
             Item.channel = true;
             Item.value = Item.sellPrice(0, 0, 80, 0);
-
         }
 
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
@@ -84,11 +84,12 @@ namespace GoldLeaf.Items.Grove
 			Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<Echobark>(), 20);
             recipe.AddIngredient(ItemType<EveDroplet>(), 60);
-            recipe.AddIngredient(ItemType<WaxCandle>(), 1);
-            recipe.AddCondition(Condition.NearLava);
+            recipe.AddIngredient(ItemType<HeavenShard>(), 4);
+            recipe.AddIngredient(ItemType<RemorseCandle>(), 1);
+            recipe.AddTile(TileID.Anvils);
+            
             recipe.AddOnCraftCallback(RecipeCallbacks.AetherCraftEffect);
-            recipe.AddTile(TileID.WorkBenches);
-			recipe.Register();
+            recipe.Register();
         }
     }
 
@@ -271,10 +272,10 @@ namespace GoldLeaf.Items.Grove
         public override void OnKill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];
-            Texture2D tex = Request<Texture2D>("GoldLeaf/Textures/RingGlow0").Value;
+            //Texture2D tex = Request<Texture2D>("GoldLeaf/Textures/RingGlow0").Value;
 
-            SoundStyle sound1 = new("GoldLeaf/Sounds/SE/RoR2/EngineerMine") {};
-            SoundStyle sound2 = new("GoldLeaf/Sounds/SE/RoR2/Aftershock") { Pitch = 1.6f };
+            SoundStyle sound1 = new("GoldLeaf/Sounds/SE/RoR2/EngineerMine") { Volume = 0.8f };
+            SoundStyle sound2 = new("GoldLeaf/Sounds/SE/RoR2/Aftershock") { Pitch = 1.6f, Volume = 0.8f };
 
             SoundEngine.PlaySound(sound1, player.Center);
             SoundEngine.PlaySound(sound2, player.Center);
@@ -283,7 +284,7 @@ namespace GoldLeaf.Items.Grove
             //Main.projectile[explosion].ai[0] = 60f + (cooldown * 0.65f);
             if (counter < 40) Main.projectile[explosion].damage = (int)(Projectile.damage * 1.35f);
 
-            if (counter < 80) player.GetModPlayer<GoldLeafPlayer>().Shake += 11; else player.GetModPlayer<GoldLeafPlayer>().Shake += (int)(11 + (counter * 0.05f));
+            if (counter < 80) Helper.AddScreenshake(player, 15, Projectile.Center); else Helper.AddScreenshake(player, (int)(15 + (counter * 0.05f)), Projectile.Center - Main.screenPosition);
         }
     }
 
@@ -299,7 +300,7 @@ namespace GoldLeaf.Items.Grove
         {
             Projectile.friendly = true;
             Projectile.penetrate = -1;
-            Projectile.timeLeft = 24;
+            Projectile.timeLeft = 28;
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
             //Projectile.extraUpdates = 1;
@@ -350,7 +351,7 @@ namespace GoldLeaf.Items.Grove
         public override void PostDraw(Color lightColor)
         {
             Texture2D tex = Request<Texture2D>("GoldLeaf/Textures/Flares/wavering").Value;
-            Color color = new Color(255, 119, 246) * (1.2f - (counter * 0.05f));
+            Color color = new Color(255, 119, 246) * (1.25f - (counter * 0.05f));
             //Color color = new Color(196, 43, 255) * (1.2f - (counter * 0.05f));
             color.A = 0;
 
@@ -401,7 +402,7 @@ namespace GoldLeaf.Items.Grove
             Projectile.penetrate = 1;
             Projectile.width = 8;
             Projectile.height = 8;
-            Projectile.extraUpdates = 2;
+            Projectile.extraUpdates = 3;
             Projectile.timeLeft = 160;
             Projectile.tileCollide = true;
             Projectile.ignoreWater = true;

@@ -38,8 +38,8 @@ namespace GoldLeaf.Items.FishWeapons
 			Item.value = Item.sellPrice(0, 8, 50, 0);
             Item.rare = ItemRarityID.Cyan;
 
-
-		}
+            Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/SplashBounce");
+        }
 
         public override void AddRecipes()
         {
@@ -68,7 +68,7 @@ namespace GoldLeaf.Items.FishWeapons
         {
             Player player = Main.player[Projectile.owner];
 
-            player.GetModPlayer<GoldLeafPlayer>().Shake += 11;
+            Helper.AddScreenshake(player, 20, Projectile.Center);
 
             for (float k = 0; k < Main.rand.Next(19, 24); k++)
             {
@@ -83,7 +83,7 @@ namespace GoldLeaf.Items.FishWeapons
 
     public class QuetzalSmallP : ModProjectile
     {
-        public override string Texture => "GoldLeaf/Effects/Dusts/QuetzalDust";
+        public override string Texture => "GoldLeaf/Items/FishWeapons/QuetzalDust";
         public override void SetDefaults()
         {
             Projectile.width = 6;

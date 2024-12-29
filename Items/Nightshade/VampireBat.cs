@@ -13,6 +13,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Localization;
 using Terraria.GameContent.Drawing;
+using Terraria.GameContent;
 
 namespace GoldLeaf.Items.Nightshade
 {
@@ -145,13 +146,13 @@ namespace GoldLeaf.Items.Nightshade
 
 		public override void PostDraw(Color lightColor)
 		{
-			Texture2D texture = Request<Texture2D>("GoldLeaf/Items/Nightshade/VampireBatGlowOutline").Value;
-			Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
-			Vector2 drawPos = Projectile.position - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
+            Texture2D texture = Request<Texture2D>("GoldLeaf/Items/Nightshade/VampireBatGlowOutline").Value;
+			Vector2 drawOrigin = new(texture.Width * 0.5f, Projectile.height * 0.5f);
+			Vector2 drawPos = Projectile.position - new Vector2(2, 0) - Main.screenPosition + drawOrigin;
 
-			Main.spriteBatch.Draw(texture, drawPos, null, Color.White, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
-			//spriteBatch.Draw(texture, projectile.position + projectile.Size / 2 - Main.screenPosition, new Rectangle(0, 0, 26, 48), Color.White, projectile.rotation, texture.Size(), projectile.scale, SpriteEffects.None, 0f);
-		}
+            Main.spriteBatch.Draw(texture, drawPos, null, Color.White, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+            //spriteBatch.Draw(texture, projectile.position + projectile.Size / 2 - Main.screenPosition, new Rectangle(0, 0, 26, 48), Color.White, projectile.rotation, texture.Size(), projectile.scale, SpriteEffects.None, 0f);
+        }
 
         public override void OnKill(int timeLeft)
         {
@@ -244,45 +245,23 @@ namespace GoldLeaf.Items.Nightshade
 		{
 			Texture2D texture = (Texture2D)Request<Texture2D>("GoldLeaf/Items/Nightshade/VampireBatTrail");
 
-			Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
-			for (int k = 0; k < Projectile.oldPos.Length; k++)
-			{
-				Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-				Main.spriteBatch.Draw(texture, drawPos, null, Color.White *(1.0f - (0.08f * k)), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
-			}
+            Vector2 drawOrigin = new(texture.Width * 0.5f, Projectile.height * 0.5f);
 
-
-			Texture2D tex = (Texture2D)Request<Texture2D>("GoldLeaf/Items/Nightshade/VampireBatGlowOutline");
-
-			SpriteEffects effect = Projectile.direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-
-			Color col = Lighting.GetColor((int)(Projectile.Center.Y) / 16, (int)(Projectile.Center.Y) / 16);
-			var basePos = Projectile.Center - Main.screenPosition + new Vector2(0.0f, Projectile.gfxOffY);
-
-			int height = tex.Height / Main.projFrames[Projectile.type];
-			var frame = new Rectangle(0, height * Projectile.frame, tex.Width, height);
-			Vector2 origin = frame.Size() / 2f;
-			int reps = 1;
-			while (reps < 5)
-			{
-				col = Projectile.GetAlpha(Color.Lerp(col, Color.White, 2.5f));
-				float num7 = 5 - reps;
-				Color drawCol = col * (num7 / (ProjectileID.Sets.TrailCacheLength[Projectile.type] * 1.5f));
-				Vector2 oldPo = Projectile.oldPos[reps];
-				float rotation = Projectile.rotation;
-				SpriteEffects effects2 = effect;
-				if (ProjectileID.Sets.TrailingMode[Projectile.type] == 2)
-				{
-					rotation = Projectile.oldRot[reps];
-					effects2 = Projectile.oldSpriteDirection[reps] == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-				}
-				Vector2 drawPos = oldPo + Projectile.Size / 2f - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
-				//Main.spriteBatch.Draw(tex, drawPos, frame, drawCol, rotation + Projectile.rotation * (reps - 1) * -effect.HasFlag(SpriteEffects.FlipHorizontally).ToDirectionInt(), origin, MathHelper.Lerp(Projectile.scale, 3f, reps / 15f), effects2, 0.0f);
-				reps++;
-			}
-			Main.spriteBatch.Draw(texture, basePos, frame, new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 175), Projectile.rotation, origin, Projectile.scale, effect, 0.0f);
-
+            for (int k = 0; k < Projectile.oldPos.Length; k++)
+            {
+                Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin/* + new Vector2(0f, Projectile.gfxOffY)*/;
+                Main.spriteBatch.Draw(texture, drawPos, null, Color.White * (1.0f - (0.15f * k)), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+            }
 			return true;
 		}
-	}
+
+        public override void PostDraw(Color lightColor)
+        {
+			Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
+            Vector2 drawOrigin = new(texture.Width * 0.5f, Projectile.height * 0.5f);
+            Vector2 drawPos = Projectile.position - Main.screenPosition + drawOrigin;
+
+            Main.spriteBatch.Draw(texture, drawPos, null, Color.White, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+        }
+    }
 }

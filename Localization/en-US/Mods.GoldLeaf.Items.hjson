@@ -14,7 +14,7 @@ MadcapPainting: {
 }
 
 GroveStone: {
-	DisplayName: Grove Stone
+	DisplayName: Basalt
 	Tooltip: ""
 }
 
@@ -22,7 +22,7 @@ VampireBat: {
 	DisplayName: Vampire Bat
 	Tooltip:
 		'''
-		Damaging enemies accumulates nightshade, increasing movement speed and acceleration
+		Damaging enemies accumulates nightshade
 		<right> to consume nightshade and leech health
 		'''
 }
@@ -44,12 +44,20 @@ MeteorMissile: {
 
 ToxicPositivity: {
 	DisplayName: Toxic Positivity
-	Tooltip: ""
+	Tooltip:
+		'''
+		Attacks may poison enemies, chance and duration increases with each buff
+		Taking damage may poison you, chance increasing with each buff
+		'''
 }
 
 ArcticFlower: {
-	DisplayName: Arctic Flower
-	Tooltip: ""
+	DisplayName: Rimeflora Rod
+	Tooltip:
+		'''
+		Summons a ghost to freeze your enemies
+		Inflicts both summon and magic damage
+		'''
 }
 
 EveDroplet: {
@@ -170,7 +178,7 @@ Constellation: {
 		'''
 }
 
-WaxCandle: {
+RemorseCandle: {
 	DisplayName: Remorse Candle
 	Tooltip: Enemies are less likely to target you when placed nearby
 }
@@ -196,4 +204,39 @@ Sediment: {
 	Gem5: "[i:178]: Shoots at enemies while returning"
 	Gem6: "[i:182]: Fast as light"
 	Gem7: "[i:999]: Stuns enemies"
+}
+
+HiveCarcass: {
+	DisplayName: Hive Carcass
+	Tooltip: Fills healing potions with honey
+}
+
+GroveHook: {
+	DisplayName: Wisp Hook
+	Tooltip: ""
+}
+
+RetroDye: {
+	DisplayName: Retro Dye
+	Tooltip: So retro!
+}
+
+Gameboy: {
+	DisplayName: Gameboy
+	Tooltip: So retro!
+}
+
+GemStaves: {
+	Type1: Pierces armor and curves toward the cursor
+	Type2: Bounces and shoots 2 at once
+	Type3: Critical strikes explode into light
+	Type4: Drops falling emeralds
+	Type5: Critical strikes spawn hearts
+	Type6: Fast as light
+	Type7: Critical strikes inflict a stun
+}
+
+Rattlestaff: {
+	Tooltip: ""
+	DisplayName: Rattlestaff
 }

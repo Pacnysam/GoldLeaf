@@ -6,11 +6,13 @@ using static GoldLeaf.Core.Helper;
 using Terraria.ModLoader;
 using Terraria;
 using Terraria.GameContent.ItemDropRules;
+using GoldLeaf.Items.Misc.Vanity;
 namespace GoldLeaf.Core
 {
     public static class GoldLeafConditions
     {
         public static Condition InSurface = new Condition("Mods.GoldLeaf.GoldLeafConditions.InSurface", () => !Main.LocalPlayer.ShoppingZone_BelowSurface);
+        public static Condition UsingGameboy = new Condition("Mods.GoldLeaf.GoldLeafConditions.UsingGameboy", () => Main.LocalPlayer.GetModPlayer<GameboyPlayer>().gameboy);
 
         public class IsDaytime : IItemDropRuleCondition, IProvideItemConditionDescription
         {
