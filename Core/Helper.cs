@@ -89,6 +89,19 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
             return sec / 60 + ":" + (sec % 60 < 10 ? "0" + sec % 60 : "" + sec % 60);
         }
 
+        public static int TimeToTicks(int hours, int min, int sec)
+        {
+            return (hours * 216000) + (min * 3600) + (sec * 60);
+        }
+        public static int TimeToTicks(int min, int sec)
+        {
+            return (min * 3600) + (sec * 60);
+        }
+        public static int TimeToTicks(int sec)
+        {
+            return sec * 60;
+        }
+
         public static float CompareAngle(float baseAngle, float targetAngle)
         {
             return (baseAngle - targetAngle + (float)Math.PI * 3) % MathHelper.TwoPi - (float)Math.PI;

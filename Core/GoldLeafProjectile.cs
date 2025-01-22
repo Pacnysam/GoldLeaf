@@ -20,21 +20,24 @@ namespace GoldLeaf.Core
 
         public bool canSpawnMiniHearts = true;
         public bool canSpawnMiniStars = true;
+        public bool canSuperCrit = true;
+
+        public float critDamageMod = 2f;
 
         public float gravity = 0f;
+        
         public int gravityDelay = 0;
+
         public int lifesteal;
         public int lifestealMax;
         public int counter = 0;
 
-        public void ChangeDebuffDuration(NPC target, float amount)
+        public static void ChangeDebuffDuration(NPC target, float amount)
         {
             for (int i = 0; target.buffType[1] != 0; i++)
             {
                 target.AddBuff(target.buffType[i],target.buffTime[i] + (int)(target.buffTime[i]*amount));
             }
-
-            //look through buff list for debuffs and extend them
         }
 
         public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
@@ -52,7 +55,7 @@ namespace GoldLeaf.Core
         {
             if (gravity != 0f && counter >= gravityDelay)
             {
-                projectile.velocity += new Vector2(0, gravity);
+                projectile.velocity.Y += gravity;
             }
 
             if ((projectile.type == ProjectileID.FallingStar) && counter % 15 == 0) 
@@ -61,6 +64,11 @@ namespace GoldLeaf.Core
             }
 
             counter++;
+        }
+
+        public override void ModifyHitNPC(Projectile projectile, NPC target, ref NPC.HitModifiers modifiers)
+        {
+            modifiers.CritDamage += (critDamageMod - 2);
         }
 
         public override void OnKill(Projectile projectile, int timeLeft)
@@ -74,6 +82,17 @@ namespace GoldLeaf.Core
                     Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Honey2, Main.rand.NextFloat(-2f, 2f), Main.rand.NextFloat(-3f, -6f));
                 }
             }
+        }
+
+        public override bool OnTileCollide(Projectile projectile, Vector2 oldVelocity)
+        {
+            if ((projectile.type == ProjectileID.FallingStar))
+            {
+                DustHelper.DrawStar(projectile.Center, DustID.FireworkFountain_Yellow, 5, 2.6f, 1f, 0.55f, 0.6f, 0.5f, true, 0, -1);
+                DustHelper.DrawStar(projectile.Center, DustID.FireworkFountain_Blue,   5, 4.8f, 1.25f, 0.7f, 0.6f, 0.5f, true, 0, -1);
+            }
+
+            return base.OnTileCollide(projectile, oldVelocity);
         }
     }
 }

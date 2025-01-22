@@ -26,13 +26,13 @@ namespace GoldLeaf.Items.Pickups
         {
             Item.CloneDefaults(ItemID.Heart);
 
-            Item.width = 8;
-            Item.height = 8;
+            Item.width = 9;
+            Item.height = 9;
             Item.alpha = 200;
             Item.color = new Color(200, 200, 200, 200);
 
             ItemID.Sets.ItemsThatShouldNotBeInInventory[Item.type] = true;
-            ItemID.Sets.ItemIconPulse[Item.type] = true;
+            //ItemID.Sets.ItemIconPulse[Item.type] = true;
             ItemID.Sets.IgnoresEncumberingStone[Item.type] = true;
             ItemID.Sets.IsAPickup[Item.type] = true;
         }
@@ -48,8 +48,19 @@ namespace GoldLeaf.Items.Pickups
         {
             Texture2D tex = Request<Texture2D>(Texture).Value;
 
-            spriteBatch.Draw(tex, new Vector2(Item.position.X - Main.screenPosition.X, Item.position.Y - Main.screenPosition.Y + 2), new Rectangle(0, 0, tex.Width, tex.Height), new Color(200, 200, 200, 200), rotation, tex.Size() * 0.5f, scale += Main.essScale * 0.001f, SpriteEffects.None, 0f);
+            float drawScale = Main.essScale * 0.25f + 0.75f;
+
+            spriteBatch.Draw(tex, new Vector2(Item.position.X - Main.screenPosition.X, Item.position.Y - Main.screenPosition.Y + 2), new Rectangle(0, 0, tex.Width, tex.Height), new Color(200, 200, 200, 200), rotation, tex.Size() * 0.5f, /*scale * */drawScale, SpriteEffects.None, 0f);
             return false;
+        }
+
+        public override void Update(ref float gravity, ref float maxFallSpeed)
+        {
+            if (Item.color.R > 60 && (float)Main.rand.Next(500) - (Math.Abs(Item.velocity.X) + Math.Abs(Item.velocity.Y)) * 10f < (float)(Item.color.R / 50))
+            {
+                int dust = Dust.NewDust(Item.position, Item.width, Item.height, DustID.TintableDustLighted, 0f, 0f, 254, Color.White, 0.3f);
+                Main.dust[dust].velocity *= 0f;
+            }
         }
 
         public override void PostUpdate()
@@ -68,13 +79,13 @@ namespace GoldLeaf.Items.Pickups
         {
             Item.CloneDefaults(ItemID.Heart);
 
-            Item.width = 16;
-            Item.height = 16;
+            Item.width = 13;
+            Item.height = 13;
             Item.alpha = 200;
             Item.color = new Color(200, 200, 200, 200);
 
             ItemID.Sets.ItemsThatShouldNotBeInInventory[Item.type] = true;
-            ItemID.Sets.ItemIconPulse[Item.type] = true;
+            //ItemID.Sets.ItemIconPulse[Item.type] = true;
             ItemID.Sets.IgnoresEncumberingStone[Item.type] = true;
             ItemID.Sets.IsAPickup[Item.type] = true;
         }
@@ -90,8 +101,19 @@ namespace GoldLeaf.Items.Pickups
         {
             Texture2D tex = Request<Texture2D>(Texture).Value;
 
-            spriteBatch.Draw(tex, new Vector2 (Item.position.X - Main.screenPosition.X, Item.position.Y - Main.screenPosition.Y + 4), new Rectangle(0, 0, tex.Width, tex.Height), new Color(200, 200, 200, 200), rotation, tex.Size() * 0.5f, scale + (Main.essScale * 0.002f), SpriteEffects.None, 0f);
+            float drawScale = Main.essScale * 0.25f + 0.75f;
+
+            spriteBatch.Draw(tex, new Vector2(Item.position.X - Main.screenPosition.X, Item.position.Y - Main.screenPosition.Y + 2), new Rectangle(0, 0, tex.Width, tex.Height), new Color(200, 200, 200, 200), rotation, tex.Size() * 0.5f, /*scale * */drawScale, SpriteEffects.None, 0f);
             return false;
+        }
+
+        public override void Update(ref float gravity, ref float maxFallSpeed)
+        {
+            if (Item.color.R > 60 && (float)Main.rand.Next(500) - (Math.Abs(Item.velocity.X) + Math.Abs(Item.velocity.Y)) * 10f < (float)(Item.color.R / 50))
+            {
+                int dust = Dust.NewDust(Item.position, Item.width, Item.height, DustID.TintableDustLighted, 0f, 0f, 254, Color.White, 1f);
+                Main.dust[dust].velocity *= 0f;
+            }
         }
 
         public override void PostUpdate()
@@ -110,8 +132,8 @@ namespace GoldLeaf.Items.Pickups
         {
             Item.CloneDefaults(ItemID.Star);
 
-            Item.width = 8;
-            Item.height = 8;
+            Item.width = 9;
+            Item.height = 9;
             Item.alpha = 200;
             Item.color = new Color(200, 200, 200, 200);
 
@@ -133,7 +155,9 @@ namespace GoldLeaf.Items.Pickups
         {
             Texture2D tex = Request<Texture2D>(Texture).Value;
 
-            spriteBatch.Draw(tex, new Vector2(Item.position.X - Main.screenPosition.X, Item.position.Y - Main.screenPosition.Y + 2), new Rectangle(0, 0, tex.Width, tex.Height), new Color(200, 200, 200, 200), rotation, tex.Size() * 0.5f, scale += Main.essScale * 0.001f, SpriteEffects.None, 0f);
+            float drawScale = Main.essScale * 0.25f + 0.75f;
+
+            spriteBatch.Draw(tex, new Vector2(Item.position.X - Main.screenPosition.X, Item.position.Y - Main.screenPosition.Y + 2), new Rectangle(0, 0, tex.Width, tex.Height), new Color(200, 200, 200, 200), rotation, tex.Size() * 0.5f, /*scale * */drawScale, SpriteEffects.None, 0f);
             return false;
         }
 
@@ -153,8 +177,8 @@ namespace GoldLeaf.Items.Pickups
         {
             Item.CloneDefaults(ItemID.Star);
 
-            Item.width = 16;
-            Item.height = 16;
+            Item.width = 13;
+            Item.height = 13;
             Item.alpha = 200;
             Item.color = new Color(200, 200, 200, 200);
 
@@ -176,7 +200,9 @@ namespace GoldLeaf.Items.Pickups
         {
             Texture2D tex = Request<Texture2D>(Texture).Value;
 
-            spriteBatch.Draw(tex, new Vector2(Item.position.X - Main.screenPosition.X, Item.position.Y - Main.screenPosition.Y + 4), new Rectangle(0, 0, tex.Width, tex.Height), new Color(200, 200, 200, 200), rotation, tex.Size() * 0.5f, scale + (Main.essScale * 0.002f), SpriteEffects.None, 0f);
+            float drawScale = Main.essScale * 0.25f + 0.75f;
+
+            spriteBatch.Draw(tex, new Vector2(Item.position.X - Main.screenPosition.X, Item.position.Y - Main.screenPosition.Y + 2), new Rectangle(0, 0, tex.Width, tex.Height), new Color(200, 200, 200, 200), rotation, tex.Size() * 0.5f, /*scale * */drawScale, SpriteEffects.None, 0f);
             return false;
         }
 

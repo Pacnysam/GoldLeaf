@@ -32,10 +32,11 @@ namespace GoldLeaf.Items.Misc.Weapons
 
         public override void SetDefaults()
         {
-            Item.DefaultToWhip(ProjectileType<ConstellationP>(), 8, 1.2f, 3f, 45);
+            Item.DefaultToWhip(ProjectileType<ConstellationP>(), 9, 1.2f, 3f, 45);
+
             Item.rare = ItemRarityID.Blue;
             Item.value = Item.sellPrice(0, 0, 70, 0);
-            //Item.autoReuse = true;
+            Item.autoReuse = true;
         }
 
         public override void AddRecipes()
@@ -48,7 +49,7 @@ namespace GoldLeaf.Items.Misc.Weapons
 
             Recipe recipe2 = CreateRecipe();
             recipe2.AddIngredient(ItemID.FallenStar, 10);
-            recipe2.AddRecipeGroup(RecipeGroupID.IronBar, 16);
+            recipe2.AddRecipeGroup(RecipeGroupID.IronBar, 8);
             recipe2.AddTile(TileID.Anvils);
             recipe2.AddCondition(GoldLeafConditions.InSurface);
             recipe2.AddCondition(Condition.TimeNight);
@@ -62,8 +63,6 @@ namespace GoldLeaf.Items.Misc.Weapons
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
-            Texture2D tex = Request<Texture2D>(Texture + "Glow").Value;
-
             spriteBatch.Draw
             (
                 glowTex.Value,
@@ -87,14 +86,14 @@ namespace GoldLeaf.Items.Misc.Weapons
         {
             for (int i = 0; i < 1; i++)
             {
-                Texture2D tex = Request<Texture2D>("GoldLeaf/Items/Misc/ConstellationGlowFlat").Value;
-                Vector2 vec = new((tex.Width / 2), (tex.Height / 1 / 2));
-                //Vector2 position1 = Item.Center - Main.screenPosition - new Vector2(tex.Width, (tex.Height / 1)) * Item.scale / 2f + vec * Item.scale + new Vector2(0.0f, 0f + addHeight + 0);
+                Texture2D glowTex = Request<Texture2D>("GoldLeaf/Items/Misc/ConstellationGlowFlat").Value;
+                Vector2 vec = new((glowTex.Width / 2), (glowTex.Height / 1 / 2));
+                //Vector2 position1 = Item.Center - Main.screenPosition - new Vector2(glowTex.Width, (glowTex.Height / 1)) * Item.scale / 2f + vec * Item.scale + new Vector2(0.0f, 0f + addHeight + 0);
                 for (int k = 0; k < 4; ++k)
                 {
                     Color color = Item.GetAlpha(new Color(180, 224, 255)) * (0.85f - (float)(Math.Cos(GoldLeafWorld.rottime)));
-                    Vector2 position = new Vector2(Item.Center.X, Item.Center.Y) + ((float)((double)k / 4 * 6.28318548202515) + rotation + 0f).ToRotationVector2() * (float)(4.0 * (double)(float)(Math.Cos(GoldLeafWorld.rottime)) + 2.0) - Main.screenPosition - new Vector2(tex.Width, (tex.Height)) * Item.scale / 2f + vec * Item.scale + new Vector2(0.0f, 0f + 0);
-                    Main.spriteBatch.Draw(tex, position, new Microsoft.Xna.Framework.Rectangle?(tex.Frame(1, 1, 0, 0)), color, rotation, vec, Item.scale * 1.1f, SpriteEffects.None, 0.0f);
+                    Vector2 position = new Vector2(Item.Center.X, Item.Center.Y) + ((float)((double)k / 4 * 6.28318548202515) + rotation + 0f).ToRotationVector2() * (float)(4.0 * (double)(float)(Math.Cos(GoldLeafWorld.rottime)) + 2.0) - Main.screenPosition - new Vector2(glowTex.Width, (glowTex.Height)) * Item.scale / 2f + vec * Item.scale + new Vector2(0.0f, 0f + 0);
+                    Main.spriteBatch.Draw(glowTex, position, new Microsoft.Xna.Framework.Rectangle?(glowTex.Frame(1, 1, 0, 0)), color, rotation, vec, Item.scale * 1.1f, SpriteEffects.None, 0.0f);
                 }
             }
             return true;
@@ -163,7 +162,7 @@ namespace GoldLeaf.Items.Misc.Weapons
             target.AddBuff(BuffType<ConstellationTag>(), 180);
             player.MinionAttackTargetNPC = target.whoAmI;
             
-            player.GetModPlayer<ConstellationPlayer>().segmentTimer = 180;
+            player.GetModPlayer<ConstellationPlayer>().segmentTimer = 300;
 
             if (player.GetModPlayer<ConstellationPlayer>().extraSegments < player.GetModPlayer<ConstellationPlayer>().maxExtraSegments)
             {

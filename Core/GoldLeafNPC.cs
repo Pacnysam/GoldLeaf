@@ -12,6 +12,9 @@ using GoldLeaf.Items.Misc.Accessories;
 using GoldLeaf.Items.Misc.Vanity;
 using GoldLeaf.Items.Misc.Vanity.Dyes;
 using Terraria.GameContent.ItemDropRules;
+using GoldLeaf.Tiles.Decor;
+using GoldLeaf.Items.VanillaBossDrops;
+using GoldLeaf.Items.Potions;
 
 namespace GoldLeaf.Core
 {
@@ -19,10 +22,18 @@ namespace GoldLeaf.Core
     {
         public override bool InstancePerEntity => true;
 
+        public float critDamageMod = 0f;
+        public int defenseMod = 0;
+        //public float defenseFactorMod = 1f;
+
         public bool stunned = false;
 
         public override void ResetEffects(NPC npc)
         {
+            critDamageMod = 0f;
+            defenseMod = 0;
+            //defenseFactorMod = 1f;
+
             stunned = false;
         }
 
@@ -31,7 +42,7 @@ namespace GoldLeaf.Core
             if (shop.NpcType == NPCID.Merchant)
             {
                 shop.Add(ItemID.Leather);
-                //shop.Add(ItemType<WaxCandle>());
+                shop.Add(ItemType<WaxCandle>());
             }
             if (shop.NpcType == NPCID.GoblinTinkerer)
             {
@@ -51,10 +62,14 @@ namespace GoldLeaf.Core
 
         public override void ModifyIncomingHit(NPC npc, ref NPC.HitModifiers modifiers)
         {
-            if (npc.onFire && GetInstance<GameplayConfig>().BuffChanges) 
+            /*if (npc.onFire && GetInstance<GameplayConfig>().BuffChanges) 
             {
                 modifiers.Defense.Flat -= 4;
-            }
+            }*/
+
+            modifiers.CritDamage += critDamageMod;
+            modifiers.Defense.Flat += defenseMod;
+            //modifiers.DefenseEffectiveness *= defenseFactorMod;
         }
 
         public override bool PreAI(NPC npc)
@@ -73,6 +88,19 @@ namespace GoldLeaf.Core
             }
 
             return true;
+        }
+
+        public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
+        {
+            switch (npc.type)
+            {
+                case NPCID.VampireBat:
+                case NPCID.Vampire:
+                    {
+                        npcLoot.Add(ItemDropRule.Common(ItemType<VampirePotion>(), 2));
+                        break;
+                    }
+            }
         }
     }
 }

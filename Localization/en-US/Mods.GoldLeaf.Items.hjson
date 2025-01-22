@@ -206,6 +206,16 @@ Sediment: {
 	Gem7: "[i:999]: Stuns enemies"
 }
 
+GemStaves: {
+	Type1: Pierces armor and curves toward the cursor
+	Type2: Bounces and shoots 2 at once
+	Type3: Critical strikes explode into light
+	Type4: Drops falling emeralds
+	Type5: Critical strikes spawn hearts
+	Type6: Fast as light
+	Type7: Critical strikes inflict a stun
+}
+
 HiveCarcass: {
 	DisplayName: Hive Carcass
 	Tooltip: Fills healing potions with honey
@@ -226,17 +236,36 @@ Gameboy: {
 	Tooltip: So retro!
 }
 
-GemStaves: {
-	Type1: Pierces armor and curves toward the cursor
-	Type2: Bounces and shoots 2 at once
-	Type3: Critical strikes explode into light
-	Type4: Drops falling emeralds
-	Type5: Critical strikes spawn hearts
-	Type6: Fast as light
-	Type7: Critical strikes inflict a stun
+Rattlestaff: {
+	DisplayName: Rattlestaff
+	Tooltip: ""
 }
 
-Rattlestaff: {
+WaxCandle: {
+	DisplayName: Wax Candle
 	Tooltip: ""
-	DisplayName: Rattlestaff
+}
+
+Goonai: {
+	DisplayName: Goonai
+	Tooltip:
+		'''
+		Garuntees critical strikes while falling
+		3x critical strike multiplier
+		'''
+}
+
+SentryPotion: {
+	DisplayName: Artillery Potion
+	Tooltip: Increases your max number of sentries by 1
+}
+
+JumpBoostPotion: {
+	DisplayName: Jump Boost Potion
+	Tooltip: Increases jump height and allows auto-jump
+}
+
+VampirePotion: {
+	DisplayName: Vampire Potion
+	Tooltip: Critical strikes gain lifesteal
 }

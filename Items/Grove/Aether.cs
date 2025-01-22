@@ -14,6 +14,7 @@ using Microsoft.CodeAnalysis;
 using GoldLeaf.Items.Misc;
 using Terraria.GameContent.Drawing;
 using GoldLeaf.Items.Grove.Boss;
+using GoldLeaf.Tiles.Decor;
 
 namespace GoldLeaf.Items.Grove
 {
@@ -83,9 +84,9 @@ namespace GoldLeaf.Items.Grove
 		{
 			Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<Echobark>(), 20);
-            recipe.AddIngredient(ItemType<EveDroplet>(), 60);
+            recipe.AddIngredient(ItemType<EveDroplet>(), 80);
             recipe.AddIngredient(ItemType<HeavenShard>(), 4);
-            recipe.AddIngredient(ItemType<RemorseCandle>(), 1);
+            recipe.AddIngredient(ItemType<WaxCandle>(), 1);
             recipe.AddTile(TileID.Anvils);
             
             recipe.AddOnCraftCallback(RecipeCallbacks.AetherCraftEffect);
@@ -247,7 +248,7 @@ namespace GoldLeaf.Items.Grove
                 float y = (float)Math.Sin(GoldLeafWorld.rottime + (counter * 0.03f) + k) * Projectile.ai[0] / 64f;
                 Vector2 pos = (new Vector2(x, y)).RotatedBy(k / 12f * 6.28f);
 
-                Dust d = Dust.NewDustPerfect(Projectile.Center, DustType<AetherDust>(), pos * (0.3f + counter * 0.003f), 0, default, 1f + (counter * 0.002f));
+                Dust d = Dust.NewDustPerfect(Projectile.Center, DustType<AetherDust>(), pos * (0.3f + counter * 0.0015f), 0, default, 1f + (counter * 0.002f));
                 d.velocity += new Vector2(0, (counter * -0.02f));
             }
         }
@@ -272,19 +273,16 @@ namespace GoldLeaf.Items.Grove
         public override void OnKill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];
-            //Texture2D tex = Request<Texture2D>("GoldLeaf/Textures/RingGlow0").Value;
+            //Texture2D glowTex = Request<Texture2D>("GoldLeaf/Textures/RingGlow0").Value;
 
             SoundStyle sound1 = new("GoldLeaf/Sounds/SE/RoR2/EngineerMine") { Volume = 0.8f };
             SoundStyle sound2 = new("GoldLeaf/Sounds/SE/RoR2/Aftershock") { Pitch = 1.6f, Volume = 0.8f };
 
             SoundEngine.PlaySound(sound1, player.Center);
             SoundEngine.PlaySound(sound2, player.Center);
-            int explosion = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ProjectileType<AetherBurst>(), Projectile.damage + (int)(shotsFired * 2.2) /*Projectile.damage+(counter)/6*/, Projectile.knockBack, player.whoAmI);
+            int explosion = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ProjectileType<AetherBurst>(), Projectile.damage + (int)(shotsFired * 2.2), Projectile.knockBack, player.whoAmI);
             if (counter >= 80) Main.projectile[explosion].ai[0] = 90f; else Main.projectile[explosion].ai[0] = 30f + (counter * 0.65f);
-            //Main.projectile[explosion].ai[0] = 60f + (cooldown * 0.65f);
-            if (counter < 40) Main.projectile[explosion].damage = (int)(Projectile.damage * 1.35f);
-
-            if (counter < 80) Helper.AddScreenshake(player, 15, Projectile.Center); else Helper.AddScreenshake(player, (int)(15 + (counter * 0.05f)), Projectile.Center - Main.screenPosition);
+            Helper.AddScreenshake(player, 18 + shotsFired, Projectile.Center);
         }
     }
 
@@ -355,7 +353,9 @@ namespace GoldLeaf.Items.Grove
             //Color color = new Color(196, 43, 255) * (1.2f - (counter * 0.05f));
             color.A = 0;
 
-            Main.spriteBatch.Draw //fireball
+            for (int i = 0; i < 2; i++)
+            {
+                Main.spriteBatch.Draw //fireball
             (
                 tex,
                 new Vector2
@@ -371,6 +371,7 @@ namespace GoldLeaf.Items.Grove
                 SpriteEffects.None,
                 0f
             );
+            }
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

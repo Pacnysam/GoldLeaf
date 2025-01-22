@@ -20,13 +20,16 @@ namespace GoldLeaf.Items.VanillaBossDrops
                 case NPCID.KingSlime:
                     {
                         LeadingConditionRule notExpertRule = new(new Conditions.NotExpert());
+
                         notExpertRule.OnSuccess(ItemDropRule.Common(ItemID.SlimeStaff, 3));
+                        notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<Goonai>(), 2, 60, 80));
                         npcLoot.Add(notExpertRule);
                         break;
                     }
                 case NPCID.BrainofCthulhu:
                     {
                         LeadingConditionRule notExpertRule = new(new Conditions.NotExpert());
+
                         notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<ClutterGloveCrimson>(), 3));
                         npcLoot.Add(notExpertRule);
                         break;
@@ -47,7 +50,8 @@ namespace GoldLeaf.Items.VanillaBossDrops
                 case NPCID.SkeletronHead:
                     {
                         LeadingConditionRule notExpertRule = new(new Conditions.NotExpert());
-                        notExpertRule.OnSuccess(ItemDropRule.Common(ItemID.Bone, 1, 15, 25));
+
+                        notExpertRule.OnSuccess(ItemDropRule.Common(ItemID.Bone, 1, 25, 40));
                         npcLoot.Add(notExpertRule);
                         break;
                     }
@@ -58,9 +62,10 @@ namespace GoldLeaf.Items.VanillaBossDrops
                         noDaylightRule.OnSuccess(ItemDropRule.Common(ItemID.EmpressBlade, 20));
                         break;
                     }*/
-                case NPCID.MoonLordCore: //i'll move these to grove boss when i'm done with that
+                case NPCID.MoonLordCore: //TODO: move to grove boss when it's done
                     {
                         LeadingConditionRule notExpertRule = new(new Conditions.NotExpert());
+
                         notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<MadcapPainting>(), 1));
                         notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<BatPlushie>(), 1));
                         npcLoot.Add(notExpertRule);
@@ -79,6 +84,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
                 case ItemID.KingSlimeBossBag:
                     {
                         itemLoot.Add(ItemDropRule.Common(ItemID.SlimeStaff, 2));
+                        itemLoot.Add(ItemDropRule.Common(ItemType<Goonai>(), 2, 70, 90));
                         break;
                     }
                 case ItemID.EaterOfWorldsBossBag:
@@ -93,10 +99,10 @@ namespace GoldLeaf.Items.VanillaBossDrops
                     }
                 case ItemID.SkeletronBossBag:
                     {
-                        itemLoot.Add(ItemDropRule.Common(ItemID.Bone, 1, 25, 35));
+                        itemLoot.Add(ItemDropRule.Common(ItemID.Bone, 1, 30, 45));
                         break;
                     }
-                case ItemID.MoonLordBossBag:
+                case ItemID.MoonLordBossBag: //TODO: move to grove boss when it's done
                     {
                         itemLoot.Add(ItemDropRule.Common(ItemType<MadcapPainting>(), 1));
                         itemLoot.Add(ItemDropRule.Common(ItemType<BatPlushie>(), 1));

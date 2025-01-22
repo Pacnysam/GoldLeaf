@@ -104,7 +104,7 @@ namespace GoldLeaf.Items.Grove
             grappleDistance = Vector2.Distance(player.Center, new Vector2(grappleX, grappleY));
             grappleTime++;
 
-            grappleSpeed = Helper.LerpFloat(0, maxSpeed, grappleTime * 0.025f);
+            grappleSpeed = Helper.LerpFloat(0, maxSpeed, grappleTime * 0.015f);
 
             if (grappleSpeed < minSpeed) grappleSpeed = minSpeed;
             if (grappleSpeed > maxSpeed) grappleSpeed = maxSpeed;

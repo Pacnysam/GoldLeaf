@@ -10,7 +10,7 @@ namespace GoldLeaf.Tiles.Decor
 {
 	public class BatPlushie : ModItem
 	{
-		public override void SetDefaults() 
+        public override void SetDefaults() 
 		{
 			Item.width = 20;
 			Item.height = 24;

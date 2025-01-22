@@ -14,6 +14,7 @@ using Terraria.ModLoader;
 using Terraria.Localization;
 using Terraria.GameContent.Drawing;
 using Terraria.GameContent;
+using GoldLeaf.Items.Gem;
 
 namespace GoldLeaf.Items.Nightshade
 {
@@ -29,7 +30,7 @@ namespace GoldLeaf.Items.Nightshade
 			Item.DamageType = DamageClass.Magic;
             Item.knockBack = 2;
 
-			Item.mana = 8;
+			Item.mana = 7;
 			
 			Item.shoot = ProjectileType<VampireBatP>();
 			Item.shootSpeed = 12f;
@@ -56,12 +57,18 @@ namespace GoldLeaf.Items.Nightshade
 
 		public override bool CanUseItem(Player player)
 		{
-			if (player.altFunctionUse == 2)
+            if (player.altFunctionUse == 2)
 			{
 				if (player.GetModPlayer<NightshadePlayer>().nightshade == player.GetModPlayer<NightshadePlayer>().nightshadeMin) 
 				{
 					return false;
 				}
+                for (int k = 0; k <= Main.maxProjectiles; k++)
+                {
+                    if (Main.projectile[k].active && Main.projectile[k].owner == player.whoAmI && Main.projectile[k].type == ProjectileType<VampireBolt>())
+                        return false;
+                }
+
                 Item.mana = 0;
 				Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/Monolith/Dash");
                 Item.shoot = ProjectileType<VampireBolt>();
@@ -231,6 +238,7 @@ namespace GoldLeaf.Items.Nightshade
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
+			Main.player[Projectile.owner].AddBuff(BuffID.Cursed, 59);
             SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Monolith/GhostChirp") { Volume = 0.25f }, Main.player[Projectile.owner].Center);
 
             int t = Main.rand.Next(4, 8);

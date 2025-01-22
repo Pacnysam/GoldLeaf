@@ -25,7 +25,7 @@ using System.Linq;
 using Mono.Cecil;
 using GoldLeaf.Items.Pickups;
 
-namespace GoldLeaf.Items.GemSickles
+namespace GoldLeaf.Items.Gem
 {
     public class GemStaffReworkItem : GlobalItem
     {
@@ -160,7 +160,9 @@ namespace GoldLeaf.Items.GemSickles
                 }
                 if (projectile.type == ProjectileID.RubyBolt && GetInstance<GameplayConfig>().OreStaffReworks)
                 {
-                    if (projectile.timeLeft >= 120)
+                    //projectile.rotation += (float)Math.Sin(GoldLeafWorld.rottime) * 25f;
+
+                    /*if (projectile.timeLeft >= 120)
                     {
                         projectile.tileCollide = false;
                         projectile.ignoreWater = true;
@@ -169,7 +171,7 @@ namespace GoldLeaf.Items.GemSickles
                     {
                         projectile.tileCollide = true;
                         projectile.ignoreWater = false;
-                    }
+                    }*/
                 }
                 return base.PreAI(projectile);
             }
@@ -235,7 +237,7 @@ namespace GoldLeaf.Items.GemSickles
                                 if (hit.Crit)
                                 {
                                     Item.NewItem(null, target.Hitbox, ItemType<HeartTiny>());
-                                    NewItemPerfect(target.Center, new Vector2(0, -2f), ItemType<HeartTiny>());
+                                    //NewItemPerfect(target.Center, new Vector2(0, -2f), ItemType<HeartTiny>());
                                 }
                                 break;
                             }

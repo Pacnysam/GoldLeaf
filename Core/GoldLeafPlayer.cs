@@ -3,6 +3,7 @@ using GoldLeaf.Items.Grove;
 using GoldLeaf.Items.Misc.Vanity;
 using GoldLeaf.Items.Misc.Vanity.Dyes;
 using GoldLeaf.Items.Nightshade;
+using GoldLeaf.Items.VanillaBossDrops;
 using GoldLeaf.Tiles.Decor;
 using Microsoft.Xna.Framework;
 using System;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
@@ -26,6 +28,7 @@ namespace GoldLeaf.Core
         public int screenshake = 0;
 
         public bool ZoneGrove = false;
+        //public bool ZoneCandle = false;
 
         public int ScreenMoveTime = 0;
         public Vector2 ScreenMoveTarget = new Vector2(0, 0);
@@ -62,6 +65,14 @@ namespace GoldLeaf.Core
             if (Main.netMode == NetmodeID.MultiplayerClient && Player == Main.LocalPlayer) GoldLeafWorld.rottime += (float)Math.PI / 60;
             Timer++;
         }
+
+        /*public override void PreUpdateBuffs()
+        {
+            if (ZoneCandle) 
+            {
+                Main.LocalPlayer.AddBuff(BuffType<WaxCandleBuff>(), 1);
+            }
+        }*/
 
         public override void ModifyScreenPosition()
         {

@@ -14,13 +14,13 @@ almost all heaven's gate content is LONG gone and not even being considered, fro
 the only heaven's gate content that i might revisit (with major reworks), from least to most likely this includes:
 -dry/temperate forest biomes [interesting and very fun idea but far too large of a scope than i can manage
 -desert and snow outposts [the only part of the surface reworks that are possible, VERY low priority though
--misc earlygame items (nemesis, toxic positivity, aurora, evil boss summon weapons, etc) [would need major reworks
--prehardmode sandstorm content/sunstone [really cool but overly complex for it's point in progression
+-misc earlygame items (nemesis, aurora, etc) [would need major reworks
 
 old gold leaf content is most likely staying, from least to most likely this includes:
 -secret vaults/special chests [neat idea but overly complex
 -toxin grove [i adore the idea but can never find a place for it, thematic overlap with corruption, possible bloat
 -surface dungeon items (runestone items and ghost bottle) [partially completed, but low priority
+-prehardmode sandstorm content/sunstone [really cool but overly complex for it's point in progression
 
 content that is in the works currently, from lowest to highest priority this includes:
 -granite enemies [im inexperienced with NPCs

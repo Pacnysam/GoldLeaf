@@ -1,4 +1,4 @@
-﻿using GoldLeaf.Items.GemSickles;
+﻿using GoldLeaf.Items.Gem;
 using GoldLeaf.Items.Grove;
 using Microsoft.Xna.Framework;
 using System;
@@ -24,9 +24,22 @@ namespace GoldLeaf.Core
     {
         public override void Update(int type, Player player, ref int buffIndex)
         {
-            if (type == BuffID.OnFire && GetInstance<GameplayConfig>().BuffChanges) 
+            if ((type == BuffID.OnFire || type == BuffID.OnFire3) && GetInstance<GameplayConfig>().BuffChanges) 
             { 
                 player.statDefense -= 4; 
+            }
+        }
+
+        public override void Update(int type, NPC npc, ref int buffIndex)
+        {
+            if ((type == BuffID.OnFire || type == BuffID.OnFire3) && GetInstance<GameplayConfig>().BuffChanges)
+            {
+                npc.GetGlobalNPC<GoldLeafNPC>().defenseMod -= 4;
+            }
+
+            if (type == BuffID.CursedInferno && GetInstance<GameplayConfig>().BuffChanges)
+            {
+                npc.GetGlobalNPC<GoldLeafNPC>().critDamageMod += 0.3f;
             }
         }
 
@@ -36,6 +49,7 @@ namespace GoldLeaf.Core
             switch (type)
             {
                 case BuffID.OnFire:
+                case BuffID.OnFire3:
                     {
                         tip += Language.GetTextValue("Mods.GoldLeaf.Buffs.Vanilla.OnFire");
                         break;

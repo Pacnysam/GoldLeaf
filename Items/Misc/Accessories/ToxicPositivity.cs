@@ -52,6 +52,7 @@ namespace GoldLeaf.Items.Misc.Accessories
         public override void Update(NPC npc, ref int buffIndex)
         {
             npc.GetGlobalNPC<ToxicPositiveNPC>().toxicPositive = true;
+            npc.GetGlobalNPC<GoldLeafNPC>().defenseMod -= 6;
         }
     }
 
@@ -85,7 +86,7 @@ namespace GoldLeaf.Items.Misc.Accessories
         {
             if (toxicPositivity && Main.rand.NextBool(Main.LocalPlayer.CountBuffs(), 100))
             {
-                Main.LocalPlayer.AddBuff(BuffID.Poisoned, 180);
+                Main.LocalPlayer.AddBuff(BuffID.Poisoned, 60 + (Main.LocalPlayer.CountBuffs() * 20));
             }
         }
     }

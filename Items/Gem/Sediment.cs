@@ -24,7 +24,7 @@ using GoldLeaf.Tiles.Grove;
 using System.Linq;
 using GoldLeaf.Items.Nightshade;
 
-namespace GoldLeaf.Items.GemSickles
+namespace GoldLeaf.Items.Gem
 {
     public class Sediment : ModItem
     {
@@ -43,7 +43,7 @@ namespace GoldLeaf.Items.GemSickles
         }
         public int gem;
 
-        public override string Texture => "GoldLeaf/Items/GemSickles/SedimentFull";
+        public override string Texture => "GoldLeaf/Items/Gem/SedimentFull";
 
         public override void SetStaticDefaults()
         {
@@ -72,14 +72,14 @@ namespace GoldLeaf.Items.GemSickles
             Item.value = Item.sellPrice(0, 0, 50, 0);
         }
 
-        public override bool CanUseItem(Player Player)
+        public override bool CanUseItem(Player player)
         {
             for (int k = 0; k <= Main.maxProjectiles; k++)
             {
-                if (Main.projectile[k].active && Main.projectile[k].owner == Player.whoAmI && Main.projectile[k].type == ProjectileType<SedimentP>() && gem != (int)Gem.Diamond)
+                if (Main.projectile[k].active && Main.projectile[k].owner == player.whoAmI && Main.projectile[k].type == ProjectileType<SedimentP>() && gem != (int)Gem.Diamond)
                     return false;
             }
-            return base.CanUseItem(Player);
+            return base.CanUseItem(player);
         }
 
         public override void RightClick(Player player)
@@ -108,7 +108,7 @@ namespace GoldLeaf.Items.GemSickles
             if (gem == (int)Gem.Amethyst || gem == (int)Gem.Emerald)
                 damage *= 1.25f;
             else if (gem == (int)Gem.Sapphire)
-                damage *= 0.75f;
+                damage *= 0.85f;
             else if (gem == (int)Gem.Diamond)
                 damage *= 0.6f;
             else
@@ -134,11 +134,21 @@ namespace GoldLeaf.Items.GemSickles
         public override float UseSpeedMultiplier(Player player)
         {
             if (gem == (int)Gem.Sapphire)
-                return 0.5f;
+                return 0.75f;
             else if (gem == (int)Gem.Emerald)
                 return 0.35f;
             else
                 return 1f;
+        }
+
+        public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
+        {
+            if (gem == (int)Gem.Amethyst) velocity *= 1.4f;
+            if (gem == (int)Gem.Topaz) velocity = velocity.RotatedBy(MathHelper.ToRadians(Main.rand.Next(-10, 10)));
+            if (gem == (int)Gem.Emerald) velocity *= 2f;
+            if (gem == (int)Gem.Ruby) velocity *= 1.6f;
+            if (gem == (int)Gem.Diamond) knockback *= 0.3f;
+            if (gem == (int)Gem.Amber) knockback *= 0f;
         }
         #endregion Stats
 
@@ -150,16 +160,6 @@ namespace GoldLeaf.Items.GemSickles
                     return false;
             }
             return true;
-        }
-
-        public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
-        {
-            if (gem == (int)Gem.Amethyst) velocity *= 1.4f;
-            if (gem == (int)Gem.Topaz) velocity = velocity.RotatedBy(MathHelper.ToRadians(Main.rand.Next(-10, 10)));
-            if (gem == (int)Gem.Emerald) velocity *= 2f;
-            if (gem == (int)Gem.Ruby) velocity *= 1.6f;
-            if (gem == (int)Gem.Diamond) knockback *= 0.3f;
-            if (gem == (int)Gem.Amber) knockback *= 0f;
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
@@ -277,16 +277,16 @@ namespace GoldLeaf.Items.GemSickles
             Amber = 7,
             Count
         }
-        public int gem;
-        public bool empowered;
+        private int gem;
+        private bool empowered = false;
 
-        int emeraldDropCounter = 6;
+        private int emeraldDropCounter = 6;
 
-        int rubyCounter = 0;
-        int rubyShotCounter = 40;
+        private int rubyCounter = 0;
+        private int rubyShotCounter = 40;
 
 
-        public override string Texture => "GoldLeaf/Items/GemSickles/SedimentFull";
+        public override string Texture => "GoldLeaf/Items/Gem/SedimentFull";
 
         public override void SetStaticDefaults()
         {
@@ -301,32 +301,45 @@ namespace GoldLeaf.Items.GemSickles
 
             Projectile.width = 20;
             Projectile.height = 20;
-
-            empowered = true;
         }
 
         public override void OnSpawn(IEntitySource source)
         {
+            counter = Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
+
             gem = (int)Projectile.ai[2];
             Projectile.frame = (int)Projectile.ai[2];
 
-            if (gem == (int)Gem.Ruby)
-            {
+            if (gem == (int)Gem.Ruby || gem == (int)Gem.None) 
                 empowered = false;
-            }
+            else 
+                empowered = true;
         }
+
 
         public override bool PreAI()
         {
             counter = Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
+            if (counter <= 1) 
+            {
+                gem = (int)Projectile.ai[2];
+                Projectile.frame = (int)Projectile.ai[2];
 
-            if (counter <= 1 && gem == (int)Gem.Ruby) empowered = false;
+                if (gem == (int)Gem.Ruby || gem == (int)Gem.None)
+                    empowered = false;
+                else
+                    empowered = true;
+            }
 
-            gem = (int)Projectile.ai[2];
-            Projectile.frame = (int)Projectile.ai[2];
+            //counter = Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
 
-            if (gem == (int)Gem.None)
-            { empowered = false; }
+            //if (counter <= 1 && gem == (int)Gem.Ruby) empowered = false;
+
+            //gem = (int)Projectile.ai[2];
+            //Projectile.frame = (int)Projectile.ai[2];
+
+            if (gem == (int)Gem.None) empowered = false;
+
 
             if (empowered)
             {
@@ -340,7 +353,7 @@ namespace GoldLeaf.Items.GemSickles
                 }
                 if (gem == (int)Gem.Ruby && empowered && counter > 1)
                 {
-                    Projectile.velocity *= 0.85f + (rubyCounter * 0.0005f);
+                    Projectile.velocity *= 0.825f + (rubyCounter * 0.0005f);
                 }
                 if (gem == (int)Gem.Emerald)
                 {
@@ -416,9 +429,7 @@ namespace GoldLeaf.Items.GemSickles
 
                             Vector2 velocity = shootVelocity.RotatedByRandom(MathHelper.ToRadians(4f));
 
-                            int rubyBolt = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, velocity * 0.55f, ProjectileID.RubyBolt, (int)(Projectile.damage * 0.7f), Projectile.knockBack * 0.3f, Projectile.owner);
-                            Main.projectile[rubyBolt].penetrate = 1;
-                            Main.projectile[rubyBolt].DamageType = DamageClass.Melee;
+                            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, velocity * 0.55f, ProjectileType<BasicRubyBolt>(), (int)(Projectile.damage * 0.7f), Projectile.knockBack * 0.3f, Projectile.owner);
                         }
                     }
                 }
@@ -520,7 +531,7 @@ namespace GoldLeaf.Items.GemSickles
             if (empowered && gem != (int)Gem.None)
             {
                 //texture = Request<Texture2D>("GoldLeaf/Textures/Slash").Value;
-                texture = Request<Texture2D>("GoldLeaf/Items/GemSickles/SedimentGlow").Value;
+                texture = Request<Texture2D>("GoldLeaf/Items/Gem/SedimentGlow").Value;
 
                 Vector2 drawOrigin = new(texture.Width * 0.5f/* * 0.07f*/, Projectile.height * 0.5f/* * 0.07f*/);
                 for (int k = 0; k < Projectile.oldPos.Length; k++)
@@ -615,7 +626,7 @@ namespace GoldLeaf.Items.GemSickles
             if (empowered)
             {
                 //texture = Request<Texture2D>("GoldLeaf/Textures/Slash").Value;
-                texture = Request<Texture2D>("GoldLeaf/Items/GemSickles/SedimentGlow").Value;
+                texture = Request<Texture2D>("GoldLeaf/Items/Gem/SedimentGlow").Value;
 
                 Vector2 drawOrigin = new(texture.Width * 0.5f/* * 0.07f*/, Projectile.height * 0.5f/* * 0.07f*/);
                 for (int k = 0; k < Projectile.oldPos.Length; k++)
@@ -783,6 +794,33 @@ namespace GoldLeaf.Items.GemSickles
                 Main.spriteBatch.Draw(tex, drawPos, null, Color.White * (1.0f - (0.15f * k)), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
             }
             return true;
+        }
+    }
+
+    public class BasicRubyBolt : ModProjectile
+    {
+        public override string Texture => "GoldLeaf/Textures/Empty";
+
+        public override void SetDefaults()
+        {
+            Projectile.CloneDefaults(ProjectileID.RubyBolt);
+            //AIType = ProjectileID.RubyBolt;
+
+            Projectile.DamageType = DamageClass.Melee;
+            Projectile.penetrate = 1;
+            Projectile.extraUpdates = 1;
+        }
+
+        public override void OnSpawn(IEntitySource source)
+        {
+            Projectile.velocity *= 0.5f;
+        }
+
+        public override void AI()
+        {
+            //Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.GemRuby, Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f, 0, GetGemColor(ItemID.Ruby), 0.6f);
+            Dust d = Dust.NewDustPerfect(Projectile.Center, DustID.GemRuby, Projectile.velocity * 0.6f, 0, GetGemColor(ItemID.Ruby), 1f);
+            d.noGravity = true;
         }
     }
 

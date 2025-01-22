@@ -8,6 +8,11 @@ namespace GoldLeaf.Tiles.Grove
 {
     public class GroveStone : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 100;
+        }
+
         public override void SetDefaults()
         {
             Item.consumable = true;

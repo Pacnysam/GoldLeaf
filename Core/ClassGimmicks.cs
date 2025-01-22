@@ -11,6 +11,7 @@ using Terraria.ID;
 using Microsoft.Xna.Framework;
 using GoldLeaf.Items.Pickups;
 using Microsoft.Build.Execution;
+using Terraria.Audio;
 
 namespace GoldLeaf.Core
 {
@@ -34,13 +35,13 @@ namespace GoldLeaf.Core
                 if (hit.DamageType == DamageClass.Melee && Main.LocalPlayer.statLife < Main.LocalPlayer.statLifeMax2 && heartTimer <= 0)
                 {
                     Item.NewItem(Player.GetSource_OnHit(target), target.Hitbox, ItemType<HeartTiny>());
-                    heartTimer = 60;
+                    heartTimer = 120;
                 }
 
                 if (hit.DamageType == DamageClass.Magic && Main.LocalPlayer.statMana < Main.LocalPlayer.statManaMax2 && starTimer <= 0)
                 {
                     Item.NewItem(Player.GetSource_OnHit(target), target.Hitbox, ItemType<StarTiny>());
-                    starTimer = 20;
+                    starTimer = 30;
                 }
             }
         }
@@ -52,24 +53,25 @@ namespace GoldLeaf.Core
                 if (hit.DamageType == DamageClass.Melee && Main.LocalPlayer.statLife < Main.LocalPlayer.statLifeMax2 && heartTimer <= 0 && proj.GetGlobalProjectile<GoldLeafProjectile>().canSpawnMiniHearts)
                 {
                     Item.NewItem(Player.GetSource_OnHit(target), target.Hitbox, ItemType<HeartTiny>());
-                    heartTimer = 120;
+                    heartTimer = 180;
                 }
 
                 if (hit.DamageType == DamageClass.Magic && Main.LocalPlayer.statMana < Main.LocalPlayer.statManaMax2 && starTimer <= 0 && proj.GetGlobalProjectile<GoldLeafProjectile>().canSpawnMiniStars)
                 {
                     Item.NewItem(Player.GetSource_OnHit(target), target.Hitbox, ItemType<StarTiny>());
-                    starTimer = 20;
+                    starTimer = 60;
                 }
             }
         }
 
-        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        /*public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
         {
-            if (superCritTimer <= 0 && modifiers.DamageType == DamageClass.Ranged && GetInstance<GameplayConfig>().ClassGimmicks)
+            if (superCritTimer <= 0 && modifiers.DamageType == DamageClass.Ranged && GetInstance<GameplayConfig>().ClassGimmicks && proj.GetGlobalProjectile<GoldLeafProjectile>().canSuperCrit)
             {
-                modifiers.CritDamage += 0.5f;
-                superCritTimer = 60;
+                modifiers.CritDamage *= 2f;
+                modifiers.SetCrit();
+                superCritTimer = TimeToTicks(10);
             }
-        }
+        }*/
     }
 }

@@ -32,6 +32,11 @@ namespace GoldLeaf.Tiles.Grove
 
     public class GroveGrassSeeds : ModItem 
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 25;
+        }
+
         public override void SetDefaults()
         {
             Item.autoReuse = true;

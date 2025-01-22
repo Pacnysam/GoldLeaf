@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using static Terraria.ModLoader.ModContent;
-using static GoldLeaf.Core.Helper;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria;
@@ -9,6 +7,9 @@ using GoldLeaf.Items.Grove;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using GoldLeaf.Effects.Dusts;
+using Terraria.Localization;
+using static Terraria.ModLoader.ModContent;
+using static GoldLeaf.Core.Helper;
 
 namespace GoldLeaf.Core
 {
@@ -38,7 +39,7 @@ namespace GoldLeaf.Core
             {
                 player.GetModPlayer<GoldLeafPlayer>().craftTimer = 20;
 
-                DustHelper.DrawStar(player.Center, DustID.FireworkFountain_Yellow, 5, 2.6f, 1f, 0.55f, 0.9f, 0.5f, true, 0, -1);
+                DustHelper.DrawStar(player.Center, DustID.FireworkFountain_Yellow, 5, 2.6f, 1f, 0.55f, 0.6f, 0.5f, true, 0, -1);
                 SoundEngine.PlaySound(SoundID.Item4, player.Center);
             }
         }
@@ -55,33 +56,6 @@ namespace GoldLeaf.Core
                 }
                 SoundEngine.PlaySound(SoundID.Item37, player.Center);
             }
-        }
-    }
-
-
-
-    public class RecipeStuff : ModSystem
-    {
-        public override void PostAddRecipes()
-        {
-            for (int i = 0; i < Recipe.numRecipes; i++)
-            {
-                Recipe recipe = Main.recipe[i];
-
-                /*if (recipe.TryGetIngredient(ItemType<EveDroplet>(), out Item aether) && (recipe.HasCondition(Condition.NearLava) || recipe.HasTile(TileID.Furnaces)))
-                {
-                    recipe.AddOnCraftCallback(RecipeCallbacks.AetherCraftEffect);
-                }*/
-                if (recipe.TryGetIngredient(ItemID.FallenStar, out Item star))
-                {
-                    recipe.AddOnCraftCallback(RecipeCallbacks.StarCraftEffect);
-                }
-                if (recipe.HasTile(TileID.Anvils))
-                {
-                    recipe.AddOnCraftCallback(RecipeCallbacks.AnvilCraftEffect);
-                }
-            }        
-
         }
     }
 }

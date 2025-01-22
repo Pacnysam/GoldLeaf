@@ -26,3 +26,28 @@ Vanilla: {
 		'''
 	Ichor: Defense is reduced by 15
 }
+
+ArcticWraithBuff: {
+	DisplayName: Rimeflora Wraith
+	Description: The wraith will freeze your enemies
+}
+
+SentryPotionBuff: {
+	DisplayName: Artillery
+	Description: Increased max number of sentries
+}
+
+JumpBoostPotionBuff: {
+	DisplayName: Jump Boost
+	Description: Increased jump height
+}
+
+VampirePotionBuff: {
+	DisplayName: Vampire
+	Description: Critical strikes leech life
+}
+
+WaxCandleBuff: {
+	DisplayName: Zen
+	Description: Enemies are less likely to target you
+}

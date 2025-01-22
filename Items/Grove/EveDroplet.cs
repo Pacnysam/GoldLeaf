@@ -29,7 +29,7 @@ namespace GoldLeaf.Items.Grove
 
         public override void SetStaticDefaults()
         {
-            Item.ResearchUnlockCount = 99;
+            Item.ResearchUnlockCount = 100;
         }
 
         public override void SetDefaults()
@@ -87,6 +87,14 @@ namespace GoldLeaf.Items.Grove
                 dust.noGravity = true;
                 dust.fadeIn = 1.4f;
             }*/
+        }
+
+        public override void PostUpdate()
+        {
+
+            float glo = 70 * 0.005f;
+            glo *= Main.essScale * 0.5f;
+            Lighting.AddLight((int)((Item.position.X + (Item.width / 2)) / 16f), (int)((Item.position.Y + (Item.height / 2)) / 16f), ((238 / 255) * 0.2f) * glo, ((107 / 255) * 0.2f) * glo, ((192 / 255) * 0.2f) * glo);
         }
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
@@ -182,7 +190,10 @@ namespace GoldLeaf.Items.Grove
         {
             Player player = Main.player[Projectile.owner];
 
-            SoundEngine.PlaySound(SoundID.Shimmer1, Projectile.Center);
+            SoundStyle sound1 = new("GoldLeaf/Sounds/SE/HollowKnight/JellyfishEggPop") { Volume = 0.65f, PitchVariance = 0.4f };
+            SoundEngine.PlaySound(sound1, Projectile.Center);
+
+            //SoundEngine.PlaySound(SoundID.Shimmer1, Projectile.Center);
 
             for (int i = 0; i < 12; i++)
             {

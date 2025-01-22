@@ -12,7 +12,7 @@ using GoldLeaf.Tiles.Grove;
 using System.Threading.Channels;
 using Terraria.ObjectData;
 using Terraria.Enums;
-using GoldLeaf.Items.GemSickles;
+using GoldLeaf.Items.Gem;
 
 namespace GoldLeaf.Core
 {

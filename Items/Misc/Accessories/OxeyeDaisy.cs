@@ -31,7 +31,7 @@ namespace GoldLeaf.Items.Misc.Accessories
 		public override void SetDefaults()
 		{
 			Item.value = Item.sellPrice(0, 0, 30, 0);
-			Item.rare = ItemRarityID.Blue;
+			Item.rare = ItemRarityID.White;
 
 			Item.width = 30;
 			Item.height = 32;
@@ -127,7 +127,7 @@ namespace GoldLeaf.Items.Misc.Accessories
             Main.tileNoFail[Type] = true;
 
             //TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.AlternateTile, TileObjectData.newTile.Width, 0);
-            TileObjectData.newTile.AnchorValidTiles = [TileID.Grass, TileID.JungleGrass, TileID.HallowedGrass, TileType<GroveGrassT>()];
+            TileObjectData.newTile.AnchorValidTiles = [TileID.Grass, TileID.JungleGrass, TileID.MushroomGrass, TileID.CorruptGrass, TileID.CrimsonGrass, TileID.CorruptJungleGrass, TileID.CrimsonJungleGrass, TileID.HallowedGrass, TileType<GroveGrassT>()];
 
             TileObjectData.newTile.CoordinateHeights = [28];
             TileObjectData.newTile.CoordinateWidth = 16;

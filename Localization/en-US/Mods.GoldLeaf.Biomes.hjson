@@ -12,3 +12,8 @@ UndergroundWhisperingGrove: {
 	DisplayName: Whispering Grove
 	TownNPCDialogueName: the Whispering Grove
 }
+
+WaxCandle: {
+	DisplayName: Zen
+	TownNPCDialogueName: the Zen
+}
