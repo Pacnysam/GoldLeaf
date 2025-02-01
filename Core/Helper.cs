@@ -242,6 +242,34 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
             return items >= count;
         }
 
+        public static bool HasAccessory(Player player, int item, bool vanity) 
+        {
+            int maxAccessoryIndex = 5 + player.extraAccessorySlots;
+            int index = 3; if (vanity) index = 13;
+
+            for (int i = index; i < index + maxAccessoryIndex; i++)
+            {
+                if (player.armor[i].type == item)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public static bool HasAccessory(Player player, int item)
+        {
+            int maxAccessoryIndex = 5 + player.extraAccessorySlots;
+
+            for (int i = 3; i < 3 + maxAccessoryIndex; i++)
+            {
+                if (player.armor[i].type == item)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public static bool TryTakeItem(Player player, int type, int count)
         {
             if (HasItem(player, type, count))
@@ -450,55 +478,14 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
                 if (amount < 0) amount = 0;
             }
 
-            player.GetModPlayer<GoldLeafPlayer>().screenshake += (int)(amount * GetInstance<GraphicsConfig>().ShakeIntensity);
+            player.GetModPlayer<GoldLeafPlayer>().ScreenShake += (int)(amount * GetInstance<GraphicsConfig>().ShakeIntensity);
         }
         public static void AddScreenshake(Player player, int amount)
         {
-            player.GetModPlayer<GoldLeafPlayer>().screenshake += (int)(amount * GetInstance<GraphicsConfig>().ShakeIntensity);
+            player.GetModPlayer<GoldLeafPlayer>().ScreenShake += (int)(amount * GetInstance<GraphicsConfig>().ShakeIntensity);
         }
         
-        public static Color GetGemColor(int gem) 
-        {
-            switch (gem) 
-            {
-                case 1: //amethyst
-                case ItemID.Amethyst:
-                    {
-                        return new Color(193, 47, 246);
-                    }
-                case 2: //topaz
-                case ItemID.Topaz:
-                    {
-                        return new Color(246, 188, 0);
-                    }
-                case 3: //sapphire
-                case ItemID.Sapphire:
-                    {
-                        return new Color(86, 135, 255);
-                    }
-                case 4: //emerald
-                case ItemID.Emerald:
-                    {
-                        return new Color(41, 206, 131);
-                    }
-                case 5: //rubyCounter
-                case ItemID.Ruby:
-                    {
-                        return new Color(237, 26, 30);
-                    }
-                case 6: //diamond
-                case ItemID.Diamond:
-                    {
-                        return Color.White;
-                    }
-                case 7: //amber
-                case ItemID.Amber:
-                    {
-                        return new Color(244, 133, 27);
-                    }
-            }
-            return Color.White;
-        }
+        
 
         public static string CoolBuffTex(string input)
         {
@@ -508,6 +495,7 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
             }
             return input;
         }
+
         /*public static string RadcapTex(string input)
         {
             if (GetInstance<GraphicsConfig>().Radcap)
@@ -724,6 +712,61 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
             return dusttype;
 
         }
+    }
+
+    public static class ColorHelper 
+    {
+        public static Color GemColor(int gem)
+        {
+            switch (gem)
+            {
+                case 1: //amethyst
+                case ItemID.Amethyst:
+                    {
+                        return new Color(193, 47, 246);
+                    }
+                case 2: //topaz
+                case ItemID.Topaz:
+                    {
+                        return new Color(246, 188, 0);
+                    }
+                case 3: //sapphire
+                case ItemID.Sapphire:
+                    {
+                        return new Color(86, 135, 255);
+                    }
+                case 4: //emerald
+                case ItemID.Emerald:
+                    {
+                        return new Color(41, 206, 131);
+                    }
+                case 5: //rubyCounter
+                case ItemID.Ruby:
+                    {
+                        return new Color(237, 26, 30);
+                    }
+                case 6: //diamond
+                case ItemID.Diamond:
+                    {
+                        return Color.White;
+                    }
+                case 7: //amber
+                case ItemID.Amber:
+                    {
+                        return new Color(244, 133, 27);
+                    }
+            }
+            return Color.White;
+        }
+
+        /// <summary>
+		/// SlimeBlue color (R:0,G:80,B:255,A:125-175).
+		/// </summary>
+        public static Color SlimeBlue => new(0, 80, 255, 255);
+        /// <summary>
+		/// SlimeBlueSimple color (R:112,G:172,B:244,A:255).
+		/// </summary>
+        public static Color SlimeBlueSimple => new(112, 172, 244, 255);
     }
 }
 

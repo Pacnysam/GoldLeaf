@@ -25,20 +25,22 @@ namespace GoldLeaf.Core
         public float critDamageMod = 2f;
 
         public float gravity = 0f;
-        
         public int gravityDelay = 0;
 
         public int lifesteal;
         public int lifestealMax;
+
+        public DamageClass throwingDamageType = DamageClass.Default;
+
         public int counter = 0;
 
-        public static void ChangeDebuffDuration(NPC target, float amount)
+        /*public static void ChangeDebuffDuration(NPC target, float amount)
         {
             for (int i = 0; target.buffType[1] != 0; i++)
             {
                 target.AddBuff(target.buffType[i],target.buffTime[i] + (int)(target.buffTime[i]*amount));
             }
-        }
+        }*/
 
         public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
         {
@@ -48,6 +50,21 @@ namespace GoldLeaf.Core
             {
                 lifestealMax--;
                 player.Heal(lifesteal);
+            }
+        }
+
+        public override void SetDefaults(Projectile entity)
+        {
+            if (entity.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType != DamageClass.Default)
+            {
+                if (GetInstance<MiscConfig>().ThrowerSupport)
+                {
+                    entity.DamageType = DamageClass.Throwing;
+                }
+                else
+                {
+                    entity.DamageType = entity.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType;
+                }
             }
         }
 

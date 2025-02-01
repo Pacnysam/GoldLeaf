@@ -5,11 +5,18 @@ using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Graphics;
 using GoldLeaf.Core;
+using ReLogic.Content;
 
 namespace GoldLeaf.Effects.Dusts
 {
     public class LightDust : ModDust
     {
+        private static Asset<Texture2D> tex;
+        public override void Load()
+        {
+            tex = Request<Texture2D>(Texture);
+        }
+
         public override void OnSpawn(Dust dust)
         {
             dust.noGravity = true;
@@ -58,10 +65,15 @@ namespace GoldLeaf.Effects.Dusts
 
         public override bool PreDraw(Dust dust)
         {
-            Main.spriteBatch.Draw(Request<Texture2D>(Texture).Value, new Vector2(dust.position.X, dust.position.Y) - Main.screenPosition, dust.frame, dust.color * ((225 - dust.alpha) / 255f) * 0.2f, dust.rotation, new Vector2(7, 7), dust.scale * 1.85f, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(Request<Texture2D>(Texture).Value, new Vector2(dust.position.X, dust.position.Y) - Main.screenPosition, dust.frame, dust.color * ((150 - dust.alpha) / 255f) * 0.5f, dust.rotation, new Vector2(7, 7), dust.scale * 1.35f, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(Request<Texture2D>(Texture).Value, dust.position - Main.screenPosition, dust.frame, dust.color, dust.rotation, new Vector2(7, 7), dust.scale, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(Request<Texture2D>(Texture).Value, dust.position - Main.screenPosition, dust.frame, Color.White * ((225 - dust.alpha) / 255f) * 0.45f, dust.rotation, new Vector2(7, 7), dust.scale * 0.7f, SpriteEffects.None, 0);
+            Color color = dust.color;
+            int brightness = (color.R + color.G + color.B) / 3;
+            Color coreColor = new(color.R + (brightness * 1.4f), color.G + (brightness * 1.4f), color.B + (brightness * 1.4f));
+            color.A = 0; coreColor.A = 0;
+
+            Main.spriteBatch.Draw(tex.Value, new Vector2(dust.position.X, dust.position.Y) - Main.screenPosition, dust.frame, Color.Black * ((175 - dust.alpha) / 255f) * 0.2f, dust.rotation, new Vector2(7, 7), dust.scale * 1.6f, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(tex.Value, new Vector2(dust.position.X, dust.position.Y) - Main.screenPosition, dust.frame, color * ((100 - dust.alpha) / 255f) * 0.5f, dust.rotation, new Vector2(7, 7), dust.scale * 1.35f, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(tex.Value, dust.position - Main.screenPosition, dust.frame, color, dust.rotation, new Vector2(7, 7), dust.scale, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(tex.Value, dust.position - Main.screenPosition, dust.frame, coreColor * (1 - (brightness/255)) /** ((225 - dust.alpha) / 255f) * 0.5f*/, dust.rotation, new Vector2(7, 7), dust.scale * 0.55f, SpriteEffects.None, 0);
 
             //Main.spriteBatch.Draw(Request<Texture2D>("GoldLeaf/Effects/Dusts/LightDust").Value, dust.position - Main.screenPosition, dust.frame, dust.color * dust.alpha, GoldLeafWorld.rottime * 2, new Vector2(0, 0), dust.scale * 1.5f, SpriteEffects.None, 0);
             //Main.spriteBatch.Draw(Request<Texture2D>("GoldLeaf/Effects/Dusts/LightDust").Value, dust.position - Main.screenPosition, dust.frame, dust.color * dust.alpha, GoldLeafWorld.rottime * -2, new Vector2(0, 0), dust.scale * 1.5f, SpriteEffects.None, 0);

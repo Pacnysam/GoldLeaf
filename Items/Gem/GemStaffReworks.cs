@@ -39,13 +39,13 @@ namespace GoldLeaf.Items.Gem
             {
                 string[] text =
                 [
-                    Language.GetTextValue("Mods.GoldLeaf.Items.GemStaves.Type" + (Array.IndexOf(gemStaves, item.type) + 1))
+                    Language.GetTextValue("Mods.GoldLeaf.Items.Vanilla.GemStaves.Type" + (Array.IndexOf(gemStaves, item.type) + 1))
                 ];
 
                 for (int i = 0; i < text.Length; i++)
                 {
                     if (text[i] != string.Empty)
-                        tooltips.Add(new TooltipLine(Mod, "Tooltip0", text[i]));
+                        tooltips. Add(new TooltipLine(Mod, "Tooltip", text[i]));
                 }
             }
         }

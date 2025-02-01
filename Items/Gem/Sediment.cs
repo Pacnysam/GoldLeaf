@@ -1,6 +1,7 @@
 ﻿using static Terraria.ModLoader.ModContent;
 using GoldLeaf.Core;
 using static GoldLeaf.Core.Helper;
+using static GoldLeaf.Core.ColorHelper;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
@@ -58,7 +59,7 @@ namespace GoldLeaf.Items.Gem
             Item.shootSpeed = 8f;
 
             Item.damage = 15;
-            Item.DamageType = DamageClass.Melee;
+            Item.GetGlobalItem<GoldLeafItem>().throwingDamageType = DamageClass.Melee;
 
             Item.width = 26;
             Item.height = 30;
@@ -92,6 +93,7 @@ namespace GoldLeaf.Items.Gem
 
                 SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact, player.Center);
                 SoundEngine.PlaySound(SoundID.DD2_SkeletonHurt, player.Center);
+                Item.NetStateChanged();
             }
             else if (gem != (int)Gem.None)
             {
@@ -99,6 +101,7 @@ namespace GoldLeaf.Items.Gem
                 gem = (int)Gem.None;
                 SoundEngine.PlaySound(SoundID.DD2_WitherBeastDeath, player.Center);
                 //SoundEngine.PlaySound(SoundID.DD2_SkeletonHurt, player.Center);
+                Item.NetStateChanged();
             }
         }
 
@@ -299,6 +302,8 @@ namespace GoldLeaf.Items.Gem
         {
             Projectile.CloneDefaults(ProjectileID.WoodenBoomerang);
 
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType = DamageClass.Melee;
+
             Projectile.width = 20;
             Projectile.height = 20;
         }
@@ -372,7 +377,7 @@ namespace GoldLeaf.Items.Gem
 
                 if (Main.rand.NextBool(dustchance))
                 {
-                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<LightDust>(), Projectile.velocity.X * 0.4f, Projectile.velocity.Y * 0.4f, 0, GetGemColor(gem), 0.6f);
+                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<LightDust>(), Projectile.velocity.X * 0.4f, Projectile.velocity.Y * 0.4f, 0, GemColor(gem), 0.6f);
                 }
             }
             return true;
@@ -465,7 +470,7 @@ namespace GoldLeaf.Items.Gem
             {
                 empowered = true;
                 for (float k = 0; k < 6.28f; k += 0.4f)
-                    Dust.NewDustPerfect(Projectile.Center, DustType<LightDust>(), Vector2.One.RotatedBy(k) * 0.65f, 0, GetGemColor(gem));
+                    Dust.NewDustPerfect(Projectile.Center, DustType<LightDust>(), Vector2.One.RotatedBy(k) * 0.65f, 0, GemColor(gem));
             }
             if (gem == (int)Gem.Diamond && empowered)
             {
@@ -519,7 +524,7 @@ namespace GoldLeaf.Items.Gem
             Vector2 spinningpoint = Vector2.Reflect(Projectile.velocity, normal);
             for (int i = 0; i < 6; i++)
             {
-                Dust dust = Dust.NewDustPerfect(hitPoint, DustType<LightDust>(), spinningpoint.RotatedBy((float)Math.PI / 4f * Main.rand.NextFloatDirection()) * 0.6f * Main.rand.NextFloat(), 100, GetGemColor(2), 0.5f);
+                Dust dust = Dust.NewDustPerfect(hitPoint, DustType<LightDust>(), spinningpoint.RotatedBy((float)Math.PI / 4f * Main.rand.NextFloatDirection()) * 0.6f * Main.rand.NextFloat(), 100, GemColor(2), 0.5f);
                 //Dust dust = Dust.NewDustPerfect(hitPoint, DustID.GemTopaz, spinningpoint.RotatedBy((float)Math.PI / 4f * Main.rand.NextFloatDirection()) * 0.6f * Main.rand.NextFloat(), 100, Color.Yellow, 1.0f);
             }
         }
@@ -537,7 +542,7 @@ namespace GoldLeaf.Items.Gem
                 for (int k = 0; k < Projectile.oldPos.Length; k++)
                 {
                     Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                    Main.spriteBatch.Draw(texture, drawPos, null, GetGemColor(gem) * (0.35f - (k * 0.025f)), Projectile.oldRot[k], drawOrigin, (Projectile.scale * (1f - (k * 0.075f))) /* * 0.07f*/, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(texture, drawPos, null, GemColor(gem) * (0.35f - (k * 0.025f)), Projectile.oldRot[k], drawOrigin, (Projectile.scale * (1f - (k * 0.075f))) /* * 0.07f*/, SpriteEffects.None, 0f);
                 }
             }
             else
@@ -568,6 +573,8 @@ namespace GoldLeaf.Items.Gem
         public override void SetDefaults()
         {
             Projectile.CloneDefaults(ProjectileID.WoodenBoomerang);
+
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType = DamageClass.Melee;
 
             Projectile.width = 20;
             Projectile.height = 20;
@@ -632,7 +639,7 @@ namespace GoldLeaf.Items.Gem
                 for (int k = 0; k < Projectile.oldPos.Length; k++)
                 {
                     Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                    Main.spriteBatch.Draw(texture, drawPos, null, GetGemColor(2) * (0.35f - (k * 0.025f)), Projectile.oldRot[k], drawOrigin, (Projectile.scale * (1f - (k * 0.075f))) /* * 0.07f*/, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(texture, drawPos, null, GemColor(2) * (0.35f - (k * 0.025f)), Projectile.oldRot[k], drawOrigin, (Projectile.scale * (1f - (k * 0.075f))) /* * 0.07f*/, SpriteEffects.None, 0f);
                 }
             }
             else
@@ -668,7 +675,7 @@ namespace GoldLeaf.Items.Gem
             Projectile.ignoreWater = true;
             //Projectile.extraUpdates = 1;
 
-            Projectile.DamageType = DamageClass.Melee;
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType = DamageClass.Melee;
         }
 
         public override void OnSpawn(IEntitySource source)
@@ -687,7 +694,7 @@ namespace GoldLeaf.Items.Gem
         float rot = 0;
         public override void AI()
         {
-            Lighting.AddLight((int)(Projectile.position.X / 16), (int)(Projectile.position.Y / 16), GetGemColor(3).R / 255, GetGemColor(3).G / 255, GetGemColor(3).B / 255);
+            Lighting.AddLight((int)(Projectile.position.X / 16), (int)(Projectile.position.Y / 16), GemColor(3).R / 255, GemColor(3).G / 255, GemColor(3).B / 255);
 
             if (counter <= 10 /*&& counter % 2 == 0*/)
             {
@@ -704,7 +711,7 @@ namespace GoldLeaf.Items.Gem
                         new ParticleOrchestraSettings { PositionInWorld = Projectile.Center, MovementVector = pos * (4.8f - (counter * 0.2f)) },
                         Projectile.owner);
 
-                    //Dust d = Dust.NewDustPerfect(Projectile.Center, DustType<LightDust>(), pos * (3.2f - (counter * 0.1f)), 0, GetGemColor(3), 0.5f);
+                    //Dust d = Dust.NewDustPerfect(Projectile.Center, DustType<LightDust>(), pos * (3.2f - (counter * 0.1f)), 0, GemColor(3), 0.5f);
                 }
             }
 
@@ -722,7 +729,7 @@ namespace GoldLeaf.Items.Gem
         public override void PostDraw(Color lightColor)
         {
             Texture2D tex = Request<Texture2D>("GoldLeaf/Textures/Flares/wavering").Value;
-            Color color = GetGemColor(3) * (1.2f - (counter * 0.05f));
+            Color color = GemColor(3) * (1.2f - (counter * 0.05f));
             color.A = 0;
 
             Main.spriteBatch.Draw
@@ -769,7 +776,7 @@ namespace GoldLeaf.Items.Gem
             Projectile.friendly = true;
             Projectile.extraUpdates = 1;
 
-            Projectile.DamageType = DamageClass.Melee;
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType = DamageClass.Melee;
 
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.08f;
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravityDelay = 20;
@@ -780,7 +787,7 @@ namespace GoldLeaf.Items.Gem
             SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact, Projectile.Center);
 
             for (float k = 0; k < 6.28f; k += 0.52f)
-                Dust.NewDustPerfect(Projectile.Center, DustType<LightDust>(), Vector2.One.RotatedBy(k) * 0.45f, 0, GetGemColor(4), 0.35f);
+                Dust.NewDustPerfect(Projectile.Center, DustType<LightDust>(), Vector2.One.RotatedBy(k) * 0.45f, 0, GemColor(4), 0.35f);
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -806,7 +813,7 @@ namespace GoldLeaf.Items.Gem
             Projectile.CloneDefaults(ProjectileID.RubyBolt);
             //AIType = ProjectileID.RubyBolt;
 
-            Projectile.DamageType = DamageClass.Melee;
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType = DamageClass.Melee;
             Projectile.penetrate = 1;
             Projectile.extraUpdates = 1;
         }
@@ -818,8 +825,8 @@ namespace GoldLeaf.Items.Gem
 
         public override void AI()
         {
-            //Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.GemRuby, Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f, 0, GetGemColor(ItemID.Ruby), 0.6f);
-            Dust d = Dust.NewDustPerfect(Projectile.Center, DustID.GemRuby, Projectile.velocity * 0.6f, 0, GetGemColor(ItemID.Ruby), 1f);
+            //Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.GemRuby, Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f, 0, GemColor(ItemID.Ruby), 0.6f);
+            Dust d = Dust.NewDustPerfect(Projectile.Center, DustID.GemRuby, Projectile.velocity * 0.6f, 0, GemColor(ItemID.Ruby), 1f);
             d.noGravity = true;
         }
     }

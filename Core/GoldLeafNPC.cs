@@ -39,24 +39,46 @@ namespace GoldLeaf.Core
 
         public override void ModifyShop(NPCShop shop)
         {
-            if (shop.NpcType == NPCID.Merchant)
+            switch (shop.NpcType)
             {
-                shop.Add(ItemID.Leather);
-                shop.Add(ItemType<WaxCandle>());
-            }
-            if (shop.NpcType == NPCID.GoblinTinkerer)
-            {
-                shop.Add(ItemType<Gameboy>());
-            }
-            if (shop.NpcType == NPCID.DyeTrader)
-            {
-                //shop.Add<RetroDye>(GoldLeafConditions.UsingGameboy);
-                shop.Add<RetroDye>(Condition.NpcIsPresent(NPCID.GoblinTinkerer));
-            }
-            if (shop.NpcType == NPCID.WitchDoctor) 
-            {
-                shop.Add<ToxicPositivity>(Condition.TimeDay);
-                //shop.Add<HexWhip>(Condition.TimeNight);
+                case NPCID.Merchant:
+                    {
+                        shop.Add(ItemID.Leather);
+                        shop.Add(ItemType<WaxCandle>());
+                        break;
+                    }
+                case NPCID.GoblinTinkerer:
+                    {
+                        shop.Add(ItemType<Gameboy>());
+                        break;
+                    }
+                case NPCID.DyeTrader:
+                    {
+                        shop.Add<RetroDye>(GoldLeafConditions.UsingGameboy);
+                        //shop.Add<RetroDye>(Condition.NpcIsPresent(NPCID.GoblinTinkerer));
+                        break;
+                    }
+                case NPCID.WitchDoctor:
+                    {
+                        shop.Add<ToxicPositivity>(Condition.TimeDay);
+                        //shop.Add<HexWhip>(Condition.TimeNight);
+
+                        shop.Add<WatcherEyedrops>(Condition.MoonPhaseNew, Condition.TimeNight);
+                        shop.Add<WatcherCloak>(Condition.MoonPhaseNew, Condition.TimeNight);
+                        //shop.Add<MadcapPainting>(Condition.MoonPhaseNew, Condition.TimeNight);
+                        //shop.Add<BatPlushie>(Condition.MoonPhaseNew, Condition.TimeNight);
+                        break;
+                    }
+                case NPCID.Painter:
+                    {
+                        shop.Add<MadcapPainting>(Condition.MoonPhaseNew, Condition.TimeNight);
+                        break;
+                    }
+                case NPCID.Clothier:
+                    {
+                        shop.Add<BatPlushie>(Condition.MoonPhaseNew, Condition.TimeNight);
+                        break;
+                    }
             }
         }
 

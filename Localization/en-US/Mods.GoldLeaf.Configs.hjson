@@ -3,16 +3,16 @@ GameplayConfig: {
 
 	ClassGimmicks: {
 		Label: Crit Gimmicks
-		Tooltip: Enables additional class based critical strike gimmicks
+		Tooltip: Enables additional class based critical strike gimmicks.
 	}
 
 	OreStaffReworks: {
 		Label: Gem Staff Reworks
-		Tooltip: Reworks gem staves
+		Tooltip: Reworks gem staves.
 	}
 
 	BuffChanges: {
-		Tooltip: Modifies several buffs
+		Tooltip: Modifies the functionality of several buffs.
 		Label: Buff Changes
 	}
 }
@@ -22,16 +22,25 @@ GraphicsConfig: {
 
 	ShakeIntensity: {
 		Label: Screenshake
-		Tooltip: Screenshake intensity
+		Tooltip: Modifies screenshake intensity.
 	}
 
 	CoolBuffs: {
 		Label: Coolbuffs Support
-		Tooltip: Changes buff textures to support the Cool Buffs resource pack
+		Tooltip: Changes buff textures to support the Cool Buffs resource pack.
 	}
 
 	OnCraftEffects: {
 		Label: Crafting Visuals
-		Tooltip: Enables visual effects when crafting an item
+		Tooltip: Enables visual effects when crafting an item.
+	}
+}
+
+MiscConfig: {
+	DisplayName: Misc Config
+
+	ThrowerSupport: {
+		Label: Throwing Support
+		Tooltip: Changes some of the mod's items to deal throwing damage. Does NOT change vanilla items.
 	}
 }

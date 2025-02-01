@@ -48,7 +48,7 @@ namespace GoldLeaf.Items.Potions
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.jumpSpeedBoost += 2f;
+            player.jumpSpeedBoost += 2.8f;
             player.autoJump = true;
         }
     }

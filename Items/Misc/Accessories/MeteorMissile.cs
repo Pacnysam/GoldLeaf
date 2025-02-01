@@ -39,7 +39,9 @@ namespace GoldLeaf.Items.Misc.Accessories
 		{
 			Recipe recipe = CreateRecipe();
 			recipe.AddIngredient(ItemID.MeteoriteBar, 10);
-			recipe.AddTile(TileID.Anvils);
+            recipe.AddIngredient(ItemID.Gel, 25);
+            recipe.AddIngredient(ItemID.Grenade, 6);
+            recipe.AddTile(TileID.Anvils);
 			recipe.Register();
 		}
     }
@@ -179,7 +181,6 @@ namespace GoldLeaf.Items.Misc.Accessories
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Player player = Main.LocalPlayer;
-
             
             if (meteorMissile && target.life <= 0 && hit.Crit && cooldown <= 0)
             {

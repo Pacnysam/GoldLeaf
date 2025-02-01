@@ -18,6 +18,8 @@ namespace GoldLeaf.Items.Blizzard
 		{
 			Item.damage = 35;
 			Item.DamageType = DamageClass.Summon;
+            Item.shoot = ProjectileType<ArcticWraith>();
+            Item.buffType = BuffType<ArcticWraithBuff>();
 			Item.width = 30;
 			Item.height = 36;
             Item.noMelee = true;

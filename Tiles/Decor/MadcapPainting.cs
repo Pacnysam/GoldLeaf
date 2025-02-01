@@ -29,7 +29,9 @@ namespace GoldLeaf.Tiles.Decor
 			Item.useStyle = ItemUseStyleID.Swing;
 			
 			Item.createTile = TileType<MadcapPaintingT>();
-		}
+
+            Item.value = Item.buyPrice(0, 5, 0, 0);
+        }
 	}
 
 	public class MadcapPaintingT : ModTile

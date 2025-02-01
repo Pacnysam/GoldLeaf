@@ -24,7 +24,7 @@ namespace GoldLeaf.Tiles.Decor
 			Item.createTile = TileType<BatPlushieT>();
 			Item.rare = ItemRarityID.Purple;
 
-            Item.value = Item.sellPrice(0, 0, 60, 0);
+            Item.value = Item.buyPrice(0, 1, 0, 0);
         }
 	}
 

@@ -124,22 +124,22 @@ OxeyeDaisy: {
 }
 
 HeartTiny: {
-	DisplayName: Small Heart
+	DisplayName: Heart
 	Tooltip: ""
 }
 
 HeartLarge: {
-	DisplayName: Big Heart
+	DisplayName: Heart
 	Tooltip: ""
 }
 
 StarLarge: {
-	DisplayName: Big Star
+	DisplayName: Star
 	Tooltip: ""
 }
 
 StarTiny: {
-	DisplayName: Small Star
+	DisplayName: Star
 	Tooltip: ""
 }
 
@@ -206,16 +206,6 @@ Sediment: {
 	Gem7: "[i:999]: Stuns enemies"
 }
 
-GemStaves: {
-	Type1: Pierces armor and curves toward the cursor
-	Type2: Bounces and shoots 2 at once
-	Type3: Critical strikes explode into light
-	Type4: Drops falling emeralds
-	Type5: Critical strikes spawn hearts
-	Type6: Fast as light
-	Type7: Critical strikes inflict a stun
-}
-
 HiveCarcass: {
 	DisplayName: Hive Carcass
 	Tooltip: Fills healing potions with honey
@@ -268,4 +258,19 @@ JumpBoostPotion: {
 VampirePotion: {
 	DisplayName: Vampire Potion
 	Tooltip: Critical strikes gain lifesteal
+}
+
+WatcherEyedrops: {
+	DisplayName: Truth Seeker Eyedrops
+	Tooltip: ""
+}
+
+WatcherCloak: {
+	DisplayName: Truth Seeker Cloak
+	Tooltip: ""
+}
+
+Bladecaster: {
+	DisplayName: Bladecaster
+	Tooltip: ""
 }

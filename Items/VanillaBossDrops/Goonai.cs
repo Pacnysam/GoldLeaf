@@ -33,7 +33,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
         public override void SetDefaults() 
         {
             Item.damage = 15;
-            Item.DamageType = DamageClass.Ranged;
+            Item.GetGlobalItem<GoldLeafItem>().throwingDamageType = DamageClass.Ranged;
 
             Item.shoot = ProjectileType<GoonaiP>();
             Item.shootSpeed = 15f;
@@ -57,6 +57,16 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Item.value = Item.sellPrice(0, 0, 0, 20);
 
             Item.rare = ItemRarityID.Blue;
+        }
+
+        public override bool ConsumeItem(Player player)
+        {
+            if (player.GetModPlayer<GoldLeafPlayer>().royalGel) 
+            {
+                return Main.rand.NextBool(3, 4);
+            }
+
+            return true;
         }
 
         public override void ModifyWeaponCrit(Player player, ref float crit)
@@ -84,7 +94,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
 
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 16;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
         }
 
@@ -99,7 +109,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Projectile.ai[0] = 0;
             Projectile.ai[1] = 0;
 
-            Projectile.DamageType = DamageClass.Ranged;
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType = DamageClass.Ranged;
 
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().critDamageMod = 3;
         }
@@ -122,14 +132,14 @@ namespace GoldLeaf.Items.VanillaBossDrops
                 Projectile.extraUpdates = 3;
                 Projectile.velocity *= 0.97f;
             }
-
-            if (Projectile.ai[0] >= 60 && Projectile.velocity.Y > 5 && Main.rand.NextBool(8))
+            if (Projectile.ai[0] >= 60 && Projectile.velocity.Y > 5 && Main.rand.NextBool(4))
             {
-                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustType<LightDust>(), 0, 0, 0, new Color(255, 255, 118), Main.rand.NextFloat(0.3f, 0.6f));
-                dust.velocity = Projectile.velocity;
-                if (dust.velocity.Y > 2.4f) dust.velocity.Y = 2.4f;
+                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustType<LightDust>(), 0, 0, 0, new Color(255, 255, 118), Main.rand.NextFloat(0.4f, 0.7f));
+                dust.velocity = Projectile.velocity * Main.rand.NextFloat(0.1f, 0.4f);
+                //if (dust.velocity.Y > 3f) dust.velocity.Y = 3f;
                 dust.velocity.X = 0;
                 dust.noLight = true;
+                dust.alpha = Main.rand.Next(-10, -5);
             }
         }
 
@@ -146,6 +156,14 @@ namespace GoldLeaf.Items.VanillaBossDrops
         {
             if (hit.Crit)
             {
+                /*for (int k = 0; k < 10; ++k)
+                {
+                    Dust dust = Dust.NewDustPerfect(new Vector2(Projectile.position.X + Main.rand.Next(Projectile.width), Projectile.position.Y + Main.rand.Next(Projectile.height)), DustType<LightDust>(), Projectile.velocity * Main.rand.NextFloat(0.15f, 0.25f), 0, new Color(255, 255, 118), Main.rand.NextFloat(0.45f, 0.7f));
+                    dust.noLight = true;
+                    dust.noGravity = true;
+                    dust.alpha = -4;
+                }*/
+
                 //Dust.NewDustPerfect(Projectile.Center, DustType<LightDust>(), Vector2.Zero, 0, Color.White, 2f);
                 SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Overwatch/Headshot") { Volume = 0.55f }, Main.player[Projectile.owner].Center);
                 target.AddBuff(BuffID.Slimed, 60);
@@ -167,7 +185,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
                     var effects = Projectile.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
                     Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin/* + new Vector2(0f, Projectile.gfxOffY)*/;
                     
-                    Main.spriteBatch.Draw(glowTex.Value, drawPos, null, new Color(240, 181, 0) * (1.0f - (0.15f * k)), Projectile.rotation, drawOrigin, Projectile.scale * (0.8f - (0.05f * k)), effects, 0f);
+                    Main.spriteBatch.Draw(glowTex.Value, drawPos, null, new Color(240, 194, 50) * (1.0f - (0.1f * k)), Projectile.rotation, drawOrigin, Projectile.scale * (0.8f - (0.05f * k)), effects, 0f);
                 }
             }
             return true;
@@ -198,11 +216,12 @@ namespace GoldLeaf.Items.VanillaBossDrops
 
         public override void OnKill(int timeLeft)
         {
-            for (int k = 0; k < 12; ++k)
+            for (int k = 0; k < 18; ++k)
             {
-                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.t_Slime, Main.rand.NextFloat(-3, 3) + Projectile.velocity.X / 3, Main.rand.NextFloat(-3, 3) + Projectile.velocity.Y / 3, 0, new Color(), 1f);
-                Main.dust[dust].noGravity = true;
-                Main.dust[dust].color = new Color(112, 172, 244);
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.t_Slime, Main.rand.NextFloat(-1.5f, 1.5f) + (Projectile.velocity.X * -1) / 5, Main.rand.NextFloat(-0.9f, 0.9f) + (Projectile.velocity.Y * -1) / 5, 0, ColorHelper.SlimeBlueSimple, Main.rand.NextFloat(0.8f, 1.2f));
+                Main.dust[dust].alpha = 175;
+                if (Main.rand.NextBool(2)) Main.dust[dust].alpha += 25;
+                if (Main.rand.NextBool(2)) Main.dust[dust].alpha += 25;
             }
         }
     }

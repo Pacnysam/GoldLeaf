@@ -16,6 +16,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
 using static Terraria.ModLoader.ModContent;
+using static GoldLeaf.Core.Helper;
 
 namespace GoldLeaf.Core
 {
@@ -25,23 +26,20 @@ namespace GoldLeaf.Core
 
         public int Timer { get; private set; }
 
-        public int screenshake = 0;
-
         public bool ZoneGrove = false;
         //public bool ZoneCandle = false;
 
-        public int ScreenMoveTime = 0;
-        public Vector2 ScreenMoveTarget = new Vector2(0, 0);
-        public Vector2 ScreenMovePan = new Vector2(0, 0);
-        public bool ScreenMoveHold = false;
-        private int ScreenMoveTimer = 0;
-        private int panDown = 0;
-
         //public int platformTimer = 0;
-
         public int craftTimer = 0;
+
+        public int overhealth = 0;
         public float itemSpeed;
-        
+
+        #region minor variables
+        public bool royalGel = false;
+
+        #endregion minor variables
+
         public override float UseTimeMultiplier(Item Item)
 		{
 			return itemSpeed;
@@ -52,18 +50,29 @@ namespace GoldLeaf.Core
             return itemSpeed;
         }
 
+        public override void UpdateEquips()
+        {
+            if (HasAccessory(Player, ItemID.RoyalGel)) royalGel = true;
+        }
+
         public delegate void ResetEffectsDelegate(GoldLeafPlayer Player);
         public static event ResetEffectsDelegate ResetEffectsEvent;
         public override void ResetEffects()
         {
             ResetEffectsEvent?.Invoke(this);
+
+            overhealth = 0;
             itemSpeed = 1;
+
+            royalGel = false;
         }
 
         public override void PostUpdate()
         {
             if (Main.netMode == NetmodeID.MultiplayerClient && Player == Main.LocalPlayer) GoldLeafWorld.rottime += (float)Math.PI / 60;
             Timer++;
+
+            if (craftTimer > 0) { craftTimer--; }
         }
 
         /*public override void PreUpdateBuffs()
@@ -74,49 +83,6 @@ namespace GoldLeaf.Core
             }
         }*/
 
-        public override void ModifyScreenPosition()
-        {
-            if (ScreenMoveTime > 0 && ScreenMoveTarget != Vector2.Zero)
-            {
-                Vector2 off = new Vector2(Main.screenWidth, Main.screenHeight) / -2;
-                if (ScreenMoveTimer <= 30) //go out
-                {
-                    Main.screenPosition = Vector2.SmoothStep(Main.LocalPlayer.Center + off, ScreenMoveTarget + off, ScreenMoveTimer / 30f);
-                }
-                else if (ScreenMoveTimer >= ScreenMoveTime - 30) //go in
-                {
-                    Main.screenPosition = Vector2.SmoothStep((ScreenMovePan == Vector2.Zero ? ScreenMoveTarget : ScreenMovePan) + off, Main.LocalPlayer.Center + off, (ScreenMoveTimer - (ScreenMoveTime - 30)) / 30f);
-                }
-                else
-                {
-                    if (ScreenMovePan == Vector2.Zero)
-                        Main.screenPosition = ScreenMoveTarget + off; //stay on target
-
-                    else if (ScreenMoveTimer <= ScreenMoveTime - 150)
-                        Main.screenPosition = Vector2.Lerp(ScreenMoveTarget + off, ScreenMovePan + off, ScreenMoveTimer / (float)(ScreenMoveTime - 150));
-
-                    else
-                        Main.screenPosition = ScreenMovePan + off;
-                }
-
-                if (ScreenMoveTimer == ScreenMoveTime)
-                {
-                    ScreenMoveTime = 0;
-                    ScreenMoveTimer = 0;
-                    ScreenMoveTarget = Vector2.Zero;
-                    ScreenMovePan = Vector2.Zero;
-                }
-
-                if (ScreenMoveTimer < ScreenMoveTime - 30 || !ScreenMoveHold)
-                    ScreenMoveTimer++;
-            }
-
-            Main.screenPosition.Y += (Main.rand.Next(-screenshake, screenshake) + panDown);
-            Main.screenPosition.X += Main.rand.Next(-screenshake, screenshake);
-            if (screenshake > 0) { screenshake--; }
-            if (craftTimer > 0) { craftTimer--; }
-        }
-
         public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)
         {
             switch (Main.LocalPlayer.name) 
@@ -126,11 +92,18 @@ namespace GoldLeaf.Core
                 case "Pac":
                 case "Sylvia":
                     {
-                        return [new Item(ItemType<BatPlushie>(), 9999), new Item(ItemType<MadcapPainting>())];
+                        return 
+                            [
+                            new Item(ItemType<BatPlushie>(), 9999), 
+                            new Item(ItemType<MadcapPainting>()), 
+                            new Item(ItemType<WatcherEyedrops>()), 
+                            new Item(ItemType<WatcherCloak>())
+                            ];
                     }
                 case "Scout":
-                case "King":
                 case "Emperor":
+                case "Hunter":
+                case "Belos":
                     {
                         return Enumerable.Empty<Item>();
                         //return [new Item(ItemType<EmperorScoutTrousers>()), new Item(ItemType<EmperorScoutTunic>()), new Item(ItemType<EmperorScoutHood>())];
@@ -140,13 +113,10 @@ namespace GoldLeaf.Core
                         return Enumerable.Empty<Item>();
                         //return [new Item(ItemType<CypherHat>()), new Item(ItemType<CypherCoat>()), new Item(ItemType<CypherPants>())];
                     }
-                case "Gamer":
                 case "Gameboy":
-                case "Gamer Girl":
+                case "Game Boy":
                     {
                         return [new Item(ItemType<Gameboy>()), new Item(ItemType<RetroDye>(), 9999)];
-                        //return [new Item(ItemType<CypherCoat>())];
-                        //return [new Item(ItemType<CypherPants>())];
                     }
             }
             return Enumerable.Empty<Item>();

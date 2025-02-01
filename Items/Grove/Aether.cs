@@ -38,10 +38,11 @@ namespace GoldLeaf.Items.Grove
 			Item.knockBack = 6;
             Item.crit = -2;
             Item.damage = 19;
+            Item.ArmorPenetration = 4;
             //Item.UseSound = SoundID.DD2_EtherianPortalOpen;
             Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/RoR2/FireCast");
             Item.shoot = ProjectileType<AetherBolt>();
-			Item.rare = ItemRarityID.Green;
+			Item.rare = ItemRarityID.Orange;
             Item.DamageType = DamageClass.Magic;
             Item.channel = true;
             Item.value = Item.sellPrice(0, 0, 80, 0);
@@ -113,6 +114,7 @@ namespace GoldLeaf.Items.Grove
             Projectile.friendly = true;
             Projectile.tileCollide = true;
             Projectile.penetrate = 4;
+            Projectile.ArmorPenetration = 4;
             Projectile.timeLeft = 190;
             Projectile.ignoreWater = false;
 
@@ -176,8 +178,8 @@ namespace GoldLeaf.Items.Grove
 
             if (counter < 80 && counter >= 40)
             {
-                Projectile.velocity += Vector2.Normalize(Main.MouseWorld - Projectile.Center) * 0.1f;
-                if (Projectile.velocity.Length() > 6) Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 6;
+                Projectile.velocity += Vector2.Normalize(Main.MouseWorld - Projectile.Center) * (0.1f + (counter/80));
+                if (Projectile.velocity.Length() > 7) Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 7;
             }
 
             if (counter == 80)
@@ -196,7 +198,7 @@ namespace GoldLeaf.Items.Grove
                 }
 
                 Projectile.velocity += Vector2.Normalize(Main.MouseWorld - Projectile.Center) * 0.65f;
-                if (Projectile.velocity.Length() > 4) Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 4;
+                if (Projectile.velocity.Length() > (4 + (counter * 0.005f))) Projectile.velocity = Vector2.Normalize(Projectile.velocity) * (4 + (counter * 0.005f));
 
                 shootCounter++;
                 if (shootCounter >= 16 - (shotsFired / 3))
@@ -281,7 +283,7 @@ namespace GoldLeaf.Items.Grove
             SoundEngine.PlaySound(sound1, player.Center);
             SoundEngine.PlaySound(sound2, player.Center);
             int explosion = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ProjectileType<AetherBurst>(), Projectile.damage + (int)(shotsFired * 2.2), Projectile.knockBack, player.whoAmI);
-            if (counter >= 80) Main.projectile[explosion].ai[0] = 90f; else Main.projectile[explosion].ai[0] = 30f + (counter * 0.65f);
+            if (counter >= 80) Main.projectile[explosion].ai[0] = 110f; else Main.projectile[explosion].ai[0] = 30f + (counter * 0.65f);
             Helper.AddScreenshake(player, 18 + shotsFired, Projectile.Center);
         }
     }
@@ -301,6 +303,7 @@ namespace GoldLeaf.Items.Grove
             Projectile.timeLeft = 28;
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
+            Projectile.ArmorPenetration = 4;
             //Projectile.extraUpdates = 1;
 
             Projectile.DamageType = DamageClass.Magic;
@@ -319,9 +322,9 @@ namespace GoldLeaf.Items.Grove
                 dust.rotation = Main.rand.NextFloat(6.28f);
             }
 
-            for (int i = 0; i < 3 + (Projectile.ai[0]/40); i++)
+            for (int i = 0; i < 4 + (Projectile.ai[0]/40); i++)
             {
-                Projectile.NewProjectileDirect(Projectile.GetSource_Death(), Projectile.Center, Main.rand.NextFloat(6.28f).ToRotationVector2() * Main.rand.NextFloat(2, 3), ProjectileType<AetherEmber>(), 0, 0, Projectile.owner).scale = Main.rand.NextFloat(0.85f, 1.15f);
+                Projectile.NewProjectileDirect(Projectile.GetSource_Death(), Projectile.Center, Main.rand.NextFloat(6.28f).ToRotationVector2() * Main.rand.NextFloat(2, 3), ProjectileType<AetherEmber>(), 0, 0, Projectile.owner).scale = Main.rand.NextFloat(0.75f, 1.25f);
             }
 
             ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.TrueExcalibur,
@@ -367,7 +370,7 @@ namespace GoldLeaf.Items.Grove
                 color,
                 0f,
                 tex.Size() * 0.5f,
-                Projectile.scale * 0.16f + (Radius * 0.009f), // + (cooldown * 0.022f),
+                Projectile.scale * 0.15f + (Radius * 0.01f), // + (cooldown * 0.022f),
                 SpriteEffects.None,
                 0f
             );
@@ -400,10 +403,11 @@ namespace GoldLeaf.Items.Grove
         public override void SetDefaults()
         {
             Projectile.friendly = true;
-            Projectile.penetrate = 1;
+            //Projectile.penetrate = 1;
+            Projectile.ArmorPenetration = 4;
             Projectile.width = 8;
             Projectile.height = 8;
-            Projectile.extraUpdates = 3;
+            Projectile.extraUpdates = 4;
             Projectile.timeLeft = 160;
             Projectile.tileCollide = true;
             Projectile.ignoreWater = true;

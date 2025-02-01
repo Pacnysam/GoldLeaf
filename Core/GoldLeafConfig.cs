@@ -57,4 +57,17 @@ namespace GoldLeaf.Core
         [DefaultValue(false)]
         public bool Radcap = false;*/
     }
+
+    public class MiscConfig : ModConfig
+    {
+        public override ConfigScope Mode => ConfigScope.ClientSide;
+
+        [Label("Throwing Support")]
+        [Tooltip("Changes some of the mod's items to deal throwing damage. Does NOT change vanilla items.")]
+        //[ReloadRequired]
+        [DefaultValue(false)]
+        public bool ThrowerSupport = false;
+
+
+    }
 }

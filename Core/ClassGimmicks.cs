@@ -32,13 +32,13 @@ namespace GoldLeaf.Core
         {
             if (hit.Crit && IsTargetValid(target) && GetInstance<GameplayConfig>().ClassGimmicks)
             {
-                if (hit.DamageType == DamageClass.Melee && Main.LocalPlayer.statLife < Main.LocalPlayer.statLifeMax2 && heartTimer <= 0)
+                if (hit.DamageType == DamageClass.Melee && Main.LocalPlayer.statLife < Main.LocalPlayer.statLifeMax2 && heartTimer <= 0 && item.GetGlobalItem<GoldLeafItem>().canSpawnMiniHearts)
                 {
                     Item.NewItem(Player.GetSource_OnHit(target), target.Hitbox, ItemType<HeartTiny>());
                     heartTimer = 120;
                 }
 
-                if (hit.DamageType == DamageClass.Magic && Main.LocalPlayer.statMana < Main.LocalPlayer.statManaMax2 && starTimer <= 0)
+                if (hit.DamageType == DamageClass.Magic && Main.LocalPlayer.statMana < Main.LocalPlayer.statManaMax2 && starTimer <= 0 && item.GetGlobalItem<GoldLeafItem>().canSpawnMiniStars)
                 {
                     Item.NewItem(Player.GetSource_OnHit(target), target.Hitbox, ItemType<StarTiny>());
                     starTimer = 30;
@@ -67,6 +67,16 @@ namespace GoldLeaf.Core
         /*public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
         {
             if (superCritTimer <= 0 && modifiers.DamageType == DamageClass.Ranged && GetInstance<GameplayConfig>().ClassGimmicks && proj.GetGlobalProjectile<GoldLeafProjectile>().canSuperCrit)
+            {
+                modifiers.CritDamage *= 2f;
+                modifiers.SetCrit();
+                superCritTimer = TimeToTicks(10);
+            }
+        }
+
+        public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)
+        {
+            if (superCritTimer <= 0 && modifiers.DamageType == DamageClass.Ranged && GetInstance<GameplayConfig>().ClassGimmicks && item.GetGlobalItem<GoldLeafItem>().canSuperCrit)
             {
                 modifiers.CritDamage *= 2f;
                 modifiers.SetCrit();

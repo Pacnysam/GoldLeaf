@@ -27,7 +27,8 @@ namespace GoldLeaf.Items.Nightshade
 		public override void SetDefaults() 
 		{
 			Item.damage = 22;
-			Item.DamageType = DamageClass.Magic;
+            Item.GetGlobalItem<GoldLeafItem>().throwingDamageType = DamageClass.Magic;
+
             Item.knockBack = 2;
 
 			Item.mana = 7;
@@ -106,7 +107,7 @@ namespace GoldLeaf.Items.Nightshade
 			Projectile.penetrate = 2;
 			Projectile.scale = 1f;
 
-            Projectile.DamageType = DamageClass.Magic;
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType = DamageClass.Magic;
 
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.012f;
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravityDelay = 10;
@@ -193,7 +194,7 @@ namespace GoldLeaf.Items.Nightshade
 			Projectile.penetrate = 1;
 			Projectile.scale = 1f;
 
-			Projectile.DamageType = DamageClass.Magic;
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType = DamageClass.Magic;
 
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.012f;
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravityDelay = 10;

@@ -1,0 +1,11 @@
+RoyalGel: 25% chance not to consume Goonai
+
+GemStaves: {
+	Type1: Pierces armor and curves toward the cursor
+	Type2: Bounces and shoots 2 at once
+	Type3: Critical strikes explode into light
+	Type4: Drops falling emeralds
+	Type5: Critical strikes spawn hearts
+	Type6: Fast as light
+	Type7: Critical strikes inflict a stun
+}

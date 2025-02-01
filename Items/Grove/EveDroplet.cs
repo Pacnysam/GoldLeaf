@@ -35,8 +35,8 @@ namespace GoldLeaf.Items.Grove
         public override void SetDefaults()
 		{
 			Item.damage = 19;
-			Item.DamageType = DamageClass.Ranged;
-			Item.width = 20;
+            Item.GetGlobalItem<GoldLeafItem>().throwingDamageType = DamageClass.Ranged;
+            Item.width = 20;
 			Item.height = 24;
 			Item.useTime = 20;
 			Item.useAnimation = 20;
@@ -75,9 +75,11 @@ namespace GoldLeaf.Items.Grove
             {
                 dustTime = Main.rand.Next(9, 38);
 
-                var dust = Dust.NewDustPerfect(new Vector2(Item.position.X + Main.rand.Next(0, Item.width), Item.position.Y + Main.rand.Next(0, Item.height)), DustType<LightDust>(), new Vector2(0, Main.rand.NextFloat(-0.4f, -1.2f)), 0, new Color(255, 152, 221), Main.rand.NextFloat(0.3f, 0.7f));
+                var dust = Dust.NewDustPerfect(new Vector2(Item.position.X + Main.rand.Next(0, Item.width), Item.position.Y + Main.rand.Next(0, Item.height)), DustType<LightDust>(), new Vector2(0, Main.rand.NextFloat(-0.4f, -1.2f)), 0, new Color(255, 198, 249), Main.rand.NextFloat(0.3f, 0.65f));
                 dust.noGravity = true;
                 dust.fadeIn = 1.4f;
+
+                //new Color(255, 152, 221);
             }
 
             /*if (Main.rand.NextBool(20))
@@ -140,7 +142,7 @@ namespace GoldLeaf.Items.Grove
 			Projectile.tileCollide = true;
             Projectile.ignoreWater = true;
 
-            Projectile.DamageType = DamageClass.Ranged;
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType = DamageClass.Ranged;
 
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.3f;
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravityDelay = 15;

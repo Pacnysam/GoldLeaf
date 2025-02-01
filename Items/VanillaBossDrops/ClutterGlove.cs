@@ -22,11 +22,10 @@ namespace GoldLeaf.Items.VanillaBossDrops
 {
     public abstract class ClutterGlove : ModItem
     {
-
         public override void SetDefaults()
         {
             Item.damage = 10;
-            Item.DamageType = DamageClass.Ranged;
+            Item.GetGlobalItem<GoldLeafItem>().throwingDamageType = DamageClass.Ranged;
             Item.knockBack = 2;
             Item.crit = 6;
 
@@ -63,12 +62,13 @@ namespace GoldLeaf.Items.VanillaBossDrops
             if (type == ProjectileID.SporeTrap) { Main.projectile[p].velocity *= Main.rand.NextFloat(0.3f, 0.5f); Main.projectile[p].timeLeft = 900; Main.projectile[p].GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.005f; }
             if (type == ProjectileID.HornetStinger) { Main.projectile[p].GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.12f; Main.projectile[p].damage += 14; }
 
+            Main.projectile[p].DamageType = Item.GetGlobalItem<GoldLeafItem>().throwingDamageType;
             return false;
         }
 
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
-            if (type == ProjectileID.Bone) { type = ProjectileID.BoneGloveProj; velocity *= 0.7f; }
+            if (type == ProjectileID.Bone) { type = ProjectileID.BoneGloveProj; velocity *= 0.65f; }
         }
     }
 
@@ -123,7 +123,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Projectile.penetrate = 3;
             Projectile.extraUpdates = 1;
 
-            Projectile.DamageType = DamageClass.Ranged;
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType = DamageClass.Ranged;
 
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.08f;
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravityDelay = 15;
@@ -195,7 +195,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Projectile.tileCollide = true;
             Projectile.ignoreWater = false;
 
-            Projectile.DamageType = DamageClass.Ranged;
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType = DamageClass.Ranged;
 
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.15f;
         }
