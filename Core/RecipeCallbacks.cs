@@ -37,7 +37,7 @@ namespace GoldLeaf.Core
         {
             if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<GraphicsConfig>().OnCraftEffects) 
             {
-                player.GetModPlayer<GoldLeafPlayer>().craftTimer = 20;
+                player.GetModPlayer<GoldLeafPlayer>().craftTimer = 15;
 
                 DustHelper.DrawStar(player.Center, DustID.FireworkFountain_Yellow, 5, 2.6f, 1f, 0.55f, 0.6f, 0.5f, true, 0, -1);
                 SoundEngine.PlaySound(SoundID.Item4, player.Center);
@@ -47,7 +47,7 @@ namespace GoldLeaf.Core
         {
             if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<GraphicsConfig>().OnCraftEffects)
             {
-                player.GetModPlayer<GoldLeafPlayer>().craftTimer = 15;
+                player.GetModPlayer<GoldLeafPlayer>().craftTimer = 10;
 
                 for (float k = 0; k < Main.rand.Next(4, 6); k++)
                 {
@@ -55,6 +55,24 @@ namespace GoldLeaf.Core
                     //d.fadeIn = 1f;
                 }
                 SoundEngine.PlaySound(SoundID.Item37, player.Center);
+            }
+        }
+        public static void GelCraftEffect(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack)
+        {
+            if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<GraphicsConfig>().OnCraftEffects)
+            {
+                player.GetModPlayer<GoldLeafPlayer>().craftTimer = 10;
+
+                for (int k = 0; k < 18; ++k)
+                {
+                    int dust = Dust.NewDust(player.position, player.width, player.height, DustType<SlimeDustBlue>(), Main.rand.NextFloat(-1.5f, 1.5f), Main.rand.NextFloat(-5f, -7f), 0, Color.White, Main.rand.NextFloat(0.8f, 1.2f));
+                    Main.dust[dust].alpha = 175;
+                    if (Main.rand.NextBool(2)) Main.dust[dust].alpha += 25;
+                    if (Main.rand.NextBool(2)) Main.dust[dust].alpha += 25;
+                }
+
+                SoundStyle sound1 = new("GoldLeaf/Sounds/SE/HollowKnight/JellyfishEggPop") { Volume = 0.65f, PitchVariance = 0.4f };
+                SoundEngine.PlaySound(sound1, player.Center);
             }
         }
     }

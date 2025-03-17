@@ -3,9 +3,9 @@ using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
 using Terraria.ID;
 using Terraria;
-using GoldLeaf.Items.Grove;
 using Terraria.ModLoader;
 using Terraria.Localization;
+using GoldLeaf.Items.Grove.Wood;
 
 namespace GoldLeaf.Core
 {
@@ -28,6 +28,10 @@ namespace GoldLeaf.Core
                 if (recipe.HasTile(TileID.Anvils))
                 {
                     recipe.AddOnCraftCallback(RecipeCallbacks.AnvilCraftEffect);
+                }
+                if (recipe.HasTile(TileID.Solidifier) || (recipe.TryGetIngredient(ItemID.Gel, out Item gel) && !recipe.HasRecipeGroup(RecipeGroup.recipeGroupIDs["Wood"])))
+                {
+                    recipe.AddOnCraftCallback(RecipeCallbacks.GelCraftEffect);
                 }
             }       
         }

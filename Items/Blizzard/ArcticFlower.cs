@@ -33,8 +33,9 @@ namespace GoldLeaf.Items.Blizzard
 		{
 			Recipe recipe = CreateRecipe();
 			recipe.AddIngredient(ItemID.BorealWood, 15);
-			recipe.AddRecipeGroup("GoldLeaf:GoldBars", 5);
-            //recipe.AddIngredient(ItemType<AuroraShard>(), 8);
+			recipe.AddRecipeGroup("GoldLeaf:GoldBars", 6);
+            recipe.AddIngredient(ItemType<AuroraCluster>(), 9);
+            recipe.AddIngredient(ItemID.Shiverthorn, 2);
             recipe.AddTile(TileID.Anvils);
 			recipe.Register();
 		}
@@ -89,46 +90,6 @@ namespace GoldLeaf.Items.Blizzard
         public override void SetStaticDefaults()
         {
             BuffID.Sets.TimeLeftDoesNotDecrease[Type] = true;
-        }
-    }
-
-    public class ArcticDust : ModDust
-    {
-        public override Color? GetAlpha(Dust dust, Color lightColor)
-        {
-            return Color.White;
-        }
-
-        public override void OnSpawn(Dust dust)
-        {
-            dust.fadeIn = 0;
-            dust.noLight = false;
-            dust.frame = new Rectangle(0, 0, 10, 10);
-            dust.velocity *= 1.75f;
-        }
-
-        public override bool Update(Dust dust)
-        {
-            if (dust.customData is null)
-            {
-                dust.position -= new Vector2(9, 9) * dust.scale;
-                dust.customData = 1;
-            }
-
-            if (dust.alpha % 40 == 35)
-                dust.frame.Y += 10;
-
-            Lighting.AddLight(dust.position, Color.Cyan.ToVector3() * 0.02f);
-
-            dust.alpha += 5;
-
-            if (dust.alpha > 255)
-                dust.active = false;
-
-            dust.velocity *= 0.95f;
-            dust.position += dust.velocity;
-
-            return false;
         }
     }
 }

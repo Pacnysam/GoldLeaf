@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -32,8 +33,7 @@ namespace GoldLeaf.Tiles.Decor
 	{
 		public override void SetStaticDefaults()
 		{
-			//SoundType = SoundID.Bird;
-			//SoundStyle = 1;
+			HitSound = SoundID.Critter with { Pitch = -0.5f };
 
 			AddMapEntry(new Color(177, 91, 219));
 			RegisterItemDrop(ItemType<BatPlushie>());
@@ -60,7 +60,12 @@ namespace GoldLeaf.Tiles.Decor
 
 			TileObjectData.addAlternate(1);
 			TileObjectData.addTile(Type);
-
 		}
-	}
+
+        public override bool RightClick(int i, int j)
+        {
+			SoundEngine.PlaySound(SoundID.Critter with { Pitch = -0.5f });
+			return true;
+        }
+    }
 }

@@ -17,15 +17,16 @@ using GoldLeaf.Items.Grove;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.UI;
 using Terraria.ModLoader.IO;
+using System.Collections.Generic;
 
 namespace GoldLeaf.Items.VanillaBossDrops
 {
-    public abstract class ClutterGlove : ModItem
+    public abstract class ClutterGlove : ModItem //TODO fix like, ALL of this
     {
         public override void SetDefaults()
         {
             Item.damage = 10;
-            Item.GetGlobalItem<GoldLeafItem>().throwingDamageType = DamageClass.Ranged;
+            Item.DamageType = DamageClass.Ranged;
             Item.knockBack = 2;
             Item.crit = 6;
 
@@ -66,6 +67,19 @@ namespace GoldLeaf.Items.VanillaBossDrops
             return false;
         }
 
+        /*public override void OnConsumeAmmo(Item ammo, Player player)
+        {
+            switch (ammo.type)
+            {
+                case ItemID.Stinger:
+                case ItemID.JungleSpores:
+                    {
+                        Helper.TryTakeItem(player, ammo.type, 1);
+                        break;
+                    }
+            }
+        }*/
+
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
             if (type == ProjectileID.Bone) { type = ProjectileID.BoneGloveProj; velocity *= 0.65f; }
@@ -78,7 +92,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
         {
             if (ammo.type == ItemID.ShadowScale)
             {
-                return Main.rand.NextBool(5);
+                return Main.rand.NextBool();
             }
             else
             { 
@@ -93,7 +107,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
         {
             if (ammo.type == ItemID.TissueSample)
             {
-                return Main.rand.NextBool(5);
+                return Main.rand.NextBool();
             }
             else
             {
@@ -123,7 +137,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Projectile.penetrate = 3;
             Projectile.extraUpdates = 1;
 
-            Projectile.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType = DamageClass.Ranged;
+            Projectile.DamageType = DamageClass.Ranged;
 
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.08f;
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravityDelay = 15;
@@ -195,7 +209,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Projectile.tileCollide = true;
             Projectile.ignoreWater = false;
 
-            Projectile.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType = DamageClass.Ranged;
+            Projectile.DamageType = DamageClass.Ranged;
 
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.15f;
         }
@@ -295,12 +309,14 @@ namespace GoldLeaf.Items.VanillaBossDrops
                     {
                         item.ammo = ItemType<EveDroplet>();
                         item.shoot = ProjectileType<ClutterScale>();
+                        item.value = Item.buyPrice(0, 0, 7, 50);
                         break;
                     }
                 case ItemID.TissueSample:
                     {
                         item.ammo = ItemType<EveDroplet>();
                         item.shoot = ProjectileType<ClutterTissue>();
+                        item.value = Item.buyPrice(0, 0, 7, 50);
                         break;
                     }
                 /*case ItemID.Stinger:
@@ -320,6 +336,47 @@ namespace GoldLeaf.Items.VanillaBossDrops
                         item.ammo = ItemType<EveDroplet>();
                         break;
                     }
+            }
+        }
+
+        /*public override void AddRecipes()
+        {
+            Recipe tissueToScale = Recipe.Create(ItemID.ShadowScale, 5)
+                .AddIngredient(ItemID.TissueSample, 5)
+                .AddTile(TileID.TinkerersWorkbench)
+                .AddCondition(GoldLeafConditions.HasClutterGlove)
+                .Register();
+            Recipe scaleToTissue = Recipe.Create(ItemID.TissueSample, 5)
+                .AddIngredient(ItemID.ShadowScale, 5)
+                .AddTile(TileID.TinkerersWorkbench)
+                .AddCondition(GoldLeafConditions.HasClutterGlove)
+                .Register();
+        }*/
+
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
+        {
+            int glove = ItemType<ClutterGlove>();
+            if (!WorldGen.crimson) glove = ItemType<ClutterGloveCorruption>(); else glove = ItemType<ClutterGloveCrimson>();
+
+            if (item.ammo == ItemType<EveDroplet>())
+            {
+                string[] text =
+                [
+                    Language.GetTextValue("Mods.GoldLeaf.Items.ClutterGlove.ClutterTooltip" /*+ ItemID.Search.GetName(item.type)*/)
+                ];
+
+                TooltipLine tooltipLine = tooltips.Find(n => n.Name == "Ammo");
+
+                if (tooltipLine != null && GoldLeafConditions.HasClutterGlove.IsMet())
+                {
+                    int index = tooltips.IndexOf(tooltipLine);
+                    for (int i = 0; i < text.Length; i++)
+                    {
+                        if (text[i] != string.Empty)
+                            tooltips.Insert(index + 1, new TooltipLine(Mod, "ClutterTooltip", /*"[i/s1:" + glove + "]: " +*/ text[i]));
+                    }
+                }
+                tooltips.Remove(tooltipLine);
             }
         }
     }

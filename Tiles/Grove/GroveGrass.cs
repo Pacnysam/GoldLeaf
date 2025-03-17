@@ -12,7 +12,7 @@ using Terraria.Audio;
 
 namespace GoldLeaf.Tiles.Grove
 {
-    public class GroveGrass : ModItem
+    /*public class GroveGrass : ModItem
     {
         public override void SetDefaults()
         {
@@ -28,7 +28,7 @@ namespace GoldLeaf.Tiles.Grove
             Item.useTime = 10;
             Item.useAnimation = 15;
         }
-    }
+    }*/
 
     public class GroveGrassSeeds : ModItem 
     {
@@ -53,6 +53,11 @@ namespace GoldLeaf.Tiles.Grove
 
             ItemID.Sets.GrassSeeds[Item.type] = true;
             ItemID.Sets.AlsoABuildingItem[Item.type] = true;
+        }
+
+        public override void PostUpdate()
+        {
+            Lighting.AddLight(new Vector2(Item.position.X / 16f, Item.position.Y / 16f), new Vector3(190/255, 99/255, 37/255) * 0.8f);
         }
 
         public override bool? UseItem(Player player)
@@ -115,7 +120,7 @@ namespace GoldLeaf.Tiles.Grove
             Main.tileMergeDirt[Type] = true;
             //Main.tileMerge[Type][TileType<GroveGrassT>()] = true;
             //Main.tileMerge[Type][TileType<GroveBrickT>()] = true;
-            RegisterItemDrop(ItemType<GroveStone>());
+            RegisterItemDrop(ItemType<Echoslate>());
             AddMapEntry(new Color(118, 108, 98));
             Main.tileBlockLight[Type] = true;
             TileID.Sets.ChecksForMerge[Type] = true;*/

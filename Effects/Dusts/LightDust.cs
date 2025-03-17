@@ -22,7 +22,7 @@ namespace GoldLeaf.Effects.Dusts
             dust.noGravity = true;
             dust.frame = new Rectangle(0, 0, 14, 14);
             dust.scale *= 0.35f;
-            dust.alpha = -15;
+            dust.alpha -= 15;
         }
 
         public override bool Update(Dust dust)
@@ -45,8 +45,6 @@ namespace GoldLeaf.Effects.Dusts
                 dust.scale *= 0.94f;
                 dust.alpha += 7;
             }
-
-            
 
             if (!dust.noLight)
                 Lighting.AddLight(dust.position, dust.color.ToVector3() * 0.3f);

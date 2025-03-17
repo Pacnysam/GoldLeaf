@@ -1,7 +1,7 @@
 ﻿using GoldLeaf.Effects.Dusts;
 using GoldLeaf.Items.Grove;
-using GoldLeaf.Items.Misc.Vanity;
-using GoldLeaf.Items.Misc.Vanity.Dyes;
+using GoldLeaf.Items.Vanity;
+using GoldLeaf.Items.Dyes;
 using GoldLeaf.Items.Nightshade;
 using GoldLeaf.Items.VanillaBossDrops;
 using GoldLeaf.Tiles.Decor;
@@ -17,6 +17,7 @@ using Terraria.ModLoader;
 using Terraria.WorldBuilding;
 using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
+using GoldLeaf.Items.Vanity.Watcher;
 
 namespace GoldLeaf.Core
 {
@@ -32,27 +33,42 @@ namespace GoldLeaf.Core
         //public int platformTimer = 0;
         public int craftTimer = 0;
 
-        public int overhealth = 0;
         public float itemSpeed;
+        public float critDamageMult = 1f;
 
         #region minor variables
         public bool royalGel = false;
 
         #endregion minor variables
 
-        public override float UseTimeMultiplier(Item Item)
-		{
-			return itemSpeed;
-		}
+        public override float UseTimeMultiplier(Item Item) => itemSpeed;
+        public override float UseAnimationMultiplier(Item item) => itemSpeed;
 
-        public override float UseAnimationMultiplier(Item item)
+        public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)
         {
-            return itemSpeed;
+            modifiers.CritDamage += (item.GetGlobalItem<GoldLeafItem>().critDamageMod);
+            modifiers.CritDamage *= critDamageMult;
+        }
+        public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
+        {
+            modifiers.CritDamage += (proj.GetGlobalProjectile<GoldLeafProjectile>().critDamageMod);
+            modifiers.CritDamage *= critDamageMult;
         }
 
-        public override void UpdateEquips()
+        public delegate void DoubleTapDelegate(Player player);
+        public static event DoubleTapDelegate DoubleTapEvent;
+        public static event DoubleTapDelegate DoubleTapPrimaryEvent;
+        public static event DoubleTapDelegate DoubleTapSecondaryEvent;
+
+        public void DoubleTap(Player player, int keyDir)
         {
-            if (HasAccessory(Player, ItemID.RoyalGel)) royalGel = true;
+            DoubleTapEvent?.Invoke(player);
+
+            if ((Main.ReversedUpDownArmorSetBonuses && keyDir == 1) || (!Main.ReversedUpDownArmorSetBonuses && keyDir == 0))
+                DoubleTapPrimaryEvent?.Invoke(player);
+
+            if ((Main.ReversedUpDownArmorSetBonuses && keyDir == 0) || (!Main.ReversedUpDownArmorSetBonuses && keyDir == 1))
+                DoubleTapSecondaryEvent?.Invoke(player);
         }
 
         public delegate void ResetEffectsDelegate(GoldLeafPlayer Player);
@@ -61,10 +77,12 @@ namespace GoldLeaf.Core
         {
             ResetEffectsEvent?.Invoke(this);
 
-            overhealth = 0;
             itemSpeed = 1;
+            critDamageMult = 1f;
 
+            #region minor variables
             royalGel = false;
+            #endregion minor variables
         }
 
         public override void PostUpdate()
@@ -90,7 +108,6 @@ namespace GoldLeaf.Core
                 case "Pacnysam":
                 case "Pacny":
                 case "Pac":
-                case "Sylvia":
                     {
                         return 
                             [

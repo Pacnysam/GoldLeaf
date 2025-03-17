@@ -27,7 +27,7 @@ using GoldLeaf.Items.Pickups;
 
 namespace GoldLeaf.Items.Gem
 {
-    public class GemStaffReworkItem : GlobalItem
+    /*public class GemStaffReworkItem : GlobalItem
     {
         public override bool InstancePerEntity => true;
 
@@ -42,10 +42,16 @@ namespace GoldLeaf.Items.Gem
                     Language.GetTextValue("Mods.GoldLeaf.Items.Vanilla.GemStaves.Type" + (Array.IndexOf(gemStaves, item.type) + 1))
                 ];
 
-                for (int i = 0; i < text.Length; i++)
+                TooltipLine gemStaffTooltip = tooltips.Find(n => n.Name == "UseMana");
+
+                if (gemStaffTooltip != null)
                 {
-                    if (text[i] != string.Empty)
-                        tooltips. Add(new TooltipLine(Mod, "Tooltip", text[i]));
+                    int index = tooltips.IndexOf(gemStaffTooltip);
+                    for (int i = 0; i < text.Length; i++)
+                    {
+                        if (text[i] != string.Empty)
+                            tooltips.Insert(index + 1, new TooltipLine(Mod, "GemStaff", text[i]));
+                    }
                 }
             }
         }
@@ -158,21 +164,6 @@ namespace GoldLeaf.Items.Gem
                 {
                     projectile.velocity.Y += 0.35f;
                 }
-                if (projectile.type == ProjectileID.RubyBolt && GetInstance<GameplayConfig>().OreStaffReworks)
-                {
-                    //projectile.rotation += (float)Math.Sin(GoldLeafWorld.rottime) * 25f;
-
-                    /*if (projectile.timeLeft >= 120)
-                    {
-                        projectile.tileCollide = false;
-                        projectile.ignoreWater = true;
-                    }
-                    else 
-                    {
-                        projectile.tileCollide = true;
-                        projectile.ignoreWater = false;
-                    }*/
-                }
                 return base.PreAI(projectile);
             }
 
@@ -236,7 +227,7 @@ namespace GoldLeaf.Items.Gem
                             {
                                 if (hit.Crit)
                                 {
-                                    Item.NewItem(null, target.Hitbox, ItemType<HeartTiny>());
+                                    Item.NewItem(new EntitySource_DropAsItem(Projectile), target.Center, ItemType<HeartTiny>());
                                     //NewItemPerfect(target.Center, new Vector2(0, -2f), ItemType<HeartTiny>());
                                 }
                                 break;
@@ -269,4 +260,5 @@ namespace GoldLeaf.Items.Gem
             }
         }
     }
+    */
 }

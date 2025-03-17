@@ -1,4 +1,13 @@
 GoldLeafConditions: {
 	InSurface: On Surface
-	UsingGameboy: Mods.GoldLeaf.GoldLeafConditions.UsingGameboy
+	UsingGameboy: Playing Gameboy
+	HasClutterGlove: Has Clutter Glove
 }
+
+DeathReasons: {
+	ToxicPositivity0: got over it.
+	ToxicPositivity1: stayed positive!
+	ToxicPositivity2: looked on the bright side!
+}
+
+Prefixes.Accurate.DisplayName: Accurate

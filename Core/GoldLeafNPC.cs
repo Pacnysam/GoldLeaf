@@ -9,12 +9,14 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
 using GoldLeaf.Items.Misc.Accessories;
-using GoldLeaf.Items.Misc.Vanity;
-using GoldLeaf.Items.Misc.Vanity.Dyes;
+using GoldLeaf.Items.Vanity;
+using GoldLeaf.Items.Dyes;
 using Terraria.GameContent.ItemDropRules;
 using GoldLeaf.Tiles.Decor;
 using GoldLeaf.Items.VanillaBossDrops;
 using GoldLeaf.Items.Potions;
+using Terraria.GameContent.Bestiary;
+using GoldLeaf.Items.Grove;
 
 namespace GoldLeaf.Core
 {
@@ -22,17 +24,19 @@ namespace GoldLeaf.Core
     {
         public override bool InstancePerEntity => true;
 
-        public float critDamageMod = 0f;
-        public int defenseMod = 0;
-        //public float defenseFactorMod = 1f;
+        public int damageModFlat = 0;
+        public float critDamageModFlat = 0f;
+        public int defenseModFlat = 0;
+        public float defenseFactorMod = 1f;
 
         public bool stunned = false;
 
         public override void ResetEffects(NPC npc)
         {
-            critDamageMod = 0f;
-            defenseMod = 0;
-            //defenseFactorMod = 1f;
+            damageModFlat = 0;
+            critDamageModFlat = 0f;
+            defenseModFlat = 0;
+            defenseFactorMod = 1f;
 
             stunned = false;
         }
@@ -43,8 +47,8 @@ namespace GoldLeaf.Core
             {
                 case NPCID.Merchant:
                     {
-                        shop.Add(ItemID.Leather);
-                        shop.Add(ItemType<WaxCandle>());
+                        shop.InsertBefore(ItemID.Rope, ItemID.Leather);
+                        shop.InsertAfter(ItemID.Rope, ItemType<WaxCandle>());
                         break;
                     }
                 case NPCID.GoblinTinkerer:
@@ -60,23 +64,14 @@ namespace GoldLeaf.Core
                     }
                 case NPCID.WitchDoctor:
                     {
-                        shop.Add<ToxicPositivity>(Condition.TimeDay);
-                        //shop.Add<HexWhip>(Condition.TimeNight);
-
-                        shop.Add<WatcherEyedrops>(Condition.MoonPhaseNew, Condition.TimeNight);
-                        shop.Add<WatcherCloak>(Condition.MoonPhaseNew, Condition.TimeNight);
-                        //shop.Add<MadcapPainting>(Condition.MoonPhaseNew, Condition.TimeNight);
-                        //shop.Add<BatPlushie>(Condition.MoonPhaseNew, Condition.TimeNight);
+                        shop.InsertAfter(ItemID.PygmyNecklace, ItemType<ToxicPositivity>(), Condition.TimeDay);
                         break;
                     }
-                case NPCID.Painter:
+                case NPCID.ArmsDealer:
                     {
-                        shop.Add<MadcapPainting>(Condition.MoonPhaseNew, Condition.TimeNight);
-                        break;
-                    }
-                case NPCID.Clothier:
-                    {
-                        shop.Add<BatPlushie>(Condition.MoonPhaseNew, Condition.TimeNight);
+                        shop.Add(ItemID.TissueSample, GoldLeafConditions.HasClutterGlove);
+                        shop.Add(ItemID.ShadowScale, GoldLeafConditions.HasClutterGlove);
+                        //shop.Add(ItemType<EveDroplet>(), GoldLeafConditions.HasClutterGlove, GoldLeafConditions.InSurface);
                         break;
                     }
             }
@@ -84,14 +79,10 @@ namespace GoldLeaf.Core
 
         public override void ModifyIncomingHit(NPC npc, ref NPC.HitModifiers modifiers)
         {
-            /*if (npc.onFire && GetInstance<GameplayConfig>().BuffChanges) 
-            {
-                modifiers.Defense.Flat -= 4;
-            }*/
-
-            modifiers.CritDamage += critDamageMod;
-            modifiers.Defense.Flat += defenseMod;
-            //modifiers.DefenseEffectiveness *= defenseFactorMod;
+            modifiers.FlatBonusDamage += damageModFlat;
+            modifiers.CritDamage += critDamageModFlat;
+            modifiers.Defense.Flat += defenseModFlat;
+            modifiers.DefenseEffectiveness *= defenseFactorMod;
         }
 
         public override bool PreAI(NPC npc)
@@ -102,6 +93,7 @@ namespace GoldLeaf.Core
                 {
                     if (!npc.boss)
                     {
+                        npc.netUpdate = true;
                         npc.velocity *= 0;
                         npc.frame.Y = 0;
                         return false;

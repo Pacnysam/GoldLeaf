@@ -2,8 +2,8 @@ GameplayConfig: {
 	DisplayName: Gameplay Config
 
 	ClassGimmicks: {
-		Label: Crit Gimmicks
-		Tooltip: Enables additional class based critical strike gimmicks.
+		Label: Life and Mana Pickup Changes
+		Tooltip: Weaker life and mana pickups are dropped on melee and magic critical strikes respectively. Nerfs normal mana stars.
 	}
 
 	OreStaffReworks: {

@@ -8,13 +8,18 @@ BatPlushie: {
 	Tooltip: It's sooooooo cute!
 }
 
+RedPlushie: {
+	DisplayName: Red Plushie
+	Tooltip: It's sooooooo... uhh...
+}
+
 MadcapPainting: {
 	DisplayName: Madcap
 	Tooltip: "'P. Nysam'"
 }
 
-GroveStone: {
-	DisplayName: Basalt
+Echoslate: {
+	DisplayName: Echoslate
 	Tooltip: ""
 }
 
@@ -46,8 +51,8 @@ ToxicPositivity: {
 	DisplayName: Toxic Positivity
 	Tooltip:
 		'''
-		Attacks may poison enemies, chance and duration increases with each buff
-		Taking damage may poison you, chance increasing with each buff
+		Attacks may apply a defense crippling toxin, chance and duration increases for every buff you have
+		Taking damage may poison you, chance increasing for every buff you have
 		'''
 }
 
@@ -104,23 +109,24 @@ NoxGauntlet: {
 }
 
 SilenceMusicBox: {
-	DisplayName: Silence Music Box
+	DisplayName: Music Box (Silence)
 	Tooltip: ""
 }
 
 ToxinGroveMusicBox: {
-	DisplayName: Toxin Grove Music Box
+	DisplayName: Music Box (Toxin Grove)
 	Tooltip: ""
 }
 
 UndergroveMusicBox: {
-	DisplayName: Whispering Grove Music Box
+	DisplayName: Music Box (Whispering Grove)
 	Tooltip: ""
 }
 
 OxeyeDaisy: {
 	DisplayName: Oxeye Daisy
-	Tooltip: Loves me... loves me not...
+	Tooltip: "'Loves me... loves me not...'"
+	HoverText: Pick a flower
 }
 
 HeartTiny: {
@@ -151,21 +157,27 @@ NightshadeRing: {
 ClutterGlove: {
 	DisplayName: Clutter Glove
 	Tooltip: ""
+	ClutterTooltip: Can be thrown with Clutter Glove
+	EveDroplet: ""
+	ShadowScale: Pierces enemies and ignores armor
+	TissueSample: Bounces and hits twice
+	Bone: Throws bouncing crossbones
+	SpikyBall: Throws with extra velocity and damage
 }
 
 ClutterGloveCrimson: {
 	DisplayName: Clutter Glove
-	Tooltip: 80% chance to not consume tissue samples
+	Tooltip: 50% chance to not consume tissue samples
 }
 
 ClutterGloveCorruption: {
 	DisplayName: Clutter Glove
-	Tooltip: 80% chance to not consume shadow scales
+	Tooltip: 50% chance to not consume shadow scales
 }
 
 Echobark: {
-	DisplayName: Echobark
 	Tooltip: ""
+	DisplayName: Echobark
 }
 
 Constellation: {
@@ -174,7 +186,7 @@ Constellation: {
 		'''
 		{$CommonItemTooltip.SummonTagDamage}
 		{$CommonItemTooltip.Whips}
-		Strike enemies to lengthen the whip
+		Strike enemies to lengthen the whip, maximum length is increased at night
 		'''
 }
 
@@ -184,13 +196,13 @@ RemorseCandle: {
 }
 
 Demitoxin: {
-	Tooltip: ""
 	DisplayName: Demitoxin
+	Tooltip: "'Smells like death'"
 }
 
 HeavenShard: {
+	DisplayName: Shard of Heaven
 	Tooltip: ""
-	DisplayName: Heaven Shard
 }
 
 Sediment: {
@@ -238,11 +250,7 @@ WaxCandle: {
 
 Goonai: {
 	DisplayName: Goonai
-	Tooltip:
-		'''
-		Garuntees critical strikes while falling
-		3x critical strike multiplier
-		'''
+	Tooltip: Garuntees critical strikes while falling
 }
 
 SentryPotion: {
@@ -260,6 +268,30 @@ VampirePotion: {
 	Tooltip: Critical strikes gain lifesteal
 }
 
+DiligencePotion: {
+	DisplayName: Diligence Potion
+	Tooltip: Allows minions to critically strike
+}
+
+MinionSpeedPotion: {
+	DisplayName: Productivity Potion
+	Tooltip:
+		'''
+		Minions move and attack faster
+		'Does not cure ADHD'
+		'''
+}
+
+FinessePotion: {
+	DisplayName: Finesse Potion
+	Tooltip: Increases attack speed by 20%
+}
+
+VigorPotion: {
+	DisplayName: Vigor Potion
+	Tooltip: Critical strike damage is doubled
+}
+
 WatcherEyedrops: {
 	DisplayName: Truth Seeker Eyedrops
 	Tooltip: ""
@@ -272,5 +304,84 @@ WatcherCloak: {
 
 Bladecaster: {
 	DisplayName: Bladecaster
+	Tooltip: <right> to launch the blade
+}
+
+OxeyeHover: {
+	DisplayName: Oxeye Hover
 	Tooltip: ""
+}
+
+ExclamationIcon: {
+	DisplayName: Exclamation Icon
+	Tooltip: ""
+}
+
+LeafIcon: {
+	DisplayName: Leaf Icon
+	Tooltip: ""
+}
+
+BeheadingAxe: {
+	DisplayName: Beheading Axe
+	Tooltip: ""
+}
+
+AuroraCluster: {
+	DisplayName: Aurora Cluster
+	Tooltip: ""
+}
+
+FrostCloth: {
+	DisplayName: Frost Cloth
+	Tooltip: "'Would not make for a good blanket'"
+}
+
+FrostyMask: {
+	DisplayName: Frosty Mask
+	Tooltip:
+		'''
+		{$CommonItemTooltip.IncreasesMaxManaBy}
+		Enemies are less likely to target you
+		'Usable as an ice pack!'
+		'''
+}
+
+FrostyRobe: {
+	DisplayName: Frosty Robe
+	Tooltip:
+		'''
+		{$CommonItemTooltip.IncreasesMaxManaBy}
+		{$CommonItemTooltip.PercentIncreasedMagicDamage@1}
+		'''
+}
+
+SafetyBlanket: {
+	DisplayName: Safety Blanket
+	Tooltip: Prevents a single debuff, goes on cooldown for half of the unrealized debuff's duration
+}
+
+FrigidMask: {
+	DisplayName: Frosty Mask
+	Tooltip: This definitely isnt a bandaid solution to a playerlayer issue because pac wasnt good enough a programmer to draw it manually
+}
+
+AncientEchoslate: {
+	DisplayName: Ancient Echoslate
+	Tooltip: ""
+}
+
+SplashGemItem: {
+	DisplayName: Splash Gem
+	Tooltip: ""
+}
+
+ToxinBossMusicBox: {
+	Tooltip: ""
+	DisplayName: Music Box (Toxin Grove Boss)
+}
+
+GroveBossMusicBox: {
+	Tooltip: ""
+	DisplayName: Music Box (Fallen Swordsman)
 }

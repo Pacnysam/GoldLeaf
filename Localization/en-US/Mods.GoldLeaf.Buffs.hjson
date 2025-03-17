@@ -15,16 +15,7 @@ AmberStun: {
 
 ToxicPositivityBuff: {
 	DisplayName: Toxic Positivity
-	Description: Toxic and Positive!
-}
-
-Vanilla: {
-	OnFire:
-		'''
-
-		Defense is reduced by 4
-		'''
-	Ichor: Defense is reduced by 15
+	Description: Armor is less effective
 }
 
 ArcticWraithBuff: {
@@ -47,7 +38,37 @@ VampirePotionBuff: {
 	Description: Critical strikes leech life
 }
 
+DiligencePotionBuff: {
+	DisplayName: Diligence
+	Description: Minions may critically strike
+}
+
+MinionSpeedPotionBuff: {
+	DisplayName: Productive
+	Description: Minions are much faster
+}
+
+FinessePotionBuff: {
+	DisplayName: Finesse
+	Description: Increased attack speed
+}
+
+VigorPotionBuff: {
+	DisplayName: Vigorous
+	Description: Doubled critical damage
+}
+
 WaxCandleBuff: {
 	DisplayName: Zen
 	Description: Enemies are less likely to target you
+}
+
+AetherFlameBuff: {
+	DisplayName: Aether Flame Buff
+	Description: Mods.GoldLeaf.Buffs.AetherFlameBuff.Description
+}
+
+SafetyBlanketBuff: {
+	DisplayName: Safety Blanket Buff
+	Description: Mods.GoldLeaf.Buffs.SafetyBlanketBuff.Description
 }

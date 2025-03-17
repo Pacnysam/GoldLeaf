@@ -61,6 +61,5 @@ namespace GoldLeaf.Tiles.MusicBoxes
 
 		public override void KillMultiTile(int i, int j, int frameX, int frameY)
 			=> Item.NewItem(null, new Rectangle(i * 16, j * 16, 32, 32), new Item(ItemType<SilenceMusicBox>()), false, true);
-		//Spawn in the drop manually to prevent a random prefix
 	}
 }

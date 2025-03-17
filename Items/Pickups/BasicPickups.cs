@@ -190,8 +190,11 @@ namespace GoldLeaf.Items.Pickups
 
         public override bool OnPickup(Player player)
         {
-            player.ManaEffect(200);
-            player.statMana += 200;
+            if (GetInstance<GameplayConfig>().ClassGimmicks) 
+            { player.ManaEffect(120); player.statMana += 120; }
+            else 
+            { player.ManaEffect(200); player.statMana += 200; }
+
             SoundEngine.PlaySound(SoundID.Grab, player.Center);
             return false;
         }

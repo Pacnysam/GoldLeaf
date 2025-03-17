@@ -1,7 +1,7 @@
 ﻿using GoldLeaf.Effects.Dusts;
 using GoldLeaf.Items.Grove;
-using GoldLeaf.Items.Misc.Vanity;
-using GoldLeaf.Items.Misc.Vanity.Dyes;
+using GoldLeaf.Items.Vanity;
+using GoldLeaf.Items.Dyes;
 using GoldLeaf.Items.Nightshade;
 using GoldLeaf.Items.VanillaBossDrops;
 using GoldLeaf.Tiles.Decor;
@@ -67,9 +67,11 @@ namespace GoldLeaf.Core
                     ScreenMoveTimer++;
             }
 
+            if (ScreenShake > 0) { ScreenShake--; }
+            if (ScreenShake < 0) { ScreenShake = 0; }
+
             Main.screenPosition.Y += (Main.rand.Next(-ScreenShake, ScreenShake) + panDown);
             Main.screenPosition.X += Main.rand.Next(-ScreenShake, ScreenShake);
-            if (ScreenShake > 0) { ScreenShake--; }
         }
     }
 }

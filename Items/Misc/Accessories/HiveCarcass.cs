@@ -24,6 +24,8 @@ namespace GoldLeaf.Items.Misc.Accessories
             Item.value = Item.sellPrice(0, 1, 0, 0);
             Item.rare = ItemRarityID.Green;
 
+            ItemID.Sets.IsAMaterial[Item.type] = false;
+
             Item.accessory = true;
         }
 

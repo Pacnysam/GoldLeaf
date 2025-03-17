@@ -12,7 +12,7 @@ namespace GoldLeaf.Core
 		public int waxCandleCount;
 
 		public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts) {
-			groveTileCount = tileCounts[TileType<GroveStoneT>()] + tileCounts[TileType<GroveGrassT>()];
+			groveTileCount = tileCounts[TileType<EchoslateT>()] + tileCounts[TileType<GroveGrassT>()];
 			waxCandleCount = tileCounts[TileType<WaxCandleT>()];
         }
 	}

@@ -22,7 +22,7 @@ namespace GoldLeaf.Core
         public bool canSpawnMiniStars = true;
         public bool canSuperCrit = true;
 
-        public float critDamageMod = 2f;
+        public float critDamageMod = 0f;
 
         public float gravity = 0f;
         public int gravityDelay = 0;
@@ -53,7 +53,7 @@ namespace GoldLeaf.Core
             }
         }
 
-        public override void SetDefaults(Projectile entity)
+        /*public override void SetDefaults(Projectile entity)
         {
             if (entity.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType != DamageClass.Default)
             {
@@ -66,7 +66,7 @@ namespace GoldLeaf.Core
                     entity.DamageType = entity.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType;
                 }
             }
-        }
+        }*/
 
         public override void AI(Projectile projectile)
         {
@@ -83,16 +83,16 @@ namespace GoldLeaf.Core
             counter++;
         }
 
-        public override void ModifyHitNPC(Projectile projectile, NPC target, ref NPC.HitModifiers modifiers)
+        /*public override void ModifyHitNPC(Projectile projectile, NPC target, ref NPC.HitModifiers modifiers)
         {
-            modifiers.CritDamage += (critDamageMod - 2);
-        }
+            modifiers.CritDamage += critDamageModFlat;
+        }*/
 
         public override void OnKill(Projectile projectile, int timeLeft)
         {
             if (projectile.type == ProjectileID.BeeHive && Main.rand.NextBool(10)) 
             {
-                Item.NewItem(projectile.GetSource_Death(), projectile.Hitbox, ItemType<HiveCarcass>());
+                Item.NewItem(projectile.GetSource_DropAsItem(), projectile.Hitbox, ItemType<HiveCarcass>());
                 SoundEngine.PlaySound(SoundID.Item87, projectile.Center);
                 for (int i = 0; i < 8; i++)
                 {

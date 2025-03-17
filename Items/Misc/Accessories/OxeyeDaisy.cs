@@ -5,11 +5,8 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using static GoldLeaf.Core.Helper;
-using GoldLeaf.Items.Nightshade;
 using Microsoft.Xna.Framework;
-using GoldLeaf.Items.Pickups;
 using GoldLeaf.Effects.Dusts;
-using Microsoft.Build.Tasks;
 using GoldLeaf.Tiles.Decor;
 using Terraria.Enums;
 using Terraria.ObjectData;
@@ -18,8 +15,8 @@ using Terraria.DataStructures;
 using Terraria.Audio;
 using Terraria.GameContent.Metadata;
 using Microsoft.Xna.Framework.Graphics;
-using System.Linq;
 using Terraria.GameContent;
+using System;
 
 namespace GoldLeaf.Items.Misc.Accessories
 {
@@ -36,21 +33,33 @@ namespace GoldLeaf.Items.Misc.Accessories
 			Item.width = 30;
 			Item.height = 32;
 
+            /*Item.createTile = TileType<OxeyeDaisyT>();
+            Item.useTime = 10;
+            Item.useAnimation = 15;
+            Item.useStyle = ItemUseStyleID.Swing;
+            Item.autoReuse = true;
+            Item.useTurn = true;
+            Item.consumable = true;*/
+
+            ItemID.Sets.IsAMaterial[Item.type] = false;
+
 			Item.accessory = true;
 		}
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.GetModPlayer<OxeyePlayer>().oxeyeDaisy = true;
+            player.GetModPlayer<OxeyePlayer>().oxeyeItem = Item;
             player.GetModPlayer<OxeyePlayer>().cooldown--;
         }
     }
-
+    
 	public class OxeyePlayer : ModPlayer
 	{
         public bool oxeyeDaisy = false;
         public bool lovesMe = true;
         public int cooldown;
+        public Item oxeyeItem;
 
         public override void ResetEffects()
         {
@@ -73,12 +82,12 @@ namespace GoldLeaf.Items.Misc.Accessories
                         {
                             CombatText.NewText(new Rectangle((int)Main.LocalPlayer.Center.X, (int)Main.LocalPlayer.Center.Y - 12, Main.LocalPlayer.width / 4, Main.LocalPlayer.height / 4), new Color(235, 99, 139, 100), "Loves me!", true, true);
                             Main.LocalPlayer.AddBuff(BuffID.Lovestruck, 600);
-                            //Item.NewItem(Player.GetSource_OnHit(target), target.Hitbox, ItemID.Heart);
-                            NewItemPerfect(target.Center, new Vector2(0, -2f), ItemID.Heart);
+                            Item.NewItem(Player.GetSource_Accessory(oxeyeItem), target.Hitbox, ItemID.Heart);
+                            //NewItemPerfect(target.Center, new Vector2(0, -2f), ItemID.Heart);
 
 
                             for (int k = 0; k < Main.rand.Next(8 + (target.width / 20), 10 + (target.width / 20)); k++)
-                                Gore.NewGore(null, target.Center, new Vector2(Main.rand.NextFloat(-6, 6), Main.rand.NextFloat(-6, 6)), 331, Main.rand.NextFloat(0.8f, 1.2f));
+                                Gore.NewGore(target.GetSource_Death(), target.Center, new Vector2(Main.rand.NextFloat(-6, 6), Main.rand.NextFloat(-6, 6)), 331, Main.rand.NextFloat(0.8f, 1.2f));
                                 //Gore.NewGorePerfect(null, target.Center, new Vector2(Main.rand.NextFloat(-6, 6), Main.rand.NextFloat(-6, 6)), 331, Main.rand.NextFloat(0.8f, 1.2f));
                         }
                         else
@@ -114,6 +123,10 @@ namespace GoldLeaf.Items.Misc.Accessories
             AddMapEntry(new Color(235, 255, 240));
             RegisterItemDrop(ItemType<OxeyeDaisy>());
 
+            Item oxeyeHover = new(ItemType<OxeyeDaisy>());
+
+            Main.HoverItem = oxeyeHover.Clone();
+            //Main.hoverItemName = Language.GetTextValue("Mods.GoldLeaf.Items.OxeyeDaisy.HoverText");
             Main.tileSolid[Type] = false;
             Main.tileFrameImportant[Type] = true;
             Main.tileObsidianKill[Type] = true;
@@ -139,8 +152,31 @@ namespace GoldLeaf.Items.Misc.Accessories
 
             TileObjectData.addTile(Type);
         }
-    }
 
+        public override void MouseOver(int i, int j)
+        {
+            Player Player = Main.LocalPlayer;
+            Player.cursorItemIconID = ItemType<OxeyeDaisy>();
+            Player.noThrow = 2;
+            Player.cursorItemIconEnabled = true;
+        }
+
+        /*public override bool RightClick(int i, int j)
+        {
+            WorldGen.KillTile(i, j);
+            return true;
+        }*/
+
+        /*public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData)
+        {
+            if (Main._shouldUseWindyDayMusic && Main.IsItDay() && Main.rand.NextBool(12))
+            {
+                //Dust.NewDust(new Vector2(i * 16, (j - 1) * 16), 16, 16, DustType<LightDust>(), Main.instance.TilesRenderer.GetWindGridPush(i, j, 1, 1), Main.rand.NextFloat(-0.8f, -1.2f), 0, new Color(231, 168, 16), Main.rand.NextFloat(0.4f, 0.6f));
+                //Gore.NewGore(null, new Vector2(i * 16, j * 16), new Vector2(Main.windSpeedCurrent, Main.rand.NextFloat(-0.8f, -1.2f)), GoreType<OxeyePetal>());
+            }
+        }*/
+    }
+    
     public class OxeyePetal : ModGore
     {
         public override void OnSpawn(Gore gore, IEntitySource source)

@@ -1,0 +1,7 @@
+FrostySet:
+	'''
+	{$CommonItemTooltip.PercentIncreasedMagicDamage}
+	Double Tap {1} to inflict snap freeze on enemies near the cursor
+	snap frozen enemies die at 85% health, does not work on bosses
+	16 second cooldown, killing the enemy resets the cooldown
+	'''

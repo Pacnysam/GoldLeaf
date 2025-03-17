@@ -35,7 +35,7 @@ namespace GoldLeaf.Items.Misc.Weapons
             Item.DefaultToWhip(ProjectileType<ConstellationP>(), 9, 1.2f, 3f, 45);
 
             Item.rare = ItemRarityID.Blue;
-            Item.value = Item.sellPrice(0, 0, 70, 0);
+            Item.value = Item.sellPrice(0, 0, 75, 0);
             Item.autoReuse = true;
         }
 
@@ -43,17 +43,18 @@ namespace GoldLeaf.Items.Misc.Weapons
         {
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.FallenStar, 5);
-            recipe.AddIngredient(ItemID.SunplateBlock, 30);
-            recipe.AddTile(TileID.SkyMill);
+            recipe.AddRecipeGroup(RecipeGroupID.IronBar, 8);
+            recipe.AddTile(TileID.Anvils);
+            recipe.AddCondition(Condition.TimeNight);
             recipe.Register();
 
-            Recipe recipe2 = CreateRecipe();
+            /*Recipe recipe2 = CreateRecipe();
             recipe2.AddIngredient(ItemID.FallenStar, 10);
             recipe2.AddRecipeGroup(RecipeGroupID.IronBar, 8);
             recipe2.AddTile(TileID.Anvils);
             recipe2.AddCondition(GoldLeafConditions.InSurface);
             recipe2.AddCondition(Condition.TimeNight);
-            recipe2.Register();
+            recipe2.Register();*/
         }
 
         public override bool MeleePrefix()
@@ -72,7 +73,7 @@ namespace GoldLeaf.Items.Misc.Weapons
                     Item.position.Y - Main.screenPosition.Y + Item.height - glowTex.Height() * 0.5f
                 ),
                 new Rectangle(0, 0, glowTex.Width(), glowTex.Height()),
-                Color.White,
+                ColorHelper.AdditiveWhite,
                 rotation,
                 glowTex.Size() * 0.5f,
                 scale,
@@ -102,8 +103,6 @@ namespace GoldLeaf.Items.Misc.Weapons
 
     public class ConstellationP : ModProjectile
     {
-        int counter = 0;
-
         private static Asset<Texture2D> glowTex;
 
         public override void SetStaticDefaults()
@@ -121,11 +120,7 @@ namespace GoldLeaf.Items.Misc.Weapons
             Projectile.WhipSettings.RangeMultiplier = 0.6f;
         }
 
-        private float Timer
-        {
-            get => Projectile.ai[0];
-            set => Projectile.ai[0] = value;
-        }
+        ref float Timer => ref Projectile.ai[0];
 
         public override void Load()
         {
@@ -137,16 +132,14 @@ namespace GoldLeaf.Items.Misc.Weapons
             Player player = Main.player[Projectile.owner];
 
             Projectile.WhipSettings.Segments += player.GetModPlayer<ConstellationPlayer>().extraSegments;
-            Projectile.WhipSettings.RangeMultiplier += (0.14f * Main.player[Projectile.owner].GetModPlayer<ConstellationPlayer>().extraSegments);
+            Projectile.WhipSettings.RangeMultiplier += (0.125f * Main.player[Projectile.owner].GetModPlayer<ConstellationPlayer>().extraSegments);
         }
 
         public override void AI()
         {
-            counter++;
-
-            List<Vector2> list = new List<Vector2>();
+            List<Vector2> list = [];
             Projectile.FillWhipControlPoints(Projectile, list);
-            Vector2 pos = list[list.Count - 1];
+            Vector2 pos = list[^1];
 
             Dust d = Dust.NewDustPerfect(pos, DustID.FireworkFountain_Blue);
             //Dust d = Dust.NewDustPerfect(pos, DustType<StarDust>());
@@ -174,7 +167,7 @@ namespace GoldLeaf.Items.Misc.Weapons
             }
             else 
             {
-                Projectile.damage = (int)(Projectile.damage * 0.6f + (player.GetModPlayer<ConstellationPlayer>().extraSegments * 0.05f));
+                Projectile.damage = (int)(Projectile.damage * 0.7f + (player.GetModPlayer<ConstellationPlayer>().extraSegments * 0.05f));
                 DustHelper.DrawStar(target.Center, DustID.FireworkFountain_Blue, 5, target.scale * 1.4f, 1f, 0.7f, 0.85f, 0.5f, true, 0, -1);
             }
         }
@@ -253,22 +246,38 @@ namespace GoldLeaf.Items.Misc.Weapons
                 float rotation = diff.ToRotation() - MathHelper.PiOver2;
                 Color color = Lighting.GetColor(element.ToTileCoordinates());
 
-                Vector2 drawOrigin = new Vector2(glowTex.Width() * 0.5f, Projectile.height * 0.5f);
+                //Vector2 drawOrigin = new(glowTex.Width() * 0.5f, Projectile.height * 0.5f);
+
+                /*for (int k = 0; k < Projectile.oldPos.Length; k++)
+                {
+                    Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + origin; //+ new Vector2(0f, Projectile.gfxOffY);
+
+                    Main.spriteBatch.Draw(glowTex.Value, drawPos, frame, ColorHelper.AdditiveWhite * (0.6f - (0.055f * k)), Projectile.rotation, origin, scale * (1f - (0.075f * k)), flip, 0f);
+                }*/
 
                 Main.EntitySpriteDraw(TextureAssets.Projectile[Type].Value, pos - Main.screenPosition, frame, color, rotation, origin, scale, flip, 0);
-                Main.spriteBatch.Draw(glowTex.Value, pos - Main.screenPosition, frame, Color.White, rotation, origin, scale, flip, 0);
+                Main.spriteBatch.Draw(glowTex.Value, pos - Main.screenPosition, frame, ColorHelper.AdditiveWhite, rotation, origin, scale, flip, 0);
 
                 pos += diff;
             }
             return false;
         }
     }
-
+    
     public class ConstellationPlayer : ModPlayer 
     {
         public int extraSegments = 0;
-        public int maxExtraSegments = 10;
+        public int maxExtraSegments = 12;
         public int segmentTimer = 60;
+
+        public override void ResetEffects()
+        {
+            maxExtraSegments = 12;
+            if (Player.HasBuff(BuffID.StarInBottle))
+                maxExtraSegments += 3;
+            if (!Main.dayTime)
+                maxExtraSegments += 3;
+        }
 
         public override void PreUpdate()
         {

@@ -14,6 +14,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.Audio;
 using ReLogic.Content;
+using GoldLeaf.Items.Grove.Boss;
+using GoldLeaf.Tiles.Decor;
+using GoldLeaf.Tiles.Grove;
 
 namespace GoldLeaf.Items.Grove
 {
@@ -38,9 +41,6 @@ namespace GoldLeaf.Items.Grove
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
-            Color color = Color.White;
-            color.A = 0;
-
             spriteBatch.Draw
             (
                 glowTex.Value,
@@ -50,13 +50,38 @@ namespace GoldLeaf.Items.Grove
                     Item.position.Y - Main.screenPosition.Y + Item.height - glowTex.Height() * 0.5f
                 ),
                 new Rectangle(0, 0, glowTex.Width(), glowTex.Height()),
-                color * ((float)Math.Sin(GoldLeafWorld.rottime) * 0.75f + 0.75f),
+                ColorHelper.AdditiveWhite * ((float)Math.Sin(GoldLeafWorld.rottime) * 0.75f + 0.75f),
                 rotation,
                 glowTex.Size() * 0.5f,
                 scale,
                 SpriteEffects.None,
                 0f
             );
+        }
+
+        public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+        {
+            spriteBatch.Draw
+            (
+                glowTex.Value,
+                position,
+                new Rectangle(0, 0, glowTex.Width(), glowTex.Height()),
+                ColorHelper.AdditiveWhite * ((float)Math.Sin(GoldLeafWorld.rottime) * 0.75f + 0.75f),
+                0,
+                origin,
+                scale,
+                SpriteEffects.None,
+                0f
+            );
+        }
+
+        public override void AddRecipes()
+        {
+            Recipe recipe = CreateRecipe()
+                .AddIngredient(ItemType<Echoslate>(), 25)
+                .AddIngredient(ItemType<EveDroplet>(), 60)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 
@@ -91,7 +116,7 @@ namespace GoldLeaf.Items.Grove
             chainTex = Request<Texture2D>(Texture + "Chain");
         }
 
-        public override float GrappleRange() => 600;
+        public override float GrappleRange() => 645;
         public override void GrappleRetreatSpeed(Player player, ref float speed) { speed = maxSpeed; }
         public override void GrapplePullSpeed(Player player, ref float speed) 
         { 
@@ -104,7 +129,7 @@ namespace GoldLeaf.Items.Grove
             grappleDistance = Vector2.Distance(player.Center, new Vector2(grappleX, grappleY));
             grappleTime++;
 
-            grappleSpeed = Helper.LerpFloat(0, maxSpeed, grappleTime * 0.015f);
+            grappleSpeed = Helper.LerpFloat(0, maxSpeed, grappleTime * 0.0165f);
 
             if (grappleSpeed < minSpeed) grappleSpeed = minSpeed;
             if (grappleSpeed > maxSpeed) grappleSpeed = maxSpeed;

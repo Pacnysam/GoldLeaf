@@ -75,7 +75,7 @@ namespace GoldLeaf.Tiles.Decor
 		{
             glowTex = Request<Texture2D>(Texture + "Glow");
 
-            AddMapEntry(new Color(255, 198, 26), Language.GetText("Wax Candle"));
+            AddMapEntry(new Color(255, 198, 26));
 
             Main.tileSolid[Type] = false;
 			Main.tileFrameImportant[Type] = true;
@@ -116,10 +116,10 @@ namespace GoldLeaf.Tiles.Decor
 
         public override void NumDust(int i, int j, bool fail, ref int num) => num = Main.rand.Next(1, 5);
 
-        public override bool CreateDust(int i, int j, ref int type)
+        /*public override bool CreateDust(int i, int j, ref int type)
         {
             return base.CreateDust(i, j, ref type);
-        }
+        }*/
 
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {

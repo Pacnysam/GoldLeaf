@@ -24,7 +24,7 @@ namespace GoldLeaf.Items.Dungeon
 
         public override void SetDefaults() 
 		{
-			Item.damage = 48;
+			Item.damage = 57;
 			ItemID.Sets.ToolTipDamageMultiplier[Item.type] = 0.8f;
 			Item.DamageType = DamageClass.Magic;
 			Item.mana = 34;
@@ -38,16 +38,21 @@ namespace GoldLeaf.Items.Dungeon
             Item.shoot = ProjectileType<WhirlpoolP>();
 			Item.knockBack = 9;
 			Item.value = 100000;
-			Item.rare = ItemRarityID.Green;
+			Item.rare = ItemRarityID.Orange;
 			//Item.UseSound = SoundID.Item167;
             Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/HollowKnight/JellyfishMiniDeath");
             Item.autoReuse = false;
 			Item.channel = true;
 			Item.noMelee = true;
         }
-		
 
-		public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+            Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, 0, 5);
+            return false;
+        }
+
+        public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
 		{
 			Texture2D texture;
 			texture = TextureAssets.Item[Item.type].Value;
@@ -91,9 +96,10 @@ namespace GoldLeaf.Items.Dungeon
 			ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
 			ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		}
+        
+        public ref float Counter => ref Projectile.ai[0];
+        public ref float Bounces => ref Projectile.ai[1];
 
-		int bounces = 5;
-		int counter;
 		public override void SetDefaults()
 		{
 			Projectile.width = 2;
@@ -104,9 +110,12 @@ namespace GoldLeaf.Items.Dungeon
 			Projectile.timeLeft = 200;
 			Projectile.ignoreWater = true;
 
+            Projectile.netImportant = true;
+            Projectile.ai[1] = 5;
+
             Projectile.DamageType = DamageClass.Magic;
 
-            counter = Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
+            Counter = Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
 
 			Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.35f;
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravityDelay = 15;
@@ -129,13 +138,13 @@ namespace GoldLeaf.Items.Dungeon
 
 			if (player.channel)
 			{
-				if (counter >= 10 && counter <= 40 && Main.myPlayer == Projectile.owner)
+				if (Counter >= 10 && Counter <= 40 && Main.myPlayer == Projectile.owner)
 				{
 					Projectile.velocity = Projectile.velocity.Length() * Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.MouseWorld) * Projectile.velocity.Length() * 0.5f, 0.15f).SafeNormalize(Vector2.Normalize(Projectile.velocity));
 					Projectile.netUpdate = true;
 				}
 			}
-			counter++;
+			Counter++;
 		}
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
@@ -154,10 +163,10 @@ namespace GoldLeaf.Items.Dungeon
 
 			SoundEngine.PlaySound(new SoundStyle("Goldleaf/Sounds/SE/SplashBounce"), Projectile.Center);
 
-			bounces--;
+			Bounces--;
 			Projectile.velocity *= 0.825f;
 
-			if (bounces > 0)
+			if (Bounces > 0)
 			{
 				return false; 
 			} 
@@ -185,7 +194,7 @@ namespace GoldLeaf.Items.Dungeon
 
             for (float k = 0; k < Main.rand.Next(7, 11); k++) 
 			{
-				int p = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center.X, Projectile.Center.Y, Main.rand.Next(-7, 7), Main.rand.Next(-16, 7), ProjectileID.WaterBolt, Projectile.damage / 4, 0, Projectile.owner, 0f, 0f);
+				int p = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center.X, Projectile.Center.Y, Main.rand.Next(-7, 7), Main.rand.Next(-16, 7), ProjectileID.WaterBolt, Projectile.damage / 3, 0, Projectile.owner, 0f, 0f);
 				Main.projectile[p].GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.7f;
 				Main.projectile[p].ai[0] = 3;
 			}
@@ -296,7 +305,7 @@ namespace GoldLeaf.Items.Dungeon
         }
     }*/
 
-    public class WhirlpoolBurst : ModProjectile
+    /*public class WhirlpoolBurst : ModProjectile
     {
         public override string Texture => "GoldLeaf/Textures/Vortex1";
 
@@ -340,5 +349,5 @@ namespace GoldLeaf.Items.Dungeon
 
             return false;
         }
-    }
+    }*/
 }

@@ -11,14 +11,17 @@ using Terraria.UI;
 using Terraria.ModLoader;
 using static Terraria.WorldGen;
 using static Terraria.ModLoader.ModContent;
+using Terraria.Localization;
+using ReLogic.Content;
+using GoldLeaf.Items.Blizzard;
 
 
 namespace GoldLeaf.Core //most of this is snatched from starlight river and spirit, i (pacnysam) did not code any of this!
 {
-    public static class Helper
+    public static partial class Helper
     {
         public static Rectangle ToRectangle(this Vector2 vector) => new Rectangle(0, 0, (int)vector.X, (int)vector.Y);
-        public static Vector2 ScreenSize => new Vector2(Main.screenWidth, Main.screenHeight);
+        public static Vector2 ScreenSize => new (Main.screenWidth, Main.screenHeight);
 
         public static bool OnScreen(Vector2 pos) => pos.X > -16 && pos.X < Main.screenWidth + 16 && pos.Y > -16 && pos.Y < Main.screenHeight + 16;
 
@@ -32,7 +35,25 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
 
         public static Vector3 ScreenCoord(this Vector3 vector) => new(-1 + (vector.X / Main.screenWidth * 2), (-1 + (vector.Y / Main.screenHeight * 2f)) * -1, 0);
 
-        public static Color IndicatorColor => Color.White * (float)(0.2f + 0.8f * (1 + Math.Sin(GoldLeafWorld.rottime)) / 2f);
+        public static bool IsVanitySet(Player player, int head, int body, int legs) 
+        {
+            if (player.armor[0].type == head && player.armor[10].type == ItemID.None || player.armor[10].type == head &&
+                player.armor[1].type == body && player.armor[11].type == ItemID.None || player.armor[11].type == body &&
+                player.armor[2].type == legs && player.armor[12].type == ItemID.None || player.armor[12].type == legs) return true;
+            return false;
+        }
+        public static bool IsVanitySet(Player player, int head, int body)
+        {
+            if (player.armor[0].type == head && player.armor[10].type == ItemID.None || player.armor[10].type == head &&
+                player.armor[1].type == body && player.armor[11].type == ItemID.None || player.armor[11].type == body) return true;
+            return false;
+        }
+
+        public static string EmptyTexString => "GoldLeaf/Textures/Empty";
+        public static Texture2D EmptyTex => Request<Texture2D>("GoldLeaf/Textures/Empty").Value;
+
+        public static string SetBonusKey => Language.GetTextValue(Main.ReversedUpDownArmorSetBonuses ? "Key.UP" : "Key.DOWN");
+        public static string SetBonusSecondaryKey() => Language.GetTextValue(Main.ReversedUpDownArmorSetBonuses ? "Key.DOWN" : "Key.UP");
 
         public static float LerpFloat(float min, float max, float val)
         {
@@ -82,6 +103,28 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
 
             return false;
         }*/
+
+        public static int Counter(this Projectile projectile) 
+        {
+            return projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
+        }
+
+        public static bool ZoneForest(this Player Player)
+        {
+            return !Player.ZoneJungle
+                && !Player.ZoneDungeon
+                && !Player.ZoneCorrupt
+                && !Player.ZoneCrimson
+                && !Player.ZoneHallow
+                && !Player.ZoneSnow
+                && !Player.ZoneUndergroundDesert
+                && !Player.ZoneGlowshroom
+                && !Player.ZoneMeteor
+                && !Player.ZoneBeach
+                && !Player.ZoneDesert
+                && !Player.GetModPlayer<GoldLeafPlayer>().ZoneGrove
+                && Player.ZoneOverworldHeight;
+        }
 
         public static string TicksToTime(int ticks)
         {
@@ -241,6 +284,21 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
 
             return items >= count;
         }
+
+        /*public static bool HasItems(player player, int[,] types, bool mustHaveAll) 
+        {
+            int[] items;
+
+            for (int k = 0; k < types.Length|| k < 3; k++)
+            {
+                if (HasItem(player, types[k, 0], types[k, 1])) 
+                {
+                    if (!mustHaveAll) return true;
+                    
+                }
+            }
+            return false;
+        }*/
 
         public static bool HasAccessory(Player player, int item, bool vanity) 
         {
@@ -462,8 +520,14 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
         public static bool IsValidDebuff(Player player, int buffindex)
         {
             int bufftype = player.buffType[buffindex];
-            bool vitalbuff = (bufftype == BuffID.PotionSickness || bufftype == BuffID.ManaSickness || bufftype == BuffID.ChaosState);
+            bool vitalbuff = (bufftype == BuffID.PotionSickness || bufftype == BuffID.ManaSickness || bufftype == BuffID.ChaosState || bufftype == BuffID.Tipsy);
             return player.buffTime[buffindex] > 2 && Main.debuff[bufftype] && !Main.buffNoTimeDisplay[bufftype] && !Main.vanityPet[bufftype] && !vitalbuff;
+        }
+
+        public static bool IsValidDebuff(int bufftype, int time)
+        {
+            bool vitalbuff = (bufftype == BuffID.PotionSickness || bufftype == BuffID.ManaSickness || bufftype == BuffID.ChaosState || bufftype == BuffID.Tipsy || bufftype == BuffType<SafetyBlanketBuff>());
+            return time > 2 && Main.debuff[bufftype] && !Main.buffNoTimeDisplay[bufftype] && !Main.vanityPet[bufftype] && !vitalbuff;
         }
 
         public static void AddScreenshake(Player player, float amount, Vector2 position)
@@ -714,8 +778,92 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
         }
     }
 
-    public static class ColorHelper 
+    public static class ColorHelper
     {
+        public static Color AdditiveWhite => new(255, 255, 255) { A = 0 };
+
+        public static Color AuroraColor() 
+        {
+            float timer = GoldLeafWorld.Timer % 9;
+            var auroraGreen = new Color(0, 255, 189);
+            var auroraBlue = new Color(0, 164, 242);
+            var auroraPurple = new Color(122, 63, 255);
+
+            if (timer < 2)
+                return Color.Lerp(auroraGreen, auroraBlue, timer / 2);
+            else if (timer < 4)
+                return Color.Lerp(auroraBlue, auroraPurple, (timer - 2) / 2);
+            else if (timer < 6)
+                return Color.Lerp(auroraPurple, auroraBlue, (timer - 4) / 2);
+            else
+                return Color.Lerp(auroraBlue, auroraGreen, (timer - 6) / 2);
+
+            /*float sin = (1f + (float)Math.Sin(GoldLeafWorld.rottime) * 0.5f);
+            float cos = (1f + (float)Math.Cos(GoldLeafWorld.rottime) * 0.5f);
+
+            return new Color(80 * sin/255f, 190 * cos/255f, 220/255f);*/
+        }
+
+        public static Color AuroraColor(float Timer)
+        {
+            float timer = Timer % 9;
+            var auroraGreen = new Color(0, 255, 189);
+            var auroraBlue = new Color(0, 164, 242);
+            var auroraPurple = new Color(122, 63, 255);
+
+            if (timer < 2)
+                return Color.Lerp(auroraGreen, auroraBlue, timer / 2);
+            else if (timer < 4)
+                return Color.Lerp(auroraBlue, auroraPurple, (timer - 2) / 2);
+            else if (timer < 6)
+                return Color.Lerp(auroraPurple, auroraBlue, (timer - 4) / 2);
+            else
+                return Color.Lerp(auroraBlue, auroraGreen, (timer - 6) / 2);
+        }
+
+        public static Color AuroraAccentColor()
+        {
+            float timer = GoldLeafWorld.Timer % 9;
+            var auroraGreen = new Color(0, 255, 189);
+            var auroraBlue = new Color(0, 164, 242);
+            var auroraPurple = new Color(122, 63, 255);
+
+            if (timer < 2)
+                return Color.Lerp(auroraPurple, auroraBlue, timer / 2);
+            else if (timer < 4)
+                return Color.Lerp(auroraBlue, auroraGreen, (timer - 2) / 2);
+            else if (timer < 6)
+                return Color.Lerp(auroraGreen, auroraBlue, (timer - 4) / 2);
+            else
+                return Color.Lerp(auroraBlue, auroraPurple, (timer - 6) / 2);
+        }
+
+        public static Color AuroraAccentColor(float Timer)
+        {
+            float timer = Timer % 9;
+            var auroraGreen = new Color(0, 255, 189);
+            var auroraBlue = new Color(0, 164, 242);
+            var auroraPurple = new Color(122, 63, 255);
+
+            if (timer < 2)
+                return Color.Lerp(auroraPurple, auroraBlue, timer / 2);
+            else if (timer < 4)
+                return Color.Lerp(auroraBlue, auroraGreen, (timer - 2) / 2);
+            else if (timer < 6)
+                return Color.Lerp(auroraGreen, auroraBlue, (timer - 4) / 2);
+            else
+                return Color.Lerp(auroraBlue, auroraPurple, (timer - 6) / 2);
+        }
+
+        public static Color IndicatorColor()
+        {
+            return Color.White * (float)(0.2f + 0.8f * (1 + Math.Sin(GoldLeafWorld.rottime)) / 2f);
+        }
+        public static Color IndicatorColor(Color color)
+        {
+            return color * (float)(0.2f + 0.8f * (1 + Math.Sin(GoldLeafWorld.rottime)) / 2f);
+        } 
+
         public static Color GemColor(int gem)
         {
             switch (gem)
@@ -754,6 +902,78 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
                 case ItemID.Amber:
                     {
                         return new Color(244, 133, 27);
+                    }
+            }
+            return Color.White;
+        }
+
+        public static Color RarityColor(int rarity)
+        {
+            switch (rarity)
+            {
+                case ItemRarityID.Gray:
+                    {
+                        return Colors.RarityTrash;
+                    }
+                case ItemRarityID.White:
+                    {
+                        return Color.White;
+                    }
+                case ItemRarityID.Blue:
+                    {
+                        return Colors.RarityBlue;
+                    }
+                case ItemRarityID.Green:
+                    {
+                        return Colors.RarityGreen;
+                    }
+                case ItemRarityID.Orange:
+                    {
+                        return Colors.RarityOrange;
+                    }
+                case ItemRarityID.LightRed:
+                    {
+                        return Colors.RarityRed;
+                    }
+                case ItemRarityID.Pink:
+                    {
+                        return Colors.RarityPink;
+                    }
+                case ItemRarityID.LightPurple:
+                    {
+                        return Colors.RarityPurple;
+                    }
+                case ItemRarityID.Lime:
+                    {
+                        return Colors.RarityLime;
+                    }
+                case ItemRarityID.Yellow:
+                    {
+                        return Colors.RarityYellow;
+                    }
+                case ItemRarityID.Cyan:
+                    {
+                        return Colors.RarityCyan;
+                    }
+                case ItemRarityID.Red:
+                    {
+                        return Colors.RarityDarkRed;
+                    }
+                case ItemRarityID.Purple:
+                    {
+                        return Colors.RarityDarkPurple;
+                    }
+                case ItemRarityID.Expert:
+                    {
+                        return Main.DiscoColor;
+                    }
+                case ItemRarityID.Master:
+                    {
+                        return Main.mcColor;
+                    }
+                case ItemRarityID.Quest:
+                    {
+                        return Colors.RarityAmber;
                     }
             }
             return Color.White;

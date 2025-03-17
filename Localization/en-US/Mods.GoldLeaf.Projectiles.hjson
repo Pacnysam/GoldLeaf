@@ -1,26 +1,27 @@
 VampireBatP.DisplayName: Vampire Bat
 VampireBolt.DisplayName: Vampire Bolt
+EveDropletP.DisplayName: Eve Droplet
+GroveHookP.DisplayName: Wisp Hook
 AetherBeam.DisplayName: Aether Spark
 AetherBolt.DisplayName: Aether's Comet
 AetherBurst.DisplayName: Aether's Comet
+AetherEmber.DisplayName: Aether Ember
 WhirlpoolP.DisplayName: Whirlpool
-QuetzalP.DisplayName: Quetzalcoatl
-QuetzalSmallP.DisplayName: Quetzalcoatl
-EveDropletP.DisplayName: Eve Droplet
+WhirlpoolBurst.DisplayName: Whirlpool
+QuetzalP.DisplayName: Quetzalcoatl Bolt
+QuetzalSmallP.DisplayName: Quetzalcoatl Spark
 ClutterScale.DisplayName: Shadow Scale
 ClutterTissue.DisplayName: Tissue Sample
 MeteorMissileP.DisplayName: Meteor Missile
 Ember.DisplayName: Ember
-AetherEmber.DisplayName: Aether Ember
 ConstellationP.DisplayName: Constellation
 SedimentP.DisplayName: Sediment
 SedimentTopaz.DisplayName: Topaz Sickle
 SapphireBurst.DisplayName: Sapphire Light
 FallingEmerald.DisplayName: Emerald
-GroveHookP.DisplayName: Grove Hook
-ArcticWraith.DisplayName: Arctic Wraith
-RubyBeam.DisplayName: Ruby Beam
+RubyBeam.DisplayName: Ruby Bolt
 BasicRubyBolt.DisplayName: Ruby Bolt
-WhirlpoolBurst.DisplayName: Whirlpool Burst
 GoonaiP.DisplayName: Goonai
 WatcherPunch.DisplayName: Watcher Punch
+ToxicPositivityEffect.DisplayName: Toxic Positivity
+ArcticWraith.DisplayName: Rimeflora Wraith

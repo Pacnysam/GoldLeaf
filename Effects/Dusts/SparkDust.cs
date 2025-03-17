@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GoldLeaf.Core;
+using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.ModLoader;
@@ -83,8 +84,7 @@ namespace GoldLeaf.Effects.Dusts
             return false;
         }
 
-        public override Color? GetAlpha(Dust dust, Color lightColor)
-            => new Color(255, 255, 255, 160);
+        public override Color? GetAlpha(Dust dust, Color lightColor) => new Color(255, 255, 255, 160);
     }
 }
 

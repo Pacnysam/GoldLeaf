@@ -22,7 +22,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
                         LeadingConditionRule notExpertRule = new(new Conditions.NotExpert());
 
                         notExpertRule.OnSuccess(ItemDropRule.Common(ItemID.SlimeStaff, 3));
-                        notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<Goonai>(), 2, 60, 80));
+                        notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<Goonai>(), 2, 90, 110));
                         npcLoot.Add(notExpertRule);
                         break;
                     }
@@ -84,7 +84,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
                 case ItemID.KingSlimeBossBag:
                     {
                         itemLoot.Add(ItemDropRule.Common(ItemID.SlimeStaff, 2));
-                        itemLoot.Add(ItemDropRule.Common(ItemType<Goonai>(), 2, 70, 90));
+                        itemLoot.Add(ItemDropRule.Common(ItemType<Goonai>(), 2, 100, 120));
                         break;
                     }
                 case ItemID.EaterOfWorldsBossBag:

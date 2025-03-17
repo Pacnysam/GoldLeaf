@@ -16,11 +16,11 @@ namespace GoldLeaf.Core
         [DefaultValue(true)]
         public bool ClassGimmicks = true;
 
-        [Label("Gem Staff Reworks")]
+        /*[Label("Gem Staff Reworks")]
         [Tooltip("Reworks gem staves")]
         [ReloadRequired]
         [DefaultValue(true)]
-        public bool OreStaffReworks = true;
+        public bool OreStaffReworks = true;*/
 
         [Label("Buff Changes")]
         [Tooltip("Modifies several buffs")]
@@ -58,7 +58,7 @@ namespace GoldLeaf.Core
         public bool Radcap = false;*/
     }
 
-    public class MiscConfig : ModConfig
+    /*public class MiscConfig : ModConfig
     {
         public override ConfigScope Mode => ConfigScope.ClientSide;
 
@@ -68,6 +68,5 @@ namespace GoldLeaf.Core
         [DefaultValue(false)]
         public bool ThrowerSupport = false;
 
-
-    }
+    }*/
 }

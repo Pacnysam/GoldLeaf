@@ -20,9 +20,11 @@ namespace GoldLeaf.Items.Grove
 	public class EveDroplet : ModItem
 	{
         private static Asset<Texture2D> tex;
+        private static Asset<Texture2D> glowTex;
         public override void Load()
         {
             tex = Request<Texture2D>(Texture);
+            glowTex = Request<Texture2D>(Texture + "Glow");
         }
 
         int dustTime = 12;
@@ -36,6 +38,7 @@ namespace GoldLeaf.Items.Grove
 		{
 			Item.damage = 19;
             Item.GetGlobalItem<GoldLeafItem>().throwingDamageType = DamageClass.Ranged;
+            Item.DamageType = DamageClass.Ranged;
             Item.width = 20;
 			Item.height = 24;
 			Item.useTime = 20;
@@ -47,9 +50,9 @@ namespace GoldLeaf.Items.Grove
 			Item.noUseGraphic = true;
 			Item.useStyle = ItemUseStyleID.Swing;
 			Item.knockBack = 2;
-            Item.value = Item.sellPrice(0, 0, 0, 10);
-            Item.rare = ItemRarityID.White;
-			Item.UseSound = SoundID.Item1;
+            Item.value = Item.buyPrice(0, 0, 1, 25);
+            Item.rare = ItemRarityID.Blue;
+            Item.UseSound = SoundID.Item1;
 			Item.autoReuse = true;
 
             //ItemID.Sets.ItemIconPulse[Item.type] = true;
@@ -71,16 +74,26 @@ namespace GoldLeaf.Items.Grove
 
         public override void Update(ref float gravity, ref float maxFallSpeed)
         {
-            if (Item.timeSinceItemSpawned % dustTime == 0) 
+            if (Item.timeSinceItemSpawned % dustTime == 0)
+            {
+                Dust dust2 = Dust.NewDustPerfect(Item.Center + new Vector2(0f, Item.height * -0.1f) + Main.rand.NextVector2CircularEdge(Item.width * 0.6f, Item.height * 0.6f) * (0.3f + Main.rand.NextFloat() * 0.5f), 279, new Vector2(0f, (0f - Main.rand.NextFloat()) * 0.3f - 1.5f), 0, new Color(201, 60, 210) { A = 0 }, Main.rand.NextFloat(0.4f, 0.6f));
+                dust2.fadeIn = 1.1f;
+                dust2.noGravity = true;
+                dust2.noLight = true;
+
+                dustTime = Main.rand.Next(15, 30);
+            }
+
+            /*if (Item.timeSinceItemSpawned % dustTime == 0) 
             {
                 dustTime = Main.rand.Next(9, 38);
 
-                var dust = Dust.NewDustPerfect(new Vector2(Item.position.X + Main.rand.Next(0, Item.width), Item.position.Y + Main.rand.Next(0, Item.height)), DustType<LightDust>(), new Vector2(0, Main.rand.NextFloat(-0.4f, -1.2f)), 0, new Color(255, 198, 249), Main.rand.NextFloat(0.3f, 0.65f));
+                var dust = Dust.NewDustPerfect(new Vector2(Item.Center.X + Main.rand.Next(Item.width / -3, Item.width / 3), Item.position.Y + Main.rand.Next(0, Item.height)), DustType<LightDust>(), new Vector2(0, Main.rand.NextFloat(-0.4f, -1.2f)), 0, new Color(201, 60, 210) { A = 0 }, Main.rand.NextFloat(0.35f, 0.75f));
                 dust.noGravity = true;
                 dust.fadeIn = 1.4f;
 
                 //new Color(255, 152, 221);
-            }
+            }*/
 
             /*if (Main.rand.NextBool(20))
             {
@@ -93,33 +106,53 @@ namespace GoldLeaf.Items.Grove
 
         public override void PostUpdate()
         {
-
             float glo = 70 * 0.005f;
             glo *= Main.essScale * 0.5f;
             Lighting.AddLight((int)((Item.position.X + (Item.width / 2)) / 16f), (int)((Item.position.Y + (Item.height / 2)) / 16f), ((238 / 255) * 0.2f) * glo, ((107 / 255) * 0.2f) * glo, ((192 / 255) * 0.2f) * glo);
         }
 
+        public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
+        {
+            Color color = new(201, 60, 210) { A = 0 };
+            spriteBatch.Draw(glowTex.Value, Item.Center - Main.screenPosition, null, color * ((float)Math.Sin(GoldLeafWorld.rottime) * 0.5f), rotation, glowTex.Size() / 2, scale, SpriteEffects.None, 0f);
+
+            return true;
+        }
+        
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
-            Color color = Color.White; color.A = 0;
+            //Color color = new(255, 198, 249) { A = 0 };
+            spriteBatch.Draw(TextureAssets.Item[Item.type].Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite * ((float)Math.Sin(GoldLeafWorld.rottime - 0.75f) * 0.75f), rotation, tex.Size() / 2, scale, SpriteEffects.None, 0f);
 
-            spriteBatch.Draw
+            /*spriteBatch.Draw
             (
-
-                tex.Value,
+                glowTex.Value,
                 new Vector2
                 (
                     Item.position.X - Main.screenPosition.X + Item.width * 0.5f,
-                    Item.position.Y - Main.screenPosition.Y + Item.height - tex.Height() * 0.5f
+                    Item.position.Y - Main.screenPosition.Y + Item.height - glowTex.Height() * 0.5f
                 ),
-                new Rectangle(0, 0, tex.Width(), tex.Height()),
+                new Rectangle(0, 0, glowTex.Width(), glowTex.Height()),
                 color * ((float)Math.Sin(GoldLeafWorld.rottime) * 0.5f),
                 rotation,
-                tex.Size() * 0.5f,
+                glowTex.Size() * 0.5f,
                 scale,
                 SpriteEffects.None,
                 0f
-            );
+            );*/
+        }
+
+        public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+        {
+            Color color = new(201, 60, 210) { A = 0 };
+            spriteBatch.Draw(glowTex.Value, position, null, color * ((float)Math.Sin(GoldLeafWorld.rottime) * 0.5f), 0, glowTex.Size() / 2, scale, SpriteEffects.None, 0f);
+
+            return true;
+        }
+
+        public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+        {
+            spriteBatch.Draw(TextureAssets.Item[Item.type].Value, position, null, ColorHelper.AdditiveWhite * ((float)Math.Sin(GoldLeafWorld.rottime - 0.75f) * 0.75f), 0, origin, scale, SpriteEffects.None, 0f);
         }
     }
 
@@ -201,21 +234,6 @@ namespace GoldLeaf.Items.Grove
             {
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<EveDust>(), Main.rand.NextFloat(-3 , 3) + Projectile.velocity.X / 3, Main.rand.Next(-6, 3) + Projectile.velocity.Y / 3);
             }
-        }
-    }
-
-    internal class EveDust : ModDust
-    {
-        public override void SetStaticDefaults()
-        {
-            UpdateType = 33;
-        }
-
-        public override void OnSpawn(Dust dust)
-        {
-            dust.alpha = 80;
-            dust.velocity *= 0.7f;
-            dust.velocity.Y += 1f;
         }
     }
 }
