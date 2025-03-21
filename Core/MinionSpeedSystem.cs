@@ -1,0 +1,82 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using Terraria;
+using Terraria.Enums;
+using Terraria.GameContent.Drawing;
+using Terraria.ID;
+using Terraria.Localization;
+using Terraria.ModLoader;
+using Terraria.ObjectData;
+using static Terraria.ModLoader.ModContent;
+using static GoldLeaf.Core.Helper;
+using GoldLeaf.Tiles.Decor;
+using GoldLeaf.Core;
+using GoldLeaf.Items.Grove;
+using GoldLeaf.Items.Blizzard;
+using System;
+using Terraria.ModLoader.IO;
+using System.IO;
+using GoldLeaf.Items.Potions;
+using System.Collections.Generic;
+
+namespace GoldLeaf.Core
+{
+    public class MinionSpeedPlayer : ModPlayer 
+    {
+        public float minionSpeed = 0f;
+        public float sentrySpeed = 0f;
+
+        public override void ResetEffects()
+        {
+            minionSpeed = 0f;
+            sentrySpeed = 0f;
+        }
+    }
+
+    public class MinionSpeedProjectile : GlobalProjectile
+    {
+        public override bool InstancePerEntity => true;
+
+        public static List<int> summonSpeedImmune = [ProjectileID.Spazmamini, ProjectileID.DeadlySphere];
+
+        private float minionSpeedCounter;
+        private float sentrySpeedCounter;
+        private int extraUpdateCache;
+
+        public override bool PreAI(Projectile projectile)
+        {
+            Player player = Main.player[projectile.owner];
+
+            if (player != null && !summonSpeedImmune.Contains(projectile.type))
+            {
+                for (int k = 0; k < extraUpdateCache; extraUpdateCache--)
+                {
+                    if (projectile.extraUpdates > 0)
+                        projectile.extraUpdates--;
+                }
+
+                if (projectile.minion) 
+                {
+                    minionSpeedCounter += player.GetModPlayer<MinionSpeedPlayer>().minionSpeed;
+
+                    for (; minionSpeedCounter >= 1; minionSpeedCounter--)
+                    {
+                        projectile.extraUpdates++; extraUpdateCache++;
+                    }
+                }
+                if (projectile.sentry)
+                {
+                    sentrySpeedCounter += player.GetModPlayer<MinionSpeedPlayer>().sentrySpeed;
+
+                    for (; sentrySpeedCounter >= 1; sentrySpeedCounter--)
+                    {
+                        projectile.extraUpdates++; extraUpdateCache++;
+                    }
+                }
+            }
+
+            return true;
+        }
+    }
+}

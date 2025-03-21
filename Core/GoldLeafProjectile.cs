@@ -22,6 +22,7 @@ namespace GoldLeaf.Core
         public bool canSpawnMiniStars = true;
         public bool canSuperCrit = true;
 
+        public float critDamageMult = 1f;
         public float critDamageMod = 0f;
 
         public float gravity = 0f;
@@ -29,6 +30,8 @@ namespace GoldLeaf.Core
 
         public int lifesteal;
         public int lifestealMax;
+
+        public int summonCritChance = 0;
 
         public DamageClass throwingDamageType = DamageClass.Default;
 

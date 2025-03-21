@@ -58,7 +58,7 @@ namespace GoldLeaf.Core
                     }
                 case NPCID.DyeTrader:
                     {
-                        shop.Add<RetroDye>(GoldLeafConditions.UsingGameboy);
+                        //shop.Add<RetroDye>(GoldLeafConditions.UsingGameboy);
                         //shop.Add<RetroDye>(Condition.NpcIsPresent(NPCID.GoblinTinkerer));
                         break;
                     }

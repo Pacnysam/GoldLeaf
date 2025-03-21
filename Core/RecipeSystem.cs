@@ -29,7 +29,7 @@ namespace GoldLeaf.Core
                 {
                     recipe.AddOnCraftCallback(RecipeCallbacks.AnvilCraftEffect);
                 }
-                if (recipe.HasTile(TileID.Solidifier) || (recipe.TryGetIngredient(ItemID.Gel, out Item gel) && !recipe.HasRecipeGroup(RecipeGroup.recipeGroupIDs["Wood"])))
+                if (recipe.HasTile(TileID.Solidifier) || (recipe.TryGetIngredient(ItemID.Gel, out Item gel) && (!recipe.HasRecipeGroup(RecipeGroup.recipeGroupIDs["Wood"]) || !recipe.HasIngredient(ItemID.Torch))))
                 {
                     recipe.AddOnCraftCallback(RecipeCallbacks.GelCraftEffect);
                 }

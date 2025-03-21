@@ -44,7 +44,7 @@ namespace GoldLeaf.Items.Potions
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.BottledWater);
             recipe.AddIngredient(ItemID.CobaltOre);
-            //recipe.AddIngredient(ItemType<Demitoxin>());
+            recipe.AddIngredient(ItemType<Demitoxin>());
             recipe.AddIngredient(ItemID.LifeCrystal);
             recipe.AddTile(TileID.Bottles);
             recipe.Register();
@@ -52,7 +52,7 @@ namespace GoldLeaf.Items.Potions
             Recipe recipe2 = CreateRecipe();
             recipe2.AddIngredient(ItemID.BottledWater);
             recipe2.AddIngredient(ItemID.PalladiumOre);
-            //recipe2.AddIngredient(ItemType<Demitoxin>());
+            recipe2.AddIngredient(ItemType<Demitoxin>());
             recipe2.AddIngredient(ItemID.LifeCrystal);
             recipe2.AddTile(TileID.Bottles);
             recipe2.Register();
@@ -66,24 +66,6 @@ namespace GoldLeaf.Items.Potions
         public override void Update(Player player, ref int buffIndex)
         {
             player.GetModPlayer<PotionPlayer>().vampirePotion = true;
-        }
-    }
-
-    public partial class PotionPlayer : ModPlayer 
-    {
-        public bool vampirePotion = false;
-
-        public override void ResetEffects()
-        {
-            vampirePotion = false;
-        }
-
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-        {
-            if (vampirePotion && hit.Crit)
-            {
-                Main.LocalPlayer.Heal(1 + damageDone/35);
-            }
         }
     }
 }

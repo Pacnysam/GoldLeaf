@@ -254,12 +254,12 @@ Goonai: {
 }
 
 SentryPotion: {
-	DisplayName: Artillery Potion
+	DisplayName: Ordnance Potion
 	Tooltip: Increases your max number of sentries by 1
 }
 
 JumpBoostPotion: {
-	DisplayName: Jump Boost Potion
+	DisplayName: Leaping Potion
 	Tooltip: Increases jump height and allows auto-jump
 }
 
@@ -268,9 +268,9 @@ VampirePotion: {
 	Tooltip: Critical strikes gain lifesteal
 }
 
-DiligencePotion: {
-	DisplayName: Diligence Potion
-	Tooltip: Allows minions to critically strike
+MinionCritPotion: {
+	DisplayName: Attentiveness Potion
+	Tooltip: Allows summon weapons to critically strike
 }
 
 MinionSpeedPotion: {
@@ -284,12 +284,17 @@ MinionSpeedPotion: {
 
 FinessePotion: {
 	DisplayName: Finesse Potion
-	Tooltip: Increases attack speed by 20%
+	Tooltip: Increases attack speed by 15%
 }
 
 VigorPotion: {
 	DisplayName: Vigor Potion
-	Tooltip: Critical strike damage is doubled
+	Tooltip: Increases critical strike damage by 100%
+}
+
+ConsistencyPotion: {
+	DisplayName: Consistency Potion
+	Tooltip: Removes random damage variation
 }
 
 WatcherEyedrops: {
@@ -358,7 +363,7 @@ FrostyRobe: {
 
 SafetyBlanket: {
 	DisplayName: Safety Blanket
-	Tooltip: Prevents a single debuff, goes on cooldown for half of the unrealized debuff's duration
+	Tooltip: Prevents a single debuff, goes on cooldown for a portion of the unrealized debuff's duration
 }
 
 FrigidMask: {
@@ -376,6 +381,11 @@ SplashGemItem: {
 	Tooltip: ""
 }
 
+EveGemItem: {
+	DisplayName: Eve Gem
+	Tooltip: ""
+}
+
 ToxinBossMusicBox: {
 	Tooltip: ""
 	DisplayName: Music Box (Toxin Grove Boss)
@@ -384,4 +394,9 @@ ToxinBossMusicBox: {
 GroveBossMusicBox: {
 	Tooltip: ""
 	DisplayName: Music Box (Fallen Swordsman)
+}
+
+BottledShimmer: {
+	DisplayName: Bottled Shimmer
+	Tooltip: ""
 }

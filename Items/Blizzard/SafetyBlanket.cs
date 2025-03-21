@@ -77,17 +77,17 @@ namespace GoldLeaf.Items.Blizzard
 
         public override void Load()
         {
-            On_Player.AddBuff_DetermineBuffTimeToAdd += SafetyBuffTime;
+            //On_Player.AddBuff_DetermineBuffTimeToAdd += SafetyBuffTime;
             On_Player.AddBuff += SafetyBuff;
         }
 
         public override void Unload()
         {
-            On_Player.AddBuff_DetermineBuffTimeToAdd -= SafetyBuffTime;
+            //On_Player.AddBuff_DetermineBuffTimeToAdd -= SafetyBuffTime;
             On_Player.AddBuff -= SafetyBuff;
         }
 
-        private static int SafetyBuffTime(On_Player.orig_AddBuff_DetermineBuffTimeToAdd orig, Player self, int type, int time1)
+        /*private static int SafetyBuffTime(On_Player.orig_AddBuff_DetermineBuffTimeToAdd orig, Player self, int type, int time1)
         {
             int buffTime = orig(self, type, time1);
 
@@ -97,7 +97,7 @@ namespace GoldLeaf.Items.Blizzard
                 return buffTime / 2;
             }
             return buffTime;
-        }
+        }*/
 
         private static void SafetyBuff(On_Player.orig_AddBuff orig, Player self, int type, int timeToAdd, bool quiet, bool foodHack)
         {
@@ -105,7 +105,7 @@ namespace GoldLeaf.Items.Blizzard
             {
                 if (Main.myPlayer == self.whoAmI)
                 {
-                    SoundEngine.PlaySound(SoundID.DD2_DarkMageHealImpact);
+                    SoundEngine.PlaySound(SoundID.DD2_DarkMageHealImpact with { Volume = 1.35f });
                     Projectile.NewProjectile(self.GetSource_Accessory(self.GetModPlayer<SafetyBlanketPlayer>().safetyBlanketItem), self.MountedCenter, Vector2.Zero, ProjectileType<ToxicPositivityEffect>(), 0, 0, self.whoAmI);
                 }
 

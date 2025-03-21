@@ -20,16 +20,16 @@ ToxicPositivityBuff: {
 
 ArcticWraithBuff: {
 	DisplayName: Rimeflora Wraith
-	Description: The wraith will freeze your enemies
+	Description: The ghost will freeze your enemies
 }
 
 SentryPotionBuff: {
-	DisplayName: Artillery
+	DisplayName: Ordnance
 	Description: Increased max number of sentries
 }
 
 JumpBoostPotionBuff: {
-	DisplayName: Jump Boost
+	DisplayName: Leaping
 	Description: Increased jump height
 }
 
@@ -38,24 +38,29 @@ VampirePotionBuff: {
 	Description: Critical strikes leech life
 }
 
-DiligencePotionBuff: {
-	DisplayName: Diligence
-	Description: Minions may critically strike
+MinionCritPotionBuff: {
+	DisplayName: Attentive
+	Description: 6% increased summon critical strike chance
 }
 
 MinionSpeedPotionBuff: {
 	DisplayName: Productive
-	Description: Minions are much faster
+	Description: 25% increased minion attack speed
 }
 
 FinessePotionBuff: {
 	DisplayName: Finesse
-	Description: Increased attack speed
+	Description: 15% increased attack speed
 }
 
 VigorPotionBuff: {
 	DisplayName: Vigorous
-	Description: Doubled critical damage
+	Description: 100% increased critical strike damage
+}
+
+ConsistencyPotionBuff: {
+	DisplayName: Consistent
+	Description: No damage variation
 }
 
 WaxCandleBuff: {
@@ -64,11 +69,16 @@ WaxCandleBuff: {
 }
 
 AetherFlameBuff: {
-	DisplayName: Aether Flame Buff
-	Description: Mods.GoldLeaf.Buffs.AetherFlameBuff.Description
+	DisplayName: Aether Flame
+	Description: Your spirit is burning away!
+}
+
+DemitoxinBuff: {
+	DisplayName: Demitoxic
+	Description: Movement and attack speed is greatly reduced
 }
 
 SafetyBlanketBuff: {
-	DisplayName: Safety Blanket Buff
-	Description: Mods.GoldLeaf.Buffs.SafetyBlanketBuff.Description
+	DisplayName: Unsafety Blanket
+	Description: Safety Blanket can not activate
 }

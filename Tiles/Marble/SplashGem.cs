@@ -15,7 +15,7 @@ using Terraria.GameContent;
 using System;
 using GoldLeaf.Items.Grove;
 
-namespace GoldLeaf.Items.Marble
+namespace GoldLeaf.Tiles.Marble
 {
     public class SplashGemItem : ModItem
     {
@@ -39,7 +39,7 @@ namespace GoldLeaf.Items.Marble
             RegisterItemDrop(ItemType<SplashGemItem>());
             AddMapEntry(new Color(37, 176, 195), name);
 
-            HitSound = new SoundStyle ("GoldLeaf/Sounds/SE/HollowKnight/JellyfishMiniDeath") { PitchVariance = 0.4f };
+            HitSound = new SoundStyle("GoldLeaf/Sounds/SE/HollowKnight/JellyfishMiniDeath") { PitchVariance = 0.4f };
             DustType = DustType<SplashGemDust>();
 
             Main.tileSolid[Type] = true;
@@ -60,9 +60,9 @@ namespace GoldLeaf.Items.Marble
         {
             if (item.type == ItemType<SplashGemItem>())
             {
-                for (float k = 0; k < 6.28f; k += (6.28f / 30))
+                for (float k = 0; k < 6.28f; k += 6.28f / 30)
                 {
-                    Dust dust = Dust.NewDustPerfect(new Vector2((i * 16) + 8, (j * 16) + 8), DustID.BubbleBurst_Blue, Vector2.One.RotatedBy(k) * 0.9f, Scale: 1.5f);
+                    Dust dust = Dust.NewDustPerfect(new Vector2(i * 16 + 8, j * 16 + 8), DustID.BubbleBurst_Blue, Vector2.One.RotatedBy(k) * 0.9f, Scale: 1.5f);
                     dust.noGravity = true;
                 }
                 SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/HollowKnight/JellyfishEggPop") { PitchVariance = 0.4f }, new Vector2(i * 16, j * 16));
@@ -79,8 +79,8 @@ namespace GoldLeaf.Items.Marble
 
         public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData)
         {
-            if (!Main.tile[i, j - 1].HasTile && Main.tile[i, j-1].LiquidType == LiquidID.Water && Main.tile[i, j - 1].LiquidAmount > 0 && Main.rand.NextBool(60))
-                Gore.NewGore(null, new Vector2(i * 16, (j * 16) - 12), new Vector2(Main.rand.NextFloat(-0.8f, 0.8f), Main.rand.NextFloat(-0.4f, -1.2f)), GoreType<SplashBubble>());
+            if (!Main.tile[i, j - 1].HasTile && Main.tile[i, j - 1].LiquidType == LiquidID.Water && Main.tile[i, j - 1].LiquidAmount > 0 && Main.rand.NextBool(60))
+                Gore.NewGore(null, new Vector2(i * 16, j * 16 - 12), new Vector2(Main.rand.NextFloat(-0.8f, 0.8f), Main.rand.NextFloat(-0.4f, -1.2f)), GoreType<SplashBubble>());
         }
 
         public override void FloorVisuals(Player player)
@@ -110,14 +110,14 @@ namespace GoldLeaf.Items.Marble
     {
         public override void SetStaticDefaults()
         {
-            UpdateType = 411;
+            UpdateType = 412;
         }
 
         public override void OnSpawn(Gore gore, IEntitySource source)
         {
             gore.numFrames = 3;
             gore.frame = (byte)Main.rand.Next(3);
-            
+
             gore.position -= new Vector2(9, 9) * gore.scale;
             ChildSafety.SafeGore[gore.type] = true;
 

@@ -59,6 +59,16 @@ namespace GoldLeaf.Items.Blizzard.Armor
             return body.type == ItemType<FrostyRobe>();
         }
 
+        /*public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor)
+        {
+            //color = ColorHelper.AuroraColor(GoldLeafWorld.Timer * 0.05f);
+            color = ColorHelper.AuroraColor(GoldLeafWorld.Timer * 0.05f) * (0.875f + (float)Math.Sin(GoldLeafWorld.rottime) * 0.125f);
+
+            Color glowColor = ColorHelper.AuroraColor(GoldLeafWorld.Timer * 0.05f); glowColor.A = 0;
+            glowMask = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
+            glowMaskColor = glowColor * (0.3f - (float)Math.Sin(GoldLeafWorld.rottime) * 0.125f);
+        }*/
+
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = Language.GetTextValue("Mods.GoldLeaf.SetBonuses.FrostySet", player.GetModPlayer<FrostyPlayer>().frostyDamageBonus * 100, SetBonusKey);
@@ -80,7 +90,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
             Item.faceSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Face);
             //Item.headSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
 
-            ItemID.Sets.ShimmerTransformToItem[Item.type] = ItemType<FrigidMask>();
+            //ItemID.Sets.ShimmerTransformToItem[Item.type] = ItemType<FrigidMask>();
         }
 
         public override void AddRecipes()
@@ -143,6 +153,16 @@ namespace GoldLeaf.Items.Blizzard.Armor
 
             Item.bodySlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Body);
         }
+
+        /*public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor)
+        {
+            //color = ColorHelper.AuroraColor(GoldLeafWorld.Timer * 0.05f);
+            //color = ColorHelper.AuroraColor(GoldLeafWorld.Timer * 0.05f) * (0.875f + (float)Math.Sin(GoldLeafWorld.rottime) * 0.125f);
+
+            Color glowColor = ColorHelper.AuroraColor(GoldLeafWorld.Timer * 0.05f); glowColor.A = 0;
+            glowMask = frontEquip;
+            glowMaskColor = glowColor;
+        }*/
 
         public override void AddRecipes()
         {

@@ -13,5 +13,8 @@ using static GoldLeaf.Core.Helper;
 
 namespace GoldLeaf.Prefixes
 {
-    
+    /*public class Vindictive : ModPrefix
+    {
+
+    }*/
 }

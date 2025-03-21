@@ -35,6 +35,7 @@ namespace GoldLeaf.Core
 
         public float itemSpeed;
         public float critDamageMult = 1f;
+        public int summonCritChance = 0;
 
         #region minor variables
         public bool royalGel = false;
@@ -46,11 +47,22 @@ namespace GoldLeaf.Core
 
         public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)
         {
+            if ((item.DamageType == DamageClass.Summon || item.DamageType == DamageClass.SummonMeleeSpeed || item.DamageType == DamageClass.MagicSummonHybrid) && ((summonCritChance > 0 && Main.rand.NextBool(summonCritChance, 100)) || summonCritChance > 100))
+            {
+                modifiers.SetCrit();
+            }
+
             modifiers.CritDamage += (item.GetGlobalItem<GoldLeafItem>().critDamageMod);
             modifiers.CritDamage *= critDamageMult;
         }
         public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
         {
+            int totalSummonCritChance = summonCritChance + proj.GetGlobalProjectile<GoldLeafProjectile>().summonCritChance;
+            if ((proj.DamageType == DamageClass.Summon || proj.DamageType == DamageClass.SummonMeleeSpeed || proj.DamageType == DamageClass.MagicSummonHybrid) && ((summonCritChance > 0 && Main.rand.NextBool(totalSummonCritChance, 100)) || summonCritChance > 100))
+            {
+                modifiers.SetCrit();
+            }
+
             modifiers.CritDamage += (proj.GetGlobalProjectile<GoldLeafProjectile>().critDamageMod);
             modifiers.CritDamage *= critDamageMult;
         }
@@ -71,7 +83,7 @@ namespace GoldLeaf.Core
                 DoubleTapSecondaryEvent?.Invoke(player);
         }
 
-        public delegate void ResetEffectsDelegate(GoldLeafPlayer Player);
+        public delegate void ResetEffectsDelegate(GoldLeafPlayer player);
         public static event ResetEffectsDelegate ResetEffectsEvent;
         public override void ResetEffects()
         {
@@ -79,6 +91,7 @@ namespace GoldLeaf.Core
 
             itemSpeed = 1;
             critDamageMult = 1f;
+            summonCritChance = 0;
 
             #region minor variables
             royalGel = false;

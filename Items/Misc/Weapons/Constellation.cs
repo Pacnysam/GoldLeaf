@@ -32,7 +32,7 @@ namespace GoldLeaf.Items.Misc.Weapons
 
         public override void SetDefaults()
         {
-            Item.DefaultToWhip(ProjectileType<ConstellationP>(), 9, 1.2f, 3f, 45);
+            Item.DefaultToWhip(ProjectileType<ConstellationP>(), 11, 1.2f, 3f, 45);
 
             Item.rare = ItemRarityID.Blue;
             Item.value = Item.sellPrice(0, 0, 75, 0);
