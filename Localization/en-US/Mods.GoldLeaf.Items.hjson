@@ -400,3 +400,8 @@ BottledShimmer: {
 	DisplayName: Bottled Shimmer
 	Tooltip: ""
 }
+
+DragonSkullCrown: {
+	DisplayName: Dragon Skull Crown
+	Tooltip: ""
+}

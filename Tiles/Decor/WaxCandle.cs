@@ -82,6 +82,7 @@ namespace GoldLeaf.Tiles.Decor
 			Main.tileLavaDeath[Type] = true;
 			Main.tileNoAttach[Type] = true;
             Main.tileLighted[Type] = true;
+            Main.tileWaterDeath[Type] = true;
 
             DustType = DustID.Torch;
             AdjTiles = [TileID.Candles];

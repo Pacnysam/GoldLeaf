@@ -167,7 +167,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemType<FrostCloth>(), 9);
+            recipe.AddIngredient(ItemType<FrostCloth>(), 8);
             recipe.AddIngredient(ItemType<AuroraCluster>(), 12);
             recipe.AddTile(TileID.Loom);
             recipe.Register();
@@ -232,7 +232,43 @@ namespace GoldLeaf.Items.Blizzard.Armor
         }*/
     }
 
-    public class FrigidMask : ModItem //idk how to make FrostyMask draw on accessory face layer, im convinced player layers were created to spite me specifically
+    public class FrostyMaskLayer : PlayerDrawLayer
+    {
+        private static Asset<Texture2D> tex;
+        public override void Load()
+        {
+            tex = Request<Texture2D>("GoldLeaf/Items/Blizzard/Armor/FrostyMask_Head");
+        }
+
+        public override Position GetDefaultPosition()
+        {
+            return new AfterParent(PlayerDrawLayers.FaceAcc);
+        }
+
+        protected override void Draw(ref PlayerDrawSet drawInfo) //taken from slr
+        {
+            Player player = drawInfo.drawPlayer;
+
+            if ((player.armor[0].type == ItemType<FrostyMask>() && player.armor[10].type == ItemID.None) || player.armor[10].type == ItemType<FrostyMask>())
+            {
+                int frame = (player.bodyFrame.Y / player.bodyFrame.Height);
+                int height = (tex.Height() / 20);
+
+                Vector2 pos = (player.MountedCenter - Main.screenPosition + new Vector2(0, player.gfxOffY - 3)).ToPoint16().ToVector2() + player.headPosition;
+
+                drawInfo.DrawDataCache.Add(new DrawData(tex.Value, pos, new Rectangle(0, frame * height, tex.Width(), height),
+                    drawInfo.colorArmorHead,
+                    player.headRotation,
+                    new Vector2(tex.Width() * 0.5f, tex.Height() * 0.025f),
+                    1f, drawInfo.playerEffect, 0)
+                {
+                    shader = drawInfo.cHead
+                });
+            }
+        }
+    }
+
+    /*public class FrigidMask : ModItem //idk how to make FrostyMask draw on accessory face layer, im convinced player layers were created to spite me specifically
     {
         public override string Texture => "GoldLeaf/Items/Blizzard/Armor/FrostyMask";
 
@@ -268,5 +304,5 @@ namespace GoldLeaf.Items.Blizzard.Armor
         {
             SetupDrawing();
         }
-    }
+    }*/
 }

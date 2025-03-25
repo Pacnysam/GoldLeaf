@@ -106,7 +106,7 @@ namespace GoldLeaf.Items.Blizzard
                 if (Main.myPlayer == self.whoAmI)
                 {
                     SoundEngine.PlaySound(SoundID.DD2_DarkMageHealImpact with { Volume = 1.35f });
-                    Projectile.NewProjectile(self.GetSource_Accessory(self.GetModPlayer<SafetyBlanketPlayer>().safetyBlanketItem), self.MountedCenter, Vector2.Zero, ProjectileType<ToxicPositivityEffect>(), 0, 0, self.whoAmI);
+                    Projectile.NewProjectile(self.GetSource_Accessory(self.GetModPlayer<SafetyBlanketPlayer>().safetyBlanketItem), self.MountedCenter, Vector2.Zero, ProjectileType<SafetyBlanketEffect>(), 0, 0, self.whoAmI);
                 }
 
                 type = BuffType<SafetyBlanketBuff>();
@@ -114,6 +114,19 @@ namespace GoldLeaf.Items.Blizzard
                 Main.NewText("Buff type changed");
             }
             orig(self, type, timeToAdd, quiet, foodHack);
+        }
+    }
+
+    public class SafetyBlanketEffect : ModProjectile
+    {
+        public override void SetDefaults()
+        {
+            Projectile.CloneDefaults(ProjectileID.BrainOfConfusion);
+
+            Projectile.width = 24;
+            Projectile.height = 28;
+
+            Projectile.damage = 0;
         }
     }
 }

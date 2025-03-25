@@ -29,10 +29,10 @@ namespace GoldLeaf.Items.Misc
             //ItemID.Sets.ShimmerTransformToItem[ItemID.BottledWater] = Item.type;
         }
 
-        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        /*public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             tooltips.RemoveAt(tooltips.IndexOf(tooltips.Find(n => n.Name == "BuffTime")));
-        }
+        }*/
 
         public override void AddRecipes()
         {

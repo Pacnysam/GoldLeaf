@@ -292,7 +292,7 @@ namespace GoldLeaf.Items.Misc.Weapons
     {
         public override string Texture => CoolBuffTex(base.Texture);
 
-        public static readonly int TagDamage = 5;
+        public static readonly int TagDamage = 3;
 
         public override void SetStaticDefaults()
         {

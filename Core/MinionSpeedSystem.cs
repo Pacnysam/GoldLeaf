@@ -24,13 +24,24 @@ namespace GoldLeaf.Core
 {
     public class MinionSpeedPlayer : ModPlayer 
     {
+        public float summonSpeed = 0f;
         public float minionSpeed = 0f;
         public float sentrySpeed = 0f;
+        public float familiarSpeed = 0f;
+
+        public override void PostUpdateMiscEffects()
+        {
+            minionSpeed += summonSpeed;
+            sentrySpeed += summonSpeed;
+            familiarSpeed += summonSpeed;
+        }
 
         public override void ResetEffects()
         {
             minionSpeed = 0f;
             sentrySpeed = 0f;
+            familiarSpeed = 0f;
+            summonSpeed = 0f;
         }
     }
 
@@ -42,6 +53,7 @@ namespace GoldLeaf.Core
 
         private float minionSpeedCounter;
         private float sentrySpeedCounter;
+        private float familiarSpeedCounter;
         private int extraUpdateCache;
 
         public override bool PreAI(Projectile projectile)
@@ -74,6 +86,15 @@ namespace GoldLeaf.Core
                         projectile.extraUpdates++; extraUpdateCache++;
                     }
                 }
+                /*if (familiar)
+                {
+                    familiarSpeedCounter += player.GetModPlayer<MinionSpeedPlayer>().sentrySpeed;
+
+                    for (; familiarSpeedCounter >= 1; familiarSpeedCounter--)
+                    {
+                        projectile.extraUpdates++; extraUpdateCache++;
+                    }
+                }*/
             }
 
             return true;

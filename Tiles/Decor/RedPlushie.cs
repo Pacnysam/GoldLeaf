@@ -29,7 +29,7 @@ namespace GoldLeaf.Tiles.Decor
 	{
 		public override void SetStaticDefaults()
 		{
-            HitSound = SoundID.Critter with { Pitch = -0.5f };
+            HitSound = SoundID.Critter with { Pitch = -0.5f, MaxInstances = 0 };
 
             AddMapEntry(new Color(213, 49, 49));
 			RegisterItemDrop(ItemType<RedPlushie>());
@@ -62,7 +62,7 @@ namespace GoldLeaf.Tiles.Decor
 
         public override bool RightClick(int i, int j)
         {
-            SoundEngine.PlaySound(SoundID.Critter with { Pitch = -0.5f });
+            SoundEngine.PlaySound(SoundID.Critter with { Pitch = -0.5f, MaxInstances = 0 });
             return true;
         }
     }

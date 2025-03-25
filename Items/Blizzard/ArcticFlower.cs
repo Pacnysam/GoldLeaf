@@ -9,17 +9,27 @@ using GoldLeaf.Items.Grove;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.DataStructures;
 
 namespace GoldLeaf.Items.Blizzard
 {
 	public class ArcticFlower : ModItem
 	{
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true;
+            ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
+
+            ItemID.Sets.StaffMinionSlotsRequired[Type] = 1f;
+        }
+
         public override void SetDefaults()
 		{
 			Item.damage = 35;
 			Item.DamageType = DamageClass.Summon;
             Item.shoot = ProjectileType<ArcticWraith>();
             Item.buffType = BuffType<ArcticWraithBuff>();
+            Item.mana = 10;
 			Item.width = 30;
 			Item.height = 36;
             Item.noMelee = true;
@@ -29,12 +39,27 @@ namespace GoldLeaf.Items.Blizzard
 			Item.autoReuse = false;
         }
 
+        public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
+        {
+            position = Main.MouseWorld;
+        }
+
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+            player.AddBuff(Item.buffType, 2);
+
+            var projectile = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, Main.myPlayer);
+            projectile.originalDamage = Item.damage;
+
+            return false;
+        }
+
         public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
 			recipe.AddIngredient(ItemID.BorealWood, 15);
 			recipe.AddRecipeGroup("GoldLeaf:GoldBars", 6);
-            recipe.AddIngredient(ItemType<AuroraCluster>(), 9);
+            recipe.AddIngredient(ItemType<AuroraCluster>(), 14);
             recipe.AddIngredient(ItemID.Shiverthorn, 2);
             recipe.AddTile(TileID.Anvils);
 			recipe.Register();
@@ -89,7 +114,22 @@ namespace GoldLeaf.Items.Blizzard
 
         public override void SetStaticDefaults()
         {
-            BuffID.Sets.TimeLeftDoesNotDecrease[Type] = true;
+            Main.buffNoSave[Type] = true;
+            Main.buffNoTimeDisplay[Type] = true;
+        }
+
+        public override void Update(Player player, ref int buffIndex)
+        {
+            // If the minions exist reset the buff time, otherwise remove the buff from the player
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<ArcticWraith>()] > 0)
+            {
+                player.buffTime[buffIndex] = 18000;
+            }
+            else
+            {
+                player.DelBuff(buffIndex);
+                buffIndex--;
+            }
         }
     }
 }

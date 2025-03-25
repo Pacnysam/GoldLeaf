@@ -33,7 +33,7 @@ namespace GoldLeaf.Tiles.Decor
 	{
 		public override void SetStaticDefaults()
 		{
-			HitSound = SoundID.Critter with { Pitch = -0.5f };
+			HitSound = SoundID.Critter with { Pitch = -0.5f, MaxInstances = 0 };
 
 			AddMapEntry(new Color(177, 91, 219));
 			RegisterItemDrop(ItemType<BatPlushie>());
@@ -48,10 +48,10 @@ namespace GoldLeaf.Tiles.Decor
 			TileObjectData.newTile.StyleHorizontal = true;
 			TileObjectData.newTile.CoordinatePadding = 2;
 
-			TileObjectData.newTile.CoordinateHeights = new int[]
-			{
-				24
-			};
+			TileObjectData.newTile.CoordinateHeights =
+            [
+                24
+			];
 			TileObjectData.newTile.CoordinateWidth = 20;
 			TileObjectData.newTile.DrawYOffset = -6;
 
@@ -64,7 +64,7 @@ namespace GoldLeaf.Tiles.Decor
 
         public override bool RightClick(int i, int j)
         {
-			SoundEngine.PlaySound(SoundID.Critter with { Pitch = -0.5f });
+			SoundEngine.PlaySound(SoundID.Critter with { Pitch = -0.5f , MaxInstances = 0 });
 			return true;
         }
     }
