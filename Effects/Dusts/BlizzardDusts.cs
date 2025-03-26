@@ -98,13 +98,18 @@ namespace GoldLeaf.Effects.Dusts
                 //dust.velocity *= 0.96f;
             }
 
-            if (dust.customData != null && dust.customData is Item item && dust.alpha >= 0)
+            if (dust.customData != null && dust.customData is Entity entity && dust.alpha >= 0)
             {
                 //dust.position = item.Center + Vector2.UnitX.RotatedBy(dust.rotation, Vector2.Zero);
 
-                dust.velocity += Vector2.Normalize(item.Center - dust.position) * 0.05f;
+                dust.velocity += Vector2.Normalize(entity.Center - dust.position) * 0.05f;
                 if (dust.velocity.Length() > 0.05f) dust.velocity = Vector2.Normalize(dust.velocity) * 0.05f;
             }
+            /*if (dust.customData != null && dust.customData is Projectile proj && dust.alpha >= 0)
+            {
+                dust.velocity += Vector2.Normalize(proj.Center - dust.position) * 0.05f;
+                if (dust.velocity.Length() > 0.05f) dust.velocity = Vector2.Normalize(dust.velocity) * 0.05f;
+            }*/
             dust.position += dust.velocity + (Vector2.UnitX.RotatedBy(dust.rotation/3, Vector2.Zero));
 
             if (dust.alpha > 220) dust.active = false;

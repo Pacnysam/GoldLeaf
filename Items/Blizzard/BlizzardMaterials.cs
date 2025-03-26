@@ -117,9 +117,7 @@ namespace GoldLeaf.Items.Blizzard
         {
             if (Item.timeSinceItemSpawned % dustTime == 0)
             {
-                Color color = ColorHelper.AuroraColor(GoldLeafWorld.Timer * 0.05f); color.A = 0;
-
-                Dust dust2 = Dust.NewDustPerfect(Item.Center + new Vector2(0f, Item.height * -0.1f) + Main.rand.NextVector2CircularEdge(Item.width * 0.6f, Item.height * 0.6f) * (0.3f + Main.rand.NextFloat() * 0.5f), 279, new Vector2(0f, (0f - Main.rand.NextFloat()) * 0.3f - 1.5f), 0, color * 0.5f, Main.rand.NextFloat(0.2f, 0.3f));
+                Dust dust2 = Dust.NewDustPerfect(Item.Center + new Vector2(0f, Item.height * -0.1f) + Main.rand.NextVector2CircularEdge(Item.width * 0.6f, Item.height * 0.6f) * (0.3f + Main.rand.NextFloat() * 0.5f), DustType<LightDust>(), new Vector2(0f, (0f - Main.rand.NextFloat()) * 0.2f - 0.6f), 0, new Color(206, 174, 125) { A = 0 } * 0.5f, Main.rand.NextFloat(0.5f, 0.7f));
                 dust2.fadeIn = 1.1f;
                 dust2.noGravity = true;
                 dust2.noLight = true;

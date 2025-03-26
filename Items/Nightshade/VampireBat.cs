@@ -84,7 +84,7 @@ namespace GoldLeaf.Items.Nightshade
 			return base.CanUseItem(player);
 		}
     }
-
+    
 	public class VampireBatP : ModProjectile
 	{
 		public override string Texture => "GoldLeaf/Items/Nightshade/VampireBat";
@@ -152,7 +152,7 @@ namespace GoldLeaf.Items.Nightshade
 			for (int k = 0; k < Projectile.oldPos.Length; k++)
 			{
 				Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-				Main.spriteBatch.Draw(texture, drawPos, null, Color.White * (1.0f - (0.08f * k)), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+				Main.spriteBatch.Draw(texture, drawPos, null, Color.Lerp(new Color(210, 136, 107) { A = 0 }, new Color(23, 29, 32), (float)(k-2) / Projectile.oldPos.Length) * (0.7f - (0.06f * k)), Projectile.rotation, drawOrigin, Projectile.scale * (1f - (0.05f * k)), SpriteEffects.None, 0f);
 			}
 
             Texture2D glowTex = Request<Texture2D>("GoldLeaf/Items/Nightshade/VampireBatGlowOutline").Value;
@@ -270,7 +270,7 @@ namespace GoldLeaf.Items.Nightshade
             for (int k = 0; k < Projectile.oldPos.Length; k++)
             {
                 Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin/* + new Vector2(0f, Projectile.gfxOffY)*/;
-                Main.spriteBatch.Draw(texture, drawPos, null, Color.White * (1.0f - (0.15f * k)), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(texture, drawPos, null, Color.Lerp(new Color(210, 136, 107) { A = 0 }, new Color(23, 29, 32), (float)(k - 3) / Projectile.oldPos.Length) * (1f - (0.06f * k)), Projectile.rotation, drawOrigin, Projectile.scale * (1f - (0.045f * k)), SpriteEffects.None, 0f);
             }
 
             return true;
@@ -282,7 +282,7 @@ namespace GoldLeaf.Items.Nightshade
             Vector2 drawOrigin = new(texture.Width * 0.5f, Projectile.height * 0.5f);
             Vector2 drawPos = Projectile.position - Main.screenPosition + drawOrigin;
 
-            Main.spriteBatch.Draw(texture, drawPos, null, Color.White, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(texture, drawPos, null, ColorHelper.AdditiveWhite * 0.5f, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
         }
     }
 }

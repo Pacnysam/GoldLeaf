@@ -14,6 +14,7 @@ using static Terraria.ModLoader.ModContent;
 using Terraria.Localization;
 using ReLogic.Content;
 using GoldLeaf.Items.Blizzard;
+using GoldLeaf.Items.Blizzard.Armor;
 
 
 namespace GoldLeaf.Core //most of this is snatched from starlight river and spirit, i (pacnysam) did not code any of this!
@@ -495,7 +496,14 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
             }
         }
 
-        public static bool IsTargetValid(NPC npc) => npc.active && !npc.friendly && !npc.immortal && !npc.dontTakeDamage;
+        public static void ReduceBuffTime(Player player, int buffType, int timeChange) 
+        {
+            int buffTime = player.buffTime[player.FindBuffIndex(buffType)] - timeChange;
+            player.ClearBuff(BuffType<SnapFreezeBuff>());
+            if (buffTime > 2) player.AddBuff(buffType, buffTime);
+        }
+
+        public static bool IsTargetValid(NPC npc) => npc.active && !npc.friendly && !npc.immortal && !npc.dontTakeDamage && npc.lifeMax > 5;
 
         public static double Distribution(int pos, int maxVal, float posOffset = 0.5f, float maxChance = 100f)
         {
@@ -520,13 +528,13 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
         public static bool IsValidDebuff(Player player, int buffindex)
         {
             int bufftype = player.buffType[buffindex];
-            bool vitalbuff = (bufftype == BuffID.PotionSickness || bufftype == BuffID.ManaSickness || bufftype == BuffID.ChaosState || bufftype == BuffID.Tipsy);
+            bool vitalbuff = (bufftype == BuffID.PotionSickness || bufftype == BuffID.ManaSickness || bufftype == BuffID.ChaosState || bufftype == BuffType<SafetyBlanketBuff>() || bufftype == BuffType<SnapFreezeBuff>());
             return player.buffTime[buffindex] > 2 && Main.debuff[bufftype] && !Main.buffNoTimeDisplay[bufftype] && !Main.vanityPet[bufftype] && !vitalbuff;
         }
 
         public static bool IsValidDebuff(int bufftype, int time)
         {
-            bool vitalbuff = (bufftype == BuffID.PotionSickness || bufftype == BuffID.ManaSickness || bufftype == BuffID.ChaosState || bufftype == BuffID.Tipsy || bufftype == BuffType<SafetyBlanketBuff>());
+            bool vitalbuff = (bufftype == BuffID.PotionSickness || bufftype == BuffID.ManaSickness || bufftype == BuffID.ChaosState || bufftype == BuffType<SafetyBlanketBuff>() || bufftype == BuffType<SnapFreezeBuff>());
             return time > 2 && Main.debuff[bufftype] && !Main.buffNoTimeDisplay[bufftype] && !Main.vanityPet[bufftype] && !vitalbuff;
         }
 

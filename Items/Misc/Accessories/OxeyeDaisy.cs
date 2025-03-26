@@ -82,7 +82,8 @@ namespace GoldLeaf.Items.Misc.Accessories
                         {
                             CombatText.NewText(new Rectangle((int)Main.LocalPlayer.Center.X, (int)Main.LocalPlayer.Center.Y - 12, Main.LocalPlayer.width / 4, Main.LocalPlayer.height / 4), new Color(235, 99, 139, 100), "Loves me!", true, true);
                             Main.LocalPlayer.AddBuff(BuffID.Lovestruck, 600);
-                            Item.NewItem(Player.GetSource_Accessory(oxeyeItem), target.Hitbox, ItemID.Heart);
+                            int i = Item.NewItem(Player.GetSource_Accessory(oxeyeItem), target.Hitbox, ItemID.Heart);
+                            Main.item[i].playerIndexTheItemIsReservedFor = Main.LocalPlayer.whoAmI;
                             //NewItemPerfect(target.Center, new Vector2(0, -2f), ItemID.Heart);
 
 

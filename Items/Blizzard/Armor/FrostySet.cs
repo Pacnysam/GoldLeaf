@@ -18,6 +18,10 @@ using ReLogic.Content;
 using GoldLeaf.Items.Vanity;
 using Terraria.Localization;
 using GoldLeaf.Items.Misc.Weapons;
+using Terraria.Audio;
+using Terraria.WorldBuilding;
+using Terraria.Graphics.Shaders;
+using GoldLeaf.Items.Pickups;
 
 namespace GoldLeaf.Items.Blizzard.Armor
 {
@@ -197,12 +201,72 @@ namespace GoldLeaf.Items.Blizzard.Armor
         
         private void SnapFreeze(Player player) 
         {
-            if (player.GetModPlayer<FrostyPlayer>().frostySet && player.GetModPlayer<FrostyPlayer>().frostyCooldown <= 0)
+            if (player.GetModPlayer<FrostyPlayer>().frostySet && !player.HasBuff(BuffType<SnapFreezeBuff>()))
             {
-                frostyCooldown = 180;
+                float num = 8000f;
+                int target = -1;
+                for (int i = 0; i < 200; i++)
+                {
+                    float distanceCheck = Vector2.Distance(player.MountedCenter, Main.npc[i].Center);
+                    if (distanceCheck < num && distanceCheck < 750f && Vector2.Distance(Main.MouseWorld, Main.npc[i].Center) <= 50)
+                    {
+                        target = i;
+                        num = distanceCheck;
+                    }
+                }
+                if (target != -1 && IsTargetValid(Main.npc[target])) 
+                {
+                    Main.npc[target].AddBuff(BuffType<SnapFreezeBuff>(), TimeToTicks(10));
 
-                for (float k = 0; k < 6.28f; k += 0.15f)
-                    Dust.NewDustPerfect(Main.LocalPlayer.Center, DustType<ArcticDust>(), Vector2.One.RotatedBy(k) * 2);
+                    player.AddBuff(BuffType<SnapFreezeBuff>(), TimeToTicks(20));
+
+                    for (float k = 0; k < 6.28f; k += 0.15f)
+                        Dust.NewDustPerfect(player.MountedCenter, DustType<ArcticDust>(), Vector2.One.RotatedBy(k) * 2);
+
+                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Deltarune/IceSpell") { Volume = 0.5f });
+
+                    /*Vector2 value = Main.npc[target].Center - player.MountedCenter;
+                    float num4 = 25f;
+                    float num5 = (float)Math.Sqrt((double)(value.X * value.X + value.Y * value.Y));
+                    if (num5 > num4)
+                    {
+                        num5 = num4 / num5;
+                    }
+                    value *= num5;
+
+                    if (Main.myPlayer == Player.whoAmI)
+                    {
+                        SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Deltarune/IceSpell") { Volume = 0.35f });
+                        //Projectile.NewProjectile(player.GetSource_FromThis(), player.MountedCenter, value, ProjectileType<SnapFreezeBeam>(), 0, 0f, player.whoAmI);
+                    }*/
+                }
+            }
+        }
+
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            if (!(target.HasBuff(BuffType<SnapFreezeBuff>()) && target.life > 0 && target.life <= target.lifeMax / 5 && !target.boss && Main.myPlayer == Player.whoAmI))
+            {
+                modifiers.ScalingBonusDamage += 0.2f;
+            }
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (target.HasBuff(BuffType<SnapFreezeBuff>()) && target.life > 0 && target.life <= target.lifeMax / 5 && !target.boss && Main.myPlayer == Player.whoAmI)
+            {
+                target.StrikeInstantKill();
+                Projectile.NewProjectileDirect(Player.GetSource_OnHit(target), target.Center, new Vector2(0, -8.5f), ProjectileType<SnapFreezeEffect>(), 0, 0, Player.whoAmI);
+                SoundEngine.PlaySound(SoundID.DeerclopsIceAttack /*with { Volume = 0.85f, Pitch = -0.3f, PitchVariance = 0.8f }*/);
+
+                ReduceBuffTime(Player, BuffType<SnapFreezeBuff>(), TimeToTicks(10));
+
+                int i = Item.NewItem(Player.GetSource_FromThis(), target.Center, ItemType<StarLarge>());
+                Main.item[i].playerIndexTheItemIsReservedFor = Player.whoAmI;
+            } 
+            else if (target.life <= 0) 
+            {
+                ReduceBuffTime(Player, BuffType<SnapFreezeBuff>(), TimeToTicks(5));
             }
         }
 
@@ -268,41 +332,118 @@ namespace GoldLeaf.Items.Blizzard.Armor
         }
     }
 
-    /*public class FrigidMask : ModItem //idk how to make FrostyMask draw on accessory face layer, im convinced player layers were created to spite me specifically
+    public class SnapFreezeBuff : ModBuff
     {
-        public override string Texture => "GoldLeaf/Items/Blizzard/Armor/FrostyMask";
-
-        public override void Load()
-        {
-            if (Main.netMode != NetmodeID.Server)
-                EquipLoader.AddEquipTexture(Mod, $"GoldLeaf/Items/Blizzard/Armor/FrigidMask_Head", EquipType.Face, this);
-        }
-
-        public override void SetDefaults()
-        {
-            Item.width = 22;
-            Item.height = 22;
-
-            Item.rare = ItemRarityID.Gray;
-
-            ItemID.Sets.TrapSigned[Item.type] = true;
-
-            Item.vanity = true;
-            Item.faceSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Face);
-            Item.accessory = true;
-        }
-
-        private void SetupDrawing()
-        {
-            if (Main.netMode == NetmodeID.Server)
-                return;
-
-            int equipSlotHead = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Face);
-        }
+        public override string Texture => CoolBuffTex(base.Texture);
 
         public override void SetStaticDefaults()
         {
-            SetupDrawing();
+            Main.debuff[Type] = true;
+            Main.pvpBuff[Type] = false;
+            Main.buffNoSave[Type] = true;
+
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
+            BuffID.Sets.LongerExpertDebuff[Type] = false;
+        }
+    }
+
+    public class SnapFreezeNPC : GlobalNPC
+    {
+        public override bool InstancePerEntity => true;
+
+        private static Asset<Texture2D> maskTex;
+        private static Asset<Texture2D> bloomTex;
+        private static Asset<Texture2D> darkBloomTex;
+        public override void Load()
+        {
+            maskTex = Request<Texture2D>("GoldLeaf/Items/Blizzard/Armor/SnapFreezeMask");
+            bloomTex = Request<Texture2D>("GoldLeaf/Textures/Masks/Mask1");
+            darkBloomTex = Request<Texture2D>("GoldLeaf/Textures/GlowBlack");
+        }
+
+        float snapFreezeTime = 0f;
+
+        public override void ResetEffects(NPC npc)
+        {
+            if (!npc.HasBuff(BuffType<SnapFreezeBuff>())) 
+                snapFreezeTime = 0f;
+        }
+
+        public override void PostAI(NPC npc)
+        {
+            if (npc.HasBuff(BuffType<SnapFreezeBuff>()))
+                snapFreezeTime += 0.1f;
+
+            /*if (!npc.HasBuff(BuffType<SnapFreezeBuff>()) && snapFreezeTime > 0)
+            {
+                snapFreezeTime = Math.Clamp(snapFreezeTime, 0, 1);
+                snapFreezeTime -= 0.05f;
+            }*/
+        }
+
+        public override void DrawEffects(NPC npc, ref Color drawColor)
+        {
+            Color color = ColorHelper.AuroraAccentColor(GoldLeafWorld.Timer * 0.05f);
+
+            if (npc.HasBuff(BuffType<SnapFreezeBuff>())) drawColor = NPC.buffColor(drawColor, color.R/255f, color.G/255f, color.B/255f, 1f);
+        }
+        
+
+        public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            spriteBatch.Draw(darkBloomTex.Value, npc.Center - screenPos, new Rectangle(0, 0, darkBloomTex.Width(), darkBloomTex.Height()), Color.Black * (Math.Clamp(snapFreezeTime, 0, 5) / 5) * 1.1f, 0, darkBloomTex.Size() / 2, npc.scale * Math.Clamp(snapFreezeTime, 0, 1) * ((float)Math.Sin(GoldLeafWorld.rottime * 2) * 0.5f + 1f) * 0.75f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(bloomTex.Value, npc.Center - screenPos, new Rectangle(0, 0, bloomTex.Width(), bloomTex.Height()), ColorHelper.AuroraColor(GoldLeafWorld.Timer * 0.05f) with { A = 0 } * (Math.Clamp(snapFreezeTime, 0, 5)/5) * 0.75f, 0, bloomTex.Size() / 2, npc.scale * 0.5f * Math.Clamp(snapFreezeTime, 0, 1), SpriteEffects.None, 0f);
+            return base.PreDraw(npc, spriteBatch, screenPos, drawColor);
+        }
+
+        public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            if (npc.HasBuff(BuffType<SnapFreezeBuff>()))
+            {
+                //var effects = npc.spriteDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+                //Vector2 frame = new(TextureAssets.Npc[npc.type].Width() / 2, TextureAssets.Npc[npc.type].Height() / Main.npcFrameCount[npc.type] / 2);
+
+                float bufftime = (float)npc.buffTime[npc.FindBuffIndex(BuffType<SnapFreezeBuff>())]/60/10;
+
+                //spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, npc.Center, npc.frame, new Color(0, 126, 179) { A = 0 } * (1 - Math.Clamp(snapFreezeTime, 0, 1)), npc.rotation, frame, npc.scale * (2f - Math.Clamp(snapFreezeTime, 0, 1)), effects, 0f);
+                
+                spriteBatch.Draw(maskTex.Value, npc.Top + new Vector2(0, -16) - screenPos, new Rectangle(0, 0, maskTex.Width(), maskTex.Height()), ColorHelper.AuroraColor(GoldLeafWorld.Timer * 0.25f) with { A = 0 }, 0, maskTex.Size()/2, (3.2f - Math.Clamp(snapFreezeTime*2, 0, 2)) + (float)(Math.Sin(GoldLeafWorld.rottime * 3f) * 0.1f), SpriteEffects.None, 0f);
+                spriteBatch.Draw(maskTex.Value, npc.Top + new Vector2(0, -16) - screenPos, new Rectangle(0, 0, maskTex.Width(), maskTex.Height()), Color.White, 0, maskTex.Size() / 2, 3f - Math.Clamp(snapFreezeTime * 2, 0, 2), SpriteEffects.None, 0f);
+                spriteBatch.Draw(maskTex.Value, npc.Top + new Vector2(0, -16) - screenPos, new Rectangle(0, 0, maskTex.Width(), maskTex.Height()), ColorHelper.AdditiveWhite * (1 - Math.Clamp(snapFreezeTime, 0, 1)), 0, maskTex.Size() / 2, 3f - Math.Clamp(snapFreezeTime*2, 0, 2), SpriteEffects.None, 0f);
+                spriteBatch.Draw(maskTex.Value, npc.Top + new Vector2(0, -16 + (bufftime*2)) - screenPos, new Rectangle(0, 0, maskTex.Width(), maskTex.Height() - (int)(maskTex.Height() * bufftime)), Color.DimGray, 0, maskTex.Size()/2, 3f - Math.Clamp(snapFreezeTime*2, 0, 2), SpriteEffects.None, 0f);
+            }
+        }
+    }
+
+    public class SnapFreezeEffect : SafetyBlanketEffect 
+    {
+        public override string Texture => "GoldLeaf/Items/Blizzard/Armor/SnapFreezeMask";
+    }
+
+    /*public class SnapFreezeBeam : ModProjectile 
+    {
+        public override string Texture => EmptyTexString;
+
+        public override void SetDefaults()
+        {
+            Projectile.CloneDefaults(ProjectileID.ShadowBeamFriendly);
+            Projectile.damage = 0;
+        }
+
+        public override void AI()
+        {
+            Dust.NewDustPerfect(Projectile.Center, DustType<ArcticDust>());
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            //target.AddBuff(BuffType<SnapFreezeBuff>(), TimeToTicks(10));
+            Projectile.Kill();
+        }
+
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
+        {
+            return false;
         }
     }*/
 }

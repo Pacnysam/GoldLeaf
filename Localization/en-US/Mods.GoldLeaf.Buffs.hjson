@@ -80,5 +80,10 @@ DemitoxinBuff: {
 
 SafetyBlanketBuff: {
 	DisplayName: Unsafety Blanket
-	Description: Safety Blanket can not activate
+	Description: Safety blanket can not activate
+}
+
+SnapFreezeBuff: {
+	DisplayName: Snap Freeze
+	Description: Can not snap freeze
 }

@@ -33,7 +33,10 @@ namespace GoldLeaf.Items.Blizzard
 			Item.width = 30;
 			Item.height = 36;
             Item.noMelee = true;
-            Item.noUseGraphic = true;
+            Item.useTime = 36;
+            Item.useAnimation = 36;
+            Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/Monolith/GhostWhistle") { Volume = 0.85f };
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.value = Item.sellPrice(0, 1, 20, 0);
             Item.rare = ItemRarityID.Blue;
 			Item.autoReuse = false;
@@ -57,10 +60,10 @@ namespace GoldLeaf.Items.Blizzard
         public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient(ItemID.BorealWood, 15);
-			recipe.AddRecipeGroup("GoldLeaf:GoldBars", 6);
+			recipe.AddIngredient(ItemID.BorealWood, 9);
+			//recipe.AddRecipeGroup("GoldLeaf:GoldBars", 6);
             recipe.AddIngredient(ItemType<AuroraCluster>(), 14);
-            recipe.AddIngredient(ItemID.Shiverthorn, 2);
+            recipe.AddIngredient(ItemID.Shiverthorn, 4);
             recipe.AddTile(TileID.Anvils);
 			recipe.Register();
 		}

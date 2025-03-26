@@ -401,7 +401,12 @@ BottledShimmer: {
 	Tooltip: ""
 }
 
-DragonSkullCrown: {
-	DisplayName: Dragon Skull Crown
-	Tooltip: ""
+DragonSkull: {
+	DisplayName: Dragon Skull Helmet
+	Tooltip:
+		'''
+		{0}% increased minion and sentry speed
+		{1}% decreased attack speed
+		Has a unique set bonus with heaven armor
+		'''
 }

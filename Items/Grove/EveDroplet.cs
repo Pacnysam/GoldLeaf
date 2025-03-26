@@ -19,11 +19,9 @@ namespace GoldLeaf.Items.Grove
 {
 	public class EveDroplet : ModItem
 	{
-        private static Asset<Texture2D> tex;
         private static Asset<Texture2D> glowTex;
         public override void Load()
         {
-            tex = Request<Texture2D>(Texture);
             glowTex = Request<Texture2D>(Texture + "Glow");
         }
 
@@ -122,7 +120,7 @@ namespace GoldLeaf.Items.Grove
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
             //Color color = new(255, 198, 249) { A = 0 };
-            spriteBatch.Draw(TextureAssets.Item[Item.type].Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite * ((float)Math.Sin(GoldLeafWorld.rottime - 0.75f) * 0.75f), rotation, tex.Size() / 2, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(TextureAssets.Item[Item.type].Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite * ((float)Math.Sin(GoldLeafWorld.rottime - 0.75f) * 0.75f), rotation, TextureAssets.Item[Item.type].Size() / 2, scale, SpriteEffects.None, 0f);
 
             /*spriteBatch.Draw
             (

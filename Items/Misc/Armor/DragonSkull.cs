@@ -16,55 +16,51 @@ using GoldLeaf.Items.Misc.Accessories;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using System.Collections.Generic;
-using static Terraria.GameContent.PlayerEyeHelper;
 using GoldLeaf.Items.Vanity.Watcher;
 using ReLogic.Content;
+using Terraria.Localization;
 
-namespace GoldLeaf.Items.Vanity
+namespace GoldLeaf.Items.Misc.Armor
 {
     [AutoloadEquip(EquipType.Head)]
-    public class DragonSkullCrown : ModItem
+    public class DragonSkull : ModItem
     {
+        private readonly float SummonSpeed = 8;
+        private readonly float SpeedDecrease = 12;
+
+        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(SummonSpeed, SpeedDecrease);
+
         public override void SetDefaults()
         {
             Item.width = 26;
             Item.height = 24;
 
-            Item.value = Item.buyPrice(0, 10, 0, 0);
+            Item.value = Item.buyPrice(0, 3, 50, 0);
             Item.rare = ItemRarityID.Blue;
 
             Item.headSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
-            Item.vanity = true;
+            Item.defense = 9;
+            //Item.vanity = true;
         }
 
-        /*public int faceEquip = -1;
-
-        public override void Load()
+        public override void UpdateEquip(Player player)
         {
-            if (Main.netMode != NetmodeID.Server)
-            {
-                EquipLoader.AddEquipTexture(Mod, $"GoldLeaf/Items/Vanity/DragonSkullCrown_Head", EquipType.Face, this);
-                faceEquip = EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Head}", EquipType.Front, this);
-            }
-        }*/
+            player.GetModPlayer<MinionSpeedPlayer>().summonSpeed += SummonSpeed/100;
+            player.GetModPlayer<GoldLeafPlayer>().itemSpeed += SpeedDecrease/100;
+        }
 
-        /*public override void SetMatch(bool male, ref int equipSlot, ref bool robes)
-        {
-            equipSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
-        }*/
-
-        public override void UpdateVanity(Player player)
+        public override void SetStaticDefaults()
         {
             ArmorIDs.Head.Sets.PreventBeardDraw[Item.headSlot] = false;
         }
     }
 
-    public class DragonSkullLayer : PlayerDrawLayer 
+    public class DragonSkullLayer : PlayerDrawLayer
     {
         private static Asset<Texture2D> tex;
         public override void Load()
         {
-            tex = Request<Texture2D>("GoldLeaf/Items/Vanity/DragonSkullCrown_Head");
+            tex = Request<Texture2D>("GoldLeaf/Items/Misc/Armor/DragonSkull_Head");
         }
 
         public override Position GetDefaultPosition()
@@ -75,11 +71,11 @@ namespace GoldLeaf.Items.Vanity
         protected override void Draw(ref PlayerDrawSet drawInfo) //taken from slr
         {
             Player player = drawInfo.drawPlayer;
-            
-            if ((player.armor[0].type == ItemType<DragonSkullCrown>() && player.armor[10].type == ItemID.None) || player.armor[10].type == ItemType<DragonSkullCrown>()) 
+
+            if (player.armor[0].type == ItemType<DragonSkull>() && player.armor[10].type == ItemID.None || player.armor[10].type == ItemType<DragonSkull>())
             {
-                int frame = (player.bodyFrame.Y / player.bodyFrame.Height);
-                int height = (tex.Height() / 20);
+                int frame = player.bodyFrame.Y / player.bodyFrame.Height;
+                int height = tex.Height() / 20;
 
                 Vector2 pos = (player.MountedCenter - Main.screenPosition + new Vector2(0, player.gfxOffY - 3)).ToPoint16().ToVector2() + player.headPosition;
 

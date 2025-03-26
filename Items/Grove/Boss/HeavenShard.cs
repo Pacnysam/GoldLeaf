@@ -20,15 +20,15 @@ namespace GoldLeaf.Items.Grove.Boss
 	{
         public override void SetStaticDefaults()
         {
-            Item.ResearchUnlockCount = 25;
+            Item.ResearchUnlockCount = 3;
         }
 
         public override void SetDefaults()
 		{
-			Item.width = 28;
-			Item.height = 26;
+			Item.width = 24;
+			Item.height = 24;
             Item.maxStack = Item.CommonMaxStack;
-            Item.rare = ItemRarityID.White;
+            Item.rare = ItemRarityID.Green;
 
             ItemID.Sets.ItemNoGravity[Item.type] = true;
             ItemID.Sets.ShimmerTransformToItem[Item.type] = ItemType<EveDroplet>();
