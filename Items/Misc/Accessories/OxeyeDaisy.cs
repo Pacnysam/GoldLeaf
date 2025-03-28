@@ -73,17 +73,21 @@ namespace GoldLeaf.Items.Misc.Accessories
                 if (cooldown <= 0)
                 {
                     lovesMe = !lovesMe;
-                    Gore.NewGore(null, Main.LocalPlayer.Center, new Vector2(Main.rand.NextFloat(-0.2f, -0.65f) * Player.direction, Main.rand.NextFloat(-0.4f, -0.8f)), GoreType<OxeyePetal>());
+                    Gore.NewGore(null, Player.Center, new Vector2(Main.rand.NextFloat(-0.2f, -0.65f) * Player.direction, Main.rand.NextFloat(-0.4f, -0.8f)), GoreType<OxeyePetal>());
 
                     if (target.life <= 0)
                     {
                         cooldown = 600;
-                        if (lovesMe)
+                        if (lovesMe && Main.myPlayer == Player.whoAmI)
                         {
-                            CombatText.NewText(new Rectangle((int)Main.LocalPlayer.Center.X, (int)Main.LocalPlayer.Center.Y - 12, Main.LocalPlayer.width / 4, Main.LocalPlayer.height / 4), new Color(235, 99, 139, 100), "Loves me!", true, true);
-                            Main.LocalPlayer.AddBuff(BuffID.Lovestruck, 600);
+                            CombatText.NewText(new Rectangle((int)Player.Center.X, (int)Player.Center.Y - 12, Player.width / 4, Player.height / 4), new Color(235, 99, 139, 100), "Loves me!", true, true);
+                            Player.AddBuff(BuffID.Lovestruck, 600);
                             int i = Item.NewItem(Player.GetSource_Accessory(oxeyeItem), target.Hitbox, ItemID.Heart);
-                            Main.item[i].playerIndexTheItemIsReservedFor = Main.LocalPlayer.whoAmI;
+                            Main.item[i].playerIndexTheItemIsReservedFor = Player.whoAmI;
+
+                            if (Main.netMode == NetmodeID.MultiplayerClient && i >= 0)
+                                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, i, 1f);
+
                             //NewItemPerfect(target.Center, new Vector2(0, -2f), ItemID.Heart);
 
 
@@ -93,8 +97,8 @@ namespace GoldLeaf.Items.Misc.Accessories
                         }
                         else
                         {
-                            CombatText.NewText(new Rectangle((int)Main.LocalPlayer.Center.X, (int)Main.LocalPlayer.Center.Y - 12, Main.LocalPlayer.width / 4, Main.LocalPlayer.height / 4), new Color(211, 63, 62, 100), "Loves me not!", true, true);
-                            Main.LocalPlayer.AddBuff(BuffID.Wrath, 600);
+                            CombatText.NewText(new Rectangle((int)Player.Center.X, (int)Player.Center.Y - 12, Player.width / 4, Player.height / 4), new Color(211, 63, 62, 100), "Loves me not!", true, true);
+                            Player.AddBuff(BuffID.Wrath, 600);
                         }
                     }
                     else
@@ -102,11 +106,11 @@ namespace GoldLeaf.Items.Misc.Accessories
                         cooldown = 15;
                         if (lovesMe)
                         {
-                            CombatText.NewText(new Rectangle((int)Main.LocalPlayer.Center.X, (int)Main.LocalPlayer.Center.Y - 12, Main.LocalPlayer.width / 5, Main.LocalPlayer.height / 5), new Color(163, 209, 159, 100), "Loves me...", false, true);
+                            CombatText.NewText(new Rectangle((int)Player.Center.X, (int)Player.Center.Y - 12, Player.width / 5, Player.height / 5), new Color(163, 209, 159, 100), "Loves me...", false, true);
                         }
                         else
                         {
-                            CombatText.NewText(new Rectangle((int)Main.LocalPlayer.Center.X, (int)Main.LocalPlayer.Center.Y - 12, Main.LocalPlayer.width / 5, Main.LocalPlayer.height / 5), new Color(163, 209, 159, 100), "Loves me not...", false, true);
+                            CombatText.NewText(new Rectangle((int)Player.Center.X, (int)Player.Center.Y - 12, Player.width / 5, Player.height / 5), new Color(163, 209, 159, 100), "Loves me not...", false, true);
                         }
                     }
                 }

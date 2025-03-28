@@ -60,7 +60,7 @@ namespace GoldLeaf.Items.Grove.Toxin
             float sin = (float)(Math.Sin(rottime * (2 + (3f * squash))) * (10 * squash));
             float cos = (float)(Math.Cos(rottime * (2 + (3f * squash))) * (10 * squash));
             
-            spriteBatch.Draw(tex, new Rectangle((int)(drawPos.X - (sin/2)), (int)(drawPos.Y - (cos/2)), tex.Width + (int)(sin), tex.Height + (int)(cos)), Color.White);
+            spriteBatch.Draw(tex, new Rectangle((int)(drawPos.X - (sin)), (int)(drawPos.Y - (cos)), tex.Width + (int)(sin*2), tex.Height + (int)(cos*2)), Color.White);
             //spriteBatch.Draw(tex, new Rectangle((int)(Item.position.X - Main.screenPosition.X - Math.Sin(GoldLeafWorld.rottime / squash) * 2), (int)(Item.position.Y - Main.screenPosition.Y - Math.Cos(GoldLeafWorld.rottime / squash) * 2), (int)(tex.Width + (Math.Sin(GoldLeafWorld.rottime / squash) * 4)), (int)(tex.Height + (Math.Cos(GoldLeafWorld.rottime / squash) * 4))), Color.White);
 
             return false;

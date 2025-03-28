@@ -46,6 +46,7 @@ namespace GoldLeaf.Items.Blizzard
             recipe.AddIngredient(ItemType<FrostCloth>(), 6);
             recipe.AddIngredient(ItemID.PurificationPowder, 25);
             recipe.AddTile(TileID.Anvils);
+            recipe.AddOnCraftCallback(RecipeCallbacks.AuroraCraftEffect);
             recipe.Register();
         }
     }
@@ -145,7 +146,7 @@ namespace GoldLeaf.Items.Blizzard
 
             if (Projectile.ai[1] < 20 && Projectile.timeLeft % 3 == 0)
             {
-                Dust dust = Dust.NewDustPerfect(Projectile.Center, DustType<AuroraTwinkle>(), Vector2.Zero, 0, ColorHelper.AuroraAccentColor(GoldLeafWorld.Timer * 0.25f), Main.rand.NextFloat(0.25f, 0.5f));
+                Dust dust = Dust.NewDustPerfect(Projectile.Center, DustType<AuroraTwinkle>(), Vector2.Zero, 0, ColorHelper.AuroraAccentColor(Main.GlobalTimeWrappedHourly * 15f), Main.rand.NextFloat(0.25f, 0.5f));
                 dust.noLight = true;
                 dust.velocity *= 0.2f;
                 dust.rotation = Main.rand.NextFloat(-12, 12);
@@ -183,7 +184,7 @@ namespace GoldLeaf.Items.Blizzard
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Color color = ColorHelper.AuroraColor(GoldLeafWorld.Timer * 0.25f); color.A = 0;
+            Color color = ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 5f); color.A = 0;
             Texture2D tex = TextureAssets.Projectile[Projectile.type].Value;
             Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, color * Math.Clamp(Math.Abs((Projectile.velocity.Y)/2), 0, 1), Projectile.rotation, tex.Size() / 2, Projectile.scale * 1.25f, SpriteEffects.None, 0f);
             Main.spriteBatch.Draw(glowTex.Value, Projectile.Center - Main.screenPosition, null, color * Math.Clamp(Math.Abs((Projectile.velocity.Y)/2), 0, 1), Projectile.rotation, glowTex.Size() / 2, Math.Abs(Projectile.velocity.Y / 3), SpriteEffects.None, 0f);

@@ -410,3 +410,13 @@ DragonSkull: {
 		Has a unique set bonus with heaven armor
 		'''
 }
+
+AuroraDye: {
+	DisplayName: Aurora Dye
+	Tooltip: ""
+}
+
+MatteGoldDye: {
+	DisplayName: Brass Dye
+	Tooltip: ""
+}

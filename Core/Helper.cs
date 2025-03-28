@@ -36,6 +36,8 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
 
         public static Vector3 ScreenCoord(this Vector3 vector) => new(-1 + (vector.X / Main.screenWidth * 2), (-1 + (vector.Y / Main.screenHeight * 2f)) * -1, 0);
 
+        public static float WorldTimer => Main.GlobalTimeWrappedHourly;
+
         public static bool IsVanitySet(Player player, int head, int body, int legs) 
         {
             if (player.armor[0].type == head && player.armor[10].type == ItemID.None || player.armor[10].type == head &&
@@ -133,17 +135,17 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
             return sec / 60 + ":" + (sec % 60 < 10 ? "0" + sec % 60 : "" + sec % 60);
         }
 
-        public static int TimeToTicks(int hours, int min, int sec)
+        public static int TimeToTicks(float hours, float min, float sec)
         {
-            return (hours * 216000) + (min * 3600) + (sec * 60);
+            return (int)((hours * 216000) + (min * 3600) + (sec * 60));
         }
-        public static int TimeToTicks(int min, int sec)
+        public static int TimeToTicks(float min, float sec)
         {
-            return (min * 3600) + (sec * 60);
+            return (int)((min * 3600) + (sec * 60));
         }
-        public static int TimeToTicks(int sec)
+        public static int TimeToTicks(float sec)
         {
-            return sec * 60;
+            return (int)(sec * 60);
         }
 
         public static float CompareAngle(float baseAngle, float targetAngle)
@@ -792,7 +794,7 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
 
         public static Color AuroraColor() 
         {
-            float timer = GoldLeafWorld.Timer % 9;
+            float timer = Main.GlobalTimeWrappedHourly % 9;
             var auroraGreen = new Color(0, 255, 189);
             var auroraBlue = new Color(0, 164, 242);
             var auroraPurple = new Color(122, 63, 255);
@@ -831,7 +833,7 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
 
         public static Color AuroraAccentColor()
         {
-            float timer = GoldLeafWorld.Timer % 9;
+            float timer = Main.GlobalTimeWrappedHourly % 9;
             var auroraGreen = new Color(0, 255, 189);
             var auroraBlue = new Color(0, 164, 242);
             var auroraPurple = new Color(122, 63, 255);

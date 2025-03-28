@@ -1,6 +1,6 @@
 FrostySet:
 	'''
 	{$CommonItemTooltip.PercentIncreasedMagicDamage}
-	Double Tap {1} to inflict snap freeze on enemies near the cursor
-	Snap frozen enemies die at 20% health, does not work on bosses
+	Double Tap {1} to snap freeze enemies near the cursor
+	Snap frozen enemies die at 25% health, does not work on bosses
 	'''

@@ -28,7 +28,7 @@ namespace GoldLeaf.Items.Granite
 			Item.damage = 19;
 			Item.DamageType = DamageClass.Melee;
 
-            Item.UseSound = SoundID.Item1;
+            Item.UseSound = SoundID.NPCDeath55;
             Item.useStyle = ItemUseStyleID.Swing;
 			Item.useTime = 30;
 			Item.useAnimation = 30;

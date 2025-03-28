@@ -32,11 +32,8 @@ namespace GoldLeaf
 
             if (Main.netMode != NetmodeID.Server)
             {
-                Asset<Effect> gameboyDyeShader = Assets.Request<Effect>("Effects/GameboyDye");
                 Asset<Effect> gameboyFilterShader = Assets.Request<Effect>("Effects/Gameboy");
-
-                GameShaders.Armor.BindShader(ItemType<RetroDye>(), new ArmorShaderData(gameboyDyeShader, "GameboyDyePass"));
-
+                
                 Filters.Scene["Gameboy"] = new Filter(new ScreenShaderData(gameboyFilterShader, "GameboyPass"), EffectPriority.VeryHigh);
             }
 

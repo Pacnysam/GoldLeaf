@@ -6,6 +6,11 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.Localization;
 using GoldLeaf.Items.Grove.Wood;
+using GoldLeaf.Items.Grove;
+using GoldLeaf.Items.Blizzard;
+using GoldLeaf.Items.VanillaBossDrops;
+using GoldLeaf.Tiles.Decor;
+using Terraria.GameContent.ItemDropRules;
 
 namespace GoldLeaf.Core
 {
@@ -16,6 +21,8 @@ namespace GoldLeaf.Core
             for (int i = 0; i < Recipe.numRecipes; i++)
             {
                 Recipe recipe = Main.recipe[i];
+
+                recipe.TryGetIngredient(ItemType<AuroraCluster>(), out Item item);
 
                 /*if (recipe.TryGetIngredient(ItemType<EveDroplet>(), out Item aether) && (recipe.HasCondition(Condition.NearLava) || recipe.HasTile(TileID.Furnaces)))
                 {

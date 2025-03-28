@@ -20,18 +20,18 @@ float4 ArmorMyShader(float4 sampleColor : COLOR0, float2 coords : TEXCOORD0) : C
 {
     float4 color = tex2D(uImage0, coords);
     
-    float brightness = (color.x + color.y + color.z) / 3.0;
+    float brightness = (color.r + color.g + color.b) / 3.0;
     
-    if (color.w == 0)
+    if (color.a == 0)
         return color;
     else if (brightness < 0.235)
-        color.xyz = float3(8, 24, 32) / 255.0;
+        color.rgb = float3(8, 24, 32) / 255.0;
     else if (brightness < 0.5)
-        color.xyz = float3(52, 104, 86) / 255.0;
+        color.rgb = float3(52, 104, 86) / 255.0;
     else if (brightness < 0.75)
-        color.xyz = float3(136, 192, 112) / 255.0;
+        color.rgb = float3(136, 192, 112) / 255.0;
     else
-        color.xyz = float3(224, 248, 208) / 255.0;
+        color.rgb = float3(224, 248, 208) / 255.0;
     
     return color;
 }

@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.ModLoader;
+using GoldLeaf.Items.Grove;
+using Terraria.ID;
 
 namespace GoldLeaf.Effects.Dusts
 {
@@ -111,7 +113,7 @@ namespace GoldLeaf.Effects.Dusts
         }
     }
 
-    public class Ember : ModProjectile //nabbed from slr
+    public class Ember : AetherEmber //nabbed from slr
     {
         public override string Texture => "GoldLeaf/Effects/Dusts/SpecialSmokeDust";
 
@@ -121,11 +123,14 @@ namespace GoldLeaf.Effects.Dusts
             Projectile.friendly = true;
             Projectile.aiStyle = 1;
             Projectile.width = Projectile.height = 12;
-            Projectile.timeLeft = 70;
             //ProjectileID.Sets.TrailCacheLength[Projectile.type] = 9;
             //ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+            Projectile.timeLeft = 70;
             Projectile.extraUpdates = 1;
             Projectile.alpha = 255;
+            Projectile.penetrate = -1;
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = -1;
         }
 
         public override void AI()
@@ -138,6 +143,18 @@ namespace GoldLeaf.Effects.Dusts
                 dust.scale = 0.65f * Projectile.scale;
                 dust.rotation = Main.rand.NextFloatDirection();
             }
+        }
+
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        {
+            Projectile.damage--;
+            target.AddBuff(BuffID.OnFire, Main.rand.Next(Helper.TimeToTicks(6f), Helper.TimeToTicks(8.5f)));
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            Projectile.damage--;
+            target.AddBuff(BuffID.OnFire, Main.rand.Next(Helper.TimeToTicks(6f), Helper.TimeToTicks(8.5f)));
         }
     }
 }

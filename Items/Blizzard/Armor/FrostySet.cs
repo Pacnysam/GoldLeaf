@@ -22,6 +22,9 @@ using Terraria.Audio;
 using Terraria.WorldBuilding;
 using Terraria.Graphics.Shaders;
 using GoldLeaf.Items.Pickups;
+using Terraria.GameContent.ItemDropRules;
+using Conditions = Terraria.GameContent.ItemDropRules.Conditions;
+using Terraria.GameContent.Bestiary;
 
 namespace GoldLeaf.Items.Blizzard.Armor
 {
@@ -65,10 +68,10 @@ namespace GoldLeaf.Items.Blizzard.Armor
 
         /*public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor)
         {
-            //color = ColorHelper.AuroraColor(GoldLeafWorld.Timer * 0.05f);
-            color = ColorHelper.AuroraColor(GoldLeafWorld.Timer * 0.05f) * (0.875f + (float)Math.Sin(GoldLeafWorld.rottime) * 0.125f);
+            //color = ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 0.05f);
+            color = ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 0.05f) * (0.875f + (float)Math.Sin(GoldLeafWorld.rottime) * 0.125f);
 
-            Color glowColor = ColorHelper.AuroraColor(GoldLeafWorld.Timer * 0.05f); glowColor.A = 0;
+            Color glowColor = ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 0.05f); glowColor.A = 0;
             glowMask = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
             glowMaskColor = glowColor * (0.3f - (float)Math.Sin(GoldLeafWorld.rottime) * 0.125f);
         }*/
@@ -102,6 +105,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<AuroraCluster>(), 16);
             recipe.AddTile(TileID.Anvils);
+            recipe.AddOnCraftCallback(RecipeCallbacks.AuroraCraftEffect);
             recipe.Register();
         }
     }
@@ -160,10 +164,10 @@ namespace GoldLeaf.Items.Blizzard.Armor
 
         /*public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor)
         {
-            //color = ColorHelper.AuroraColor(GoldLeafWorld.Timer * 0.05f);
-            //color = ColorHelper.AuroraColor(GoldLeafWorld.Timer * 0.05f) * (0.875f + (float)Math.Sin(GoldLeafWorld.rottime) * 0.125f);
+            //color = ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 0.05f);
+            //color = ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 0.05f) * (0.875f + (float)Math.Sin(GoldLeafWorld.rottime) * 0.125f);
 
-            Color glowColor = ColorHelper.AuroraColor(GoldLeafWorld.Timer * 0.05f); glowColor.A = 0;
+            Color glowColor = ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 0.05f); glowColor.A = 0;
             glowMask = frontEquip;
             glowMaskColor = glowColor;
         }*/
@@ -174,6 +178,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
             recipe.AddIngredient(ItemType<FrostCloth>(), 8);
             recipe.AddIngredient(ItemType<AuroraCluster>(), 12);
             recipe.AddTile(TileID.Loom);
+            recipe.AddOnCraftCallback(RecipeCallbacks.AuroraCraftEffect);
             recipe.Register();
         }
     }
@@ -208,7 +213,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
                 for (int i = 0; i < 200; i++)
                 {
                     float distanceCheck = Vector2.Distance(player.MountedCenter, Main.npc[i].Center);
-                    if (distanceCheck < num && distanceCheck < 750f && Vector2.Distance(Main.MouseWorld, Main.npc[i].Center) <= 50)
+                    if (distanceCheck < num && distanceCheck < 800f && Vector2.Distance(Main.MouseWorld, Main.npc[i].Center) <= 100)
                     {
                         target = i;
                         num = distanceCheck;
@@ -220,9 +225,18 @@ namespace GoldLeaf.Items.Blizzard.Armor
 
                     player.AddBuff(BuffType<SnapFreezeBuff>(), TimeToTicks(20));
 
-                    for (float k = 0; k < 6.28f; k += 0.15f)
-                        Dust.NewDustPerfect(player.MountedCenter, DustType<ArcticDust>(), Vector2.One.RotatedBy(k) * 2);
+                    float seed = Main.rand.NextFloat(0f, 8f);
 
+                    for (float k = 0; k < 6.28f; k += (6.28f / 24))
+                    {
+                        Dust dust = Dust.NewDustPerfect(player.MountedCenter, DustType<AuroraTwinkle>(), Vector2.One.RotatedBy(k) * 6f /* (float)((Math.Sin(k * 3)/2) + 1f)*/, 5, ColorHelper.AuroraAccentColor(seed + (k * 5.4f)), Main.rand.NextFloat(0.6f, 0.9f));
+                        dust.rotation = Main.rand.NextFloat(-18f, 18f);
+                        dust.noLight = true;
+                        dust.customData = player;
+                    }
+                    Projectile proj = Projectile.NewProjectileDirect(player.GetSource_FromThis(), player.MountedCenter, Vector2.Zero, ProjectileType<AuroraStar>(), 0, 0, Main.myPlayer, 3.6f, 0.9f);
+                    proj.rotation = Main.rand.NextFloat(-0.015f, 0.015f);
+                    
                     SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Deltarune/IceSpell") { Volume = 0.5f });
 
                     /*Vector2 value = Main.npc[target].Center - player.MountedCenter;
@@ -232,43 +246,65 @@ namespace GoldLeaf.Items.Blizzard.Armor
                     {
                         num5 = num4 / num5;
                     }
-                    value *= num5;
-
-                    if (Main.myPlayer == Player.whoAmI)
-                    {
-                        SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Deltarune/IceSpell") { Volume = 0.35f });
-                        //Projectile.NewProjectile(player.GetSource_FromThis(), player.MountedCenter, value, ProjectileType<SnapFreezeBeam>(), 0, 0f, player.whoAmI);
-                    }*/
+                    value *= num5;*/
                 }
             }
         }
 
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            if (!(target.HasBuff(BuffType<SnapFreezeBuff>()) && target.life > 0 && target.life <= target.lifeMax / 5 && !target.boss && Main.myPlayer == Player.whoAmI))
+            if (target.HasBuff(BuffType<SnapFreezeBuff>()))
             {
-                modifiers.ScalingBonusDamage += 0.2f;
+                modifiers.ScalingBonusDamage += 0.25f;
             }
-        }
-
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-        {
-            if (target.HasBuff(BuffType<SnapFreezeBuff>()) && target.life > 0 && target.life <= target.lifeMax / 5 && !target.boss && Main.myPlayer == Player.whoAmI)
+            if (target.HasBuff(BuffType<SnapFreezeBuff>()) && target.life > 0 && target.life <= target.lifeMax / 5 && !target.boss)
             {
-                target.StrikeInstantKill();
                 Projectile.NewProjectileDirect(Player.GetSource_OnHit(target), target.Center, new Vector2(0, -8.5f), ProjectileType<SnapFreezeEffect>(), 0, 0, Player.whoAmI);
-                SoundEngine.PlaySound(SoundID.DeerclopsIceAttack /*with { Volume = 0.85f, Pitch = -0.3f, PitchVariance = 0.8f }*/);
+                SoundEngine.PlaySound(SoundID.DeerclopsIceAttack with { Volume = 0.7f, Pitch = -0.1f, PitchVariance = 0.25f });
+                target.RequestBuffRemoval(BuffType<SnapFreezeBuff>());
 
                 ReduceBuffTime(Player, BuffType<SnapFreezeBuff>(), TimeToTicks(10));
 
-                int i = Item.NewItem(Player.GetSource_FromThis(), target.Center, ItemType<StarLarge>());
+                int i = Item.NewItem(Player.GetSource_Loot(), target.Center, ItemType<StarLarge>(), 1, true, 0, true);
                 Main.item[i].playerIndexTheItemIsReservedFor = Player.whoAmI;
-            } 
-            else if (target.life <= 0) 
-            {
-                ReduceBuffTime(Player, BuffType<SnapFreezeBuff>(), TimeToTicks(5));
+
+                if (Main.netMode == NetmodeID.MultiplayerClient && i >= 0)
+                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, i, 1f);
+
+                modifiers.SetInstantKill();
             }
+            /*else if (target.life <= 0)
+            {
+                ReduceBuffTime(Player, BuffType<SnapFreezeBuff>(), TimeToTicks(3));
+            }*/
         }
+
+        /*public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            /if (target.HasBuff(BuffType<SnapFreezeBuff>()) && target.life > 0)
+            {
+                Projectile proj = Projectile.NewProjectileDirect(Player.GetSource_OnHit(target), target.Center, Vector2.Zero, ProjectileType<AuroraStar>(), 0, 0, Player.whoAmI, target.scale, 0.875f);
+                proj.rotation = Main.rand.NextFloat(-0.015f, 0.015f);
+            }
+            if (target.HasBuff(BuffType<SnapFreezeBuff>()) && target.life > 0 && target.life <= target.lifeMax / 5 && !target.boss)
+            {
+                Projectile.NewProjectileDirect(Player.GetSource_OnHit(target), target.Center, new Vector2(0, -8.5f), ProjectileType<SnapFreezeEffect>(), 0, 0, Player.whoAmI);
+                SoundEngine.PlaySound(SoundID.DeerclopsIceAttack with { Volume = 0.7f, Pitch = -0.1f, PitchVariance = 0.2f });
+                target.RequestBuffRemoval(BuffType<SnapFreezeBuff>());
+
+                ReduceBuffTime(Player, BuffType<SnapFreezeBuff>(), TimeToTicks(10));
+
+                int i = Item.NewItem(Player.GetSource_Loot(), target.Center, ItemType<StarLarge>(), 1, true, 0, true);
+                Main.item[i].playerIndexTheItemIsReservedFor = Player.whoAmI;
+
+                if (Main.netMode == NetmodeID.MultiplayerClient && i >= 0)
+                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, i, 1f);
+            }
+            if (target.life <= 0)
+            {
+                ReduceBuffTime(Player, BuffType<SnapFreezeBuff>(), TimeToTicks(3));
+            }
+        }*/
 
         /*public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo) //wtf
         {
@@ -295,7 +331,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
             drawInfo.DrawDataCache.Add(data2);
         }*/
     }
-
+    
     public class FrostyMaskLayer : PlayerDrawLayer
     {
         private static Asset<Texture2D> tex;
@@ -344,6 +380,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
 
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
             BuffID.Sets.LongerExpertDebuff[Type] = false;
+            BuffID.Sets.CanBeRemovedByNetMessage[Type] = true;
         }
     }
 
@@ -352,11 +389,13 @@ namespace GoldLeaf.Items.Blizzard.Armor
         public override bool InstancePerEntity => true;
 
         private static Asset<Texture2D> maskTex;
+        private static Asset<Texture2D> darkMaskTex;
         private static Asset<Texture2D> bloomTex;
         private static Asset<Texture2D> darkBloomTex;
         public override void Load()
         {
             maskTex = Request<Texture2D>("GoldLeaf/Items/Blizzard/Armor/SnapFreezeMask");
+            darkMaskTex = Request<Texture2D>("GoldLeaf/Items/Blizzard/Armor/SnapFreezeMaskDark");
             bloomTex = Request<Texture2D>("GoldLeaf/Textures/Masks/Mask1");
             darkBloomTex = Request<Texture2D>("GoldLeaf/Textures/GlowBlack");
         }
@@ -372,7 +411,12 @@ namespace GoldLeaf.Items.Blizzard.Armor
         public override void PostAI(NPC npc)
         {
             if (npc.HasBuff(BuffType<SnapFreezeBuff>()))
+            { 
                 snapFreezeTime += 0.1f;
+                
+                //Color color = ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 0.05f) * ((Math.Clamp(snapFreezeTime, 0, 5) / 5) * 0.35f);
+                //Lighting.AddLight((int)npc.Center.X/16, (int)npc.Center.Y/16, color.R / 255, color.G / 255, color.B / 255);
+            }
 
             /*if (!npc.HasBuff(BuffType<SnapFreezeBuff>()) && snapFreezeTime > 0)
             {
@@ -381,18 +425,40 @@ namespace GoldLeaf.Items.Blizzard.Armor
             }*/
         }
 
+        public override void OnHitByItem(NPC npc, Player player, Item item, NPC.HitInfo hit, int damageDone)
+        {
+            if (npc.HasBuff(BuffType<SnapFreezeBuff>()) && npc.life > 0)
+            {
+                SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact, npc.Center);
+                Projectile proj = Projectile.NewProjectileDirect(npc.GetSource_OnHurt(player), npc.Center, Vector2.Zero, ProjectileType<AuroraStar>(), 0, 0, -1, npc.scale, 0.875f);
+                proj.rotation = Main.rand.NextFloat(-0.015f, 0.015f);
+            }
+        }
+
+        public override void OnHitByProjectile(NPC npc, Projectile projectile, NPC.HitInfo hit, int damageDone)
+        {
+            if (npc.HasBuff(BuffType<SnapFreezeBuff>()) && npc.life > 0 && Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact, npc.Center);
+                Projectile proj = Projectile.NewProjectileDirect(npc.GetSource_OnHurt(Main.player[projectile.owner]), npc.Center, Vector2.Zero, ProjectileType<AuroraStar>(), 0, 0, -1, npc.scale, 0.875f);
+                proj.rotation = Main.rand.NextFloat(-0.015f, 0.015f);
+            }
+        }
+
         public override void DrawEffects(NPC npc, ref Color drawColor)
         {
-            Color color = ColorHelper.AuroraAccentColor(GoldLeafWorld.Timer * 0.05f);
+            Color color = ColorHelper.AuroraAccentColor(Main.GlobalTimeWrappedHourly * 3f);
 
-            if (npc.HasBuff(BuffType<SnapFreezeBuff>())) drawColor = NPC.buffColor(drawColor, color.R/255f, color.G/255f, color.B/255f, 1f);
+            if (npc.HasBuff(BuffType<SnapFreezeBuff>())) 
+            { 
+                drawColor = NPC.buffColor(drawColor, color.R / 255f, color.G / 255f, color.B / 255f, 1f);
+            }
         }
         
-
         public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            spriteBatch.Draw(darkBloomTex.Value, npc.Center - screenPos, new Rectangle(0, 0, darkBloomTex.Width(), darkBloomTex.Height()), Color.Black * (Math.Clamp(snapFreezeTime, 0, 5) / 5) * 1.1f, 0, darkBloomTex.Size() / 2, npc.scale * Math.Clamp(snapFreezeTime, 0, 1) * ((float)Math.Sin(GoldLeafWorld.rottime * 2) * 0.5f + 1f) * 0.75f, SpriteEffects.None, 0f);
-            spriteBatch.Draw(bloomTex.Value, npc.Center - screenPos, new Rectangle(0, 0, bloomTex.Width(), bloomTex.Height()), ColorHelper.AuroraColor(GoldLeafWorld.Timer * 0.05f) with { A = 0 } * (Math.Clamp(snapFreezeTime, 0, 5)/5) * 0.75f, 0, bloomTex.Size() / 2, npc.scale * 0.5f * Math.Clamp(snapFreezeTime, 0, 1), SpriteEffects.None, 0f);
+            spriteBatch.Draw(darkBloomTex.Value, npc.Center - screenPos, new Rectangle(0, 0, darkBloomTex.Width(), darkBloomTex.Height()), Color.Black * (Math.Clamp(snapFreezeTime, 0, 5) / 5) * 1.1f, 0, darkBloomTex.Size() / 2, npc.scale * Math.Clamp(snapFreezeTime, 0, 1) * (((float)Math.Sin(GoldLeafWorld.rottime * 2f) * 0.4f) + 1f) * 1.25f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(bloomTex.Value, npc.Center - screenPos, new Rectangle(0, 0, bloomTex.Width(), bloomTex.Height()), ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 3) with { A = 0 } * (Math.Clamp(snapFreezeTime, 0, 5)/5) * 0.75f, 0, bloomTex.Size() / 2, npc.scale * 0.5f * Math.Clamp(snapFreezeTime, 0, 1) * (((float)Math.Sin(GoldLeafWorld.rottime * 2f) * 0.4f) + 1f), SpriteEffects.None, 0f);
             return base.PreDraw(npc, spriteBatch, screenPos, drawColor);
         }
 
@@ -407,10 +473,10 @@ namespace GoldLeaf.Items.Blizzard.Armor
 
                 //spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, npc.Center, npc.frame, new Color(0, 126, 179) { A = 0 } * (1 - Math.Clamp(snapFreezeTime, 0, 1)), npc.rotation, frame, npc.scale * (2f - Math.Clamp(snapFreezeTime, 0, 1)), effects, 0f);
                 
-                spriteBatch.Draw(maskTex.Value, npc.Top + new Vector2(0, -16) - screenPos, new Rectangle(0, 0, maskTex.Width(), maskTex.Height()), ColorHelper.AuroraColor(GoldLeafWorld.Timer * 0.25f) with { A = 0 }, 0, maskTex.Size()/2, (3.2f - Math.Clamp(snapFreezeTime*2, 0, 2)) + (float)(Math.Sin(GoldLeafWorld.rottime * 3f) * 0.1f), SpriteEffects.None, 0f);
+                spriteBatch.Draw(maskTex.Value, npc.Top + new Vector2(0, -16) - screenPos, new Rectangle(0, 0, maskTex.Width(), maskTex.Height()), ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 15) with { A = 0 }, 0, maskTex.Size()/2, (3.2f - Math.Clamp(snapFreezeTime*2, 0, 2)) + (float)(Math.Sin(GoldLeafWorld.rottime * 3f) * 0.1f), SpriteEffects.None, 0f);
                 spriteBatch.Draw(maskTex.Value, npc.Top + new Vector2(0, -16) - screenPos, new Rectangle(0, 0, maskTex.Width(), maskTex.Height()), Color.White, 0, maskTex.Size() / 2, 3f - Math.Clamp(snapFreezeTime * 2, 0, 2), SpriteEffects.None, 0f);
                 spriteBatch.Draw(maskTex.Value, npc.Top + new Vector2(0, -16) - screenPos, new Rectangle(0, 0, maskTex.Width(), maskTex.Height()), ColorHelper.AdditiveWhite * (1 - Math.Clamp(snapFreezeTime, 0, 1)), 0, maskTex.Size() / 2, 3f - Math.Clamp(snapFreezeTime*2, 0, 2), SpriteEffects.None, 0f);
-                spriteBatch.Draw(maskTex.Value, npc.Top + new Vector2(0, -16 + (bufftime*2)) - screenPos, new Rectangle(0, 0, maskTex.Width(), maskTex.Height() - (int)(maskTex.Height() * bufftime)), Color.DimGray, 0, maskTex.Size()/2, 3f - Math.Clamp(snapFreezeTime*2, 0, 2), SpriteEffects.None, 0f);
+                spriteBatch.Draw(darkMaskTex.Value, npc.Top + new Vector2(0, -16 + (bufftime)) - screenPos, new Rectangle(0, 0, maskTex.Width(), maskTex.Height() - (int)(maskTex.Height() * bufftime)), Color.White, 0, maskTex.Size()/2, 3f - Math.Clamp(snapFreezeTime*2, 0, 2), SpriteEffects.None, 0f);
             }
         }
     }
@@ -418,6 +484,48 @@ namespace GoldLeaf.Items.Blizzard.Armor
     public class SnapFreezeEffect : SafetyBlanketEffect 
     {
         public override string Texture => "GoldLeaf/Items/Blizzard/Armor/SnapFreezeMask";
+    }
+
+    public class AuroraStar : ModProjectile
+    {
+        private static Asset<Texture2D> darkBloomTex;
+        public override void Load()
+        {
+            darkBloomTex = Request<Texture2D>("GoldLeaf/Textures/GlowBlack");
+        }
+
+        public override string Texture => "GoldLeaf/Textures/Flares/FlareSmall";
+
+        public override void SetDefaults()
+        {
+            Projectile.width = 30;
+            Projectile.height = 30;
+
+            Projectile.damage = 0;
+
+            Projectile.scale = 0f;
+            Projectile.timeLeft = 20;
+
+            Projectile.ai[1] = 0.9f;
+
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = -1;
+        }
+
+        public override void AI()
+        {
+            Projectile.ai[0] *= Projectile.ai[1];
+            Projectile.rotation += Projectile.rotation * 0.94f;
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Color color = ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 15); color.A = 0;
+            Texture2D tex = TextureAssets.Projectile[Projectile.type].Value;
+            Main.spriteBatch.Draw(darkBloomTex.Value, Projectile.Center - Main.screenPosition, null, Color.Black * Projectile.ai[0] * 0.8f, Projectile.rotation, darkBloomTex.Size() / 2, Projectile.ai[0] * 0.7f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, color * Projectile.ai[0], Projectile.rotation, tex.Size() / 2, Projectile.ai[0], SpriteEffects.None, 0f);
+            return false;
+        }
     }
 
     /*public class SnapFreezeBeam : ModProjectile 

@@ -78,7 +78,7 @@ namespace GoldLeaf.Effects.Dusts
         {
             if (dust.customData == null)
             {
-                dust.color = ColorHelper.AuroraAccentColor(GoldLeafWorld.Timer * 0.05f);
+                dust.color = ColorHelper.AuroraAccentColor(Main.GlobalTimeWrappedHourly * 3);
                 dust.color.R += 10; dust.color.G += 25; dust.color.B += 40; dust.color.A = 0;
             }
 
@@ -98,19 +98,26 @@ namespace GoldLeaf.Effects.Dusts
                 //dust.velocity *= 0.96f;
             }
 
-            if (dust.customData != null && dust.customData is Entity entity && dust.alpha >= 0)
+            if (dust.customData != null && dust.customData is Player player && dust.alpha >= 0)
+            {
+                //dust.position = item.Center + Vector2.UnitX.RotatedBy(dust.rotation, Vector2.Zero);
+
+                dust.velocity += Vector2.Normalize(player.MountedCenter - dust.position) * (dust.alpha * 0.1f);
+                if (dust.velocity.Length() > 4.6f) dust.velocity = Vector2.Normalize(dust.velocity) * 4.6f;
+
+            }
+            else if (dust.customData != null && dust.customData is Entity entity && dust.alpha >= 0)
             {
                 //dust.position = item.Center + Vector2.UnitX.RotatedBy(dust.rotation, Vector2.Zero);
 
                 dust.velocity += Vector2.Normalize(entity.Center - dust.position) * 0.05f;
                 if (dust.velocity.Length() > 0.05f) dust.velocity = Vector2.Normalize(dust.velocity) * 0.05f;
             }
-            /*if (dust.customData != null && dust.customData is Projectile proj && dust.alpha >= 0)
-            {
-                dust.velocity += Vector2.Normalize(proj.Center - dust.position) * 0.05f;
-                if (dust.velocity.Length() > 0.05f) dust.velocity = Vector2.Normalize(dust.velocity) * 0.05f;
-            }*/
-            dust.position += dust.velocity + (Vector2.UnitX.RotatedBy(dust.rotation/3, Vector2.Zero));
+
+            if (dust.customData != null && dust.customData is Player)
+                dust.position += dust.velocity;
+            else
+                dust.position += dust.velocity + (Vector2.UnitX.RotatedBy(dust.rotation / 3, Vector2.Zero));
 
             if (dust.alpha > 220) dust.active = false;
 

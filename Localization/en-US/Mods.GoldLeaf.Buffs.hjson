@@ -69,8 +69,8 @@ WaxCandleBuff: {
 }
 
 AetherFlameBuff: {
-	DisplayName: Aether Flame
-	Description: Your spirit is burning away!
+	DisplayName: Eternal Flame
+	Description: Flares up when stuck
 }
 
 DemitoxinBuff: {

@@ -63,12 +63,12 @@ namespace GoldLeaf.Items.Blizzard
 
         public override void UpdateInventory(Player player)
         {
-            Item.color = ColorHelper.AuroraColor(Item.timeSinceItemSpawned * 0.05f) * (0.875f + (float)Math.Sin(GoldLeafWorld.rottime) * 0.125f);
+            Item.color = ColorHelper.AuroraColor(Item.timeSinceItemSpawned) * (0.875f + (float)Math.Sin(GoldLeafWorld.rottime) * 0.125f);
         }
 
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {
-            Color color = ColorHelper.AuroraColor(GoldLeafWorld.Timer * 0.05f); color.A = 0;
+            Color color = ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 3); color.A = 0;
 
             spriteBatch.Draw(TextureAssets.Item[Item.type].Value, Item.Center - Main.screenPosition, null, ColorHelper.AuroraColor(Item.timeSinceItemSpawned * 0.05f) * (0.875f + (float)Math.Sin(GoldLeafWorld.rottime) * 0.125f), rotation, TextureAssets.Item[Item.type].Size()/2, scale, SpriteEffects.None, 0f);
             spriteBatch.Draw(TextureAssets.Item[Item.type].Value, Item.Center - Main.screenPosition, null, color * (0.3f - (float)Math.Sin(GoldLeafWorld.rottime) * 0.125f), rotation, TextureAssets.Item[Item.type].Size() / 2, scale, SpriteEffects.None, 0f);
@@ -78,9 +78,9 @@ namespace GoldLeaf.Items.Blizzard
 
         public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
-            Color color = ColorHelper.AuroraColor(GoldLeafWorld.Timer * 0.05f); color.A = 0;
+            Color color = ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 3); color.A = 0;
 
-            spriteBatch.Draw(TextureAssets.Item[Item.type].Value, position, null, ColorHelper.AuroraColor(GoldLeafWorld.Timer * 0.05f) * 0.75f * (0.875f + (float)Math.Sin(GoldLeafWorld.rottime) * 0.125f), 0, origin, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(TextureAssets.Item[Item.type].Value, position, null, ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 3f) * 0.75f * (0.875f + (float)Math.Sin(GoldLeafWorld.rottime) * 0.125f), 0, origin, scale, SpriteEffects.None, 0f);
             spriteBatch.Draw(TextureAssets.Item[Item.type].Value, position, null, color * (0.3f - (float)Math.Sin(GoldLeafWorld.rottime) * 0.125f), 0, origin, scale, SpriteEffects.None, 0f);
             return false;
         }
@@ -126,7 +126,7 @@ namespace GoldLeaf.Items.Blizzard
             }
             /*if (Item.timeSinceItemSpawned % dustTime == 0)
             {
-                Color color = ColorHelper.AuroraColor(GoldLeafWorld.Timer * 0.05f); color.A = 0;
+                Color color = ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 0.05f); color.A = 0;
 
                 dustTime = Main.rand.Next(14, 32);
 
