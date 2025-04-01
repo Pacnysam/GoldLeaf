@@ -46,7 +46,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Item.value = Item.sellPrice(0, 1, 50, 0);
             Item.rare = ItemRarityID.Blue;
 
-            ItemID.Sets.IsRangedSpecialistWeapon[Item.type] = true;
+            ItemID.Sets.IsRangedSpecialistWeapon[Type] = true;
 
             Item.shootSpeed = 11f;
             Item.useAmmo = ItemType<EveDroplet>();

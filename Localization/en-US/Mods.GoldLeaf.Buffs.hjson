@@ -39,7 +39,7 @@ VampirePotionBuff: {
 }
 
 MinionCritPotionBuff: {
-	DisplayName: Attentive
+	DisplayName: Focused
 	Description: 6% increased summon critical strike chance
 }
 

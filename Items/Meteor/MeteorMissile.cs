@@ -68,6 +68,9 @@ namespace GoldLeaf.Items.Meteor
             Projectile.ArmorPenetration = 3;
             Projectile.timeLeft = 360;
 
+            ProjectileID.Sets.DontApplyParryDamageBuff[Type] = true;
+            ProjectileID.Sets.CultistIsResistantTo[Type] = true;
+
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().canSpawnMiniHearts = false;
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().canSpawnMiniStars = false;
         }

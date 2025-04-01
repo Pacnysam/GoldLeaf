@@ -19,12 +19,9 @@ float2 uLegacyArmorSheetSize;
 float4 ArmorMyShader(float4 sampleColor : COLOR0, float2 coords : TEXCOORD0) : COLOR0
 {
     float4 color = tex2D(uImage0, coords);
-    
     float brightness = (color.r + color.g + color.b) / 3.0;
     
-    if (color.a == 0)
-        return color;
-    else if (brightness < 0.235)
+    if (brightness < 0.235)
         color.rgb = float3(8, 24, 32) / 255.0;
     else if (brightness < 0.5)
         color.rgb = float3(52, 104, 86) / 255.0;
@@ -33,7 +30,7 @@ float4 ArmorMyShader(float4 sampleColor : COLOR0, float2 coords : TEXCOORD0) : C
     else
         color.rgb = float3(224, 248, 208) / 255.0;
     
-    return color;
+    return color * color.a * sampleColor.a;
 }
 
 technique Technique1

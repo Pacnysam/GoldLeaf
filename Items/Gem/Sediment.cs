@@ -831,6 +831,11 @@ namespace GoldLeaf.Items.Gem
     {
         public override string Texture => "GoldLeaf/Textures/Empty";
 
+        public override void SetStaticDefaults()
+        {
+            ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
+        }
+
         public override void SetDefaults()
         {
             Projectile.CloneDefaults(ProjectileID.RubyBolt);

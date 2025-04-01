@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.DataStructures;
+using GoldLeaf.Effects.Dusts;
 
 namespace GoldLeaf.Items.Blizzard
 {
@@ -54,6 +55,12 @@ namespace GoldLeaf.Items.Blizzard
             var projectile = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, Main.myPlayer);
             projectile.originalDamage = Item.damage;
 
+            for (float k = 0; k < 6.28f; k += Main.rand.NextFloat(0.15f, 0.3f))
+            {
+                Dust dust = Dust.NewDustPerfect(projectile.Center, DustType<ArcticDust>(), Vector2.One.RotatedBy(k) * Main.rand.NextFloat(1.75f, 2.25f), 0, Color.White);
+                dust.noLight = true;
+            }
+
             return false;
         }
 
@@ -76,17 +83,37 @@ namespace GoldLeaf.Items.Blizzard
             Main.projFrames[Projectile.type] = 6;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+
+            ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = true;
+
+            Main.projPet[Projectile.type] = true;
+
+            ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
+            ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
         }
+        
 
         public override void SetDefaults()
         {
             Projectile.width = 28;
             Projectile.height = 38;
-            Projectile.friendly = true;
-            Projectile.tileCollide = false;
-            Projectile.ignoreWater = true;
 
+            Projectile.friendly = true;
+            Projectile.minion = true;
             Projectile.DamageType = DamageClass.MagicSummonHybrid;
+            Projectile.minionSlots = 1f;
+            Projectile.penetrate = -1;
+            Projectile.ignoreWater = true;
+        }
+
+        public override bool? CanCutTiles()
+        {
+            return false;
+        }
+
+        public override bool MinionContactDamage()
+        {
+            return false;
         }
 
         public override void AI()
@@ -123,8 +150,7 @@ namespace GoldLeaf.Items.Blizzard
 
         public override void Update(Player player, ref int buffIndex)
         {
-            // If the minions exist reset the buff time, otherwise remove the buff from the player
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<ArcticWraith>()] > 0)
+            if (player.ownedProjectileCounts[ProjectileType<ArcticWraith>()] > 0)
             {
                 player.buffTime[buffIndex] = 18000;
             }

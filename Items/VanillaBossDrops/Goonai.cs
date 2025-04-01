@@ -61,6 +61,8 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Item.value = Item.sellPrice(0, 0, 0, 20);
 
             Item.rare = ItemRarityID.Blue;
+
+            ItemID.Sets.IsRangedSpecialistWeapon[Type] = true;
         }
 
         public override bool ConsumeItem(Player player)

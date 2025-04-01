@@ -23,7 +23,6 @@ float2 uZoom;
 float4 PixelShaderFunction(float2 uv : TEXCOORD0) : COLOR0
 {
     float4 color = tex2D(uImage0, uv);
-
     float brightness = (color.x + color.y + color.z) / 3.0;
     
     if (brightness < 0.235)

@@ -49,7 +49,7 @@ namespace GoldLeaf.Core
     {
         public override bool InstancePerEntity => true;
 
-        public static List<int> summonSpeedImmune = [ProjectileID.Spazmamini, ProjectileID.DeadlySphere];
+        public List<int> summonSpeedImmune = [ProjectileID.Spazmamini, ProjectileID.DeadlySphere];
 
         private float minionSpeedCounter;
         private float sentrySpeedCounter;

@@ -269,7 +269,7 @@ VampirePotion: {
 }
 
 MinionCritPotion: {
-	DisplayName: Attentiveness Potion
+	DisplayName: Focus Potion
 	Tooltip: Allows summon weapons to critically strike
 }
 

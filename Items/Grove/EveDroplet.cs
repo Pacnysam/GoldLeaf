@@ -53,6 +53,8 @@ namespace GoldLeaf.Items.Grove
             Item.UseSound = SoundID.Item1;
 			Item.autoReuse = true;
 
+            ItemID.Sets.IsRangedSpecialistWeapon[Type] = true;
+            AmmoID.Sets.IsSpecialist[Type] = true;
             //ItemID.Sets.ItemIconPulse[Item.type] = true;
 
             Item.shoot = ProjectileType<EveDropletP>();

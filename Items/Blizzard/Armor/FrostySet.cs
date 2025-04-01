@@ -182,7 +182,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
             recipe.Register();
         }
     }
-
+    
     public class FrostyPlayer : ModPlayer 
     {
         public bool frostySet = false;
@@ -466,17 +466,12 @@ namespace GoldLeaf.Items.Blizzard.Armor
         {
             if (npc.HasBuff(BuffType<SnapFreezeBuff>()))
             {
-                //var effects = npc.spriteDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-                //Vector2 frame = new(TextureAssets.Npc[npc.type].Width() / 2, TextureAssets.Npc[npc.type].Height() / Main.npcFrameCount[npc.type] / 2);
-
                 float bufftime = (float)npc.buffTime[npc.FindBuffIndex(BuffType<SnapFreezeBuff>())]/60/10;
 
-                //spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, npc.Center, npc.frame, new Color(0, 126, 179) { A = 0 } * (1 - Math.Clamp(snapFreezeTime, 0, 1)), npc.rotation, frame, npc.scale * (2f - Math.Clamp(snapFreezeTime, 0, 1)), effects, 0f);
-                
                 spriteBatch.Draw(maskTex.Value, npc.Top + new Vector2(0, -16) - screenPos, new Rectangle(0, 0, maskTex.Width(), maskTex.Height()), ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 15) with { A = 0 }, 0, maskTex.Size()/2, (3.2f - Math.Clamp(snapFreezeTime*2, 0, 2)) + (float)(Math.Sin(GoldLeafWorld.rottime * 3f) * 0.1f), SpriteEffects.None, 0f);
                 spriteBatch.Draw(maskTex.Value, npc.Top + new Vector2(0, -16) - screenPos, new Rectangle(0, 0, maskTex.Width(), maskTex.Height()), Color.White, 0, maskTex.Size() / 2, 3f - Math.Clamp(snapFreezeTime * 2, 0, 2), SpriteEffects.None, 0f);
                 spriteBatch.Draw(maskTex.Value, npc.Top + new Vector2(0, -16) - screenPos, new Rectangle(0, 0, maskTex.Width(), maskTex.Height()), ColorHelper.AdditiveWhite * (1 - Math.Clamp(snapFreezeTime, 0, 1)), 0, maskTex.Size() / 2, 3f - Math.Clamp(snapFreezeTime*2, 0, 2), SpriteEffects.None, 0f);
-                spriteBatch.Draw(darkMaskTex.Value, npc.Top + new Vector2(0, -16 + (bufftime)) - screenPos, new Rectangle(0, 0, maskTex.Width(), maskTex.Height() - (int)(maskTex.Height() * bufftime)), Color.White, 0, maskTex.Size()/2, 3f - Math.Clamp(snapFreezeTime*2, 0, 2), SpriteEffects.None, 0f);
+                spriteBatch.Draw(darkMaskTex.Value, npc.Top + new Vector2(0, -16) - screenPos, new Rectangle(0, 0, maskTex.Width(), maskTex.Height() - (int)(maskTex.Height() * bufftime)), Color.White, 0, maskTex.Size()/2, 3f - Math.Clamp(snapFreezeTime*2, 0, 2), SpriteEffects.None, 0f);
             }
         }
     }

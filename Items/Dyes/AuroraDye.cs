@@ -13,6 +13,7 @@ using System.Diagnostics.Metrics;
 using System;
 using GoldLeaf.Effects.Dusts;
 using Terraria.Graphics.Shaders;
+using ReLogic.Content;
 
 namespace GoldLeaf.Items.Dyes
 {
@@ -20,11 +21,14 @@ namespace GoldLeaf.Items.Dyes
     {
         public override void SetStaticDefaults()
         {
+            ArmorShaderData arouraDyeShaderData = new(Request<Effect>("GoldLeaf/Effects/AuroraDye"), "AuroraDyePass");
+            //arouraDyeShaderData.UseColor(1, 1, 1).UseSecondaryColor(1, 1, 1);
+
             if (!Main.dedServ)
             {
                 GameShaders.Armor.BindShader(
                     Item.type,
-                    GameShaders.Armor.GetSecondaryShader(1, Main.LocalPlayer).UseColor(ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 3f).R/255, ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 3f).G/255, ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 3f).B/255) 
+                    arouraDyeShaderData
                 );
             }
 
