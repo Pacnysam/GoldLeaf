@@ -3,4 +3,4 @@ author = Pacnysam
 version = 0.1
 hideCode = false
 includeSource = true
-buildIgnore = .gitignore, *.sln, *.csproj, *.user, obj\*, bin\*, .vs\*, Dev\*, Properties\*, .git\*
+buildIgnore = .gitignore, *.sln, *.user, obj\*, bin\*, .vs\*, Dev\*, Properties\*, .git\*

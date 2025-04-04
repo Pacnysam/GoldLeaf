@@ -1,9 +1,0 @@
-The Alchemist class is based around Buff and Debuff managment
-
-Flasks - Main Weapon: Throw them in an arc. When they hit an enemy or a tile they will break and produce a wide variety of effects. The projectiles will not break when they contact a mirror. Hitting an enemy with flasks increases the length of their debuffs.
-
-Sprayers - Alternate Primary Weapon: You charge them up (3 stages) and then release, firing a beam that can activate mirrors with higher precision. The longer you charge, the further and faster they'll travel. Does more damage to enemies with debuffs, but shortens the length of their debuffs.
-
-Alchemical Mirrors - Support Weapon: Mirrors can be placed anywhere and will float. They have slots similar to minions.When an arcane projectile comes in contact with a mirror, a positive effect triggers and gives you a cooldown debuff. If you hit a mirror while on cooldown the mirror will shatter causing a powerful effect that damages enemies but also give you a powerful debuff. ALL MIRRORS ARE SIDEGRADES OF EACH OTHER
-
-Sickles - Secondary Weapon: You toss them similarly to boomerangs. On hitting an enemy, a debuff may transfer to an enemy. Hitting an enemy while the projectile is returning to you causes them to get knocked upward. Shatters Mirrors on Hit

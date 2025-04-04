@@ -1,3 +1,0 @@
-nightshade is an herb that grows in the whispering grove, item set is crafted with nightshade extract, made from nightshade at an alchemy table
-
-witness staff, summon weapon: holding the item summons up to 4 gazers overtime which float around the players head, left clicking makes the oldest one open their eye, shooting a bolt at the cursor and disappearing, bolts give nightshade. right click causes them all to attack at the same time without disappearing, this saps nightshade but their bullets now inflict a defense reducing poison on enemies
