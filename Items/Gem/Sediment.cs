@@ -300,7 +300,7 @@ namespace GoldLeaf.Items.Gem
         private int emeraldDropCounter = 6;
 
         private int rubyCounter = 0;
-        private int rubyShotCounter = 30;
+        private int rubyShotCounter = 15;
 
 
         public override string Texture => "GoldLeaf/Items/Gem/SedimentFull";

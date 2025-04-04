@@ -14,7 +14,7 @@ using static GoldLeaf.Core.Helper;
 
 namespace GoldLeaf.Items.Nightshade
 {
-	public class NoxGauntlet : ModItem
+	public class PorcelainPunch : ModItem
 	{
 		public override void SetDefaults()
 		{
@@ -63,7 +63,7 @@ namespace GoldLeaf.Items.Nightshade
         }
     }
 
-    public class NightshadeHeist : ModBuff
+    public class NightshadeHeist : ModBuff //TODO: Move this to witness
     {
         public override string Texture => CoolBuffTex(base.Texture);
 

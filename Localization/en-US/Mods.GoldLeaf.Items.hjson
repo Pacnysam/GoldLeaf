@@ -99,12 +99,12 @@ Whirlpool: {
 	Tooltip: Casts explosive whirlpools that slightly home toward the cursor
 }
 
-NoxGauntlet: {
-	DisplayName: Nox Gauntlet
+PorcelainPunch: {
+	DisplayName: Porcelain Punch
 	Tooltip:
 		'''
-		<left> to punch, stuns at the cost of nightshade
-		<right> to launch the gauntlet forward and steal some nightshade
+		<left> to punch forward, stealing 2 nightshade on hit
+		<right> to consume nightshade and go into a frenzy
 		'''
 }
 
@@ -405,9 +405,8 @@ DragonSkull: {
 	DisplayName: Dragon Skull Helmet
 	Tooltip:
 		'''
-		{0}% increased minion and sentry speed
-		{1}% decreased attack speed
-		Has a unique set bonus with heaven armor
+		Converts all minion slots into sentry slots
+		{0}% increased sentry speed
 		'''
 }
 

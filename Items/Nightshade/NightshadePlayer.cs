@@ -19,14 +19,14 @@ namespace GoldLeaf.Items.Nightshade
         public int nightshade = 0;
         public int nightshadeTimer = 60;
         public int nightshadeMin = 0;
-        public int nightshadeMax = 12;
+        public int nightshadeMax = 10;
 
         public bool nightshadeRing = false;
 
         public override void ResetEffects()
         {
             nightshadeMin = 0;
-            nightshadeMax = 12;
+            nightshadeMax = 10;
             nightshadeRing = false;
         }
 

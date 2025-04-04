@@ -25,10 +25,9 @@ namespace GoldLeaf.Items.Misc.Armor
     [AutoloadEquip(EquipType.Head)]
     public class DragonSkull : ModItem
     {
-        private readonly float SummonSpeed = 8;
-        private readonly float SpeedDecrease = 12;
+        private readonly float SentrySpeed = 20;
 
-        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(SummonSpeed, SpeedDecrease);
+        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(SentrySpeed);
 
         public override void SetDefaults()
         {
@@ -36,17 +35,17 @@ namespace GoldLeaf.Items.Misc.Armor
             Item.height = 24;
 
             Item.value = Item.buyPrice(0, 3, 50, 0);
-            Item.rare = ItemRarityID.Blue;
+            Item.rare = ItemRarityID.Orange;
 
             Item.headSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
-            Item.defense = 9;
+            Item.defense = 7;
             //Item.vanity = true;
         }
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MinionSpeedPlayer>().summonSpeed += SummonSpeed/100;
-            player.GetModPlayer<GoldLeafPlayer>().itemSpeed += SpeedDecrease/100;
+            player.GetModPlayer<MinionSpeedPlayer>().sentrySpeed += SentrySpeed/100;
+            player.GetModPlayer<DragonSkullPlayer>().dragonSkull = true;
         }
 
         public override void SetStaticDefaults()
@@ -54,7 +53,7 @@ namespace GoldLeaf.Items.Misc.Armor
             ArmorIDs.Head.Sets.PreventBeardDraw[Item.headSlot] = false;
         }
     }
-
+    
     public class DragonSkullLayer : PlayerDrawLayer
     {
         private static Asset<Texture2D> tex;
@@ -91,8 +90,22 @@ namespace GoldLeaf.Items.Misc.Armor
         }
     }
 
-    /*public class DragonSkullCrownPlayer : ModPlayer 
+    public class DragonSkullPlayer : ModPlayer 
     {
-        
-    }*/
+        public bool dragonSkull = false;
+
+        public override void ResetEffects()
+        {
+            dragonSkull = false;
+        }
+
+        public override void PostUpdateEquips()
+        {
+            if (dragonSkull) 
+            {
+                Player.maxTurrets += Player.maxMinions;
+                Player.maxMinions = -1;
+            }
+        }
+    }
 }
