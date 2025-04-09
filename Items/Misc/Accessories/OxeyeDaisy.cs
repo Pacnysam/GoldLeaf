@@ -46,6 +46,14 @@ namespace GoldLeaf.Items.Misc.Accessories
 			Item.accessory = true;
 		}
 
+        public override void AddRecipes()
+        {
+            Recipe oxeyeDye = Recipe.Create(ItemID.BrightSilverDye, 1)
+                .AddIngredient(ItemType<OxeyeDaisy>())
+                .AddTile(TileID.DyeVat)
+                .Register();
+        }
+
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.GetModPlayer<OxeyePlayer>().oxeyeDaisy = true;

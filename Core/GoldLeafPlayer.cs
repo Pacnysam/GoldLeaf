@@ -34,7 +34,9 @@ namespace GoldLeaf.Core
         public int craftTimer = 0;
 
         public float itemSpeed;
+
         public float critDamageMult = 1f;
+
         public int summonCritChance = 0;
 
         #region minor variables
@@ -47,7 +49,7 @@ namespace GoldLeaf.Core
 
         public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)
         {
-            if ((item.DamageType == DamageClass.Summon || item.DamageType == DamageClass.SummonMeleeSpeed || item.DamageType == DamageClass.MagicSummonHybrid) && ((summonCritChance > 0 && Main.rand.NextBool(summonCritChance, 100)) || summonCritChance > 100))
+            if (item.DamageType.CountsAsClass(DamageClass.Summon) && ((summonCritChance > 0 && Main.rand.NextBool(summonCritChance, 100)) || summonCritChance > 100))
             {
                 modifiers.SetCrit();
             }
@@ -58,7 +60,7 @@ namespace GoldLeaf.Core
         public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
         {
             int totalSummonCritChance = summonCritChance + proj.GetGlobalProjectile<GoldLeafProjectile>().summonCritChance;
-            if ((proj.DamageType == DamageClass.Summon || proj.DamageType == DamageClass.SummonMeleeSpeed || proj.DamageType == DamageClass.MagicSummonHybrid) && ((summonCritChance > 0 && Main.rand.NextBool(totalSummonCritChance, 100)) || summonCritChance > 100))
+            if (proj.DamageType.CountsAsClass(DamageClass.Summon) && ((summonCritChance > 0 && Main.rand.NextBool(totalSummonCritChance, 100)) || summonCritChance > 100))
             {
                 modifiers.SetCrit();
             }

@@ -24,14 +24,13 @@ namespace GoldLeaf.Core
 
         public bool canSpawnMiniHearts = true;
         public bool canSpawnMiniStars = true;
-        public bool canSuperCrit = true;
-
+        
         public float critDamageMod = 0f;
 
         public int lifesteal;
         public int lifestealMax;
 
-        public DamageClass throwingDamageType = DamageClass.Default;
+        //public DamageClass throwingDamageType = DamageClass.Default;
 
         public override void OnHitNPC(Item item, Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
@@ -40,11 +39,6 @@ namespace GoldLeaf.Core
                 lifestealMax--;
                 player.Heal(lifesteal);
             }
-        }
-
-        public override void UpdateAccessory(Item item, Player player, bool hideVisual)
-        {
-            base.UpdateAccessory(item, player, hideVisual);
         }
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
@@ -78,37 +72,12 @@ namespace GoldLeaf.Core
             }
         }
 
-        public override void UpdateInventory(Item item, Player player)
-        {
-            /*if (item.GetGlobalItem<GoldLeafItem>().throwingDamageType != DamageClass.Default)
-            {
-                if (GetInstance<MiscConfig>().ThrowerSupport)
-                {
-                    item.DamageType = DamageClass.Throwing;
-                }
-                else
-                {
-                    item.DamageType = item.GetGlobalItem<GoldLeafItem>().throwingDamageType;
-                }
-                
-                item.NetStateChanged();
-            }*/
-        }
-
         public override void ModifyItemLoot(Item item, ItemLoot itemLoot)
         {
             if (ItemID.Sets.BossBag[item.type]) 
             {
                 itemLoot.Add(ItemDropRule.FewFromOptions(5, 32, [ItemType<WatcherEyedrops>(), ItemType<WatcherCloak>(), ItemType<BatPlushie>(), ItemType<RedPlushie>(), ItemType<MadcapPainting>()]));
             }
-        }
-
-        public override void AddRecipes()
-        {
-            Recipe oxeyeDye = Recipe.Create(ItemID.BrightSilverDye, 1)
-                .AddIngredient(ItemType<OxeyeDaisy>())
-                .AddTile(TileID.DyeVat)
-                .Register();
         }
 
         public override void SetDefaults(Item item)

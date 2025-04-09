@@ -34,7 +34,6 @@ namespace GoldLeaf.Items.Vanity
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.GetModPlayer<GameboyPlayer>().gameboy = true;
-            Main.player[player.whoAmI].nightVision = true;
 
             Filters.Scene.Activate("Gameboy");
             Filters.Scene["Gameboy"].Opacity = 1f;
@@ -43,7 +42,6 @@ namespace GoldLeaf.Items.Vanity
         public override void UpdateVanity(Player player)
         {
             player.GetModPlayer<GameboyPlayer>().gameboy = true;
-            Main.player[player.whoAmI].nightVision = true;
 
             Filters.Scene.Activate("Gameboy");
             Filters.Scene["Gameboy"].Opacity = 1f;

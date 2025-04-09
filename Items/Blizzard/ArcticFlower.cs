@@ -71,6 +71,7 @@ namespace GoldLeaf.Items.Blizzard
 			//recipe.AddRecipeGroup("GoldLeaf:GoldBars", 6);
             recipe.AddIngredient(ItemType<AuroraCluster>(), 14);
             recipe.AddIngredient(ItemID.Shiverthorn, 4);
+            recipe.AddOnCraftCallback(RecipeCallbacks.AuroraCraftEffect);
             recipe.AddTile(TileID.Anvils);
 			recipe.Register();
 		}

@@ -11,9 +11,9 @@ using Terraria.ModLoader;
 using GoldLeaf.Items.Grove;
 using System.Diagnostics.Metrics;
 using System;
-using GoldLeaf.Effects.Dusts;
 using Terraria.Graphics.Shaders;
 using ReLogic.Content;
+using GoldLeaf.Items.Blizzard;
 
 namespace GoldLeaf.Items.Dyes
 {
@@ -42,6 +42,15 @@ namespace GoldLeaf.Items.Dyes
             Item.CloneDefaults(ItemID.AcidDye);
 
             Item.dye = dye;
+        }
+
+        public override void AddRecipes()
+        {
+            Recipe recipe = CreateRecipe();
+            recipe.AddIngredient(ItemID.BottledWater);
+            recipe.AddIngredient(ItemType<AuroraCluster>());
+            recipe.AddTile(TileID.DyeVat);
+            recipe.Register();
         }
     }
 }

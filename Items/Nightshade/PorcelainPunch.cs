@@ -41,7 +41,7 @@ namespace GoldLeaf.Items.Nightshade
 			Item.shootSpeed = 11f;
 		}
 
-        public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+        /*public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
             Texture2D tex = Request<Texture2D>(Texture + "Glow").Value;
             spriteBatch.Draw
@@ -60,7 +60,7 @@ namespace GoldLeaf.Items.Nightshade
                 SpriteEffects.None,
                 0f
             );
-        }
+        }*/
     }
 
     public class NightshadeHeist : ModBuff //TODO: Move this to witness

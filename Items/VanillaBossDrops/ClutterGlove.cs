@@ -30,8 +30,6 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Item.knockBack = 2;
             Item.crit = 6;
 
-            //Item.ammo = 0;
-
             Item.width = 28;
             Item.height = 38;
 
@@ -63,7 +61,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
             if (type == ProjectileID.SporeTrap) { Main.projectile[p].velocity *= Main.rand.NextFloat(0.3f, 0.5f); Main.projectile[p].timeLeft = 900; Main.projectile[p].GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.005f; }
             if (type == ProjectileID.HornetStinger) { Main.projectile[p].GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.12f; Main.projectile[p].damage += 14; }
 
-            Main.projectile[p].DamageType = Item.GetGlobalItem<GoldLeafItem>().throwingDamageType;
+            Main.projectile[p].DamageType = Item.DamageType;
             return false;
         }
 

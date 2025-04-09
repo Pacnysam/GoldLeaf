@@ -20,10 +20,6 @@ namespace GoldLeaf.Items.Nightshade
 {
 	public class VampireBat : ModItem
 	{
-        public override LocalizedText DisplayName => base.DisplayName.WithFormatArgs("Vampire Bat");
-        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs("Damaging enemies accumulates nightshade, increasing movement speed and acceleration\n" + 
-																			 "<right> to consume nightshade and leech health");
-        
 		public override void SetDefaults() 
 		{
 			Item.damage = 22;
@@ -52,7 +48,13 @@ namespace GoldLeaf.Items.Nightshade
 			Item.rare = ItemRarityID.Orange;
 		}
 
-		public override bool AltFunctionUse(Player player)
+        public override void ModifyManaCost(Player player, ref float reduce, ref float mult)
+        {
+            if (player.altFunctionUse == 2)
+                mult = 0;
+        }
+
+        public override bool AltFunctionUse(Player player)
 		{
 			return true;
 		}
@@ -70,14 +72,11 @@ namespace GoldLeaf.Items.Nightshade
                     if (Main.projectile[k].active && Main.projectile[k].owner == player.whoAmI && Main.projectile[k].type == ProjectileType<VampireBolt>())
                         return false;
                 }
-
-                Item.mana = 0;
 				Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/Monolith/Dash");
                 Item.shoot = ProjectileType<VampireBolt>();
 			}
 			else
 			{
-                Item.mana = 8;
                 Item.UseSound = SoundID.Item1;
                 Item.shoot = ProjectileType<VampireBatP>();
 			}

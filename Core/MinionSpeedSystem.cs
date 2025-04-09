@@ -49,18 +49,21 @@ namespace GoldLeaf.Core
     {
         public override bool InstancePerEntity => true;
 
-        public List<int> summonSpeedImmune = [ProjectileID.Spazmamini, ProjectileID.DeadlySphere];
+        public override bool AppliesToEntity(Projectile entity, bool lateInstantiation)
+        {
+            return entity.minion || entity.sentry;
+        }
 
         private float minionSpeedCounter;
         private float sentrySpeedCounter;
-        private float familiarSpeedCounter;
+        //private float familiarSpeedCounter;
         private int extraUpdateCache;
 
         public override bool PreAI(Projectile projectile)
         {
             Player player = Main.player[projectile.owner];
 
-            if (player != null && !summonSpeedImmune.Contains(projectile.type))
+            if (player != null && !GoldLeafWorld.summonSpeedImmune.Contains(projectile.type))
             {
                 for (int k = 0; k < extraUpdateCache; extraUpdateCache--)
                 {

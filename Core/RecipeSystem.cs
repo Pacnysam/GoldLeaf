@@ -21,9 +21,6 @@ namespace GoldLeaf.Core
             for (int i = 0; i < Recipe.numRecipes; i++)
             {
                 Recipe recipe = Main.recipe[i];
-
-                recipe.TryGetIngredient(ItemType<AuroraCluster>(), out Item item);
-
                 /*if (recipe.TryGetIngredient(ItemType<EveDroplet>(), out Item aether) && (recipe.HasCondition(Condition.NearLava) || recipe.HasTile(TileID.Furnaces)))
                 {
                     recipe.AddOnCraftCallback(RecipeCallbacks.AetherCraftEffect);

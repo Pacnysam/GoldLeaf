@@ -35,7 +35,6 @@ namespace GoldLeaf.Items.Grove
         public override void SetDefaults()
 		{
 			Item.damage = 19;
-            Item.GetGlobalItem<GoldLeafItem>().throwingDamageType = DamageClass.Ranged;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 20;
 			Item.height = 24;

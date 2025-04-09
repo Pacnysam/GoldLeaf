@@ -116,8 +116,6 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Projectile.ai[1] = 0;
 
             Projectile.DamageType = DamageClass.Ranged;
-
-            Projectile.GetGlobalProjectile<GoldLeafProjectile>().critDamageMod = 1;
         }
 
         public override void AI()

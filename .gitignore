@@ -3,6 +3,7 @@
 /.vs/
 /bin/
 /obj/
+/Dev/
 /Properties/
 *.user
 *.sln

@@ -8,8 +8,10 @@ using System.IO;
 using System.Linq;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Core
@@ -20,9 +22,7 @@ namespace GoldLeaf.Core
 
         public bool canSpawnMiniHearts = true;
         public bool canSpawnMiniStars = true;
-        public bool canSuperCrit = true;
-
-        public float critDamageMult = 1f;
+        
         public float critDamageMod = 0f;
 
         public float gravity = 0f;
@@ -44,6 +44,13 @@ namespace GoldLeaf.Core
                 target.AddBuff(target.buffType[i],target.buffTime[i] + (int)(target.buffTime[i]*amount));
             }
         }*/
+
+        public override void OnSpawn(Projectile projectile, IEntitySource source) {
+			if (source is EntitySource_ItemUse realSource) {
+				projectile.GetGlobalProjectile<GoldLeafProjectile>().critDamageMod += realSource.Item.GetGlobalItem<GoldLeafItem>().critDamageMod;
+                projectile.netUpdate = true;
+			}
+		}
 
         public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
         {
@@ -104,9 +111,23 @@ namespace GoldLeaf.Core
             }
         }
 
+        public override void SendExtraAI(Projectile projectile, BitWriter bitWriter, BinaryWriter binaryWriter)
+        {
+            binaryWriter.Write(counter);
+            binaryWriter.Write(gravity);
+            binaryWriter.Write(critDamageMod);
+        }
+
+        public override void ReceiveExtraAI(Projectile projectile, BitReader bitReader, BinaryReader binaryReader)
+        {
+            counter = binaryReader.ReadInt32();
+            gravity = binaryReader.ReadInt32();
+            critDamageMod = binaryReader.ReadSingle();
+        }
+
         public override bool OnTileCollide(Projectile projectile, Vector2 oldVelocity)
         {
-            if ((projectile.type == ProjectileID.FallingStar))
+            if (projectile.type == ProjectileID.FallingStar)
             {
                 DustHelper.DrawStar(projectile.Center, DustID.FireworkFountain_Yellow, 5, 2.6f, 1f, 0.55f, 0.6f, 0.5f, true, 0, -1);
                 DustHelper.DrawStar(projectile.Center, DustID.FireworkFountain_Blue,   5, 4.8f, 1.25f, 0.7f, 0.6f, 0.5f, true, 0, -1);

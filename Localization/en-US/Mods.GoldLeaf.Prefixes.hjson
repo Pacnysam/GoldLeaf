@@ -1,0 +1,13 @@
+CritMultTooltip: "{0:+0;-#}% critical strike damage"
+Vindictive.DisplayName: Vindictive
+Accurate.DisplayName: Accurate
+Pinpoint.DisplayName: Pinpoint
+Crooked.DisplayName: Crooked
+Flat.DisplayName: Flat
+Lopsided.DisplayName: Lopsided
+Direct.DisplayName: Direct
+
+Vital: {
+	DisplayName: Vital
+	Tooltip: Critical strikes spawn hearts
+}
