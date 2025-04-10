@@ -116,7 +116,7 @@ namespace GoldLeaf.Core
             return base.GrabStyle(item, player);
         }
 
-        public override bool OnPickup(Item item, Player player)
+        /*public override bool OnPickup(Item item, Player player)
         {
             if ((item.type == ItemID.Star || item.type == ItemID.SoulCake || item.type == ItemID.SugarPlum) && GetInstance<GameplayConfig>().ClassGimmicks)
             {
@@ -125,7 +125,7 @@ namespace GoldLeaf.Core
                 return false;
             }
             return base.OnPickup(item, player);
-        }
+        }*/
 
         private static void PullItem_Pickup(Player player, Item item, float speed, int acc)
         {

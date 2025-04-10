@@ -145,8 +145,8 @@ namespace GoldLeaf.Items.Pickups
 
         public override bool OnPickup(Player player)
         {
-            player.ManaEffect(20);
-            player.statMana += 20;
+            player.ManaEffect(40);
+            player.statMana += 40;
             SoundEngine.PlaySound(SoundID.Grab, player.Center);
             return false;
         }

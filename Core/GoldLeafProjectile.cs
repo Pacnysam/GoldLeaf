@@ -50,7 +50,11 @@ namespace GoldLeaf.Core
 				projectile.GetGlobalProjectile<GoldLeafProjectile>().critDamageMod += realSource.Item.GetGlobalItem<GoldLeafItem>().critDamageMod;
                 projectile.netUpdate = true;
 			}
-		}
+            if (source is EntitySource_Parent parent && parent.Entity is Projectile proj)
+            {
+                projectile.GetGlobalProjectile<GoldLeafProjectile>().critDamageMod = proj.GetGlobalProjectile<GoldLeafProjectile>().critDamageMod;
+            }
+        }
 
         public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
         {

@@ -25,11 +25,11 @@ float4 PixelShaderFunction(float2 uv : TEXCOORD0) : COLOR0
     float4 color = tex2D(uImage0, uv);
     float brightness = (color.x + color.y + color.z) / 3.0;
     
-    if (brightness < 0.235)
+    if (brightness < 0.2225)
         color.rgb = float3(8, 24, 32) / 255.0;
-    else if (brightness < 0.5)
+    else if (brightness < 0.475)
         color.rgb = float3(52, 104, 86) / 255.0;
-    else if (brightness < 0.75)
+    else if (brightness < 0.735)
         color.rgb = float3(136, 192, 112) / 255.0;
     else
         color.rgb = float3(224, 248, 208) / 255.0;

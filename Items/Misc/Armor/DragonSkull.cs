@@ -38,7 +38,7 @@ namespace GoldLeaf.Items.Misc.Armor
             Item.rare = ItemRarityID.Orange;
 
             Item.headSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
-            Item.defense = 7;
+            Item.defense = 9;
             //Item.vanity = true;
         }
 

@@ -91,7 +91,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
             Item.value = Item.sellPrice(0, 0, 80, 0);
             Item.rare = ItemRarityID.Blue;
 
-            Item.defense = 3;
+            Item.defense = 5;
             //Item.vanity = true;
 
             Item.faceSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Face);
@@ -116,7 +116,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(manaMax, magicDamage * 100);
 
         private static readonly int manaMax = 40;
-        private static readonly float magicDamage = 0.1f;
+        private static readonly float magicDamage = 0.12f;
 
         public int frontEquip = -1;
         public override void Load()
