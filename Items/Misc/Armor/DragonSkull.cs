@@ -62,6 +62,8 @@ namespace GoldLeaf.Items.Misc.Armor
             tex = Request<Texture2D>("GoldLeaf/Items/Misc/Armor/DragonSkull_Head");
         }
 
+        public override bool IsHeadLayer => true;
+
         public override Position GetDefaultPosition()
         {
             return new AfterParent(PlayerDrawLayers.FaceAcc);

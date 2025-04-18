@@ -107,7 +107,7 @@ namespace GoldLeaf.Items.Blizzard
         {
             Item.value = Item.sellPrice(0, 0, 7, 50);
             Item.maxStack = Item.CommonMaxStack;
-            Item.rare = ItemRarityID.Blue;
+            Item.rare = ItemRarityID.Green;
 
             Item.width = 26;
             Item.height = 26;

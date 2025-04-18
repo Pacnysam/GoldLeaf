@@ -39,7 +39,7 @@ namespace GoldLeaf.Items.Blizzard
             Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/Monolith/GhostWhistle") { Volume = 0.85f };
             Item.useStyle = ItemUseStyleID.Swing;
             Item.value = Item.sellPrice(0, 1, 20, 0);
-            Item.rare = ItemRarityID.Blue;
+            Item.rare = ItemRarityID.Green;
 			Item.autoReuse = false;
         }
 
@@ -81,9 +81,9 @@ namespace GoldLeaf.Items.Blizzard
     {
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Projectile.type] = 6;
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4;
-            ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+            Main.projFrames[Projectile.type] = 22;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
 
             ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = true;
 
@@ -119,7 +119,41 @@ namespace GoldLeaf.Items.Blizzard
 
         public override void AI()
         {
-           
+            Player player = Main.player[Projectile.owner];
+
+            if (!MinionCheckBuff(player))
+            {
+                return;
+            }
+
+            Behavior(player);
+        }
+
+        private void Behavior(Player player) 
+        {
+            /*Vector2 idlePosition = player.Center;
+            idlePosition.Y -= 32f;
+            float minionPositionOffsetX = (10 + Projectile.minionPos * 40) * -player.direction;
+            idlePosition.X += minionPositionOffsetX;*/
+        }
+
+        private bool MinionCheckBuff(Player player) 
+        {
+            if (player.dead || !player.active)
+            {
+                player.ClearBuff(BuffType<ArcticWraithBuff>());
+                return false;
+            }
+            if (player.HasBuff(BuffType<ArcticWraithBuff>()))
+            {
+                Projectile.timeLeft = 2;
+            }
+            return true;
+        }
+
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
+        {
+            return false;
         }
 
         public override bool PreDraw(ref Color lightColor)

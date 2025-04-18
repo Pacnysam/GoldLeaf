@@ -223,7 +223,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
                 {
                     Main.npc[target].AddBuff(BuffType<SnapFreezeBuff>(), TimeToTicks(10));
 
-                    player.AddBuff(BuffType<SnapFreezeBuff>(), TimeToTicks(20));
+                    player.AddBuff(BuffType<SnapFreezeBuff>(), TimeToTicks(15));
 
                     float seed = Main.rand.NextFloat(0f, 8f);
 
@@ -257,10 +257,10 @@ namespace GoldLeaf.Items.Blizzard.Armor
             {
                 modifiers.ScalingBonusDamage += 0.25f;
             }
-            if (target.HasBuff(BuffType<SnapFreezeBuff>()) && target.life > 0 && target.life <= target.lifeMax / 5 && !target.boss)
+            if (target.HasBuff(BuffType<SnapFreezeBuff>()) && (target.life) <= target.lifeMax / 4 && !target.boss)
             {
                 Projectile.NewProjectileDirect(Player.GetSource_OnHit(target), target.Center, new Vector2(0, -8.5f), ProjectileType<SnapFreezeEffect>(), 0, 0, Player.whoAmI);
-                SoundEngine.PlaySound(SoundID.DeerclopsIceAttack with { Volume = 0.7f, Pitch = -0.1f, PitchVariance = 0.25f });
+                SoundEngine.PlaySound(SoundID.DeerclopsIceAttack with { Volume = 0.7f/*, Pitch = -0.1f, PitchVariance = 0.25f*/ });
                 target.RequestBuffRemoval(BuffType<SnapFreezeBuff>());
 
                 ReduceBuffTime(Player, BuffType<SnapFreezeBuff>(), TimeToTicks(10));
@@ -281,7 +281,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
 
         /*public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            /if (target.HasBuff(BuffType<SnapFreezeBuff>()) && target.life > 0)
+            if (target.HasBuff(BuffType<SnapFreezeBuff>()) && target.life > 0)
             {
                 Projectile proj = Projectile.NewProjectileDirect(Player.GetSource_OnHit(target), target.Center, Vector2.Zero, ProjectileType<AuroraStar>(), 0, 0, Player.whoAmI, target.scale, 0.875f);
                 proj.rotation = Main.rand.NextFloat(-0.015f, 0.015f);
@@ -300,7 +300,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
                 if (Main.netMode == NetmodeID.MultiplayerClient && i >= 0)
                     NetMessage.SendData(MessageID.SyncItem, -1, -1, null, i, 1f);
             }
-            if (target.life <= 0)
+            if (target.life <= 0 && !target.HasBuff(BuffType<SnapFreezeBuff>()))
             {
                 ReduceBuffTime(Player, BuffType<SnapFreezeBuff>(), TimeToTicks(3));
             }
@@ -338,6 +338,13 @@ namespace GoldLeaf.Items.Blizzard.Armor
         public override void Load()
         {
             tex = Request<Texture2D>("GoldLeaf/Items/Blizzard/Armor/FrostyMask_Head");
+        }
+
+        public override bool IsHeadLayer => true;
+
+        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
+        {
+            return (drawInfo.drawPlayer.armor[0].type == ItemType<FrostyMask>() && drawInfo.drawPlayer.armor[10].type == ItemID.None) || drawInfo.drawPlayer.armor[10].type == ItemType<FrostyMask>();
         }
 
         public override Position GetDefaultPosition()
@@ -437,7 +444,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
 
         public override void OnHitByProjectile(NPC npc, Projectile projectile, NPC.HitInfo hit, int damageDone)
         {
-            if (npc.HasBuff(BuffType<SnapFreezeBuff>()) && npc.life > 0 && Main.netMode != NetmodeID.MultiplayerClient)
+            if (npc.HasBuff(BuffType<SnapFreezeBuff>()) && npc.life > 0 )//&& Main.netMode != NetmodeID.MultiplayerClient)
             {
                 SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact, npc.Center);
                 Projectile proj = Projectile.NewProjectileDirect(npc.GetSource_OnHurt(Main.player[projectile.owner]), npc.Center, Vector2.Zero, ProjectileType<AuroraStar>(), 0, 0, -1, npc.scale, 0.875f);

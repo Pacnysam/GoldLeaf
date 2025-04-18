@@ -17,23 +17,23 @@ using GoldLeaf.Items.Blizzard;
 
 namespace GoldLeaf.Items.Dyes
 {
-    public class AuroraDye : ModItem
+    public class SunstoneDye : ModItem
     {
         private static Asset<Texture2D> noiseTex;
         public override void Load()
         {
-            noiseTex = Request<Texture2D>("GoldLeaf/Textures/Noise/wnoise");
+            noiseTex = Request<Texture2D>("GoldLeaf/Textures/Noise/Manifold");
         }
-
         public override void SetStaticDefaults()
         {
+            ArmorShaderData arouraDyeShaderData = new(Request<Effect>("GoldLeaf/Effects/SunstoneDye"), "SunstoneDyePass");
+
             if (!Main.dedServ)
             {
-                ArmorShaderData arouraDyeShaderData = new(Request<Effect>("GoldLeaf/Effects/AuroraDye"), "AuroraDyePass");
                 GameShaders.Armor.BindShader(
                     Item.type,
                     arouraDyeShaderData
-                ).UseImage(noiseTex).UseColor(0f, 255f / 255, 135f / 255).UseSecondaryColor(236f / 255, 90f / 255, 255f / 255);
+                ).UseImage(noiseTex).UseColor(255f/255, 185f/255, 67f/255).UseSecondaryColor(30f/255, 222f/255, 139f/255);
             }
 
             Item.ResearchUnlockCount = 3;
@@ -48,13 +48,13 @@ namespace GoldLeaf.Items.Dyes
             Item.dye = dye;
         }
 
-        public override void AddRecipes()
+        /*public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.BottledWater);
-            recipe.AddIngredient(ItemType<AuroraCluster>());
+            recipe.AddIngredient(ItemType<Sunstone>());
             recipe.AddTile(TileID.DyeVat);
             recipe.Register();
-        }
+        }*/
     }
 }

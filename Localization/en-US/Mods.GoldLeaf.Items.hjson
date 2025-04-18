@@ -415,7 +415,37 @@ AuroraDye: {
 	Tooltip: ""
 }
 
-MatteGoldDye: {
+AuroraHairDye: {
+	DisplayName: Aurora Hair Dye
+	Tooltip: ""
+}
+
+BrassDye: {
 	DisplayName: Brass Dye
+	Tooltip: ""
+}
+
+Avalanche: {
+	DisplayName: Avalanche
+	Tooltip: Firerate and critical strike chance increase every time you hit a shot
+}
+
+BlizzardBrassBullet: {
+	DisplayName: Brass Bullet
+	Tooltip: Critical strikes are determined upon firing, repeated critical strikes freeze enemies
+}
+
+GlacialScissors: {
+	DisplayName: Glacial Scissors
+	Tooltip: Repeated hits freeze enemies
+}
+
+NitrogenPerfume: {
+	DisplayName: Nitrogen Perfume
+	Tooltip: First attack on an enemy freezes them briefly
+}
+
+SunstoneDye: {
+	DisplayName: Sunstone Dye
 	Tooltip: ""
 }

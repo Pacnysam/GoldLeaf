@@ -71,6 +71,22 @@ namespace GoldLeaf.Prefixes
     {
         public override float CritDamageMult => 1f;
     }
+    public class Burgeoning : CritDamagePrefix
+    {
+        public override float CritDamageMult => 0.25f;
+
+        public override void ModifyValue(ref float valueMult)
+        {
+            valueMult *= 1f + (CritDamageMult / 5) + 0.12f;
+        }
+
+        public override void SetStats(ref float damageMult, ref float knockbackMult, ref float useTimeMult, ref float scaleMult, ref float shootSpeedMult, ref float manaMult, ref int critBonus)
+        {
+            damageMult += 0.16f;
+            useTimeMult += 0.12f;
+            scaleMult += 0.15f;
+        }
+    }
     public class Vindictive : CritDamagePrefix
     {
         public override float CritDamageMult => 0.5f;

@@ -18,7 +18,7 @@ using Terraria.Graphics.Effects;
 
 namespace GoldLeaf.Items.Dyes
 {
-    internal class MatteGoldDye : ModItem
+    internal class BrassDye : ModItem
     {
         public override void SetStaticDefaults()
         {

@@ -24,7 +24,7 @@ namespace GoldLeaf.Items.Misc
             Item.height = 26;
 
             Item.buffType = BuffID.Shimmer;
-            //Item.buffTime = TimeToTicks(2);
+            Item.buffTime = 0;
 
             //ItemID.Sets.ShimmerTransformToItem[ItemID.BottledWater] = Item.type;
         }

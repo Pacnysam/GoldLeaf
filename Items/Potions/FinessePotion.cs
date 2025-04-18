@@ -11,10 +11,13 @@ using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
 using GoldLeaf.Tiles.Decor;
+using GoldLeaf.Core;
+using GoldLeaf.Items.Nightshade;
+using GoldLeaf.Items.Grove;
 
 namespace GoldLeaf.Items.Potions
 {
-    public class SentryPotion : ModItem
+    public class FinessePotion : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -23,32 +26,34 @@ namespace GoldLeaf.Items.Potions
 
         public override void SetDefaults()
         {
-            Item.CloneDefaults(ItemID.SummoningPotion);
+            Item.CloneDefaults(ItemID.SwiftnessPotion);
 
-            Item.width = 20;
+            Item.width = 16;
             Item.height = 32;
 
-            Item.buffType = BuffType<SentryPotionBuff>();
+            Item.buffType = BuffType<FinessePotionBuff>();
+            Item.buffTime = TimeToTicks(5, 0);
         }
 
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.BottledWater);
-            recipe.AddIngredient(ItemID.Shiverthorn);
-            recipe.AddIngredient(ItemID.Hive);
+            recipe.AddIngredient(ItemID.Blinkroot);
+            recipe.AddIngredient(ItemType<EveDroplet>());
+            //recipe.AddIngredient(ItemType<GroveFish>());
             recipe.AddTile(TileID.Bottles);
             recipe.Register();
         }
     }
 
-    public class SentryPotionBuff : ModBuff
+    public class FinessePotionBuff : ModBuff
     {
         public override string Texture => CoolBuffTex(base.Texture);
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.maxTurrets += 1;
+            player.GetModPlayer<GoldLeafPlayer>().itemSpeed *= 1f - (0.15f);
         }
     }
 }

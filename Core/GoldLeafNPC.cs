@@ -17,6 +17,7 @@ using GoldLeaf.Items.VanillaBossDrops;
 using GoldLeaf.Items.Potions;
 using Terraria.GameContent.Bestiary;
 using GoldLeaf.Items.Grove;
+using GoldLeaf.Items.Dyes.HairDye;
 
 namespace GoldLeaf.Core
 {
@@ -59,12 +60,18 @@ namespace GoldLeaf.Core
                 case NPCID.DyeTrader:
                     {
                         shop.Add<RetroDye>(GoldLeafConditions.UsingGameboy);
+			            shop.InsertAfter(ItemID.SilverDye, ItemType<BrassDye>());
                         //shop.Add<RetroDye>(Condition.NpcIsPresent(NPCID.GoblinTinkerer));
                         break;
                     }
                 case NPCID.WitchDoctor:
                     {
                         shop.InsertAfter(ItemID.PygmyNecklace, ItemType<ToxicPositivity>(), Condition.TimeDay);
+                        break;
+                    }
+                case NPCID.Stylist:
+                    {
+                        shop.Add(ItemType<AuroraHairDye>(), Condition.InSnow, Condition.TimeNight);
                         break;
                     }
                 case NPCID.ArmsDealer:
