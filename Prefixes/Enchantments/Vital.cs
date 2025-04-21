@@ -22,5 +22,10 @@ namespace GoldLeaf.Prefixes.Enchantments
         {
             
         }
+
+        /*public override bool CanRoll(Item item)
+        {
+            return false;
+        }*/
     }
 }

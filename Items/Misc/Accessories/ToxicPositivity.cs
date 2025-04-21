@@ -106,7 +106,7 @@ namespace GoldLeaf.Items.Misc.Accessories
             {
                 target.AddBuff(BuffType<ToxicPositivityBuff>(), 180 + (Main.LocalPlayer.CountBuffs() * 20));
 
-                SoundEngine.PlaySound(SoundID.Zombie60, target.Center);
+                //SoundEngine.PlaySound(SoundID.Zombie60, target.Center);
 
                 Projectile.NewProjectile(Player.GetSource_OnHit(target), target.position, Vector2.Zero, ProjectileType<ToxicPositivityEffect>(), 0, 0, Player.whoAmI);
             }
