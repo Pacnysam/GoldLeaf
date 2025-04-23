@@ -60,8 +60,9 @@ namespace GoldLeaf.Core
                 case NPCID.DyeTrader:
                     {
                         shop.Add<RetroDye>(GoldLeafConditions.UsingGameboy);
-			            shop.InsertAfter(ItemID.SilverDye, ItemType<BrassDye>());
                         //shop.Add<RetroDye>(Condition.NpcIsPresent(NPCID.GoblinTinkerer));
+
+                        shop.InsertAfter(ItemID.SilverDye, ItemType<BrassDye>());
                         break;
                     }
                 case NPCID.WitchDoctor:
@@ -72,6 +73,7 @@ namespace GoldLeaf.Core
                 case NPCID.Stylist:
                     {
                         shop.Add(ItemType<AuroraHairDye>(), Condition.InSnow, Condition.TimeNight);
+                        shop.Add(ItemType<SunstoneHairDye>(), Condition.InDesert, Condition.TimeDay);
                         break;
                     }
                 case NPCID.ArmsDealer:

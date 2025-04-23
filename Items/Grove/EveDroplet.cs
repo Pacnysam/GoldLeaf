@@ -14,6 +14,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.Audio;
 using ReLogic.Content;
+using GoldLeaf.Items.Grove.Boss;
+using Terraria.Graphics.Shaders;
+using GoldLeaf.Items.Gem;
 
 namespace GoldLeaf.Items.Grove
 {
@@ -34,7 +37,7 @@ namespace GoldLeaf.Items.Grove
 
         public override void SetDefaults()
 		{
-			Item.damage = 19;
+			Item.damage = 11;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 20;
 			Item.height = 24;
@@ -174,7 +177,8 @@ namespace GoldLeaf.Items.Grove
 			Projectile.tileCollide = true;
             Projectile.ignoreWater = true;
 
-            Projectile.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType = DamageClass.Ranged;
+            Projectile.DamageType = DamageClass.Ranged;
+            //Projectile.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType = DamageClass.Ranged;
 
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.3f;
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravityDelay = 15;
@@ -213,11 +217,14 @@ namespace GoldLeaf.Items.Grove
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            target.buffImmune[BuffID.OnFire] = false;
+            if (!target.HasBuff(BuffType<AetherFlameBuff>()))
+                target.AddBuff(BuffType<EveDropletBuff>(), Helper.TimeToTicks(8));
+            
+            /*target.buffImmune[BuffID.OnFire] = false;
             target.buffImmune[BuffID.Frostburn] = false;
             target.buffImmune[BuffID.CursedInferno] = false;
             target.buffImmune[BuffID.Ichor] = false;
-            target.buffImmune[BuffID.ShadowFlame] = false;
+            target.buffImmune[BuffID.ShadowFlame] = false;*/
         }
 
         public override void OnKill(int timeLeft)
@@ -233,6 +240,87 @@ namespace GoldLeaf.Items.Grove
             {
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<EveDust>(), Main.rand.NextFloat(-3 , 3) + Projectile.velocity.X / 3, Main.rand.Next(-6, 3) + Projectile.velocity.Y / 3);
             }
+        }
+    }
+
+    public class EveDropletBuff : ModBuff
+    {
+        public override string Texture => Helper.CoolBuffTex(base.Texture);
+
+        public override void SetStaticDefaults()
+        {
+            BuffID.Sets.LongerExpertDebuff[Type] = false;
+            BuffID.Sets.CanBeRemovedByNetMessage[Type] = true;
+
+            Main.buffNoSave[Type] = true;
+            Main.debuff[Type] = true;
+        }
+
+        public override void Update(NPC npc, ref int buffIndex)
+        {
+            if (Main.rand.NextBool(2))
+            {
+                Dust.NewDust(npc.position, npc.width, npc.height, DustType<EveDust>(), 0f, Main.rand.NextFloat(0f, -4f));
+            }
+        }
+    }
+    
+    public class EveDropletNPC : GlobalNPC 
+    {
+        public override bool InstancePerEntity => true;
+
+        public override void OnHitByItem(NPC npc, Player player, Item item, NPC.HitInfo hit, int damageDone)
+        {
+            EveExplode(npc, hit);
+        }
+
+        public override void OnHitByProjectile(NPC npc, Projectile projectile, NPC.HitInfo hit, int damageDone)
+        {
+            EveExplode(npc, hit);
+        }
+
+        private static void EveExplode(NPC npc, NPC.HitInfo hit)
+        {
+            if (npc.HasBuff(BuffType<EveDropletBuff>()))
+            {
+                if (npc.HasBuff(BuffID.OnFire))
+                {
+                    npc.AddBuff(BuffType<AetherFlameBuff>(), Helper.TimeToTicks(5));
+
+                    int explosion = Projectile.NewProjectile(npc.GetSource_Buff(npc.FindBuffIndex(BuffType<EveDropletBuff>())), npc.Center, Vector2.Zero, ProjectileType<AetherBurst>(), 65, 0.5f, -1, 65f, 0, 1f);
+                    Main.projectile[explosion].DamageType = hit.DamageType;
+                    Main.projectile[explosion].netUpdate = true;
+
+                    Helper.AddScreenshake(Main.LocalPlayer, 16, npc.Center);
+
+                    SoundEngine.PlaySound(SoundID.Item74, npc.Center);
+                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/RoR2/EngineerMine") { Volume = 0.4f, Pitch = -0.5f }, npc.Center);
+
+                    npc.DelBuff(npc.FindBuffIndex(BuffID.OnFire));
+                    npc.RequestBuffRemoval(BuffType<EveDropletBuff>());
+                }
+                if (npc.HasBuff(BuffID.OnFire3))
+                {
+                    npc.AddBuff(BuffType<AetherFlameBuff>(), Helper.TimeToTicks(5));
+
+                    int explosion = Projectile.NewProjectile(npc.GetSource_Buff(npc.FindBuffIndex(BuffType<EveDropletBuff>())), npc.Center, Vector2.Zero, ProjectileType<AetherBurst>(), 90, 0.5f, -1, 120f, 0, 1f);
+                    Main.projectile[explosion].DamageType = hit.DamageType;
+                    Main.projectile[explosion].netUpdate = true;
+
+                    Helper.AddScreenshake(Main.LocalPlayer, 24, npc.Center);
+
+                    SoundEngine.PlaySound(SoundID.Item74, npc.Center);
+                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/RoR2/EngineerMine") { Volume = 0.8f, Pitch = 0.25f }, npc.Center);
+
+                    npc.DelBuff(npc.FindBuffIndex(BuffID.OnFire3));
+                    npc.RequestBuffRemoval(BuffType<EveDropletBuff>());
+                }
+            }
+        }
+
+        public override void DrawEffects(NPC npc, ref Color drawColor)
+        {
+            if (npc.HasBuff(BuffType<EveDropletBuff>())) drawColor = NPC.buffColor(drawColor, 255f/255, 80f/255, 202f/255, 1f);
         }
     }
 }

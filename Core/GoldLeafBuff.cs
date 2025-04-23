@@ -36,11 +36,14 @@ namespace GoldLeaf.Core
             {
                 npc.GetGlobalNPC<GoldLeafNPC>().defenseModFlat -= 4;
             }
-
             if (type == BuffID.CursedInferno && GetInstance<GameplayConfig>().BuffChanges)
             {
                 //npc.GetGlobalNPC<GoldLeafNPC>().critDamageModFlat += 0.3f;
                 npc.GetGlobalNPC<GoldLeafNPC>().damageModFlat += 3;
+            }
+            if (type == BuffID.Frozen)
+            {
+                npc.GetGlobalNPC<GoldLeafNPC>().stunned = true;
             }
         }
 

@@ -18,24 +18,24 @@ using Terraria.GameContent.Dyes;
 
 namespace GoldLeaf.Items.Dyes.HairDye
 {
-    public class AuroraHairDye : ModItem
+    public class SunstoneHairDye : ModItem
     {
         private static Asset<Texture2D> noiseTex;
         public override void Load()
         {
-            noiseTex = Request<Texture2D>("GoldLeaf/Textures/Noise/wnoise");
+            noiseTex = Request<Texture2D>("GoldLeaf/Textures/Noise/Manifold");
         }
 
         public override void SetStaticDefaults()
         {
             if (!Main.dedServ)
             {
-                HairShaderData arouraHairDyeShaderData = new(Request<Effect>("GoldLeaf/Effects/AuroraDye"), "AuroraDyePass");
+                HairShaderData sunstoneHairDyeShaderData = new(Request<Effect>("GoldLeaf/Effects/SunstoneDye"), "SunstoneDyePass");
 
                 GameShaders.Hair.BindShader(
                     Item.type,
-                    arouraHairDyeShaderData
-                ).UseImage(noiseTex).UseColor(0f, 255f / 255, 135f / 255).UseSecondaryColor(236f / 255, 90f / 255, 255f / 255);
+                    sunstoneHairDyeShaderData
+                ).UseImage(noiseTex).UseColor(255f / 255, 185f / 255, 67f / 255).UseSecondaryColor(30f / 255, 222f / 255, 139f / 255);
             }
 
             Item.ResearchUnlockCount = 1;

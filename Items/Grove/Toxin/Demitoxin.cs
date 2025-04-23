@@ -29,9 +29,9 @@ namespace GoldLeaf.Items.Grove.Toxin
         public override void SetDefaults()
 		{
 			Item.width = 28;
-			Item.height = 26;
+			Item.height = 30;
             Item.maxStack = Item.CommonMaxStack;
-            Item.rare = ItemRarityID.Orange;
+            Item.rare = ItemRarityID.LightRed;
 
             ItemID.Sets.ItemNoGravity[Item.type] = true;
             //ItemID.Sets.ItemIconPulse[Item.type] = true;
@@ -40,7 +40,7 @@ namespace GoldLeaf.Items.Grove.Toxin
 
         public override void PostUpdate()
         {
-            if (Item.timeSinceItemSpawned % 240 < 30)
+            if (Item.timeSinceItemSpawned % 240 >= 120 && Item.timeSinceItemSpawned % 240 < 150)
                 squash = 1f;
 
             //Main.NewText((Item.timeSinceItemSpawned * 60));
@@ -82,10 +82,10 @@ namespace GoldLeaf.Items.Grove.Toxin
             Texture2D tex = TextureAssets.Item[Item.type].Value;
 
             Vector2 drawPos = Item.position - Main.screenPosition;
-            float sin = (float)(Math.Sin(rottime * (2.4f + (2f * squash))) * 6f) * squash;
-            float cos = (float)(Math.Cos(rottime * (2.4f + (2f * squash))) * 6f) * squash;
+            float sin = (float)(Math.Sin(rottime * (2f + (2f * squash))) * 7f) * squash;
+            float cos = (float)(Math.Cos(rottime * (2f + (2f * squash))) * 7f) * squash;
             
-            spriteBatch.Draw(tex, new Rectangle((int)(drawPos.X - (scale * cos)), (int)(drawPos.Y - (scale * sin)), (int)(scale * tex.Width + (cos*2)), (int)(scale * tex.Height + (sin*2))), null, lightColor, rotation, Vector2.Zero, SpriteEffects.None, 0f);
+            spriteBatch.Draw(tex, new Rectangle((int)(drawPos.X - (scale * sin)), (int)(drawPos.Y - (scale * cos)), (int)(scale * tex.Width + (sin*2)), (int)(scale * tex.Height + (cos*2))), null, lightColor, rotation, Vector2.Zero, SpriteEffects.None, 0f);
             //spriteBatch.Draw(tex, new Rectangle((int)(Item.position.X - Main.screenPosition.X - Math.Sin(GoldLeafWorld.rottime / squash) * 2), (int)(Item.position.Y - Main.screenPosition.Y - Math.Cos(GoldLeafWorld.rottime / squash) * 2), (int)(tex.Width + (Math.Sin(GoldLeafWorld.rottime / squash) * 4)), (int)(tex.Height + (Math.Cos(GoldLeafWorld.rottime / squash) * 4))), Color.White);
 
             return false;

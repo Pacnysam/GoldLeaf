@@ -77,7 +77,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
 
         public override void ModifyWeaponCrit(Player player, ref float crit)
         {
-            crit = 0;
+            crit *= 0;
         }
 
         public override void AddRecipes()

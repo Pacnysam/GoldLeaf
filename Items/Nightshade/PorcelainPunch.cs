@@ -37,7 +37,7 @@ namespace GoldLeaf.Items.Nightshade
 			
 			Item.UseSound = SoundID.Item1;
 
-			Item.shoot = ProjectileType<AetherBolt>();
+			//Item.shoot = ProjectileType<AetherBolt>();
 			Item.shootSpeed = 11f;
 		}
 

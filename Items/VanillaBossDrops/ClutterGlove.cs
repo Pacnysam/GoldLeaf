@@ -25,7 +25,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
     {
         public override void SetDefaults()
         {
-            Item.damage = 10;
+            Item.damage = 9;
             Item.DamageType = DamageClass.Ranged;
             Item.knockBack = 2;
             Item.crit = 6;
@@ -55,11 +55,11 @@ namespace GoldLeaf.Items.VanillaBossDrops
         {
             int p = Projectile.NewProjectile(source, position, velocity.RotatedBy(MathHelper.ToRadians(Main.rand.Next(-3, 3))), type, damage, knockback, player.whoAmI);
 
-            if (type == ProjectileType<EveDropletP>()) { Main.projectile[p].timeLeft = Main.rand.Next(115, 200); Main.projectile[p].velocity *= 0.7f; Main.projectile[p].damage -= 9;}
-            if (type == ProjectileType<ClutterScale>() || type == ProjectileType<ClutterTissue>()) { Main.projectile[p].damage += 11; }
-            if (type == ProjectileID.SpikyBall) { Main.projectile[p].velocity *= 0.5f; Main.projectile[p].damage -= 6; }
+            if (type == ProjectileType<EveDropletP>()) { Main.projectile[p].timeLeft = Main.rand.Next(115, 200); Main.projectile[p].velocity *= 0.7f; Main.projectile[p].damage -= 2; }
+            if (type == ProjectileType<ClutterScale>() || type == ProjectileType<ClutterTissue>()) { Main.projectile[p].damage += 13; }
+            if (type == ProjectileID.SpikyBall) { Main.projectile[p].velocity *= 0.5f; Main.projectile[p].damage -= 5; }
             if (type == ProjectileID.SporeTrap) { Main.projectile[p].velocity *= Main.rand.NextFloat(0.3f, 0.5f); Main.projectile[p].timeLeft = 900; Main.projectile[p].GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.005f; }
-            if (type == ProjectileID.HornetStinger) { Main.projectile[p].GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.12f; Main.projectile[p].damage += 14; }
+            if (type == ProjectileID.HornetStinger) { Main.projectile[p].GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.12f; Main.projectile[p].damage += 12; }
 
             Main.projectile[p].DamageType = Item.DamageType;
             return false;
@@ -131,7 +131,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Projectile.friendly = true;
             Projectile.tileCollide = true;
             Projectile.ignoreWater = false;
-            Projectile.ArmorPenetration = 10;
+            Projectile.ArmorPenetration = 12;
             Projectile.penetrate = 3;
             Projectile.extraUpdates = 1;
 

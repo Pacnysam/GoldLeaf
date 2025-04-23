@@ -21,7 +21,7 @@ using Terraria.ModLoader.IO;
 using Microsoft.Build.Evaluation;
 using Terraria.Graphics.Shaders;
 
-namespace GoldLeaf.Items.Grove
+namespace GoldLeaf.Items.Grove.Boss
 {
     public class Aether : ModItem
     {
@@ -86,7 +86,7 @@ namespace GoldLeaf.Items.Grove
             );
         }
 
-        public override void AddRecipes()
+        /*public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<Echobark>(), 20);
@@ -97,7 +97,7 @@ namespace GoldLeaf.Items.Grove
             
             recipe.AddOnCraftCallback(RecipeCallbacks.AetherCraftEffect);
             recipe.Register();
-        }
+        }*/
     }
     
     public class AetherBolt : ModProjectile
@@ -213,8 +213,8 @@ namespace GoldLeaf.Items.Grove
             }
             player.direction = ((!projDirection) ? 1 : (-1));
             player.itemRotation = vectorToCursor.ToRotation();
-            player.itemTime = 20;
-            player.itemAnimation = 20;
+            player.itemTime = 15;
+            player.itemAnimation = 15;
 
             /*if (counter < THRESHHOLD && counter >= THRESHHOLD/2)
             {
@@ -336,10 +336,10 @@ namespace GoldLeaf.Items.Grove
             }
         }
     }
-
+    
     public class AetherBurst : ModProjectile
     {
-        public override string Texture => "GoldLeaf/Textures/Empty";
+        public override string Texture => Helper.EmptyTexString;
 
         public float Radius => Helper.BezierEase(1 - (Projectile.timeLeft / 24f)) * Projectile.ai[0]; 
         
@@ -358,6 +358,9 @@ namespace GoldLeaf.Items.Grove
             Projectile.ai[1] = 20;
 
             //Projectile.extraUpdates = 1;
+
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = 6;
 
             Projectile.DamageType = DamageClass.Magic;
         }
@@ -392,15 +395,13 @@ namespace GoldLeaf.Items.Grove
             //Main.NewText(Radius / Projectile.ai[0]);
 
             counter++;
-
-            if (counter > 20) 
-            {
-                Projectile.damage = 0;
-            }
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
+            if (/*(Projectile.ai[2] != 0 && counter < 10) ||*/ counter > 20)
+                return false;
+
             return Helper.CheckCircularCollision(Projectile.Center, (int)Radius + 30, targetHitbox);
         }
 
@@ -432,20 +433,20 @@ namespace GoldLeaf.Items.Grove
             
         }
 
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            modifiers.HitDirectionOverride = Math.Sign(target.Center.X - Projectile.Center.X);
+            modifiers.Knockback.Base += 8f * target.knockBackResist;
+        }
+
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (hit.Crit)
+            if (hit.Crit || Projectile.ai[2] != 0)
                 target.AddBuff(BuffType<AetherFlameBuff>(), Main.rand.Next(Helper.TimeToTicks(3), Helper.TimeToTicks(4f)));
 
-            target.velocity += Vector2.Normalize(target.Center - Projectile.Center) * (12 + (damageDone * 0.05f)) * target.knockBackResist;
+            //target.velocity += Vector2.Normalize(target.Center - Projectile.Center) * (12 + (damageDone * 0.05f)) * target.knockBackResist;
 
-            target.immune[Projectile.owner] = 6;
-
-            /*target.buffImmune[BuffID.OnFire] = false;
-            target.buffImmune[BuffID.Frostburn] = false;
-            target.buffImmune[BuffID.CursedInferno] = false;
-            target.buffImmune[BuffID.Ichor] = false;
-            target.buffImmune[BuffID.ShadowFlame] = false;*/
+            //target.immune[Projectile.owner] = 6;
         }
     }
 

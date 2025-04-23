@@ -15,6 +15,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using ReLogic.Content;
 using GoldLeaf.Items.Blizzard.Armor;
+using GoldLeaf.Items.Grove.Boss;
 
 namespace GoldLeaf.Core
 {

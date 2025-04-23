@@ -67,7 +67,7 @@ ArcticFlower: {
 
 EveDroplet: {
 	DisplayName: Eve Droplet
-	Tooltip: ""
+	Tooltip: Coats enemies in an explosive fluid
 }
 
 Quetzalcoatl: {
@@ -427,12 +427,25 @@ BrassDye: {
 
 Avalanche: {
 	DisplayName: Avalanche
-	Tooltip: Firerate and critical strike chance increase every time you hit a shot
+	Tooltip:
+		'''
+		Consecutive hits increase firerate and critical strike chance
+		50% chance to save ammo
+		'''
+	HighScore:
+		'''
+		Current Streak: {0}
+		High Score: {1}
+		'''
 }
 
 BlizzardBrassBullet: {
-	DisplayName: Brass Bullet
-	Tooltip: Critical strikes are determined upon firing, repeated critical strikes freeze enemies
+	DisplayName: Blizzard Brass Bullet
+	Tooltip:
+		'''
+		Critical strikes are determined upon firing
+		Repeated critical strikes freeze enemies
+		'''
 }
 
 GlacialScissors: {
@@ -448,4 +461,9 @@ NitrogenPerfume: {
 SunstoneDye: {
 	DisplayName: Sunstone Dye
 	Tooltip: ""
+}
+
+SunstoneHairDye: {
+	Tooltip: ""
+	DisplayName: Sunstone Hair Dye
 }

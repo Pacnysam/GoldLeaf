@@ -87,3 +87,8 @@ SnapFreezeBuff: {
 	DisplayName: Snap Freeze
 	Description: Can not snap freeze
 }
+
+EveDropletBuff: {
+	DisplayName: Eve Droplet
+	Description: Covered in eve water
+}
