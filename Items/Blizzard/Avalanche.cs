@@ -59,7 +59,7 @@ namespace GoldLeaf.Items.Blizzard
             Item.value = Item.sellPrice(0, 1, 50, 0);
             Item.rare = ItemRarityID.Green;
 
-            Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/Monolith/Revolver") { Volume = 0.6f, PitchVariance = 0.3f, MaxInstances = 5, Pitch = -0.6f + (0.05f * consecutiveHits) };
+            Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/Monolith/Revolver") { Volume = 0.6f, PitchVariance = 0.3f, MaxInstances = 5 };
         }
 
         public override bool CanConsumeAmmo(Item ammo, Player player)
@@ -84,7 +84,7 @@ namespace GoldLeaf.Items.Blizzard
 
         public override Vector2? HoldoutOffset()
         {
-            return new Vector2(-10f, 2f);
+            return new Vector2(-10f, -3f);
         }
 
         /*public override bool CanUseItem(Player player)
@@ -103,7 +103,8 @@ namespace GoldLeaf.Items.Blizzard
 
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
-            Vector2 muzzleOffset = Vector2.Normalize(velocity) * 30f;
+            Vector2 muzzleOffset = Vector2.Normalize(velocity) * 28f;
+            position.Y -= 6;
 
             if (Collision.CanHit(position, 0, 0, position + muzzleOffset, 0, 0))
             {
@@ -195,7 +196,7 @@ namespace GoldLeaf.Items.Blizzard
         public override void ModifyDamageHitbox(Projectile projectile, ref Rectangle hitbox)
         {
             if (shotFromAvalanche)
-                hitbox.Inflate(6, 6);
+                hitbox.Inflate(10, 10);
         }
 
         public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
