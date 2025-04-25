@@ -33,6 +33,7 @@ namespace GoldLeaf.Items.Blizzard
         }
 
         public int consecutiveHits = 0;
+        public bool newPeak = false;
         //public bool hitPrev = false;
 
         public override void SetDefaults()
@@ -132,9 +133,18 @@ namespace GoldLeaf.Items.Blizzard
         {
             consecutiveHits = (int)Math.Clamp(consecutiveHits, 0, 999999999999);
 
+            if (consecutiveHits < player.GetModPlayer<AvalanchePlayer>().avalancheHighScore)
+                newPeak = false;
+
             if (player.GetModPlayer<AvalanchePlayer>().avalancheHighScore < consecutiveHits)
             {
                 player.GetModPlayer<AvalanchePlayer>().avalancheHighScore = consecutiveHits;
+                if (newPeak == false)
+                {
+                    SoundEngine.PlaySound(SoundID.ResearchComplete);
+                    CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y - 5, player.width, player.height), new(195, 10, 200), Language.GetTextValue("Mods.GoldLeaf.Items.Avalanche.NewHighScore"), true);
+                    newPeak = true;
+                }
             }
         }
 
@@ -178,7 +188,7 @@ namespace GoldLeaf.Items.Blizzard
             spriteBatch.Draw(glowTex.Value, Item.Center - Main.screenPosition, null, color * (0.3f - (float)Math.Sin(GoldLeafWorld.rottime) * 0.125f), rotation, glowTex.Size() / 2, scale, SpriteEffects.None, 0f);
         }*/
     }
-
+    
     public class AvalancheProjectile : GlobalProjectile
     {
         public override bool InstancePerEntity => true;
@@ -196,7 +206,7 @@ namespace GoldLeaf.Items.Blizzard
         public override void ModifyDamageHitbox(Projectile projectile, ref Rectangle hitbox)
         {
             if (shotFromAvalanche)
-                hitbox.Inflate(10, 10);
+                hitbox.Inflate(6, 6);
         }
 
         public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
@@ -216,6 +226,10 @@ namespace GoldLeaf.Items.Blizzard
             if (!hasHitTarget && shotFromAvalanche && avalancheInstance != null)
             {
                 var avalanche = avalancheInstance.ModItem as Avalanche;
+
+                if (Main.myPlayer == projectile.owner && Main.netMode != NetmodeID.Server && avalanche.consecutiveHits != 0)
+                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Monolith/Chop") { Volume = 0.9f });
+
                 avalanche.consecutiveHits = 0;
                 //Math.Clamp((avalanche.consecutiveHits -= 2), 0, 100);
                 //avalanche.hitPrev = false;

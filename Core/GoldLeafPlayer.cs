@@ -100,6 +100,25 @@ namespace GoldLeaf.Core
             #endregion minor variables
         }
 
+        public override void Load()
+        {
+            On_Player.KeyDoubleTap += DoubleTapKey;
+        }
+
+        public override void Unload()
+        {
+            On_Player.KeyDoubleTap -= DoubleTapKey;
+
+            ResetEffectsEvent = null;
+        }
+
+        private static void DoubleTapKey(On_Player.orig_KeyDoubleTap orig, Player self, int keyDir)
+        {
+            orig(self, keyDir);
+
+            self.GetModPlayer<GoldLeafPlayer>().DoubleTap(self, keyDir);
+        }
+
         public override void PostUpdate()
         {
             if (Main.netMode == NetmodeID.MultiplayerClient && Player == Main.LocalPlayer) GoldLeafWorld.rottime += (float)Math.PI / 60;
@@ -152,11 +171,6 @@ namespace GoldLeaf.Core
                     }
             }
             return Enumerable.Empty<Item>();
-        }
-
-        public override void Unload()
-        {
-            ResetEffectsEvent = null;
         }
     }
 }

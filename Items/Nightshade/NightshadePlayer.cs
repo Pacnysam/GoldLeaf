@@ -48,7 +48,7 @@ namespace GoldLeaf.Items.Nightshade
                 nightshadeTimer = 6 + (4 * (nightshade - nightshadeMin));
                 if (nightshade > nightshadeMin)
                 {
-                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Monolith/Chop") { Volume = 0.25f }, Main.LocalPlayer.Center);
+                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Monolith/Chop") { Volume = 0.25f });
                     nightshade--;
                 }
             }

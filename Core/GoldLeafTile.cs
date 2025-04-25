@@ -12,8 +12,8 @@ using GoldLeaf.Tiles.Grove;
 using System.Threading.Channels;
 using Terraria.ObjectData;
 using Terraria.Enums;
-using GoldLeaf.Items.Gem;
 using Terraria.DataStructures;
+using GoldLeaf.Items.Underground;
 
 namespace GoldLeaf.Core
 {

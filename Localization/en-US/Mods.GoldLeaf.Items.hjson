@@ -437,6 +437,7 @@ Avalanche: {
 		Current Streak: {0}
 		High Score: {1}
 		'''
+	NewHighScore: New High Score!
 }
 
 BlizzardBrassBullet: {

@@ -14,11 +14,23 @@ using GoldLeaf.Effects.Dusts;
 using static tModPorter.ProgressUpdate;
 using Terraria.Graphics.Effects;
 using GoldLeaf.Items.Misc.Accessories;
+using ReLogic.Content;
+using Terraria.Graphics.Shaders;
 
 namespace GoldLeaf.Items.Vanity
 {
     public class Gameboy : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            if (Main.netMode != NetmodeID.Server)
+            {
+                Asset<Effect> gameboyFilterShader = Request<Effect>("GoldLeaf/Effects/Gameboy");
+
+                Filters.Scene["Gameboy"] = new Filter(new ScreenShaderData(gameboyFilterShader, "GameboyPass"), EffectPriority.VeryHigh);
+            }
+        }
+
         public override void SetDefaults()
         {
             Item.width = 26;

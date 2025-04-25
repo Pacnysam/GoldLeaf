@@ -172,13 +172,13 @@ namespace GoldLeaf.Items.VanillaBossDrops
                                         new ParticleOrchestraSettings { PositionInWorld = Projectile.Center },
                                         Projectile.owner);
 
-                if (Main.netMode != NetmodeID.Server)
+                if (Main.myPlayer == Projectile.owner)
                     SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Overwatch/Headshot") { Volume = 0.55f }, Main.player[Projectile.owner].Center);
                 target.AddBuff(BuffID.Slimed, 60);
             }
             if (!target.active)
             {
-                if (Main.netMode != NetmodeID.Server)
+                if (Main.myPlayer == Projectile.owner)
                     SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Overwatch/Elimination") { Volume = 0.7f }, Main.player[Projectile.owner].Center);
             }
         }

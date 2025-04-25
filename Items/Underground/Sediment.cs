@@ -23,7 +23,7 @@ using System.IO;
 using Terraria.ModLoader.IO;
 using System.Linq;
 
-namespace GoldLeaf.Items.Gem
+namespace GoldLeaf.Items.Underground
 {
     public class Sediment : ModItem
     {
@@ -42,7 +42,7 @@ namespace GoldLeaf.Items.Gem
         }
         public int gem;
 
-        public override string Texture => "GoldLeaf/Items/Gem/SedimentFull";
+        public override string Texture => "GoldLeaf/Items/Underground/SedimentFull";
 
         public override void SetStaticDefaults()
         {
@@ -92,10 +92,10 @@ namespace GoldLeaf.Items.Gem
             Item.NetStateChanged();
             if (gem == (int)Gem.None && sedimentValidGems.Contains(Main.mouseItem.type))
             {
-                gem = (Array.IndexOf(sedimentValidGems, Main.mouseItem.type) + 1);
+                gem = Array.IndexOf(sedimentValidGems, Main.mouseItem.type) + 1;
                 Main.mouseItem.stack--;
 
-                if (Main.netMode != NetmodeID.Server) 
+                if (Main.netMode != NetmodeID.Server)
                 {
                     SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact);
                     SoundEngine.PlaySound(SoundID.DD2_SkeletonHurt);
@@ -267,7 +267,7 @@ namespace GoldLeaf.Items.Gem
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {
             Texture2D texture = TextureAssets.Item[Item.type].Value;
-            Rectangle frame = new(0, (texture.Height / (int)Gem.Count) * gem, texture.Width, (texture.Height / (int)Gem.Count) - 2);
+            Rectangle frame = new(0, texture.Height / (int)Gem.Count * gem, texture.Width, texture.Height / (int)Gem.Count - 2);
 
             Vector2 position = new(Item.position.X - Main.screenPosition.X + Item.width / 2, Item.position.Y - Main.screenPosition.Y + Item.height / 2);
 
@@ -303,7 +303,7 @@ namespace GoldLeaf.Items.Gem
         private int rubyShotCounter = 15;
 
 
-        public override string Texture => "GoldLeaf/Items/Gem/SedimentFull";
+        public override string Texture => "GoldLeaf/Items/Underground/SedimentFull";
 
         public override void SetStaticDefaults()
         {
@@ -333,9 +333,9 @@ namespace GoldLeaf.Items.Gem
             Gem = (int)Projectile.ai[2];
             Projectile.frame = (int)Projectile.ai[2];
 
-            if (Gem == (int)Gems.Ruby || Gem == (int)Gems.None) 
+            if (Gem == (int)Gems.Ruby || Gem == (int)Gems.None)
                 empowered = false;
-            else 
+            else
                 empowered = true;
         }
 
@@ -343,7 +343,7 @@ namespace GoldLeaf.Items.Gem
         public override bool PreAI()
         {
             counter = Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
-            if (counter <= 1) 
+            if (counter <= 1)
             {
                 Gem = (int)Projectile.ai[2];
                 Projectile.frame = (int)Projectile.ai[2];
@@ -376,7 +376,7 @@ namespace GoldLeaf.Items.Gem
                 }
                 if (Gem == (int)Gems.Ruby && empowered && counter > 1)
                 {
-                    Projectile.velocity *= 0.825f + (rubyCounter * 0.0005f);
+                    Projectile.velocity *= 0.825f + rubyCounter * 0.0005f;
                 }
                 if (Gem == (int)Gems.Emerald)
                 {
@@ -496,7 +496,7 @@ namespace GoldLeaf.Items.Gem
                 target.immune[Projectile.owner] = 0;
                 Projectile.damage = 0;
             }
-            if (Gem == (int)Gems.Amber && empowered)
+            if (Gem == (int)Gems.Amber && empowered && GoldLeafNPC.CanBeStunned(target))
             {
                 empowered = false;
                 target.AddBuff(BuffType<AmberStun>(), 30);
@@ -554,13 +554,13 @@ namespace GoldLeaf.Items.Gem
             if (empowered && Gem != (int)Gems.None)
             {
                 //texture = Request<Texture2D>("GoldLeaf/Textures/Slash").Value;
-                texture = Request<Texture2D>("GoldLeaf/Items/Gem/SedimentGlow").Value;
+                texture = Request<Texture2D>("GoldLeaf/Items/Underground/SedimentGlow").Value;
 
                 Vector2 drawOrigin = new(texture.Width * 0.5f/* * 0.07f*/, Projectile.height * 0.5f/* * 0.07f*/);
                 for (int k = 0; k < Projectile.oldPos.Length; k++)
                 {
                     Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                    Main.spriteBatch.Draw(texture, drawPos, null, GemColor((int)Gem) * (0.35f - (k * 0.025f)), Projectile.oldRot[k], drawOrigin, (Projectile.scale * (1f - (k * 0.075f))) /* * 0.07f*/, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(texture, drawPos, null, GemColor((int)Gem) * (0.35f - k * 0.025f), Projectile.oldRot[k], drawOrigin, Projectile.scale * (1f - k * 0.075f) /* * 0.07f*/, SpriteEffects.None, 0f);
                 }
             }
             else
@@ -570,7 +570,7 @@ namespace GoldLeaf.Items.Gem
                 {
                     var effects = Projectile.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
                     Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                    Color color = Projectile.GetAlpha(lightColor) * (float)(((float)(Projectile.oldPos.Length - k) / Projectile.oldPos.Length) / 2);
+                    Color color = Projectile.GetAlpha(lightColor) * (float)((float)(Projectile.oldPos.Length - k) / Projectile.oldPos.Length / 2);
 
                     Main.spriteBatch.Draw(texture, drawPos, new Microsoft.Xna.Framework.Rectangle?(texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), color, Projectile.oldRot[k], drawOrigin, Projectile.scale, effects, 0f);
                 }
@@ -655,13 +655,13 @@ namespace GoldLeaf.Items.Gem
             if (empowered)
             {
                 //texture = Request<Texture2D>("GoldLeaf/Textures/Slash").Value;
-                texture = Request<Texture2D>("GoldLeaf/Items/Gem/SedimentGlow").Value;
+                texture = Request<Texture2D>("GoldLeaf/Items/Underground/SedimentGlow").Value;
 
                 Vector2 drawOrigin = new(texture.Width * 0.5f/* * 0.07f*/, Projectile.height * 0.5f/* * 0.07f*/);
                 for (int k = 0; k < Projectile.oldPos.Length; k++)
                 {
                     Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                    Main.spriteBatch.Draw(texture, drawPos, null, GemColor(2) * (0.35f - (k * 0.025f)), Projectile.oldRot[k], drawOrigin, (Projectile.scale * (1f - (k * 0.075f))) /* * 0.07f*/, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(texture, drawPos, null, GemColor(2) * (0.35f - k * 0.025f), Projectile.oldRot[k], drawOrigin, Projectile.scale * (1f - k * 0.075f) /* * 0.07f*/, SpriteEffects.None, 0f);
                 }
             }
             else
@@ -671,7 +671,7 @@ namespace GoldLeaf.Items.Gem
                 {
                     var effects = Projectile.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
                     Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                    Color color = Projectile.GetAlpha(lightColor) * (float)(((float)(Projectile.oldPos.Length - k) / Projectile.oldPos.Length) / 2);
+                    Color color = Projectile.GetAlpha(lightColor) * (float)((float)(Projectile.oldPos.Length - k) / Projectile.oldPos.Length / 2);
 
                     Main.spriteBatch.Draw(texture, drawPos, new Microsoft.Xna.Framework.Rectangle?(texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), color, Projectile.oldRot[k], drawOrigin, Projectile.scale, effects, 0f);
                 }
@@ -728,10 +728,10 @@ namespace GoldLeaf.Items.Gem
 
                     float x = (float)Math.Cos(GoldLeafWorld.rottime + rot + k * 3) * 1.6f;
                     float y = (float)Math.Sin(GoldLeafWorld.rottime + rot + k * 3) * 1.6f;
-                    Vector2 pos = (new Vector2(x, y)).RotatedBy(k * 2 * 6.28f);
+                    Vector2 pos = new Vector2(x, y).RotatedBy(k * 2 * 6.28f);
 
                     ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.StardustPunch,
-                        new ParticleOrchestraSettings { PositionInWorld = Projectile.Center, MovementVector = pos * (4.8f - (counter * 0.2f)) },
+                        new ParticleOrchestraSettings { PositionInWorld = Projectile.Center, MovementVector = pos * (4.8f - counter * 0.2f) },
                         Projectile.owner);
 
                     //Dust d = Dust.NewDustPerfect(Projectile.Center, DustType<LightDust>(), pos * (3.2f - (counter * 0.1f)), 0, GemColor(3), 0.5f);
@@ -752,7 +752,7 @@ namespace GoldLeaf.Items.Gem
         public override void PostDraw(Color lightColor)
         {
             Texture2D tex = Request<Texture2D>("GoldLeaf/Textures/Flares/wavering").Value;
-            Color color = GemColor(3) * (1.2f - (counter * 0.05f));
+            Color color = GemColor(3) * (1.2f - counter * 0.05f);
             color.A = 0;
 
             Main.spriteBatch.Draw
@@ -767,7 +767,7 @@ namespace GoldLeaf.Items.Gem
                 color,
                 0f,
                 tex.Size() * 0.5f,
-                Projectile.scale * 0.16f + (Radius * 0.009f),
+                Projectile.scale * 0.16f + Radius * 0.009f,
                 SpriteEffects.None,
                 0f
             );
@@ -821,7 +821,7 @@ namespace GoldLeaf.Items.Gem
             for (int k = 0; k < Projectile.oldPos.Length; k++)
             {
                 Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin/* + new Vector2(0f, Projectile.gfxOffY)*/;
-                Main.spriteBatch.Draw(tex, drawPos, null, Color.White * (1.0f - (0.15f * k)), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(tex, drawPos, null, Color.White * (1.0f - 0.15f * k), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
             }
             return true;
         }
@@ -862,7 +862,7 @@ namespace GoldLeaf.Items.Gem
     public class AmberStun : ModBuff
     {
         public override string Texture => CoolBuffTex(base.Texture);
-        
+
         public override void SetStaticDefaults()
         {
             Main.debuff[Type] = true;

@@ -120,13 +120,13 @@ namespace GoldLeaf.Items.Nightshade
 			player.GetModPlayer<NightshadePlayer>().nightshade++;
 			player.GetModPlayer<NightshadePlayer>().nightshadeTimer = 300;
 
-			if (player.GetModPlayer<NightshadePlayer>().nightshade == player.GetModPlayer<NightshadePlayer>().nightshadeMax && Main.netMode != NetmodeID.Server) 
+			if (player.GetModPlayer<NightshadePlayer>().nightshade == player.GetModPlayer<NightshadePlayer>().nightshadeMax && Main.myPlayer == Projectile.owner && Main.netMode != NetmodeID.Server) 
 			{
 				SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Monolith/BombClick") { Volume = 0.6f }, player.Center);
 			}
             else if (player.GetModPlayer<NightshadePlayer>().nightshade <= player.GetModPlayer<NightshadePlayer>().nightshadeMax)
             {
-                if (Main.netMode != NetmodeID.Server)
+                if (Main.myPlayer == Projectile.owner && Main.netMode != NetmodeID.Server)
                 {
                     SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Deltarune/FountainTarget") { Pitch = -0.5f + ((player.GetModPlayer<NightshadePlayer>().nightshade - player.GetModPlayer<NightshadePlayer>().nightshadeMin) * 0.1f), Volume = 0.8f });
                 }
@@ -242,14 +242,14 @@ namespace GoldLeaf.Items.Nightshade
                 new ParticleOrchestraSettings { PositionInWorld = Projectile.Center },
                 Projectile.owner);
 
-            if (Main.netMode != NetmodeID.Server)
+            if (Main.myPlayer == Projectile.owner && Main.netMode != NetmodeID.Server)
                 SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Monolith/GhostWhistle"), player.Center);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
 			Main.player[Projectile.owner].AddBuff(BuffID.Cursed, 59);
-            if (Main.netMode != NetmodeID.Server)
+            if (Main.myPlayer == Projectile.owner && Main.netMode != NetmodeID.Server)
                 SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Monolith/GhostChirp") { Volume = 0.25f });
 
             int t = Main.rand.Next(4, 8);

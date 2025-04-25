@@ -185,6 +185,9 @@ namespace GoldLeaf.Items.Blizzard
         {
             if (Projectile.ai[0] > 0)
             {
+                if (Main.myPlayer == Projectile.owner)
+                    BlizzardNPC.AddFrost(target);
+
                 for (int i = 0; i < Main.rand.Next(6, 9); i++)
                 {
                     Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustType<AuroraTwinkle>(), 0, 0, 5, ColorHelper.AuroraAccentColor(Main.rand.NextFloat(0f, 8f) + (i * 5.4f)), Main.rand.NextFloat(0.6f, 0.9f));

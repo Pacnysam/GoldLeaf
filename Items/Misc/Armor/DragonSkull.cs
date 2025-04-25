@@ -69,7 +69,7 @@ namespace GoldLeaf.Items.Misc.Armor
             return new AfterParent(PlayerDrawLayers.FaceAcc);
         }
 
-        protected override void Draw(ref PlayerDrawSet drawInfo) //taken from slr
+        protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player player = drawInfo.drawPlayer;
 
@@ -78,7 +78,7 @@ namespace GoldLeaf.Items.Misc.Armor
                 int frame = player.bodyFrame.Y / player.bodyFrame.Height;
                 int height = tex.Height() / 20;
 
-                Vector2 pos = (player.MountedCenter - Main.screenPosition + new Vector2(0, player.gfxOffY - 3)).ToPoint16().ToVector2() + player.headPosition;
+                Vector2 pos = (player.RotatedRelativePoint(player.MountedCenter) - Main.screenPosition + new Vector2(0, player.gfxOffY - 3)).ToPoint16().ToVector2() + player.headPosition;
 
                 drawInfo.DrawDataCache.Add(new DrawData(tex.Value, pos, new Rectangle(0, frame * height, tex.Width(), height),
                     drawInfo.colorArmorHead,

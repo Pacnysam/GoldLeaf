@@ -29,27 +29,6 @@ namespace GoldLeaf
             MusicLoader.AddMusicBox(this, MusicLoader.GetMusicSlot(this, "Sounds/Music/ToxinGrove"), ItemType<ToxinGroveMusicBox>(), TileType<ToxinGroveMusicBoxT>());
             MusicLoader.AddMusicBox(this, MusicLoader.GetMusicSlot(this, "Sounds/Music/GroveBoss"), ItemType<GroveBossMusicBox>(), TileType<GroveBossMusicBoxT>());
             MusicLoader.AddMusicBox(this, MusicLoader.GetMusicSlot(this, "Sounds/Music/ToxinBoss"), ItemType<ToxinBossMusicBox>(), TileType<ToxinBossMusicBoxT>());
-
-            if (Main.netMode != NetmodeID.Server)
-            {
-                Asset<Effect> gameboyFilterShader = Assets.Request<Effect>("Effects/Gameboy");
-                
-                Filters.Scene["Gameboy"] = new Filter(new ScreenShaderData(gameboyFilterShader, "GameboyPass"), EffectPriority.VeryHigh);
-            }
-
-            On_Player.KeyDoubleTap += DoubleTapKey;
-        }
-
-        public override void Unload()
-        {
-            On_Player.KeyDoubleTap -= DoubleTapKey;
-        }
-
-        private static void DoubleTapKey(On_Player.orig_KeyDoubleTap orig, Player self, int keyDir)
-        {
-            orig(self, keyDir);
-
-            self.GetModPlayer<GoldLeafPlayer>().DoubleTap(self, keyDir);
         }
     }
 }

@@ -94,13 +94,15 @@ namespace GoldLeaf.Core
             modifiers.DefenseEffectiveness *= defenseFactorMod;
         }
 
+        public static bool CanBeStunned(NPC npc) => (!npc.boss && npc.knockBackResist != 0f);
+
         public override bool PreAI(NPC npc)
         {
             if (Main.netMode != NetmodeID.Server)
             {
                 if (stunned)
                 {
-                    if (!npc.boss)
+                    if (!npc.boss && npc.knockBackResist != 0f)
                     {
                         npc.netUpdate = true;
                         npc.velocity *= 0;

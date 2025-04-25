@@ -238,15 +238,6 @@ namespace GoldLeaf.Items.Blizzard.Armor
                     proj.rotation = Main.rand.NextFloat(-0.015f, 0.015f);
                     
                     SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Deltarune/IceSpell") { Volume = 0.5f });
-
-                    /*Vector2 value = Main.npc[target].Center - player.MountedCenter;
-                    float num4 = 25f;
-                    float num5 = (float)Math.Sqrt((double)(value.X * value.X + value.Y * value.Y));
-                    if (num5 > num4)
-                    {
-                        num5 = num4 / num5;
-                    }
-                    value *= num5;*/
                 }
             }
         }
@@ -273,34 +264,11 @@ namespace GoldLeaf.Items.Blizzard.Armor
 
                 modifiers.SetInstantKill();
             }
-            /*else if (target.life <= 0)
-            {
-                ReduceBuffTime(Player, BuffType<SnapFreezeBuff>(), TimeToTicks(3));
-            }*/
         }
 
         /*public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (target.HasBuff(BuffType<SnapFreezeBuff>()) && target.life > 0)
-            {
-                Projectile proj = Projectile.NewProjectileDirect(Player.GetSource_OnHit(target), target.Center, Vector2.Zero, ProjectileType<AuroraStar>(), 0, 0, Player.whoAmI, target.scale, 0.875f);
-                proj.rotation = Main.rand.NextFloat(-0.015f, 0.015f);
-            }
-            if (target.HasBuff(BuffType<SnapFreezeBuff>()) && target.life > 0 && target.life <= target.lifeMax / 5 && !target.boss)
-            {
-                Projectile.NewProjectileDirect(Player.GetSource_OnHit(target), target.Center, new Vector2(0, -8.5f), ProjectileType<SnapFreezeEffect>(), 0, 0, Player.whoAmI);
-                SoundEngine.PlaySound(SoundID.DeerclopsIceAttack with { Volume = 0.7f, Pitch = -0.1f, PitchVariance = 0.2f });
-                target.RequestBuffRemoval(BuffType<SnapFreezeBuff>());
-
-                ReduceBuffTime(Player, BuffType<SnapFreezeBuff>(), TimeToTicks(10));
-
-                int i = Item.NewItem(Player.GetSource_Loot(), target.Center, ItemType<StarLarge>(), 1, true, 0, true);
-                Main.item[i].playerIndexTheItemIsReservedFor = Player.whoAmI;
-
-                if (Main.netMode == NetmodeID.MultiplayerClient && i >= 0)
-                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, i, 1f);
-            }
-            if (target.life <= 0 && !target.HasBuff(BuffType<SnapFreezeBuff>()))
+            if (!target.active)
             {
                 ReduceBuffTime(Player, BuffType<SnapFreezeBuff>(), TimeToTicks(3));
             }
@@ -352,7 +320,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
             return new AfterParent(PlayerDrawLayers.FaceAcc);
         }
 
-        protected override void Draw(ref PlayerDrawSet drawInfo) //taken from slr
+        protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player player = drawInfo.drawPlayer;
 
@@ -361,7 +329,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
                 int frame = (player.bodyFrame.Y / player.bodyFrame.Height);
                 int height = (tex.Height() / 20);
 
-                Vector2 pos = (player.MountedCenter - Main.screenPosition + new Vector2(0, player.gfxOffY - 3)).ToPoint16().ToVector2() + player.headPosition;
+                Vector2 pos = (player.RotatedRelativePoint(player.MountedCenter) - Main.screenPosition + new Vector2(0, player.gfxOffY - 3)).ToPoint16().ToVector2() + player.headPosition;
 
                 drawInfo.DrawDataCache.Add(new DrawData(tex.Value, pos, new Rectangle(0, frame * height, tex.Width(), height),
                     drawInfo.colorArmorHead,
