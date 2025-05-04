@@ -67,6 +67,7 @@ namespace GoldLeaf.Items.Blizzard
 
         public override void DrawEffects(NPC npc, ref Color drawColor)
         {
+            if (npc.HasBuff(BuffID.Chilled)) drawColor = NPC.buffColor(drawColor, 79f / 255, 180f / 255, 1f, 1f);
             if (npc.HasBuff(BuffID.Frozen)) drawColor = NPC.buffColor(drawColor, 30f / 255, 90f / 255, 192f / 255, 1f);
         }
     }

@@ -32,6 +32,13 @@ namespace GoldLeaf.Core
 
         //public DamageClass throwingDamageType = DamageClass.Default;
 
+        public override void ModifyWeaponCrit(Item item, Player player, ref float crit)
+        {
+            float updatedCritMod = (2 + item.GetGlobalItem<GoldLeafItem>().critDamageMod) * Main.LocalPlayer.GetModPlayer<GoldLeafPlayer>().critDamageMult;
+            if (updatedCritMod <= 1 && Helper.IsWeapon(item))
+                crit *= 0;
+        }
+
         public override void OnHitNPC(Item item, Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (lifestealMax >= 1 && lifesteal > 0)
@@ -45,7 +52,7 @@ namespace GoldLeaf.Core
         {
             float updatedCritMod = (2 + item.GetGlobalItem<GoldLeafItem>().critDamageMod) * Main.LocalPlayer.GetModPlayer<GoldLeafPlayer>().critDamageMult;
 
-            if (updatedCritMod != 2 && Helper.IsWeapon(item))
+            if (updatedCritMod != 2 && updatedCritMod > 1 && Helper.IsWeapon(item))
             {
                 string[] text =
                 [

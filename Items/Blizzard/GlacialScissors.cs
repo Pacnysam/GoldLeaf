@@ -49,7 +49,7 @@ namespace GoldLeaf.Items.Blizzard
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<AuroraCluster>(), 18);
             recipe.AddTile(TileID.Anvils);
-            recipe.AddOnCraftCallback(RecipeCallbacks.AuroraCraftEffect);
+            recipe.AddOnCraftCallback(RecipeCallbacks.AuroraMajor);
             recipe.Register();
         }
 

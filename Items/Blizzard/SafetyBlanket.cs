@@ -45,8 +45,8 @@ namespace GoldLeaf.Items.Blizzard
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<FrostCloth>(), 6);
             recipe.AddIngredient(ItemID.PurificationPowder, 25);
-            recipe.AddTile(TileID.Anvils);
-            recipe.AddOnCraftCallback(RecipeCallbacks.AuroraCraftEffect);
+            recipe.AddTile(TileID.Loom);
+            recipe.AddOnCraftCallback(RecipeCallbacks.AuroraMajor);
             recipe.Register();
         }
     }

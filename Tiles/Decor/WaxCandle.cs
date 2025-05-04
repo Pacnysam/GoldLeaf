@@ -10,12 +10,17 @@ using Terraria.ModLoader;
 using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
+using GoldLeaf.Tiles.Blizzard.Crafted;
 
 namespace GoldLeaf.Tiles.Decor
 {
 	public class WaxCandle : ModItem
 	{
-        private Asset<Texture2D> glowTex;
+        private static Asset<Texture2D> glowTex;
+        public override void Load()
+        {
+            glowTex = Request<Texture2D>(Texture + "Glow");
+        }
 
         public override void SetStaticDefaults()
         {
@@ -24,8 +29,6 @@ namespace GoldLeaf.Tiles.Decor
 
         public override void SetDefaults() 
 		{
-            glowTex = Request<Texture2D>(Texture + "Glow");
-
             Item.width = 14;
 			Item.height = 28;
 			Item.maxStack = Item.CommonMaxStack;
@@ -43,19 +46,18 @@ namespace GoldLeaf.Tiles.Decor
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
-            Texture2D tex = Request<Texture2D>(Texture + "Glow").Value;
             spriteBatch.Draw
             (
-                tex,
+                glowTex.Value,
                 new Vector2
                 (
                     Item.position.X - Main.screenPosition.X + Item.width * 0.5f,
-                    Item.position.Y - Main.screenPosition.Y + Item.height - tex.Height * 0.5f
+                    Item.position.Y - Main.screenPosition.Y + Item.height - glowTex.Height() * 0.5f
                 ),
-                new Rectangle(0, 0, tex.Width, tex.Height),
+                new Rectangle(0, 0, glowTex.Width(), glowTex.Height()),
                 Color.White,
                 rotation,
-                tex.Size() * 0.5f,
+                glowTex.Size() * 0.5f,
                 scale,
                 SpriteEffects.None,
                 0f
@@ -70,12 +72,16 @@ namespace GoldLeaf.Tiles.Decor
 
 	public class WaxCandleT : ModTile
 	{
-        private Asset<Texture2D> glowTex;
+        private static Asset<Texture2D> glowTex;
+        public override void Load()
+        {
+            glowTex = Request<Texture2D>(Texture + "Glow");
+        }
+
         public override void SetStaticDefaults()
 		{
-            glowTex = Request<Texture2D>(Texture + "Glow");
-
             AddMapEntry(new Color(255, 198, 26));
+            RegisterItemDrop(ItemType<WaxCandle>());
 
             Main.tileSolid[Type] = false;
 			Main.tileFrameImportant[Type] = true;

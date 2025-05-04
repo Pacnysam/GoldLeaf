@@ -30,6 +30,9 @@ namespace GoldLeaf.Core
         public int defenseModFlat = 0;
         public float defenseFactorMod = 1f;
 
+        public float movementSpeed = 1f;
+
+        public bool Slowed => movementSpeed < 1f;
         public bool stunned = false;
 
         public override void ResetEffects(NPC npc)
@@ -39,6 +42,7 @@ namespace GoldLeaf.Core
             defenseModFlat = 0;
             defenseFactorMod = 1f;
 
+            movementSpeed = 1f;
             stunned = false;
         }
 
@@ -104,7 +108,7 @@ namespace GoldLeaf.Core
                 {
                     if (!npc.boss && npc.knockBackResist != 0f)
                     {
-                        npc.netUpdate = true;
+                        //npc.netUpdate = true;
                         npc.velocity *= 0;
                         npc.frame.Y = 0;
                         return false;
@@ -113,6 +117,17 @@ namespace GoldLeaf.Core
             }
 
             return true;
+        }
+
+        public override void PostAI(NPC npc)
+        {
+            if (Slowed)
+            {
+                if (!npc.boss && npc.knockBackResist != 0f)
+                {
+                    npc.position -= npc.velocity * (1 - movementSpeed);
+                }
+            }
         }
 
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)

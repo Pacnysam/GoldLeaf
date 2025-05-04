@@ -11,6 +11,7 @@ using GoldLeaf.Items.Blizzard;
 using GoldLeaf.Items.VanillaBossDrops;
 using GoldLeaf.Tiles.Decor;
 using Terraria.GameContent.ItemDropRules;
+using GoldLeaf.Items;
 
 namespace GoldLeaf.Core
 {
@@ -25,18 +26,26 @@ namespace GoldLeaf.Core
                 {
                     recipe.AddOnCraftCallback(RecipeCallbacks.AetherCraftEffect);
                 }*/
+                recipe.AddOnCraftCallback(RecipeCallbacks.DyeMinor);
+
+
                 if (recipe.TryGetIngredient(ItemID.FallenStar, out Item star))
                 {
-                    recipe.AddOnCraftCallback(RecipeCallbacks.StarCraftEffect);
+                    recipe.AddOnCraftCallback(RecipeCallbacks.Star);
                 }
                 if (recipe.HasTile(TileID.Anvils))
                 {
-                    recipe.AddOnCraftCallback(RecipeCallbacks.AnvilCraftEffect);
+                    recipe.AddOnCraftCallback(RecipeCallbacks.Anvil);
                 }
                 if (recipe.HasTile(TileID.Solidifier) || (recipe.TryGetIngredient(ItemID.Gel, out Item gel) && (!recipe.HasRecipeGroup(RecipeGroup.recipeGroupIDs["Wood"]) || !recipe.HasIngredient(ItemID.Torch))))
                 {
-                    recipe.AddOnCraftCallback(RecipeCallbacks.GelCraftEffect);
+                    recipe.AddOnCraftCallback(RecipeCallbacks.Slime);
                 }
+                /*if (recipe.HasRecipeGroup(RecipeGroup.recipeGroupIDs["GoldLeaf:Dyes"]))
+                {
+                    recipe.AddOnCraftCallback(RecipeCallbacks.FluidColorful);
+                }*/
+                
             }       
         }
 

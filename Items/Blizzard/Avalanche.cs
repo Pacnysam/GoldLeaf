@@ -120,7 +120,7 @@ namespace GoldLeaf.Items.Blizzard
         {
             //Dust.NewDustPerfect(position, DustType<MuzzleFlash>(), velocity);
 
-            Projectile proj = Projectile.NewProjectileDirect(source, position, velocity.RotatedBy(MathHelper.ToRadians(Main.rand.Next(-2, 2))), type, damage, knockback);
+            Projectile proj = Projectile.NewProjectileDirect(source, position, velocity.RotatedBy(MathHelper.ToRadians(Main.rand.NextFloat(-1.6f, 1.6f))), type, damage, knockback);
             proj.GetGlobalProjectile<AvalancheProjectile>().shotFromAvalanche = true;
             proj.GetGlobalProjectile<AvalancheProjectile>().avalancheInstance = Item;
             proj.extraUpdates += Math.Clamp((int)(consecutiveHits / 5f), 0, 3);
@@ -176,7 +176,7 @@ namespace GoldLeaf.Items.Blizzard
             recipe.AddIngredient(ItemID.IllegalGunParts);
             recipe.AddIngredient(ItemType<AuroraCluster>(), 15);
             recipe.AddTile(TileID.Anvils);
-            recipe.AddOnCraftCallback(RecipeCallbacks.AuroraCraftEffect);
+            recipe.AddOnCraftCallback(RecipeCallbacks.AuroraMajor);
             recipe.Register();
         }
 
@@ -214,16 +214,21 @@ namespace GoldLeaf.Items.Blizzard
             if (shotFromAvalanche && avalancheInstance != null) 
             {
                 hasHitTarget = true;
-                var avalanche = avalancheInstance.ModItem as Avalanche;
-                Math.Clamp(avalanche.consecutiveHits++, 0, 100);
-                //avalanche.consecutiveHits++;
-                //avalanche.hitPrev = true;
+
+                if (!target.friendly && !target.immortal && !target.dontTakeDamage && target.lifeMax > 5)
+                {
+                    Main.player[projectile.owner].GetModPlayer<AvalanchePlayer>().streakLossImmuneTime += 15;
+                    var avalanche = avalancheInstance.ModItem as Avalanche;
+                    Math.Clamp(avalanche.consecutiveHits++, 0, 100);
+                    //avalanche.consecutiveHits++;
+                    //avalanche.hitPrev = true;
+                }
             }
         }
 
         public override void OnKill(Projectile projectile, int timeLeft)
         {
-            if (!hasHitTarget && shotFromAvalanche && avalancheInstance != null)
+            if ((!hasHitTarget && Main.player[projectile.owner].GetModPlayer<AvalanchePlayer>().streakLossImmuneTime <= 0) && shotFromAvalanche && avalancheInstance != null)
             {
                 var avalanche = avalancheInstance.ModItem as Avalanche;
 
@@ -240,6 +245,12 @@ namespace GoldLeaf.Items.Blizzard
     public class AvalanchePlayer : ModPlayer
     {
         public int avalancheHighScore;
+        public int streakLossImmuneTime;
+
+        public override void PostUpdateMiscEffects()
+        {
+            streakLossImmuneTime = Math.Clamp(streakLossImmuneTime - 1, 0, 30);
+        }
 
         public override void Initialize()
         {

@@ -4,6 +4,8 @@ GoldLeafConditions: {
 	HasClutterGlove: Has Clutter Glove
 }
 
+RecipeGroups.Dye: Any Dye
+
 DeathReasons: {
 	ToxicPositivity0: got over it.
 	ToxicPositivity1: stayed positive!

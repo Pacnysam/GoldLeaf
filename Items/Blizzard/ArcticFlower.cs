@@ -67,11 +67,11 @@ namespace GoldLeaf.Items.Blizzard
         public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient(ItemID.BorealWood, 9);
+			recipe.AddIngredient(ItemID.BorealWood, 12);
 			recipe.AddRecipeGroup("GoldLeaf:GoldBars", 6);
             recipe.AddIngredient(ItemType<AuroraCluster>(), 14);
             recipe.AddIngredient(ItemID.Shiverthorn, 4);
-            recipe.AddOnCraftCallback(RecipeCallbacks.AuroraCraftEffect);
+            recipe.AddOnCraftCallback(RecipeCallbacks.AuroraMajor);
             recipe.AddTile(TileID.Anvils);
 			recipe.Register();
 		}

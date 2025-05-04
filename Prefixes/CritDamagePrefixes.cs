@@ -16,7 +16,7 @@ namespace GoldLeaf.Prefixes
 {
     public class Flat : CritDamagePrefix
     {
-        public override float CritDamageMult => -0.25f;
+        public override float CritDamageMult => -0.5f;
     }
     public class Pinpoint : CritDamagePrefix
     {

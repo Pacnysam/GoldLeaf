@@ -47,6 +47,8 @@ namespace GoldLeaf.Items.Blizzard.Armor
             equipSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
         }
 
+        public override void ArmorSetShadows(Player player) => player.armorEffectDrawOutlines = true;
+
         public override void SetStaticDefaults()
         {
             //ArmorIDs.Face.Sets.PreventHairDraw[Item.headSlot] = false;
@@ -105,7 +107,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<AuroraCluster>(), 16);
             recipe.AddTile(TileID.Anvils);
-            recipe.AddOnCraftCallback(RecipeCallbacks.AuroraCraftEffect);
+            recipe.AddOnCraftCallback(RecipeCallbacks.AuroraMajor);
             recipe.Register();
         }
     }
@@ -178,7 +180,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
             recipe.AddIngredient(ItemType<FrostCloth>(), 8);
             recipe.AddIngredient(ItemType<AuroraCluster>(), 12);
             recipe.AddTile(TileID.Loom);
-            recipe.AddOnCraftCallback(RecipeCallbacks.AuroraCraftEffect);
+            recipe.AddOnCraftCallback(RecipeCallbacks.AuroraMajor);
             recipe.Register();
         }
     }
@@ -203,7 +205,12 @@ namespace GoldLeaf.Items.Blizzard.Armor
         {
             if (frostySet && frostyCooldown > 0) frostyCooldown--;
         }
-        
+
+        public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
+        {
+            //drawInfo.drawPlayer.
+        }
+
         private void SnapFreeze(Player player) 
         {
             if (player.GetModPlayer<FrostyPlayer>().frostySet && !player.HasBuff(BuffType<SnapFreezeBuff>()))
@@ -356,6 +363,11 @@ namespace GoldLeaf.Items.Blizzard.Armor
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
             BuffID.Sets.LongerExpertDebuff[Type] = false;
             BuffID.Sets.CanBeRemovedByNetMessage[Type] = true;
+        }
+
+        public override void Update(NPC npc, ref int buffIndex)
+        {
+            npc.GetGlobalNPC<GoldLeafNPC>().movementSpeed *= 0.75f;
         }
     }
 

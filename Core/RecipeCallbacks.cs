@@ -16,14 +16,28 @@ using Terraria.GameContent;
 using ReLogic.Content;
 using GoldLeaf.Items.Blizzard.Armor;
 using GoldLeaf.Items.Grove.Boss;
+using Terraria.Graphics.Shaders;
 
 namespace GoldLeaf.Core
 {
-    public static class RecipeCallbacks
+    public static class RecipeCallbacks //ive tried reworking this like 4 times i give up
     {
         static readonly Player player = Main.LocalPlayer;
 
-        public static void AetherCraftEffect(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack)
+        /*public delegate void CraftEffectDelegate(Player player);
+        public static event CraftEffectDelegate MajorOnCraftEvent;
+        public static event CraftEffectDelegate MinorOnCraftEvent;
+
+        public static void CraftEffects(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack)
+        {
+            if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<GraphicsConfig>().OnCraftEffects)
+            {
+                MajorOnCraftEvent?.Invoke(player);
+            }
+            MinorOnCraftEvent?.Invoke(player);
+        }*/
+
+        public static void AetherBurst(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack)
         {
             if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<GraphicsConfig>().OnCraftEffects)
             {
@@ -37,7 +51,7 @@ namespace GoldLeaf.Core
                 SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/RoR2/EngineerMine") { Volume = 0.4f, Pitch = -0.5f });
             }
         }
-        public static void StarCraftEffect(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack)
+        public static void Star(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack)
         {
             if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<GraphicsConfig>().OnCraftEffects) 
             {
@@ -47,7 +61,7 @@ namespace GoldLeaf.Core
                 SoundEngine.PlaySound(SoundID.Item4);
             }
         }
-        public static void AnvilCraftEffect(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack)
+        public static void Anvil(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack)
         {
             if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<GraphicsConfig>().OnCraftEffects)
             {
@@ -61,7 +75,7 @@ namespace GoldLeaf.Core
                 SoundEngine.PlaySound(SoundID.Item37);
             }
         }
-        public static void GelCraftEffect(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack)
+        public static void Slime(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack)
         {
             if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<GraphicsConfig>().OnCraftEffects)
             {
@@ -79,7 +93,7 @@ namespace GoldLeaf.Core
                 SoundEngine.PlaySound(sound1);
             }
         }
-        public static void AuroraCraftEffect(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack)
+        public static void AuroraMajor(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack)
         {
             if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<GraphicsConfig>().OnCraftEffects)
             {
@@ -97,6 +111,39 @@ namespace GoldLeaf.Core
                 }
                 SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Frost") { Volume = 0.35f, Pitch = 0.2f });
                 SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/MassAttack/SputterStarTiny") { Volume = 0.85f, Pitch = 0.2f, PitchVariance = 0.2f });
+            }
+        }
+        public static void AuroraMinor(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack)
+        {
+            if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<GraphicsConfig>().OnCraftEffects)
+            {
+                player.GetModPlayer<GoldLeafPlayer>().craftTimer = 10;
+
+                Projectile proj = Projectile.NewProjectileDirect(player.GetSource_FromThis(), player.MountedCenter, Vector2.Zero, ProjectileType<AuroraStar>(), 0, 0, Main.myPlayer, 1.8f, 0.9f);
+
+                SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact);
+            }
+        }
+        public static void DyeMinor(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack)
+        {
+            if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<GraphicsConfig>().OnCraftEffects)
+            {
+                if (item.dye > 0 || item.hairDye > -1)
+                {
+                    for (int k = 0; k < 12; ++k)
+                    {
+                        Dust dust = Dust.NewDustDirect(player.position, player.width, player.height, DustType<SlimeDust>(), 0, Main.rand.NextFloat(-2.5f, -4f), 125, Color.White, Main.rand.NextFloat(1f, 1.6f));
+
+                        if (item.dye > 0)
+                            dust.shader = GameShaders.Armor.GetSecondaryShader(item.dye, Main.LocalPlayer);
+                        if (item.hairDye > 0)
+                            dust.shader = GameShaders.Armor.GetSecondaryShader(item.hairDye, Main.LocalPlayer);
+
+                        if (Main.rand.NextBool()) dust.alpha += 50; if (Main.rand.NextBool()) dust.alpha += 25;
+                    }
+
+                    SoundEngine.PlaySound((Main.rand.NextBool() ? SoundID.Item86 : SoundID.Item87) with { MaxInstances = 2 });
+                }
             }
         }
     }

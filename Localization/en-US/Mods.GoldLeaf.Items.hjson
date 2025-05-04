@@ -284,7 +284,7 @@ MinionSpeedPotion: {
 
 FinessePotion: {
 	DisplayName: Finesse Potion
-	Tooltip: Increases attack speed by 15%
+	Tooltip: Increases item speed by 15%
 }
 
 VigorPotion: {
@@ -363,7 +363,11 @@ FrostyRobe: {
 
 SafetyBlanket: {
 	DisplayName: Safety Blanket
-	Tooltip: Prevents a single debuff, goes on cooldown for a portion of the unrealized debuff's duration
+	Tooltip:
+		'''
+		Prevents a single debuff, goes on cooldown for a portion of the unrealized debuff's duration
+		'It's not very warm...'
+		'''
 }
 
 FrigidMask: {
@@ -467,4 +471,24 @@ SunstoneDye: {
 SunstoneHairDye: {
 	Tooltip: ""
 	DisplayName: Sunstone Hair Dye
+}
+
+AuroraGlassItem: {
+	DisplayName: Aurora Glass
+	Tooltip: ""
+}
+
+AuroraGlassWallItem: {
+	DisplayName: Aurora Glass Wall
+	Tooltip: ""
+}
+
+AuroraWaxCandleItem: {
+	Tooltip: ""
+	DisplayName: Aurora Wax Candle
+}
+
+DyeIcon: {
+	Tooltip: ""
+	DisplayName: Dye
 }

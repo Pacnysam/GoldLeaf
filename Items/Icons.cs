@@ -44,4 +44,14 @@ namespace GoldLeaf.Items
             ItemID.Sets.Deprecated[Item.type] = true;
         }
     }
+
+    public class DyeIcon : ModItem
+    {
+        public override string Texture => $"Terraria/Images/Item_{ItemID.RainbowDye}";
+
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.Deprecated[Item.type] = true;
+        }
+    }
 }

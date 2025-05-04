@@ -54,7 +54,7 @@ namespace GoldLeaf.Items.Blizzard
             recipe.AddIngredient(ItemID.MusketBall, 100);
             recipe.AddIngredient(ItemType<AuroraCluster>());
             recipe.AddTile(TileID.Anvils);
-            recipe.AddOnCraftCallback(RecipeCallbacks.AuroraCraftEffect);
+            recipe.AddOnCraftCallback(RecipeCallbacks.AuroraMinor);
             recipe.Register();
         }
 

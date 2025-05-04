@@ -9,6 +9,8 @@ using GoldLeaf.Effects.Dusts;
 using GoldLeaf.Tiles.Grove;
 using Terraria.DataStructures;
 using Terraria.Audio;
+using GoldLeaf.Core;
+using ReLogic.Content;
 
 namespace GoldLeaf.Tiles.Grove
 {
@@ -82,6 +84,12 @@ namespace GoldLeaf.Tiles.Grove
 
     public class GroveGrassT : ModTile
     {
+        private static Asset<Texture2D> glowTex;
+        public override void Load()
+        {
+            glowTex = Request<Texture2D>(Texture + "Glow");
+        }
+
         private float glow = 0;
 
         public override void SetStaticDefaults()
@@ -141,11 +149,16 @@ namespace GoldLeaf.Tiles.Grove
             }
         }
 
-        public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)   //light colors
+        public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
         {
-            r = 0.570f;
-            g = 0.394f;
-            b = 0.111f;
+            r = 0.570f * 0.3f;
+            g = 0.394f * 0.3f;
+            b = 0.111f * 0.3f;
+        }
+
+        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+        {
+            GoldLeafTile.DrawSlopedGlowMask(i, j, glowTex.Value, Color.White * 0.4f, Vector2.Zero);
         }
 
         public override void FloorVisuals(Player player)

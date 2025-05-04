@@ -50,7 +50,7 @@ MinionSpeedPotionBuff: {
 
 FinessePotionBuff: {
 	DisplayName: Finesse
-	Description: 15% increased attack speed
+	Description: 15% increased item speed
 }
 
 VigorPotionBuff: {
