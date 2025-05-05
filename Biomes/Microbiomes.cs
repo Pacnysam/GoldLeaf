@@ -10,7 +10,7 @@ using GoldLeaf.Tiles.Decor;
 
 namespace GoldLeaf.Biomes
 {
-	/*public class WaxCandle : ModBiome
+	public class ZoneCandle : ModBiome
 	{
         public override SceneEffectPriority Priority => SceneEffectPriority.None; 
 
@@ -18,8 +18,7 @@ namespace GoldLeaf.Biomes
         {
 			return GetInstance<TileCount>().waxCandleCount >= 10;
         }
-		public override void OnEnter(Player player) => player.AddBuff(BuffType<WaxCandleBuff>(), 1);
+		public override void OnEnter(Player player) => player.AddBuff(BuffType<WaxCandleBuff>(), 2);
         public override void OnLeave(Player player) => player.ClearBuff(BuffType<WaxCandleBuff>());
-
-    }*/
+    }
 }

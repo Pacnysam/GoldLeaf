@@ -17,7 +17,7 @@ using GoldLeaf.Items.Blizzard;
 using GoldLeaf.Items.Blizzard.Armor;
 
 
-namespace GoldLeaf.Core //most of this is snatched from starlight river and spirit, i (pacnysam) did not code any of this!
+namespace GoldLeaf.Core //most of this is snatched from starlight river and spirit, i (pacnysam) did not code most of this!
 {
     public static partial class Helper
     {
@@ -288,21 +288,6 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
             return items >= count;
         }
 
-        /*public static bool HasItems(player player, int[,] types, bool mustHaveAll) 
-        {
-            int[] items;
-
-            for (int k = 0; k < types.Length|| k < 3; k++)
-            {
-                if (HasItem(player, types[k, 0], types[k, 1])) 
-                {
-                    if (!mustHaveAll) return true;
-                    
-                }
-            }
-            return false;
-        }*/
-
         public static bool HasAccessory(Player player, int item, bool vanity) 
         {
             int maxAccessoryIndex = 5 + player.extraAccessorySlots;
@@ -530,13 +515,13 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
         public static bool IsValidDebuff(Player player, int buffindex)
         {
             int bufftype = player.buffType[buffindex];
-            bool vitalbuff = (bufftype == BuffID.PotionSickness || bufftype == BuffID.ManaSickness || bufftype == BuffID.ChaosState || bufftype == BuffType<SafetyBlanketBuff>() || bufftype == BuffType<SnapFreezeBuff>());
+            bool vitalbuff = (GoldLeafSets.Cooldown[bufftype]);
             return player.buffTime[buffindex] > 2 && Main.debuff[bufftype] && !Main.buffNoTimeDisplay[bufftype] && !Main.vanityPet[bufftype] && !vitalbuff;
         }
 
         public static bool IsValidDebuff(int bufftype, int time)
         {
-            bool vitalbuff = (bufftype == BuffID.PotionSickness || bufftype == BuffID.ManaSickness || bufftype == BuffID.ChaosState || bufftype == BuffType<SafetyBlanketBuff>() || bufftype == BuffType<SnapFreezeBuff>());
+            bool vitalbuff = (GoldLeafSets.Cooldown[bufftype]);
             return time > 2 && Main.debuff[bufftype] && !Main.buffNoTimeDisplay[bufftype] && !Main.vanityPet[bufftype] && !vitalbuff;
         }
 
@@ -549,35 +534,17 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
             if (!OnScreen(new Vector2(position.X, position.Y)))
             {
                 amount /= mult;
-                if (amount < 0) amount = 0;
             }
 
-            player.GetModPlayer<GoldLeafPlayer>().ScreenShake += (int)(amount * GetInstance<GraphicsConfig>().ShakeIntensity);
+            player.GetModPlayer<GoldLeafPlayer>().ScreenShake += (int)Math.Clamp(amount * GetInstance<GraphicsConfig>().ShakeIntensity, 0, 150);
         }
         public static void AddScreenshake(Player player, int amount)
         {
-            player.GetModPlayer<GoldLeafPlayer>().ScreenShake += (int)(amount * GetInstance<GraphicsConfig>().ShakeIntensity);
-        }
-        
-        
-
-        public static string CoolBuffTex(string input)
-        {
-            if (GetInstance<GraphicsConfig>().CoolBuffs)
-            {
-                return input + "Cool";
-            }
-            return input;
+            player.GetModPlayer<GoldLeafPlayer>().ScreenShake += (int)Math.Clamp(amount * GetInstance<GraphicsConfig>().ShakeIntensity, 0, 150);
         }
 
-        /*public static string RadcapTex(string input)
-        {
-            if (GetInstance<GraphicsConfig>().Radcap)
-            {
-                return input + "Rad";
-            }
-            return input;
-        }*/
+        public static string CoolBuffTex(string input) => (GetInstance<GraphicsConfig>().CoolBuffs ? input + "Cool" : input);
+        //public static string RadcapTex(string input) => (GetInstance<GraphicsConfig>().CoolBuffs ? input + "Rad" : input);
     }
 
     public static class DustHelper
@@ -990,8 +957,12 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
         }
 
         /// <summary>
-		/// SlimeBlue color (R:0,G:80,B:255,A:125-175).
-		/// </summary>
+        /// Overhealth color (R:255,G:184,B:82,A:255).
+        /// </summary>
+        public static Color Overhealth => new(239, 235, 122, 255);
+        /// <summary>
+        /// SlimeBlue color (R:0,G:80,B:255,A:125-175).
+        /// </summary>
         public static Color SlimeBlue => new(0, 80, 255, 255);
         /// <summary>
 		/// SlimeBlueSimple color (R:112,G:172,B:244,A:255).

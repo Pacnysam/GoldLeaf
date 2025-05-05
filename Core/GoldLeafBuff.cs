@@ -48,6 +48,7 @@ namespace GoldLeaf.Core
             if (type == BuffID.Frozen)
             {
                 npc.GetGlobalNPC<GoldLeafNPC>().stunned = true;
+                npc.GetGlobalNPC<GoldLeafNPC>().movementSpeed *= 0f;
             }
         }
 

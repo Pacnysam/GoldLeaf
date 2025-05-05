@@ -245,7 +245,7 @@ Rattlestaff: {
 
 WaxCandle: {
 	DisplayName: Wax Candle
-	Tooltip: ""
+	Tooltip: "Enemies are less likely to target you when near wax candles"
 }
 
 Goonai: {
@@ -289,7 +289,11 @@ FinessePotion: {
 
 VigorPotion: {
 	DisplayName: Vigor Potion
-	Tooltip: Increases critical strike damage by 100%
+	Tooltip:
+		'''
+		Melee strikes generate overhealth
+		Increases maximum overhealth by 30
+		'''
 }
 
 ConsistencyPotion: {
@@ -484,8 +488,8 @@ AuroraGlassWallItem: {
 }
 
 AuroraWaxCandleItem: {
-	Tooltip: ""
 	DisplayName: Aurora Wax Candle
+	Tooltip: "Enemies are less likely to target you when near wax candles"
 }
 
 DyeIcon: {

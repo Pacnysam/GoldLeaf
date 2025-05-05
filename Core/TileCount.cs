@@ -1,4 +1,5 @@
-﻿using GoldLeaf.Tiles.Decor;
+﻿using GoldLeaf.Tiles.Blizzard.Crafted;
+using GoldLeaf.Tiles.Decor;
 using GoldLeaf.Tiles.Grove;
 using System;
 using Terraria.ModLoader;
@@ -13,7 +14,7 @@ namespace GoldLeaf.Core
 
 		public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts) {
 			groveTileCount = tileCounts[TileType<EchoslateT>()] + tileCounts[TileType<GroveGrassT>()];
-			waxCandleCount = tileCounts[TileType<WaxCandleT>()];
+			waxCandleCount = tileCounts[TileType<WaxCandleT>()] + tileCounts[TileType<AuroraWaxCandle>()];
         }
 	}
 }

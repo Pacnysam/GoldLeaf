@@ -18,6 +18,7 @@ using Terraria.WorldBuilding;
 using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
 using GoldLeaf.Items.Vanity.Watcher;
+using GoldLeaf.Biomes;
 
 namespace GoldLeaf.Core
 {
@@ -35,6 +36,10 @@ namespace GoldLeaf.Core
 
         public float itemSpeed;
 
+        public float meleeCritDamageMult = 1f;
+        public float rangedCritDamageMult = 1f;
+        public float magicCritDamageMult = 1f;
+        public float summonCritDamageMult = 1f;
         public float critDamageMult = 1f;
 
         public int summonCritChance = 0;
@@ -53,6 +58,11 @@ namespace GoldLeaf.Core
             {
                 modifiers.SetCrit();
             }
+
+            if (item.DamageType == DamageClass.Melee) critDamageMult *= meleeCritDamageMult;
+            if (item.DamageType == DamageClass.Ranged) critDamageMult *= rangedCritDamageMult;
+            if (item.DamageType == DamageClass.Magic) critDamageMult *= magicCritDamageMult;
+            if (item.DamageType == DamageClass.Summon) critDamageMult *= summonCritDamageMult;
 
             modifiers.CritDamage += (item.GetGlobalItem<GoldLeafItem>().critDamageMod);
             modifiers.CritDamage *= critDamageMult;
@@ -93,6 +103,7 @@ namespace GoldLeaf.Core
 
             itemSpeed = 1;
             critDamageMult = 1f;
+            meleeCritDamageMult = rangedCritDamageMult = magicCritDamageMult = summonCritDamageMult = 1f;
             summonCritChance = 0;
 
             #region minor variables
@@ -117,6 +128,11 @@ namespace GoldLeaf.Core
             orig(self, keyDir);
 
             self.GetModPlayer<GoldLeafPlayer>().DoubleTap(self, keyDir);
+        }
+
+        public override void PreUpdateBuffs()
+        {
+            if (Player.InModBiome<ZoneCandle>()) Player.AddBuff(BuffType<WaxCandleBuff>(), 2);
         }
 
         public override void PostUpdate()

@@ -3,6 +3,7 @@ using GoldLeaf.Items.Pickups;
 using GoldLeaf.Items.VanillaBossDrops;
 using GoldLeaf.Items.Vanity.Watcher;
 using GoldLeaf.Tiles.Decor;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +23,6 @@ namespace GoldLeaf.Core
     {
         public override bool InstancePerEntity => true;
 
-        public bool canSpawnMiniHearts = true;
-        public bool canSpawnMiniStars = true;
-        
         public float critDamageMod = 0f;
 
         public int lifesteal;
@@ -83,8 +81,48 @@ namespace GoldLeaf.Core
         {
             if (ItemID.Sets.BossBag[item.type]) 
             {
-                itemLoot.Add(ItemDropRule.FewFromOptions(5, 32, [ItemType<WatcherEyedrops>(), ItemType<WatcherCloak>(), ItemType<BatPlushie>(), ItemType<RedPlushie>(), ItemType<MadcapPainting>()]));
+                itemLoot.Add(ItemDropRule.FewFromOptions(5, 50, [ItemType<WatcherEyedrops>(), ItemType<WatcherCloak>(), ItemType<BatPlushie>(), ItemType<RedPlushie>(), ItemType<MadcapPainting>()]));
             }
+        }
+
+        public override void GrabRange(Item item, Player player, ref int grabRange)
+        {
+            if (player.lifeMagnet && (item.type == ItemType<HeartTiny>() || item.type == ItemType<HeartLarge>()))
+            {
+                grabRange += Item.lifeGrabRange;
+            }
+            if (player.manaMagnet && (item.type == ItemType<StarTiny>() || item.type == ItemType<StarLarge>()))
+            {
+                grabRange += Item.manaGrabRange;
+            }
+        }
+
+        public override bool GrabStyle(Item item, Player player)
+        {
+            if (player.lifeMagnet && (item.type == ItemType<HeartTiny>() || item.type == ItemType<HeartLarge>()))
+            {
+                PullItem_Pickup(player, item, 15f, 5);
+                return true;
+            }
+            if (player.manaMagnet && (item.type == ItemType<StarTiny>() || item.type == ItemType<StarLarge>()))
+            {
+                PullItem_Pickup(player, item, 12f, 5);
+                return true;
+            }
+            return base.GrabStyle(item, player);
+        }
+
+        private static void PullItem_Pickup(Player player, Item item, float speed, int acc)
+        {
+            Vector2 vector = new(item.position.X + (float)(item.width / 2), item.position.Y + (float)(item.height / 2));
+            float num = player.Center.X - vector.X;
+            float num2 = player.Center.Y - vector.Y;
+            float num3 = (float)Math.Sqrt(num * num + num2 * num2);
+            num3 = speed / num3;
+            num *= num3;
+            num2 *= num3;
+            item.velocity.X = (item.velocity.X * (float)(acc - 1) + num) / (float)acc;
+            item.velocity.Y = (item.velocity.Y * (float)(acc - 1) + num2) / (float)acc;
         }
 
         public override void SetDefaults(Item item)

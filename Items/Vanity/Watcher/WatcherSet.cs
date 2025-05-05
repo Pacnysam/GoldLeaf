@@ -23,12 +23,6 @@ namespace GoldLeaf.Items.Vanity.Watcher
     {
         public override string Texture => "GoldLeaf/Items/Vanity/Watcher/WatcherEyedrops";
 
-        public override void Load()
-        {
-            if (Main.netMode != NetmodeID.Server)
-                EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Head}", EquipType.Head, this);
-        }
-
         public override void SetMatch(bool male, ref int equipSlot, ref bool robes)
         {
             equipSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);

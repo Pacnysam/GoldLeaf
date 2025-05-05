@@ -21,11 +21,11 @@ namespace GoldLeaf.Items
     {
         public int temp, temp2, temp3 = 0;
 
-        public override string Texture => "GoldLeaf/Items/Blizzard/ArcticFlower";
+        //public override string Texture => "GoldLeaf/";
         public override void SetDefaults()
         {
-            Item.width = 34;
-            Item.height = 40;
+            Item.width = 52;
+            Item.height = 52;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.staff[Item.type] = true;
             Item.noMelee = true;

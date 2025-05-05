@@ -20,9 +20,6 @@ namespace GoldLeaf.Core
     {
         public override bool InstancePerEntity => true;
 
-        public bool canSpawnMiniHearts = true;
-        public bool canSpawnMiniStars = true;
-        
         public float critDamageMod = 0f;
 
         public float gravity = 0f;
@@ -64,6 +61,11 @@ namespace GoldLeaf.Core
             {
                 lifestealMax--;
                 player.Heal(lifesteal);
+            }
+
+            if (projectile.type == ProjectileID.SnowBallFriendly)
+            {
+                target.AddBuff(BuffID.Chilled, 60);
             }
         }
 

@@ -17,3 +17,8 @@ WaxCandle: {
 	DisplayName: Zen
 	TownNPCDialogueName: the Zen
 }
+
+ZoneCandle: {
+	DisplayName: Zone Candle
+	TownNPCDialogueName: the Zone Candle
+}

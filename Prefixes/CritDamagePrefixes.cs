@@ -100,7 +100,7 @@ namespace GoldLeaf.Prefixes
         {
             damageMult += 0.12f;
             knockbackMult -= 0.15f;
-            useTimeMult -= 0.08f;
+            useTimeMult -= 0.1f;
         }
     }
 

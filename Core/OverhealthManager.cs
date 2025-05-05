@@ -22,65 +22,48 @@ namespace GoldLeaf.Core
 {
     public class OverhealthManager : ModPlayer
     {
-        /*public List<int[]> overhealth = new();
+        public int overhealth = 0;
+        public int overhealthMax = 20;
 
-        public int overhealthTotal = 0;
-
-        public int overhealthDecaySpeed = 1;
-        public int overhealthTimer = 0;
+        public int overhealthDecayTime = 5;
+        int overhealthTimer = 0;
 
         public override void ResetEffects()
         {
-            overhealthTotal = 0;
-
-            overhealthDecaySpeed = 1;
-            overhealthTimer = 0;
+            overhealthMax = 20;
+            overhealthDecayTime = 10;
         }
 
         public override void PostUpdateMiscEffects()
         {
-            for (int k = 0; k < overhealth.Count - 1; k++)
+            if (overhealth > 0) 
             {
-                overhealthTotal += overhealth.ElementAtOrDefault(k)[0];
-
-                if (overhealth.ElementAtOrDefault(k)[2] > 0) 
+                overhealthTimer--;
+                if (overhealthTimer <= 0)
                 {
-                    if (overhealth.ElementAtOrDefault(k)[1] == 0) overhealth.RemoveAt(k); k--;
-                    overhealth.ElementAtOrDefault(k)[2]--;
-                }
-                else
-                {
-                    overhealth.ElementAtOrDefault(k)[0] -= overhealth.ElementAtOrDefault(k)[1];
+                    overhealthTimer = overhealthDecayTime;
+                    Player.statLife--;
+                    overhealth--;
                 }
 
-                if (overhealth.ElementAtOrDefault(k)[0] <= 0) overhealth.RemoveAt(k); k--;
+                overhealth = Math.Clamp(overhealth, 0, overhealthMax);
+                Player.statLifeMax2 += overhealth;
             }
-
-            Player.statLifeMax2 += overhealthTotal;
         }
 
-        public override void ModifyHurt(ref Player.HurtModifiers modifiers)
+        /*public override void OnHurt(Player.HurtInfo info)
         {
-            base.ModifyHurt(ref modifiers);
-        }
+            info.Damage -= overhealth;
+            overhealth -= info.Damage;
+        }*/
 
-        public override void OnHurt(Player.HurtInfo info)
+        public static void AddOverhealth(Player player, int amount, int time) 
         {
-            base.OnHurt(info);
-        }
+            player.statLife += amount;
+            player.GetModPlayer<OverhealthManager>().overhealth += amount;
+            player.GetModPlayer<OverhealthManager>().overhealthTimer += time;
 
-        public int[] OverhealthPool; */
+            CombatText.NewText(player.Hitbox, ColorHelper.Overhealth, amount, false, true);
+        }
     }
-
-    /*public static partial class Helper 
-    {
-        public static void AddOverhealth(Player player, int size, int decayTime, int timer)
-        {
-            player.GetModPlayer<OverhealthManager>().overhealth.Add([size, decayTime, timer]);
-        }
-        public static void AddOverhealth(Player player, int size)
-        {
-            player.GetModPlayer<OverhealthManager>().overhealth.Add([size, player.GetModPlayer<OverhealthManager>().overhealthDecaySpeed, 300]);
-        }
-    }*/
 }

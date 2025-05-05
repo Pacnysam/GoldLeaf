@@ -22,11 +22,13 @@ namespace GoldLeaf.Items.Potions
     {
         public bool vampirePotion = false;
         public bool consistencyPotion = false;
+        public bool vigorPotion = false;
 
         public override void ResetEffects()
         {
             vampirePotion = false;
             consistencyPotion = false;
+            vigorPotion = false;
         }
 
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
@@ -42,6 +44,11 @@ namespace GoldLeaf.Items.Potions
             if (vampirePotion && hit.Crit)
             {
                 Player.Heal(1 + damageDone / 45);
+            }
+
+            if (vigorPotion && hit.DamageType ==  DamageClass.Melee)
+            {
+                OverhealthManager.AddOverhealth(Player, hit.Damage/5, TimeToTicks(5));
             }
         }
     }

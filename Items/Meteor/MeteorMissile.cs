@@ -70,9 +70,6 @@ namespace GoldLeaf.Items.Meteor
 
             ProjectileID.Sets.DontApplyParryDamageBuff[Type] = true;
             ProjectileID.Sets.CultistIsResistantTo[Type] = true;
-
-            Projectile.GetGlobalProjectile<GoldLeafProjectile>().canSpawnMiniHearts = false;
-            Projectile.GetGlobalProjectile<GoldLeafProjectile>().canSpawnMiniStars = false;
         }
 
         public override void OnSpawn(IEntitySource source)

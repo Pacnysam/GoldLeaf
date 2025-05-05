@@ -55,7 +55,11 @@ FinessePotionBuff: {
 
 VigorPotionBuff: {
 	DisplayName: Vigorous
-	Description: 100% increased critical strike damage
+	Description:
+		'''
+		Melee strikes generate overhealth
+		Increased max overhealth
+		'''
 }
 
 ConsistencyPotionBuff: {
