@@ -17,6 +17,7 @@ using Terraria.GameContent.Metadata;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using System;
+using Terraria.GameContent.ObjectInteractions;
 
 namespace GoldLeaf.Items.Misc.Accessories
 {
@@ -133,13 +134,12 @@ namespace GoldLeaf.Items.Misc.Accessories
             HitSound = SoundID.Grass;
             DustType = DustID.Grass;
 
+            TileID.Sets.DisableSmartCursor[Type] = true;
+            TileID.Sets.HasOutlines[Type] = true;
+
             AddMapEntry(new Color(235, 255, 240));
             RegisterItemDrop(ItemType<OxeyeDaisy>());
 
-            Item oxeyeHover = new(ItemType<OxeyeDaisy>());
-
-            Main.HoverItem = oxeyeHover.Clone();
-            //Main.hoverItemName = Language.GetTextValue("Mods.GoldLeaf.Items.OxeyeDaisy.HoverText");
             Main.tileSolid[Type] = false;
             Main.tileFrameImportant[Type] = true;
             Main.tileObsidianKill[Type] = true;
@@ -148,23 +148,22 @@ namespace GoldLeaf.Items.Misc.Accessories
 
             TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
             TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
-            //TileObjectData.newTile.StyleHorizontal = true;
-            //TileObjectData.newTile.CoordinatePadding = 2;
             Main.tileNoFail[Type] = true;
 
-            //TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.AlternateTile, TileObjectData.newTile.Width, 0);
             TileObjectData.newTile.AnchorValidTiles = [TileID.Grass, TileID.JungleGrass, TileID.MushroomGrass, TileID.CorruptGrass, TileID.CrimsonGrass, TileID.CorruptJungleGrass, TileID.CrimsonJungleGrass, TileID.HallowedGrass, TileType<GroveGrassT>()];
 
             TileObjectData.newTile.CoordinateHeights = [28];
             TileObjectData.newTile.CoordinateWidth = 16;
             TileObjectData.newTile.DrawYOffset = -10;
 
-            TileID.Sets.ReplaceTileBreakUp[Type] = true;
+            //TileID.Sets.ReplaceTileBreakUp[Type] = true;
             TileID.Sets.IgnoredInHouseScore[Type] = true;
             TileID.Sets.SwaysInWindBasic[Type] = true;
 
             TileObjectData.addTile(Type);
         }
+
+        public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
         public override void MouseOver(int i, int j)
         {
@@ -174,11 +173,13 @@ namespace GoldLeaf.Items.Misc.Accessories
             Player.cursorItemIconEnabled = true;
         }
 
-        /*public override bool RightClick(int i, int j)
+        public override bool RightClick(int i, int j)
         {
             WorldGen.KillTile(i, j);
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                NetMessage.SendTileSquare(-1, i, j);
             return true;
-        }*/
+        }
 
         /*public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData)
         {

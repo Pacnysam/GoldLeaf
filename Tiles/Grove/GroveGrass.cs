@@ -44,7 +44,7 @@ namespace GoldLeaf.Tiles.Grove
             Item.autoReuse = true;
             Item.useTurn = true;
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.useTime = 15;
+            Item.useTime = 10;
             Item.useAnimation = 15;
             Item.maxStack = Item.CommonMaxStack;
             Item.rare = ItemRarityID.White;

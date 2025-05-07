@@ -11,6 +11,7 @@ using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.DataStructures;
 using GoldLeaf.Effects.Dusts;
+using System;
 
 namespace GoldLeaf.Items.Blizzard
 {
@@ -57,7 +58,7 @@ namespace GoldLeaf.Items.Blizzard
 
             for (float k = 0; k < 6.28f; k += Main.rand.NextFloat(0.15f, 0.3f))
             {
-                Dust dust = Dust.NewDustPerfect(projectile.Center, DustType<ArcticDust>(), Vector2.One.RotatedBy(k) * Main.rand.NextFloat(1.75f, 2.25f), 0, Color.White);
+                Dust dust = Dust.NewDustPerfect(position + new Vector2(5), DustType<ArcticDust>(), Vector2.One.RotatedBy(k) * Main.rand.NextFloat(1.75f, 2.25f), 0, Color.White);
                 dust.noLight = true;
             }
 
@@ -81,7 +82,7 @@ namespace GoldLeaf.Items.Blizzard
     {
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Projectile.type] = 22;
+            Main.projFrames[Projectile.type] = 6;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
 
@@ -93,11 +94,10 @@ namespace GoldLeaf.Items.Blizzard
             ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
         }
         
-
         public override void SetDefaults()
         {
-            Projectile.width = 28;
-            Projectile.height = 38;
+            Projectile.width = 48;
+            Projectile.height = 44;
 
             Projectile.friendly = true;
             Projectile.minion = true;
@@ -106,6 +106,23 @@ namespace GoldLeaf.Items.Blizzard
             Projectile.penetrate = -1;
             Projectile.ignoreWater = true;
         }
+
+        private ref float State => ref Projectile.ai[0];
+        private ref float AnimLoops => ref Projectile.ai[1];
+        private ref int Counter => ref Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
+
+        private const int Idle = 0;
+        private const int WindUp = 1;
+        private const int Recoil = 2;
+        private const int Turning = 3;
+        //private const int Spawning = 4;
+
+        const int targetingRange = 900;
+
+        const int animationSpeed = 6;
+
+        bool animReverse = false;
+        bool hasTarget = false;
 
         public override bool? CanCutTiles()
         {
@@ -117,6 +134,12 @@ namespace GoldLeaf.Items.Blizzard
             return false;
         }
 
+        private bool IsFrozen(Entity otherEntity, int currentTarget)
+        {
+            NPC npc = otherEntity as NPC;
+            return npc.HasBuff(BuffID.Frozen);
+        }
+
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -126,15 +149,122 @@ namespace GoldLeaf.Items.Blizzard
                 return;
             }
 
-            Behavior(player);
-        }
-
-        private void Behavior(Player player) 
-        {
-            /*Vector2 idlePosition = player.Center;
+            #region general behavior
+            Vector2 idlePosition = player.Center;
             idlePosition.Y -= 32f;
             float minionPositionOffsetX = (10 + Projectile.minionPos * 40) * -player.direction;
-            idlePosition.X += minionPositionOffsetX;*/
+            idlePosition.X += minionPositionOffsetX;
+
+            Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
+            float distanceToIdlePosition = vectorToIdlePosition.Length();
+
+            NPC target;
+
+            #region teleport if far
+            if (Main.myPlayer == player.whoAmI && distanceToIdlePosition > 1500f)
+            {
+                Projectile.position = idlePosition;
+                Projectile.velocity *= 0.1f;
+                Projectile.netUpdate = true;
+
+                for (float k = 0; k < 6.28f; k += Main.rand.NextFloat(0.15f, 0.3f))
+                {
+                    Dust dust = Dust.NewDustPerfect(Projectile.Center + new Vector2(5), DustType<ArcticDust>(), Vector2.One.RotatedBy(k) * Main.rand.NextFloat(1.75f, 2.25f), 0, Color.White);
+                    dust.noLight = true;
+                }
+            }
+            #endregion teleport if far
+
+            #region push
+            if (State != Turning)
+            {
+                foreach (var other in Main.ActiveProjectiles)
+                {
+                    if (other.whoAmI != Projectile.whoAmI && other.owner == Projectile.owner && Math.Abs(Projectile.position.X - other.position.X) + Math.Abs(Projectile.position.Y - other.position.Y) < Projectile.width)
+                    {
+                        if (Projectile.position.X < other.position.X)
+                        {
+                            Projectile.velocity.X -= 0.05f;
+                        }
+                        else
+                        {
+                            Projectile.velocity.X += 0.05f;
+                        }
+
+                        if (Projectile.position.Y < other.position.Y)
+                        {
+                            Projectile.velocity.Y -= 0.05f;
+                        }
+                        else
+                        {
+                            Projectile.velocity.Y += 0.05f;
+                        }
+                    }
+                }
+            }
+            #endregion push
+
+            if (State == Idle)
+            {
+                //Projectile.velocity += Vector2.Normalize(idlePosition - Projectile.Center) * 0.1f;
+            }
+
+            #endregion
+
+            #region targeting
+            int attackTarget = -1;
+
+            Projectile.Minion_FindTargetInRange(targetingRange, ref attackTarget, false, IsFrozen);
+            if (attackTarget == -1)
+                Projectile.Minion_FindTargetInRange(targetingRange, ref attackTarget, false);
+            if (attackTarget != -1)
+            {
+                target = Main.npc[attackTarget];
+            }
+            #endregion targeting
+
+            #region animation
+            Projectile.frameCounter++;
+
+            if (Projectile.frameCounter >= animationSpeed)
+            {
+                Projectile.frameCounter = 0;
+
+                if (animReverse)
+                    Projectile.frame--;
+                else
+                    Projectile.frame++;
+
+                if (Projectile.frame >= Main.projFrames[Projectile.type] && State != Turning)
+                {
+                    AnimLoops++;
+
+                    if (State == WindUp)
+                        ChangeState(Recoil);
+                    else if (State == Recoil)
+                        ChangeState(Idle);
+
+                    Projectile.frame = 0;
+                }
+                else if (Projectile.frame >= 3 && State == Turning && !animReverse)
+                {
+                    animReverse = true;
+                }
+                else if (Projectile.frame == 0 && State == Turning && animReverse)
+                    ChangeState(Idle);
+            }
+            #endregion animation
+        }
+
+        private void ChangeState(float newState)
+        {
+            Projectile.frameCounter = 0;
+            Projectile.frame = 0;
+            Counter = 0;
+            AnimLoops = 0;
+            animReverse = false;
+
+            State = newState;
         }
 
         private bool MinionCheckBuff(Player player) 
@@ -159,17 +289,15 @@ namespace GoldLeaf.Items.Blizzard
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
+            var effects = (Projectile.direction == -1 || animReverse) ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
-            /*Vector2 drawOrigin = new(texture.Width * 0.5f, Projectile.height * 0.5f);
-            for (int k = 0; k < Projectile.oldPos.Length; k++)
-            {
-                var effects = Projectile.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-                Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                Color color = Projectile.GetAlpha(lightColor) * (float)(((float)(Projectile.oldPos.Length - k) / Projectile.oldPos.Length) / 2);
+            Vector2 offset = new(0, -1);
 
-                Main.spriteBatch.Draw(texture, drawPos, new Microsoft.Xna.Framework.Rectangle?(texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), color, Projectile.rotation, drawOrigin, Projectile.scale, effects, 0f);
-            }*/
-            return true;
+            Rectangle rect = new((texture.Width / 4) * (int)State, texture.Height / Main.projFrames[Projectile.type] * Projectile.frame, 
+                (texture.Width / 4), texture.Height / Main.projFrames[Projectile.type]);
+
+            Main.EntitySpriteDraw(texture, (Projectile.Center + offset) - Main.screenPosition, rect, Projectile.GetAlpha(lightColor), Projectile.rotation, rect.Size() / 2, Projectile.scale, effects, 0);
+            return false;
         }
     }
 

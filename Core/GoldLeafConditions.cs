@@ -8,9 +8,10 @@ using Terraria;
 using Terraria.GameContent.ItemDropRules;
 using GoldLeaf.Items.Vanity;
 using GoldLeaf.Items.VanillaBossDrops;
+using Terraria.Localization;
 namespace GoldLeaf.Core
 {
-    public static class GoldLeafConditions
+    public class GoldLeafConditions
     {
         public static Condition InSurface = new("Mods.GoldLeaf.GoldLeafConditions.InSurface", () => !Main.LocalPlayer.ShoppingZone_BelowSurface);
         public static Condition UsingGameboy = new("Mods.GoldLeaf.GoldLeafConditions.UsingGameboy", () => Main.LocalPlayer.GetModPlayer<GameboyPlayer>().gameboy);
@@ -28,5 +29,7 @@ namespace GoldLeaf.Core
             public bool CanShowItemDropInUI() => true;
             public string GetConditionDescription() => null;
         }
+
+        public static Condition LearnedRecipe(int item) => new("Mods.GoldLeaf.GoldLeafConditions.LearnedRecipe", () => RecipeSystem.learnedRecipes.Contains(item));
     }
 }

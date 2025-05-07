@@ -98,6 +98,7 @@ namespace GoldLeaf.Tiles.Blizzard.Crafted
             Main.tileBlockLight[Type] = false;
 
             TileID.Sets.DrawsWalls[Type] = true;
+            TileID.Sets.IceSkateSlippery[Type] = true;
         }
 
         public override void PlaceInWorld(int i, int j, Item item)
@@ -119,13 +120,70 @@ namespace GoldLeaf.Tiles.Blizzard.Crafted
             GoldLeafTile.DrawSlopedGlowMask(i, j, glowTex.Value, ColorHelper.AdditiveWhite * 0.3f, Vector2.Zero);
         }
 
-        /*public override void FloorVisuals(Player player)
+        public override void FloorVisuals(Player player)
         {
-            if (Main.rand.NextBool(10) && Math.Abs(player.velocity.X) > 2)
+            if (Main.rand.NextBool(4) && Math.Abs(player.velocity.X) > 2)
             {
-                Gore.NewGore(null, player.Bottom, new Vector2(0f, Main.rand.NextFloat(-0.6f, -1f)), GoreType<EveBubble>());
-                //SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/HollowKnight/JellyfishEggPop") { PitchVariance = 0.8f, MaxInstances = 2, Pitch = 1f, Volume = 0.5f }, player.MountedCenter);
+                Vector2 position = (player.direction == 1 ? player.BottomLeft : player.BottomRight);
+                Dust dust = Dust.NewDustPerfect(position, DustType<AuroraTwinkle>(), new Vector2(-player.direction * Main.rand.NextFloat(0.5f, 1.5f), Main.rand.NextFloat(-1.8f, -3.2f)), Main.rand.Next(30, 70), ColorHelper.AuroraAccentColor(Main.GlobalTimeWrappedHourly * 1.5f), Main.rand.NextFloat(0.6f, 0.9f));
+                dust.rotation = Main.rand.NextFloat(-8f, 8f);
+                dust.noLight = true;
             }
-        }*/
+        }
+    }
+
+    public class AuroraGlassProjectile : GlobalProjectile 
+    {
+        public override bool InstancePerEntity => true;
+
+        public int auroraBounces = 0;
+
+        public override bool OnTileCollide(Projectile projectile, Vector2 oldVelocity)
+        {
+            bool checktop = Main.tile[(int)(projectile.Top.X / 16), (int)(projectile.Top.Y / 16) - 1].TileType == TileType<AuroraGlass>();
+            bool checkbottom = Main.tile[(int)(projectile.Bottom.X / 16), (int)(projectile.Bottom.Y / 16) + 1].TileType == TileType<AuroraGlass>();
+            bool checkright = Main.tile[(int)(projectile.Right.X / 16) + 1, (int)(projectile.Right.Y / 16)].TileType == TileType<AuroraGlass>();
+            bool checkleft = Main.tile[(int)(projectile.Left.X / 16) - 1, (int)(projectile.Left.Y / 16)].TileType == TileType<AuroraGlass>();
+
+            if ((checkleft || checkright || checktop || checkbottom) && !Main.projPet[projectile.type] && auroraBounces < 3)
+            {
+                if (projectile.velocity.X != oldVelocity.X)
+                {
+                    projectile.velocity.X = -oldVelocity.X;
+                }
+
+                if (projectile.velocity.Y != oldVelocity.Y)
+                {
+                    projectile.velocity.Y = -oldVelocity.Y;
+                }
+
+                auroraBounces++;
+
+                AuroraBounce(projectile, projectile.Center + projectile.velocity.SafeNormalize(Vector2.UnitX) * 8f, (-projectile.velocity).SafeNormalize(Vector2.UnitX));
+                return false;
+            }
+            return base.OnTileCollide(projectile, oldVelocity);
+        }
+
+        private static void AuroraBounce(Projectile projectile, Vector2 hitPoint, Vector2 normal)
+        {
+            int l = 3;
+            if (projectile.damage > 0)
+            {
+                SoundEngine.PlaySound(SoundID.Item150, projectile.Center);
+                SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact, projectile.Center);
+                l = 7;
+            }
+
+            Vector2 spinningpoint = Vector2.Reflect(projectile.velocity, normal);
+            for (int i = 0; i < l; i++)
+            {
+                Dust dust = Dust.NewDustPerfect(hitPoint, DustType<AuroraTwinkle>(), spinningpoint.RotatedBy((float)Math.PI / 4f * Main.rand.NextFloatDirection()) * 0.6f * Main.rand.NextFloat(), Main.rand.Next(20, 60), ColorHelper.AuroraAccentColor(Main.GlobalTimeWrappedHourly * 1.5f), Main.rand.NextFloat(0.45f, 0.8f));
+                dust.rotation = Main.rand.NextFloat(-5f, 5f);
+                dust.noLight = true;
+                dust.velocity *= 0.4f;
+                //Dust dust = Dust.NewDustPerfect(hitPoint, DustID.GemTopaz, spinningpoint.RotatedBy((float)Math.PI / 4f * Main.rand.NextFloatDirection()) * 0.6f * Main.rand.NextFloat(), 100, Color.Yellow, 1.0f);
+            }
+        }
     }
 }

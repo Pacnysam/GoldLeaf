@@ -42,7 +42,7 @@ namespace GoldLeaf.Items.Grove.Boss
 			Item.shootSpeed = 6f;
 			Item.knockBack = 6;
             Item.crit = -2;
-            Item.damage = 17;
+            Item.damage = 19;
             Item.ArmorPenetration = 4;
             //Item.UseSound = SoundID.DD2_EtherianPortalOpen;
             Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/RoR2/FireCast") { Volume = 0.85f };
@@ -656,7 +656,8 @@ namespace GoldLeaf.Items.Grove.Boss
 
         public override void OnHitByProjectile(NPC npc, Projectile projectile, NPC.HitInfo hit, int damageDone)
         {
-            AetherFlareUp(npc);
+            if (projectile.type != ProjectileType<AetherEmber>())
+                AetherFlareUp(npc);
         }
 
         private void AetherFlareUp(NPC npc) 

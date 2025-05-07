@@ -52,11 +52,6 @@ namespace GoldLeaf.Core
 
             if (updatedCritMod != 2 && updatedCritMod > 1 && Helper.IsWeapon(item))
             {
-                string[] text =
-                [
-                    Language.GetTextValue($"{updatedCritMod}x critical strike multiplier")
-                ];
-
                 TooltipLine critLine = tooltips.Find(n => n.Name == "CritChance");
                 TooltipLine damageLine = tooltips.Find(n => n.Name == "Damage");
                 int index = tooltips.IndexOf(critLine);
@@ -65,7 +60,8 @@ namespace GoldLeaf.Core
                     index = tooltips.IndexOf(damageLine);
 
                 if (critLine != null || damageLine != null)
-                    tooltips.Insert(index + 1, new TooltipLine(Mod, "CritMult", $"{updatedCritMod}x critical strike multiplier"));
+                    tooltips.Insert(index + 1, new TooltipLine(Mod, "CritMult", Language.GetTextValue("Mods.GoldLeaf.Mechanics.CritMult", updatedCritMod)));
+                  //tooltips.Insert(index + 1, new TooltipLine(Mod, "CritMult", $"{updatedCritMod}x critical strike multiplier"));
             }
         }
 

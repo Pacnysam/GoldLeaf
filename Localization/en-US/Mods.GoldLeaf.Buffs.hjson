@@ -24,7 +24,7 @@ ArcticWraithBuff: {
 }
 
 SentryPotionBuff: {
-	DisplayName: Ordnance
+	DisplayName: Reinforcements
 	Description: Increased max number of sentries
 }
 

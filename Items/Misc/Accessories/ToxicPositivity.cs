@@ -131,7 +131,7 @@ namespace GoldLeaf.Items.Misc.Accessories
             {
                 genDust = false;
                 playSound = false;
-                damageSource = PlayerDeathReason.ByCustomReason(Player.name + " " + Language.GetTextValue("Mods.GoldLeaf.DeathReasons.ToxicPositivity" + Main.rand.Next(3)));
+                damageSource = PlayerDeathReason.ByCustomReason(QuickDeathReason("ToxicPositivity", Player, 3));
             }
             return base.PreKill(damage, hitDirection, pvp, ref playSound, ref genDust, ref damageSource);
         }

@@ -25,8 +25,8 @@ namespace GoldLeaf.Core
         public static bool[] Cooldown = BuffID.Sets.Factory.CreateNamedSet("Cooldown")
             .RegisterBoolSet(false, BuffID.PotionSickness, BuffID.ManaSickness, BuffID.ChaosState, BuffType<SnapFreezeBuff>(), BuffType<SafetyBlanketBuff>());
 
-        /*public static bool[] IsRemovable = BuffID.Sets.Factory.CreateNamedSet("IsRemovable")
+        public static bool[] IsRemovable = BuffID.Sets.Factory.CreateNamedSet("IsRemovable")
             .Description("Can be removed by safety blanket and similar methods")
-            .RegisterBoolSet(true, BuffID.MoonLeech, BuffID.TheTongue, BuffID.Obstructed, BuffID.Horrified, BuffID.Hunger, BuffID.NeutralHunger, BuffID.Starving, BuffType<ToxicPositivityBuff>());*/
+            .RegisterBoolSet(true, BuffID.MoonLeech, BuffID.TheTongue, BuffID.Obstructed, BuffID.Horrified, BuffID.Hunger, BuffID.NeutralHunger, BuffID.Starving, BuffType<ToxicPositivityBuff>());
     }
 }

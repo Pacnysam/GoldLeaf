@@ -12,11 +12,20 @@ using GoldLeaf.Items.VanillaBossDrops;
 using GoldLeaf.Tiles.Decor;
 using Terraria.GameContent.ItemDropRules;
 using GoldLeaf.Items;
+using System.Collections.Generic;
+using Terraria.ModLoader.IO;
+using Microsoft.Xna.Framework;
+using Terraria.Audio;
 
 namespace GoldLeaf.Core
 {
     public class RecipeSystem : ModSystem
     {
+        public override void PreWorldGen()
+        {
+            learnedRecipes.Clear();
+        }
+
         public override void PostAddRecipes()
         {
             for (int i = 0; i < Recipe.numRecipes; i++)
@@ -80,6 +89,27 @@ namespace GoldLeaf.Core
             RecipeGroup.RegisterGroup("GoldLeaf:MythrilBars", BaseGroup(ItemID.MythrilBar, [ItemID.MythrilBar, ItemID.OrichalcumBar]));
 
             RecipeGroup.RegisterGroup("GoldLeaf:AdamantiteBars", BaseGroup(ItemID.AdamantiteBar, [ItemID.AdamantiteBar, ItemID.TitaniumBar]));
+        }
+
+        public static List<int> learnedRecipes = [];
+
+        public static void LearnRecipie(Item item)
+        {
+            if (!learnedRecipes.Contains(item.type))
+            {
+                learnedRecipes.Add(item.type);
+                SoundEngine.PlaySound(SoundID.ResearchComplete);
+                CombatText.NewText(new Rectangle((int)Main.LocalPlayer.position.X, (int)Main.LocalPlayer.position.Y - 5, Main.LocalPlayer.width, Main.LocalPlayer.height), new(195, 10, 200), Language.GetTextValue("Mods.GoldLeaf.Mechanics.LearnRecipe", item.Name), true);
+            }
+        }
+
+        public override void SaveWorldData(TagCompound tag)
+        {
+            tag["learnedRecipies"] = learnedRecipes;
+        }
+        public override void LoadWorldData(TagCompound tag)
+        {
+            learnedRecipes = (List<int>)tag.GetList<int>("learnedRecipies");
         }
     }
 }

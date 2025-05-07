@@ -17,22 +17,22 @@ GameplayConfig: {
 	}
 }
 
-GraphicsConfig: {
-	DisplayName: Graphics Config
+VisualConfig: {
+	DisplayName: Visual Config
 
 	ShakeIntensity: {
 		Label: Screenshake
 		Tooltip: Modifies screenshake intensity.
 	}
 
-	CoolBuffs: {
-		Label: Coolbuffs Support
-		Tooltip: Changes buff textures to support the Cool Buffs resource pack.
-	}
-
 	OnCraftEffects: {
 		Label: Crafting Visuals
 		Tooltip: Enables visual effects when crafting an item.
+	}
+
+	CoolBuffs: {
+		Label: Coolbuffs Support
+		Tooltip: Changes buff textures to support the Cool Buffs resource pack.
 	}
 }
 

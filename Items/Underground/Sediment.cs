@@ -40,7 +40,7 @@ namespace GoldLeaf.Items.Underground
             Amber = 7,
             Count
         }
-        public int gem;
+        public int gem = 0;
 
         public override string Texture => "GoldLeaf/Items/Underground/SedimentFull";
 

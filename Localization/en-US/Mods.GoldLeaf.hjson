@@ -2,12 +2,12 @@ GoldLeafConditions: {
 	InSurface: On Surface
 	UsingGameboy: Playing Gameboy
 	HasClutterGlove: Has Clutter Glove
+	LearnedRecipe: Learned Recipe
 }
 
 RecipeGroups.Dye: Any Dye
 
-DeathReasons: {
-	ToxicPositivity0: got over it.
-	ToxicPositivity1: stayed positive!
-	ToxicPositivity2: looked on the bright side!
+Mechanics: {
+	CritMult: "{0}x critical strike multiplier"
+	LearnRecipe: Learned Recipe: {0}
 }

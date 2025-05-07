@@ -22,6 +22,9 @@ namespace GoldLeaf.Items.Potions
 {
     public class VigorPotion : ModItem
     {
+        public static readonly int extraOverhealth = 20;
+        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(extraOverhealth);
+
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 20;
@@ -58,7 +61,7 @@ namespace GoldLeaf.Items.Potions
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.GetModPlayer<OverhealthManager>().overhealthMax += 30;
+            player.GetModPlayer<OverhealthManager>().overhealthMax += VigorPotion.extraOverhealth;
             player.GetModPlayer<PotionPlayer>().vigorPotion = true;
         }
     }

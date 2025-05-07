@@ -48,7 +48,7 @@ namespace GoldLeaf.Items.Potions
 
             if (vigorPotion && hit.DamageType ==  DamageClass.Melee)
             {
-                OverhealthManager.AddOverhealth(Player, hit.Damage/5, TimeToTicks(5));
+                OverhealthManager.AddOverhealth(Player, hit.Damage/10, TimeToTicks(5));
             }
         }
     }

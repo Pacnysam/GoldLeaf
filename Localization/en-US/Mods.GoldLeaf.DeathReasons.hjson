@@ -1,0 +1,7 @@
+ToxicPositivity: {
+	Variant1: "{0} got over it."
+	Variant2: "{0} stayed positive!"
+	Variant3: "{0} looked on the bright side!"
+}
+
+Overhealth: "{0} ran out of time."

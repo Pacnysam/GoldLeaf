@@ -18,6 +18,7 @@ using Terraria.UI;
 using Terraria.ModLoader.IO;
 using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
+using GoldLeaf.Items.Blizzard;
 
 namespace GoldLeaf.Items.Granite
 {
@@ -42,7 +43,18 @@ namespace GoldLeaf.Items.Granite
             Item.rare = ItemRarityID.Blue;
 
             Item.width = 38;
-            Item.height = 40;
+            Item.height = 42;
+        }
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ItemID.Granite, 12)
+                //.AddIngredient(ItemType<Magnesium>(), 18)
+                .AddRecipeGroup("GoldLeaf:SilverBars", 7)
+                .AddCondition(GoldLeafConditions.LearnedRecipe(Item.type))
+                .AddTile(TileID.Anvils)
+                .Register();
         }
 
         public override bool AltFunctionUse(Player player)

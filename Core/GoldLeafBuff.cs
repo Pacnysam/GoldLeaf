@@ -24,7 +24,7 @@ namespace GoldLeaf.Core
     {
         public override void Update(int type, Player player, ref int buffIndex)
         {
-            if ((type == BuffID.OnFire || type == BuffID.OnFire3) && GetInstance<GameplayConfig>().BuffChanges) 
+            if ((type == BuffID.OnFire || type == BuffID.OnFire3)) 
             { 
                 player.statDefense -= 4; 
             }
@@ -32,11 +32,11 @@ namespace GoldLeaf.Core
 
         public override void Update(int type, NPC npc, ref int buffIndex)
         {
-            if ((type == BuffID.OnFire || type == BuffID.OnFire3) && GetInstance<GameplayConfig>().BuffChanges)
+            if ((type == BuffID.OnFire || type == BuffID.OnFire3))
             {
                 npc.GetGlobalNPC<GoldLeafNPC>().defenseModFlat -= 4;
             }
-            if (type == BuffID.CursedInferno && GetInstance<GameplayConfig>().BuffChanges)
+            if (type == BuffID.CursedInferno)
             {
                 //npc.GetGlobalNPC<GoldLeafNPC>().critDamageModFlat += 0.3f;
                 npc.GetGlobalNPC<GoldLeafNPC>().damageModFlat += 3;
@@ -44,11 +44,14 @@ namespace GoldLeaf.Core
             if (type == BuffID.Chilled)
             {
                 npc.GetGlobalNPC<GoldLeafNPC>().movementSpeed *= 0.5f;
+                npc.coldDamage = true;
             }
             if (type == BuffID.Frozen)
             {
                 npc.GetGlobalNPC<GoldLeafNPC>().stunned = true;
                 npc.GetGlobalNPC<GoldLeafNPC>().movementSpeed *= 0f;
+                npc.coldDamage = true;
+                npc.damage = 0;
             }
         }
 

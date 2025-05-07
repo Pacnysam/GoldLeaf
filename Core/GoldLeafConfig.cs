@@ -7,29 +7,24 @@ using System.ComponentModel;
 
 namespace GoldLeaf.Core
 {
-    public class GameplayConfig : ModConfig
+    /*public class GameplayConfig : ModConfig
     {
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
-        [Label("Critical Strike Gimmicks")]
-        [Tooltip("Enables additional class based critical strike gimmicks")]
-        [DefaultValue(true)]
-        public bool ClassGimmicks = true;
-
-        /*[Label("Gem Staff Reworks")]
+        [Label("Gem Staff Reworks")]
         [Tooltip("Reworks gem staves")]
         [ReloadRequired]
         [DefaultValue(true)]
-        public bool OreStaffReworks = true;*/
+        public bool OreStaffReworks = true;
 
         [Label("Buff Changes")]
         [Tooltip("Modifies several buffs")]
         [ReloadRequired]
         [DefaultValue(true)]
         public bool BuffChanges = true;
-    }
+    }*/
 
-    public class GraphicsConfig : ModConfig
+    public class VisualConfig : ModConfig
     {
         public override ConfigScope Mode => ConfigScope.ClientSide;
 

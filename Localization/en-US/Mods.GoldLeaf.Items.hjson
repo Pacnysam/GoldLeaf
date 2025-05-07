@@ -245,7 +245,7 @@ Rattlestaff: {
 
 WaxCandle: {
 	DisplayName: Wax Candle
-	Tooltip: "Enemies are less likely to target you when near wax candles"
+	Tooltip: Enemies are less likely to target you when near wax candles
 }
 
 Goonai: {
@@ -254,7 +254,7 @@ Goonai: {
 }
 
 SentryPotion: {
-	DisplayName: Ordnance Potion
+	DisplayName: Reinforcement Potion
 	Tooltip: Increases your max number of sentries by 1
 }
 
@@ -292,7 +292,7 @@ VigorPotion: {
 	Tooltip:
 		'''
 		Melee strikes generate overhealth
-		Increases maximum overhealth by 30
+		Increases maximum overhealth by {0}
 		'''
 }
 
@@ -479,7 +479,7 @@ SunstoneHairDye: {
 
 AuroraGlassItem: {
 	DisplayName: Aurora Glass
-	Tooltip: ""
+	Tooltip: Reflects projectiles
 }
 
 AuroraGlassWallItem: {
@@ -489,10 +489,15 @@ AuroraGlassWallItem: {
 
 AuroraWaxCandleItem: {
 	DisplayName: Aurora Wax Candle
-	Tooltip: "Enemies are less likely to target you when near wax candles"
+	Tooltip: Enemies are less likely to target you when near wax candles
 }
 
-DyeIcon: {
-	Tooltip: ""
-	DisplayName: Dye
+ClutchRod: {
+	DisplayName: Clutch Rod
+	Tooltip:
+		'''
+		Summons a clutch familiar when held
+		Hold and release <left> to launch it at enemies
+		<right> to place on the ground
+		'''
 }

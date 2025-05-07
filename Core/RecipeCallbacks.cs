@@ -39,7 +39,7 @@ namespace GoldLeaf.Core
 
         public static void AetherBurst(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack)
         {
-            if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<GraphicsConfig>().OnCraftEffects)
+            if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<VisualConfig>().OnCraftEffects)
             {
                 player.GetModPlayer<GoldLeafPlayer>().craftTimer = 60;
 
@@ -53,7 +53,7 @@ namespace GoldLeaf.Core
         }
         public static void Star(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack)
         {
-            if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<GraphicsConfig>().OnCraftEffects) 
+            if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<VisualConfig>().OnCraftEffects) 
             {
                 player.GetModPlayer<GoldLeafPlayer>().craftTimer = 15;
 
@@ -63,7 +63,7 @@ namespace GoldLeaf.Core
         }
         public static void Anvil(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack)
         {
-            if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<GraphicsConfig>().OnCraftEffects)
+            if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<VisualConfig>().OnCraftEffects)
             {
                 player.GetModPlayer<GoldLeafPlayer>().craftTimer = 10;
 
@@ -77,7 +77,7 @@ namespace GoldLeaf.Core
         }
         public static void Slime(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack)
         {
-            if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<GraphicsConfig>().OnCraftEffects)
+            if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<VisualConfig>().OnCraftEffects)
             {
                 player.GetModPlayer<GoldLeafPlayer>().craftTimer = 10;
 
@@ -95,7 +95,7 @@ namespace GoldLeaf.Core
         }
         public static void AuroraMajor(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack)
         {
-            if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<GraphicsConfig>().OnCraftEffects)
+            if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<VisualConfig>().OnCraftEffects)
             {
                 player.GetModPlayer<GoldLeafPlayer>().craftTimer = 30;
 
@@ -115,7 +115,7 @@ namespace GoldLeaf.Core
         }
         public static void AuroraMinor(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack)
         {
-            if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<GraphicsConfig>().OnCraftEffects)
+            if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<VisualConfig>().OnCraftEffects)
             {
                 player.GetModPlayer<GoldLeafPlayer>().craftTimer = 10;
 
@@ -126,7 +126,7 @@ namespace GoldLeaf.Core
         }
         public static void DyeMinor(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack)
         {
-            if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<GraphicsConfig>().OnCraftEffects)
+            if (player.GetModPlayer<GoldLeafPlayer>().craftTimer <= 0 && GetInstance<VisualConfig>().OnCraftEffects)
             {
                 if (item.dye > 0 || item.hairDye > -1)
                 {

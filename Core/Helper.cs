@@ -107,11 +107,6 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
             return false;
         }*/
 
-        public static int Counter(this Projectile projectile) 
-        {
-            return projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
-        }
-
         public static bool ZoneForest(this Player Player)
         {
             return !Player.ZoneJungle
@@ -466,6 +461,9 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
 
         public static bool IsWeapon(this Item item) => item.type != ItemID.None && item.stack > 0 && item.useStyle > ItemUseStyleID.None && (item.damage > 0 || item.useAmmo > 0 && item.useAmmo != AmmoID.Solution);
 
+        public static NetworkText QuickDeathReason(string key, Player player) => NetworkText.FromKey("Mods.GoldLeaf.DeathReasons." + key, player.name);
+        public static NetworkText QuickDeathReason(string key, Player player, int variants) => NetworkText.FromKey("Mods.GoldLeaf.DeathReasons." + key + ".Variant" + (1 + Main.rand.Next(variants)), player.name);
+
         public static void DropItem(this Entity ent, int type, IEntitySource source, int stack = 1)
         {
             int i = Item.NewItem(source, ent.Hitbox, type, stack);
@@ -515,13 +513,13 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
         public static bool IsValidDebuff(Player player, int buffindex)
         {
             int bufftype = player.buffType[buffindex];
-            bool vitalbuff = (GoldLeafSets.Cooldown[bufftype]);
+            bool vitalbuff = (GoldLeafSets.Cooldown[bufftype] || !GoldLeafSets.IsRemovable[bufftype]);
             return player.buffTime[buffindex] > 2 && Main.debuff[bufftype] && !Main.buffNoTimeDisplay[bufftype] && !Main.vanityPet[bufftype] && !vitalbuff;
         }
 
         public static bool IsValidDebuff(int bufftype, int time)
         {
-            bool vitalbuff = (GoldLeafSets.Cooldown[bufftype]);
+            bool vitalbuff = (GoldLeafSets.Cooldown[bufftype] || !GoldLeafSets.IsRemovable[bufftype]);
             return time > 2 && Main.debuff[bufftype] && !Main.buffNoTimeDisplay[bufftype] && !Main.vanityPet[bufftype] && !vitalbuff;
         }
 
@@ -536,14 +534,14 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
                 amount /= mult;
             }
 
-            player.GetModPlayer<GoldLeafPlayer>().ScreenShake += (int)Math.Clamp(amount * GetInstance<GraphicsConfig>().ShakeIntensity, 0, 150);
+            player.GetModPlayer<GoldLeafPlayer>().ScreenShake += (int)Math.Clamp(amount * GetInstance<VisualConfig>().ShakeIntensity, 0, 150);
         }
         public static void AddScreenshake(Player player, int amount)
         {
-            player.GetModPlayer<GoldLeafPlayer>().ScreenShake += (int)Math.Clamp(amount * GetInstance<GraphicsConfig>().ShakeIntensity, 0, 150);
+            player.GetModPlayer<GoldLeafPlayer>().ScreenShake += (int)Math.Clamp(amount * GetInstance<VisualConfig>().ShakeIntensity, 0, 150);
         }
 
-        public static string CoolBuffTex(string input) => (GetInstance<GraphicsConfig>().CoolBuffs ? input + "Cool" : input);
+        public static string CoolBuffTex(string input) => (GetInstance<VisualConfig>().CoolBuffs ? input + "Cool" : input);
         //public static string RadcapTex(string input) => (GetInstance<GraphicsConfig>().CoolBuffs ? input + "Rad" : input);
     }
 
