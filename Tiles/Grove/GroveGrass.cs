@@ -11,6 +11,7 @@ using Terraria.DataStructures;
 using Terraria.Audio;
 using GoldLeaf.Core;
 using ReLogic.Content;
+using Terraria.GameContent;
 
 namespace GoldLeaf.Tiles.Grove
 {
@@ -37,6 +38,7 @@ namespace GoldLeaf.Tiles.Grove
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 25;
+            ItemSets.Glowmask[Type] = (TextureAssets.Item[Type], Color.White * 0.4f);
         }
 
         public override void SetDefaults()
@@ -55,6 +57,11 @@ namespace GoldLeaf.Tiles.Grove
 
             ItemID.Sets.GrassSeeds[Item.type] = true;
             ItemID.Sets.AlsoABuildingItem[Item.type] = true;
+        }
+
+        public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+        {
+            spriteBatch.Draw(TextureAssets.Item[Item.type].Value, Item.Center - Main.screenPosition, null, Color.White * 0.4f, rotation, TextureAssets.Item[Item.type].Value.Size() / 2, scale, SpriteEffects.None, 0f);
         }
 
         public override void PostUpdate()

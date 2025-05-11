@@ -11,6 +11,7 @@ using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
 using GoldLeaf.Tiles.Blizzard.Crafted;
+using GoldLeaf.Core;
 
 namespace GoldLeaf.Tiles.Decor
 {
@@ -24,6 +25,7 @@ namespace GoldLeaf.Tiles.Decor
 
         public override void SetStaticDefaults()
         {
+            ItemSets.Glowmask[Type] = (glowTex, Color.White);
             Item.ResearchUnlockCount = 10;
         }
 

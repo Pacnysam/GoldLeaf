@@ -94,6 +94,29 @@ namespace GoldLeaf.Items.Grove.Toxin
         /*public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             Texture2D tex = TextureAssets.Item[Item.type].Value;
+            Color color = ColorHelper.AdditiveWhite * (1 - (float)Math.Cos(Main.GlobalTimeWrappedHourly * 3));
+
+            for (float k = 0f; k < 1f; k += 1 / 4f)
+            {
+                Main.spriteBatch.Draw
+                (
+                    tex,
+                    position + new Vector2(0f, 2f - (2f * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 3))).RotatedBy(k + (Main.GlobalTimeWrappedHourly * 3)),
+                    new Rectangle(0, 0, tex.Width, tex.Height),
+                    color * 0.4f,
+                    0,
+                    tex.Size() * 0.5f,
+                    scale,
+                    SpriteEffects.None,
+                    0f
+                );
+            }
+            return true;
+        }*/
+
+        /*public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+        {
+            Texture2D tex = TextureAssets.Item[Item.type].Value;
 
             float sin = (float)(Math.Sin(GoldLeafWorld.rottime * (2.4f + (2f * squash))) * 6f) * squash;
             float cos = (float)(Math.Cos(GoldLeafWorld.rottime * (2.4f + (2f * squash))) * 6f) * squash;

@@ -32,12 +32,17 @@ namespace GoldLeaf.Tiles.Blizzard.Crafted
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 100;
+            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite * 0.3f);
         }
 
         public override void SetDefaults()
         {
             Item.DefaultToPlaceableTile(TileType<AuroraGlass>());
             Item.value = Item.sellPrice(0, 0, 0, 20);
+        }
+        public override Color? GetAlpha(Color lightColor)
+        {
+            return ColorHelper.AuroraAccentColor(Main.GlobalTimeWrappedHourly * 1.5f) * 0.4f;
         }
 
         public override void AddRecipes()
@@ -55,9 +60,13 @@ namespace GoldLeaf.Tiles.Blizzard.Crafted
             .Register();
         }
 
+        public override void UseAnimation(Player player)
+        {
+            Item.color = ColorHelper.AuroraAccentColor(Main.GlobalTimeWrappedHourly * 1.5f);
+        }
         public override void UpdateInventory(Player player)
         {
-            Item.color = ColorHelper.AuroraAccentColor(Main.GlobalTimeWrappedHourly * 1.5f) * 0.4f;
+            Item.color = ColorHelper.AuroraAccentColor(Main.GlobalTimeWrappedHourly * 1.5f);
         }
 
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)

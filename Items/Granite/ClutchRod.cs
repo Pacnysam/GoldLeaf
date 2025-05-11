@@ -32,6 +32,10 @@ namespace GoldLeaf.Items.Granite
         {
             glowTex = Request<Texture2D>(Texture + "Glow");
         }
+        public override void SetStaticDefaults()
+        {
+            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite);
+        }
 
         public override bool? PrefixChance(int pre, UnifiedRandom rand)
         {
@@ -52,6 +56,7 @@ namespace GoldLeaf.Items.Granite
 
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.useTime = Item.useAnimation = 30;
+            Item.noMelee = true;
 
             Item.shoot = ProjectileID.MagicMissile;
 
@@ -135,7 +140,7 @@ namespace GoldLeaf.Items.Granite
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
-            spriteBatch.Draw(glowTex.Value, Item.Center - Main.screenPosition, null, Color.White, rotation, glowTex.Size() / 2, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(glowTex.Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite, rotation, glowTex.Size() / 2, scale, SpriteEffects.None, 0f);
         }
     }
 }

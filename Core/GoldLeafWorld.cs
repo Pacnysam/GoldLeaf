@@ -20,8 +20,6 @@ namespace GoldLeaf.Core
 {
     public class GoldLeafWorld : ModSystem
     {
-        public static List<int> summonSpeedImmune = [ProjectileID.Spazmamini, ProjectileID.DeadlySphere];
-
         public static float rottime = 0;
         //public static int Timer;
 

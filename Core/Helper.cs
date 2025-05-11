@@ -513,13 +513,13 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
         public static bool IsValidDebuff(Player player, int buffindex)
         {
             int bufftype = player.buffType[buffindex];
-            bool vitalbuff = (GoldLeafSets.Cooldown[bufftype] || !GoldLeafSets.IsRemovable[bufftype]);
+            bool vitalbuff = (BuffSets.Cooldown[bufftype] || !BuffSets.IsRemovable[bufftype]);
             return player.buffTime[buffindex] > 2 && Main.debuff[bufftype] && !Main.buffNoTimeDisplay[bufftype] && !Main.vanityPet[bufftype] && !vitalbuff;
         }
 
         public static bool IsValidDebuff(int bufftype, int time)
         {
-            bool vitalbuff = (GoldLeafSets.Cooldown[bufftype] || !GoldLeafSets.IsRemovable[bufftype]);
+            bool vitalbuff = (BuffSets.Cooldown[bufftype] || !BuffSets.IsRemovable[bufftype]);
             return time > 2 && Main.debuff[bufftype] && !Main.buffNoTimeDisplay[bufftype] && !Main.vanityPet[bufftype] && !vitalbuff;
         }
 

@@ -14,13 +14,22 @@ using GoldLeaf.Items.Grove;
 using Terraria.GameContent.Drawing;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
 using System.Diagnostics.Metrics;
+using ReLogic.Content;
 
 namespace GoldLeaf.Items.Dungeon
 {
 	public class Whirlpool : ModItem
 	{
-        public override LocalizedText DisplayName => base.DisplayName.WithFormatArgs("Cascade Staff");
-        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs("Shoots whirlpools that slightly home toward the cursor\nExplodes into water droplets on death");
+        private static Asset<Texture2D> glowTex;
+        public override void Load()
+        {
+            glowTex = Request<Texture2D>(Texture + "Glow");
+        }
+
+        public override void SetStaticDefaults()
+        {
+            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite);
+        }
 
         public override void SetDefaults() 
 		{
@@ -54,20 +63,19 @@ namespace GoldLeaf.Items.Dungeon
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
 		{
-			Texture2D texture;
-			texture = TextureAssets.Item[Item.type].Value;
+			Texture2D tex = glowTex.Value;
 			spriteBatch.Draw
 			(
-				Request<Texture2D>(Texture + "Glow").Value,
+				tex,
 				new Vector2
 				(
 					Item.position.X - Main.screenPosition.X + Item.width * 0.5f,
-					Item.position.Y - Main.screenPosition.Y + Item.height - texture.Height * 0.5f
+					Item.position.Y - Main.screenPosition.Y + Item.height - tex.Height * 0.5f
 				),
-				new Rectangle(0, 0, texture.Width, texture.Height),
-				Color.White,
+				new Rectangle(0, 0, tex.Width, tex.Height),
+                ColorHelper.AdditiveWhite,
 				rotation,
-				texture.Size() * 0.5f,
+				tex.Size() * 0.5f,
 				scale,
 				SpriteEffects.None,
 				0f

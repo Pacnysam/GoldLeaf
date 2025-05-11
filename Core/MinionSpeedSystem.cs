@@ -19,6 +19,7 @@ using Terraria.ModLoader.IO;
 using System.IO;
 using GoldLeaf.Items.Potions;
 using System.Collections.Generic;
+using GoldLeaf.Items.Blizzard.Armor;
 
 namespace GoldLeaf.Core
 {
@@ -63,7 +64,7 @@ namespace GoldLeaf.Core
         {
             Player player = Main.player[projectile.owner];
 
-            if (player != null && !GoldLeafWorld.summonSpeedImmune.Contains(projectile.type))
+            if (player != null && !ProjectileSets.summonSpeedImmune[projectile.type])
             {
                 for (int k = 0; k < extraUpdateCache; extraUpdateCache--)
                 {

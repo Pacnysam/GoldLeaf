@@ -20,7 +20,17 @@ using GoldLeaf.Items.Blizzard.Armor;
 namespace GoldLeaf.Core
 {
     [ReinitializeDuringResizeArrays]
-    public static class GoldLeafSets
+    public static class ItemSets
+    {
+        public static (Asset<Texture2D>, Color)[] Glowmask = ItemID.Sets.Factory.CreateNamedSet("Glowmask")
+            .RegisterCustomSet<(Asset<Texture2D>, Color)>((null, Color.White));
+    }
+    public static class ProjectileSets
+    {
+        public static bool[] summonSpeedImmune = ProjectileID.Sets.Factory.CreateNamedSet("SummonSpeedImmune")
+            .RegisterBoolSet(false, ProjectileID.Spazmamini, ProjectileID.DeadlySphere);
+    }
+    public static class BuffSets
     {
         public static bool[] Cooldown = BuffID.Sets.Factory.CreateNamedSet("Cooldown")
             .RegisterBoolSet(false, BuffID.PotionSickness, BuffID.ManaSickness, BuffID.ChaosState, BuffType<SnapFreezeBuff>(), BuffType<SafetyBlanketBuff>());

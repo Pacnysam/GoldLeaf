@@ -20,14 +20,23 @@ using System.IO;
 using Terraria.ModLoader.IO;
 using Microsoft.Build.Evaluation;
 using Terraria.Graphics.Shaders;
+using ReLogic.Content;
+using Terraria.GameContent;
 
 namespace GoldLeaf.Items.Grove.Boss
 {
     public class Aether : ModItem
     {
-        public override LocalizedText DisplayName => base.DisplayName.WithFormatArgs("Aether's Comet");
-        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs("Casts a flame that bursts on command, damage ramps up over time\n" +
-                                                                             "Channeling the flame for long enough makes it spark at nearby enemies");
+        private static Asset<Texture2D> glowTex;
+        public override void Load()
+        {
+            glowTex = Request<Texture2D>(Texture + "Glow");
+        }
+        public override void SetStaticDefaults()
+        {
+            ItemSets.Glowmask[Type] = (glowTex, Color.White);
+        }
+
         public override void SetDefaults()
 		{
 			Item.width = 28;
@@ -67,7 +76,8 @@ namespace GoldLeaf.Items.Grove.Boss
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
-            Texture2D tex = Request<Texture2D>(Texture + "Glow").Value;
+            spriteBatch.Draw(glowTex.Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite, rotation, TextureAssets.Item[Item.type].Size() / 2, scale, SpriteEffects.None, 0f);
+            /*Texture2D tex = glowTex.Value;
             spriteBatch.Draw
             (
                 tex,
@@ -83,7 +93,7 @@ namespace GoldLeaf.Items.Grove.Boss
                 scale,
                 SpriteEffects.None,
                 0f
-            );
+            );*/
         }
 
         /*public override void AddRecipes()

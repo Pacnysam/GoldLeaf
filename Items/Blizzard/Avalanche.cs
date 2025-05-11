@@ -31,6 +31,10 @@ namespace GoldLeaf.Items.Blizzard
         {
             glowTex = Request<Texture2D>(Texture + "Glow");
         }
+        /*public override void SetStaticDefaults()
+        {
+            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite);
+        }*/
 
         public int consecutiveHits = 0;
         public bool newPeak = false;
