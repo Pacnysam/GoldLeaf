@@ -118,6 +118,8 @@ namespace GoldLeaf.Items.Blizzard
             Projectile.penetrate = -1;
             Projectile.ignoreWater = true;
             Projectile.netImportant = true;
+
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().critDamageMod = -0.5f;
         }
 
         private ref float State => ref Projectile.ai[0];
@@ -231,7 +233,7 @@ namespace GoldLeaf.Items.Blizzard
 
             //Projectile.Minion_FindTargetInRange(targetingRange, ref attackTarget, false, IsFrozen);
             //if (attackTarget == -1)
-                Projectile.Minion_FindTargetInRange(targetingRange, ref attackTarget, false);
+                Projectile.Minion_FindTargetInRange(targetingRange, ref attackTarget, false); //was gonna make it prioritize unfrozen enemies but i cant figure this out
             if (attackTarget != -1)
             {
                 target = Main.npc[attackTarget];
