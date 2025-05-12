@@ -91,7 +91,7 @@ namespace GoldLeaf.Items.Blizzard
             glowTex = Request<Texture2D>(Texture + "Glow");
             trimTex = Request<Texture2D>(Texture + "Trim");
         }
-
+        
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 6;
@@ -132,12 +132,13 @@ namespace GoldLeaf.Items.Blizzard
         private const int Turning = 3;
         //private const int Spawning = 4;
 
+        const int teleportRange = 1500;
         const int targetingRange = 800;
         const float attackingRange = 400;
 
         const float speed = 9f;
         const float inertia = 50f;
-        const float shootSpeed = 4.5f;
+        const float shootSpeed = 6f;
 
         const int animationSpeed = 6;
 
@@ -185,7 +186,7 @@ namespace GoldLeaf.Items.Blizzard
             #endregion variables
 
             #region teleport if far
-            if (Main.myPlayer == player.whoAmI && distanceToIdlePosition > 1500f)
+            if (Main.myPlayer == player.whoAmI && distanceToIdlePosition > teleportRange)
             {
                 Projectile.position = idlePosition - Projectile.Size/2;
                 Projectile.velocity = Vector2.Zero;
@@ -365,7 +366,7 @@ namespace GoldLeaf.Items.Blizzard
 
         private void Shoot(NPC target, Vector2 velocity) 
         {
-            for (int j = 0; j < 16; j++)
+            /*for (int j = 0; j < 16; j++)
             {
                 Vector2 vector = Vector2.UnitX * -Projectile.width / 2f;
                 //vector += -Utils.RotatedBy(Vector2.UnitY, (j * 3.141591734f / 6f), default) * new Vector2(8f, 16f);
@@ -374,7 +375,7 @@ namespace GoldLeaf.Items.Blizzard
                 dust.noGravity = true;
                 dust.velocity *= 0.1f;
                 dust.velocity = Vector2.Normalize(Projectile.Center - Projectile.velocity * 3f - dust.position) * 2.25f;
-            }
+            }*/
 
             Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, velocity, ProjectileType<ArcticWraithOrb>(), Projectile.damage, Projectile.knockBack, Projectile.owner, target.whoAmI);
             SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/ForgottenLand/StarShot") { Volume = 0.5f, PitchVariance = 0.5f }, Projectile.Center);
@@ -419,7 +420,7 @@ namespace GoldLeaf.Items.Blizzard
                     Color color1 = new(0, 225, 241);
                     Color color2 = new(0, 38, 128);
 
-                    Main.spriteBatch.Draw(texture, drawPos, rect, Color.Lerp(color1, color2, k / (Projectile.oldPos.Length + 2f)) with { A = 0 } * (0.8f - (k / (Projectile.oldPos.Length + 4f))), Projectile.oldRot[k], rect.Size() / 2, Projectile.scale, oldEffects, 0f);
+                    Main.spriteBatch.Draw(texture, drawPos, rect, Color.Lerp(color1, color2, k / (Projectile.oldPos.Length + 2f)) with { A = 0 } * (0.8f - (k / (Projectile.oldPos.Length + 4f))), Projectile.oldRot[k], rect.Size() / 2, Projectile.scale * 1.1f, oldEffects, 0f);
                 }
             }
             else
@@ -489,6 +490,8 @@ namespace GoldLeaf.Items.Blizzard
             Projectile.timeLeft = TimeToTicks(15);
 
             Projectile.DamageType = DamageClass.MagicSummonHybrid;
+
+            Projectile.GetGlobalProjectile<GoldLeafProjectile>().critDamageMod = -0.5f;
         }
 
         const float accelerationSpeed = 1.3f;
@@ -537,7 +540,7 @@ namespace GoldLeaf.Items.Blizzard
                 Color color1 = new(0, 225, 241);
                 Color color2 = new(0, 38, 128);
 
-                Main.spriteBatch.Draw(texture, drawPos, rect, Color.Lerp(color1, color2, k / (Projectile.oldPos.Length + 2f)) /*with { A = 0 }*/ * (1f - (k / 10f)), Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(texture, drawPos, rect, Color.Lerp(color1, color2, k / (Projectile.oldPos.Length + 2f)) /*with { A = 0 }*/ * (0.8f - (k / 10f)), Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
             }
 
             Main.EntitySpriteDraw(texture, Projectile.position - Main.screenPosition + texture.Size() / 2, rect, Color.White, Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None, 0);

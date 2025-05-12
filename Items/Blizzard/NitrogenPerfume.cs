@@ -36,7 +36,20 @@ namespace GoldLeaf.Items.Blizzard
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            //player.GetModPlayer<NitrogenPerfumePlayer>().NitrogenPerfume = true;
+            player.GetModPlayer<NitrogenPerfumePlayer>().NitrogenPerfume = true;
+            player.GetModPlayer<NitrogenPerfumePlayer>().perfumeItem = Item;
+        }
+    }
+
+    public class NitrogenPerfumePlayer : ModPlayer
+    {
+        public bool NitrogenPerfume = false;
+        public Item perfumeItem;
+
+        public override void ResetEffects()
+        {
+            NitrogenPerfume = false;
+            perfumeItem = null;
         }
     }
 }
