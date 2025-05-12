@@ -122,7 +122,7 @@ namespace GoldLeaf.Tiles.Granite
             {
                 if (TileDrawing.IsVisible(tile) && tile.TileFrameY != 0 && Main.LocalPlayer.Distance(new Vector2(i, j).ToWorldCoordinates()) < 300)
                 {
-                    float alpha = Math.Clamp(1f - (Main.LocalPlayer.Distance(new Vector2(i, j).ToWorldCoordinates()) / 250f), 0f, (float)((Math.Sin(GoldLeafWorld.rottime * 0.5f) / 4f) + 0.5f));
+                    float alpha = Math.Clamp(1f - (Main.LocalPlayer.Distance(new Vector2(i, j).ToWorldCoordinates()) / 250f), 0, (float)((Math.Sin(GoldLeafWorld.rottime * 0.5f) / 4f) + 0.5f));
                     Vector2 zero = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange);
 
                     spriteBatch.Draw(backTex.Value, new Vector2(i * 16 - (int)Main.screenPosition.X + 6, j * 16 - (int)Main.screenPosition.Y + 18) + zero, null, new Color(0, 192, 255){ A = 0 } * alpha, 0f, backTex.Size()/2, (float)(Math.Sin(GoldLeafWorld.rottime)/8f) + 0.5f, SpriteEffects.None, 0f);
@@ -135,7 +135,7 @@ namespace GoldLeaf.Tiles.Granite
         {
             Tile tile = Main.tile[i, j];
 
-            float alpha = Math.Clamp(1f - (Main.LocalPlayer.Distance(new Vector2(i, j).ToWorldCoordinates()) / 300f), 0f, (float)((Math.Sin(GoldLeafWorld.rottime * 0.5f) / 4f) + 0.2f));
+            float alpha = Math.Clamp(1f - (Main.LocalPlayer.Distance(new Vector2(i, j).ToWorldCoordinates()) / 300f), -1f, (float)((Math.Sin(GoldLeafWorld.rottime * 0.5f) / 4f) + 0.3f));
 
             r = (0f / 255) * alpha;
             g = (192f / 255) * alpha;

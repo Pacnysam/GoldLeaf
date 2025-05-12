@@ -47,7 +47,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
             equipSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
         }
 
-        public override void ArmorSetShadows(Player player) => player.armorEffectDrawOutlines = true;
+        public override void ArmorSetShadows(Player player) => player.armorEffectDrawOutlines = !player.HasBuff(BuffType<SnapFreezeBuff>());
 
         public override void SetStaticDefaults()
         {
@@ -189,7 +189,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
     {
         public bool frostySet = false;
         public float frostyDamageBonus = 0.1f;
-        public int frostyCooldown = 0;
+        //public int frostyCooldown = 0;
 
         public override void Load()
         {
@@ -201,10 +201,10 @@ namespace GoldLeaf.Items.Blizzard.Armor
             frostySet = false;
         }
 
-        public override void PostUpdateEquips()
+        /*public override void PostUpdateEquips()
         {
             if (frostySet && frostyCooldown > 0) frostyCooldown--;
-        }
+        }*/
 
         public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
         {
@@ -244,7 +244,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
                     Projectile proj = Projectile.NewProjectileDirect(player.GetSource_FromThis(), player.MountedCenter, Vector2.Zero, ProjectileType<AuroraStar>(), 0, 0, Main.myPlayer, 3.6f, 0.9f);
                     proj.rotation = Main.rand.NextFloat(-0.015f, 0.015f);
                     
-                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Deltarune/IceSpell") { Volume = 0.5f });
+                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Reflect") { Volume = 0.9f });
                 }
             }
         }
