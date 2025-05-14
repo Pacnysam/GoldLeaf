@@ -34,7 +34,7 @@ namespace GoldLeaf.Tiles.Grove
             Item.rare = ItemRarityID.White;
             Item.placeStyle = 0;
             Item.width = 22;
-            Item.height = 20;
+            Item.height = 18;
             Item.value = Item.buyPrice(0, 0, 5, 0);
 
             ItemID.Sets.GrassSeeds[Item.type] = true;
@@ -125,7 +125,16 @@ namespace GoldLeaf.Tiles.Grove
 
         public override bool CanExplode(int i, int j)
         {
+            WorldGen.KillTile(i, j, false, false, true);
             return true;
+        }
+
+        public override void RandomUpdate(int i, int j)
+        {
+            WorldGen.SpreadGrass(i+1, j, TileID.Mud, TileType<GroveGrassT>(), true); //bruh this sucks i needa redo this later on god
+            WorldGen.SpreadGrass(i-1, j, TileID.Mud, TileType<GroveGrassT>(), true);
+            WorldGen.SpreadGrass(i, j+1, TileID.Mud, TileType<GroveGrassT>(), true);
+            WorldGen.SpreadGrass(i, j-1, TileID.Mud, TileType<GroveGrassT>(), true);
         }
 
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
@@ -152,19 +161,16 @@ namespace GoldLeaf.Tiles.Grove
 
         public override void FloorVisuals(Player player)
         {
-            glow += 0.03f;
-            if (glow > 1) glow = 1;
-
             Vector2 playerFeet = player.Center + new Vector2(-8, player.height / 2);
             if (player.velocity.X != 0)
             {
-                if (Main.rand.NextBool(6)) Dust.NewDust(playerFeet, 16, 1, DustType<AutumnGrass>(), 0, Main.rand.NextFloat(-0.05f, -0.3f), Scale: 0.9f);
+                if (Main.rand.NextBool(6)) 
+                {
+                    Dust dust = Dust.NewDustDirect(playerFeet, 16, 1, DustType<AutumnGrass>(), 0, Main.rand.NextFloat(-0.05f, -0.3f), Scale: 0.9f);
+                    if (dust.velocity.Y > 0)
+                        dust.velocity.Y = 0;
+                }
             }
-        }
-
-        public override void RandomUpdate(int i, int j)
-        {
-            glow -= 0.2f;
         }
 
         /*public override void PostDraw(int i, int j, SpriteBatch spriteBatch)

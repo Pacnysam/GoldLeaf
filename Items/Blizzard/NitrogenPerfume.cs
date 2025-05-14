@@ -23,6 +23,12 @@ namespace GoldLeaf.Items.Blizzard
 {
     public class NitrogenPerfume : ModItem
     {
+        private static Asset<Texture2D> glowTex;
+        public override void Load()
+        {
+            glowTex = Request<Texture2D>(Texture + "Glow");
+        }
+
         public override void SetDefaults()
         {
             Item.width = 28;
@@ -38,6 +44,12 @@ namespace GoldLeaf.Items.Blizzard
         {
             player.GetModPlayer<NitrogenPerfumePlayer>().NitrogenPerfume = true;
             player.GetModPlayer<NitrogenPerfumePlayer>().perfumeItem = Item;
+        }
+        public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+        {
+            float brightness = Lighting.Brightness((int)Item.Center.X / 16, (int)Item.Center.Y / 16);
+            if (brightness <= 0.3f)
+                spriteBatch.Draw(glowTex.Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite * (0.3f - brightness), rotation, glowTex.Size() / 2, scale, SpriteEffects.None, 0f);
         }
     }
 

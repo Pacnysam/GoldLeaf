@@ -92,7 +92,7 @@ namespace GoldLeaf.Items.Pickups
 
         public override bool OnPickup(Player player)
         {
-            player.Heal(40);
+            player.Heal(50);
             SoundEngine.PlaySound(SoundID.Grab, player.Center);
             return false;
         }
