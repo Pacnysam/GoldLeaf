@@ -30,7 +30,7 @@ namespace GoldLeaf.Items.Blizzard
 
         public override void SetDefaults()
 		{
-			Item.damage = 32;
+			Item.damage = 35;
 			Item.DamageType = DamageClass.Summon;
             Item.shoot = ProjectileType<ArcticWraith>();
             Item.buffType = BuffType<ArcticWraithBuff>();

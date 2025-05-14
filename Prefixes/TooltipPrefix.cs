@@ -21,7 +21,7 @@ namespace GoldLeaf.Prefixes
 
         public override IEnumerable<TooltipLine> GetTooltipLines(Item item)
         {
-            yield return new TooltipLine(Mod, "PrefixWeaponAwesomeDescription", Tooltip.Value)
+            yield return new TooltipLine(Mod, "PrefixTooltip", Tooltip.Value)
             {
                 IsModifier = true,
                 IsModifierBad = IsNegative,

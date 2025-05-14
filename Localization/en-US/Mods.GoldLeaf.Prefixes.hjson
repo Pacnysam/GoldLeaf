@@ -1,4 +1,5 @@
 CritMultTooltip: "{0:+0;-#}% critical strike damage"
+MinionSpeedTooltip: "{0:+0;-#}% summon speed"
 Vindictive.DisplayName: Vindictive
 Accurate.DisplayName: Accurate
 Pinpoint.DisplayName: Pinpoint
@@ -6,10 +7,13 @@ Crooked.DisplayName: Crooked
 Flat.DisplayName: Flat
 Lopsided.DisplayName: Lopsided
 Direct.DisplayName: Direct
+Burgeoning.DisplayName: Burgeoning
+Peppy.DisplayName: Peppy
+Spunky.DisplayName: Spunky
+Vivacious.DisplayName: Vivacious
+Jubilated.DisplayName: Jubilated
 
 Vital: {
 	DisplayName: Vital
 	Tooltip: Critical strikes spawn hearts
 }
-
-Burgeoning.DisplayName: Burgeoning
