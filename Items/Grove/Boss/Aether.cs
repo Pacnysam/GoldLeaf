@@ -34,7 +34,7 @@ namespace GoldLeaf.Items.Grove.Boss
         }
         public override void SetStaticDefaults()
         {
-            ItemSets.Glowmask[Type] = (glowTex, Color.White);
+            ItemSets.Glowmask[Type] = (glowTex, Color.White, false);
         }
 
         public override void SetDefaults()

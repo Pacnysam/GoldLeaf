@@ -138,7 +138,7 @@ namespace GoldLeaf.Items.Blizzard
 
         const float speed = 9f;
         const float inertia = 50f;
-        const float shootSpeed = 6f;
+        const float shootSpeed = 2.75f;
 
         const int animationSpeed = 6;
 
@@ -170,6 +170,34 @@ namespace GoldLeaf.Items.Blizzard
             Player player = Main.player[Projectile.owner];
 
             if (!MinionCheckBuff(player)) return;
+
+            #region animation
+            if (!Main.gamePaused)
+                Projectile.frameCounter++;
+
+            if (Projectile.frameCounter >= animationSpeed)
+            {
+                Projectile.frameCounter = 0;
+
+                if (animReverse)
+                    Projectile.frame--;
+                else
+                    Projectile.frame++;
+
+                if (Projectile.frame >= Main.projFrames[Projectile.type] && State != Turning)
+                {
+                    AnimLoops++;
+
+                    Projectile.frame = 0;
+                }
+
+                if (Projectile.frame > 4 && State == Turning)
+                {
+                    Projectile.frame--;
+                    animReverse = true;
+                }
+            }
+            #endregion animation
 
             #region variables
             Vector2 idlePosition = player.Center;
@@ -379,6 +407,7 @@ namespace GoldLeaf.Items.Blizzard
 
             Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, velocity, ProjectileType<ArcticWraithOrb>(), Projectile.damage, Projectile.knockBack, Projectile.owner, target.whoAmI);
             SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/ForgottenLand/StarShot") { Volume = 0.5f, PitchVariance = 0.5f }, Projectile.Center);
+            SoundEngine.PlaySound(new SoundStyle("Goldleaf/Sounds/SE/SplashBounce") { Volume = 0.3f }, Projectile.Center);
             ChangeState(Recoil);
         }
 
@@ -396,11 +425,8 @@ namespace GoldLeaf.Items.Blizzard
             return true;
         }
 
-        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
-        {
-            return false;
-        }
-
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) => false;
+        
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
@@ -416,11 +442,11 @@ namespace GoldLeaf.Items.Blizzard
                 for (int k = 0; k < Projectile.oldPos.Length; k++)
                 {
                     var oldEffects = (Projectile.oldSpriteDirection[k] == -1) ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-                    Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + rect.Size()/2;
+                    Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + rect.Size()/2 + new Vector2(0, 2);
                     Color color1 = new(0, 225, 241);
                     Color color2 = new(0, 38, 128);
 
-                    Main.spriteBatch.Draw(texture, drawPos, rect, Color.Lerp(color1, color2, k / (Projectile.oldPos.Length + 2f)) with { A = 0 } * (0.8f - (k / (Projectile.oldPos.Length + 4f))), Projectile.oldRot[k], rect.Size() / 2, Projectile.scale * 1.1f, oldEffects, 0f);
+                    Main.spriteBatch.Draw(texture, drawPos, rect, Color.Lerp(color1, color2, k / (Projectile.oldPos.Length + 2f)) with { A = 0 } * (0.8f - (k / (Projectile.oldPos.Length + 4f))), Projectile.oldRot[k], rect.Size() / 2, Projectile.scale, oldEffects, 0f);
                 }
             }
             else
@@ -435,34 +461,6 @@ namespace GoldLeaf.Items.Blizzard
                 Main.spriteBatch.Draw(trimTex.Value, (Projectile.Center + offset) - Main.screenPosition, rect, ColorHelper.AdditiveWhite * (0.3f - brightness), Projectile.rotation, rect.Size()/2, Projectile.scale, effects, 0);
             
             Main.spriteBatch.Draw(glowTex.Value, (Projectile.Center + offset) - Main.screenPosition, rect, Color.White, Projectile.rotation, rect.Size()/2, Projectile.scale, effects, 0f);
-
-            #region animation
-            if (!Main.gamePaused)
-                Projectile.frameCounter++;
-
-            if (Projectile.frameCounter >= animationSpeed)
-            {
-                Projectile.frameCounter = 0;
-
-                if (animReverse)
-                    Projectile.frame--;
-                else
-                    Projectile.frame++;
-
-                if (Projectile.frame >= Main.projFrames[Projectile.type] && State != Turning)
-                {
-                    AnimLoops++;
-
-                    Projectile.frame = 0;
-                }
-
-                if (Projectile.frame > 4 && State == Turning)
-                {
-                    Projectile.frame--;
-                    animReverse = true;
-                }
-            }
-            #endregion animation
 
             return false;
         }
@@ -488,14 +486,15 @@ namespace GoldLeaf.Items.Blizzard
             Projectile.friendly = true;
             Projectile.tileCollide = false;
             Projectile.timeLeft = TimeToTicks(15);
+            Projectile.extraUpdates = 1;
 
             Projectile.DamageType = DamageClass.MagicSummonHybrid;
 
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().critDamageMod = -0.5f;
         }
 
-        const float accelerationSpeed = 1.3f;
-        const float maxSpeed = 14.5f;
+        const float accelerationSpeed = 0.7f;
+        const float maxSpeed = 7.25f;
 
         bool HasTarget => (Main.npc[(int)Projectile.ai[0]].active && Main.npc[(int)Projectile.ai[0]].chaseable && Projectile.Distance(Main.npc[(int)Projectile.ai[0]].Center) <= 500) && Counter <= TimeToTicks(10);
         private ref int Counter => ref Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
@@ -514,7 +513,7 @@ namespace GoldLeaf.Items.Blizzard
             if (Projectile.velocity.Length() > maxSpeed) 
                 Projectile.velocity = Vector2.Normalize(Projectile.velocity) * maxSpeed;
 
-            if (++Projectile.frameCounter >= 6)
+            if (++Projectile.frameCounter >= 12)
             {
                 Projectile.frameCounter = 0;
                 Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
@@ -522,7 +521,7 @@ namespace GoldLeaf.Items.Blizzard
 
             Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), (0 / 255f) * 0.6f, (164 / 255f) * 0.6f, (242 / 255f) * 0.6f);
 
-            if (Main.rand.NextBool(2))
+            if (Main.rand.NextBool(4))
             {
                 Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustType<ArcticDust>());
                 dust.velocity = Vector2.Zero;

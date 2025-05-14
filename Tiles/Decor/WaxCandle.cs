@@ -25,7 +25,7 @@ namespace GoldLeaf.Tiles.Decor
 
         public override void SetStaticDefaults()
         {
-            ItemSets.Glowmask[Type] = (glowTex, Color.White);
+            ItemSets.Glowmask[Type] = (glowTex, Color.White, false);
             Item.ResearchUnlockCount = 10;
         }
 

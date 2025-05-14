@@ -23,6 +23,11 @@ namespace GoldLeaf.Items.Blizzard
 {
     public class BlizzardBrassBullet : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 99;
+        }
+
         public override void SetDefaults()
         {
             Item.CloneDefaults(ItemID.MusketBall);
@@ -60,7 +65,9 @@ namespace GoldLeaf.Items.Blizzard
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
-            spriteBatch.Draw(TextureAssets.Item[Item.type].Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite * 0.3f, rotation, TextureAssets.Item[Item.type].Value.Size() / 2, scale, SpriteEffects.None, 0f);
+            float brightness = Lighting.Brightness((int)Item.Center.X / 16, (int)Item.Center.Y / 16);
+            if (brightness <= 0.3f)
+                spriteBatch.Draw(TextureAssets.Item[Item.type].Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite * (0.3f - brightness), rotation, TextureAssets.Item[Item.type].Value.Size() / 2, scale, SpriteEffects.None, 0f);
         }
     }
     
@@ -93,6 +100,8 @@ namespace GoldLeaf.Items.Blizzard
 
             Projectile.DamageType = DamageClass.Ranged;
 
+            Projectile.light = 0f;
+
             Projectile.ai[0] = 0;
         }
 
@@ -102,11 +111,13 @@ namespace GoldLeaf.Items.Blizzard
             {
                 Projectile.ai[0] = 1;
                 Projectile.extraUpdates *= 3;
+                Projectile.light = 0.4f;
             }
             else if (Main.rand.NextBool(Projectile.CritChance, 100)) 
             {
                 Projectile.ai[0] = 1;
                 Projectile.extraUpdates *= 2;
+                Projectile.light = 0.4f;
             }
         }
 
@@ -160,7 +171,10 @@ namespace GoldLeaf.Items.Blizzard
                     //Main.EntitySpriteDraw(glowTex.Value, drawPos, null, Color.White * (0.8f - (0.05f * k)), Projectile.oldRot[k], drawOrigin, Projectile.scale * (1f - (0.045f * k)), SpriteEffects.None);
                 }
                 Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None);
-                Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite * 0.3f, Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
+
+                float brightness = Lighting.Brightness((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16);
+                if (brightness <= 0.3f)
+                    Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite * (0.3f - brightness), Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
 
                 /*
                 for (int k = 0; k < Projectile.oldPos.Length/3; k++)

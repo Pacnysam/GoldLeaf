@@ -32,7 +32,7 @@ namespace GoldLeaf.Tiles.Blizzard.Crafted
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 100;
-            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite * 0.3f);
+            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite * 0.3f, false);
         }
 
         public override void SetDefaults()

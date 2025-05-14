@@ -22,8 +22,9 @@ namespace GoldLeaf.Core
     [ReinitializeDuringResizeArrays]
     public static class ItemSets
     {
-        public static (Asset<Texture2D>, Color)[] Glowmask = ItemID.Sets.Factory.CreateNamedSet("Glowmask")
-            .RegisterCustomSet<(Asset<Texture2D>, Color)>((null, Color.White));
+        public static (Asset<Texture2D>, Color, bool)[] Glowmask = ItemID.Sets.Factory.CreateNamedSet("Glowmask")
+            .Description("Bool automatically draws an in world glowmask")
+            .RegisterCustomSet<(Asset<Texture2D>, Color, bool)>((null, Color.White, false));
     }
     public static class ProjectileSets
     {

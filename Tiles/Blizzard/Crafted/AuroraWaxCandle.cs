@@ -27,7 +27,7 @@ namespace GoldLeaf.Tiles.Blizzard.Crafted
 
         public override void SetStaticDefaults()
         {
-            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AuroraAccentColor(Main.GlobalTimeWrappedHourly * 4f));
+            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AuroraAccentColor(Main.GlobalTimeWrappedHourly * 4f), false);
             Item.ResearchUnlockCount = 10;
         }
 

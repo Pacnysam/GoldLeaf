@@ -28,7 +28,7 @@ namespace GoldLeaf.Items.Dungeon
 
         public override void SetStaticDefaults()
         {
-            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite);
+            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite * 0.5f, true);
         }
 
         public override void SetDefaults() 
@@ -61,7 +61,7 @@ namespace GoldLeaf.Items.Dungeon
             return false;
         }
 
-        public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+        /*public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
 		{
 			Texture2D tex = glowTex.Value;
 			spriteBatch.Draw
@@ -80,7 +80,7 @@ namespace GoldLeaf.Items.Dungeon
 				SpriteEffects.None,
 				0f
 			);
-        }
+        }*/
 		
 		public override void AddRecipes() 
 		{

@@ -34,18 +34,11 @@ namespace GoldLeaf.Items.Granite
         }
         public override void SetStaticDefaults()
         {
-            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite);
+            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite, true);
         }
 
-        public override bool? PrefixChance(int pre, UnifiedRandom rand)
-        {
-            return false;
-        }
-
-        public override int ChoosePrefix(UnifiedRandom rand)
-        {
-            return 0;
-        }
+        public override bool? PrefixChance(int pre, UnifiedRandom rand) => false;
+        public override int ChoosePrefix(UnifiedRandom rand) => 0;
 
         public override void SetDefaults()
 		{
@@ -138,9 +131,5 @@ namespace GoldLeaf.Items.Granite
             return true;
         }*/
 
-        public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
-        {
-            spriteBatch.Draw(glowTex.Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite, rotation, glowTex.Size() / 2, scale, SpriteEffects.None, 0f);
-        }
     }
 }

@@ -23,6 +23,12 @@ namespace GoldLeaf.Items.Blizzard
 {
     public class SafetyBlanket : ModItem
     {
+        private static Asset<Texture2D> glowTex;
+        public override void Load()
+        {
+            glowTex = Request<Texture2D>(Texture + "Glow");
+        }
+
         public override void SetDefaults()
         {
             Item.width = 28;
@@ -38,6 +44,11 @@ namespace GoldLeaf.Items.Blizzard
         {
             player.GetModPlayer<SafetyBlanketPlayer>().safetyBlanket = true;
             player.GetModPlayer<SafetyBlanketPlayer>().safetyBlanketItem = Item;
+        }
+
+        public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+        {
+            spriteBatch.Draw(glowTex.Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite, rotation, glowTex.Size() / 2, scale, SpriteEffects.None, 0f);
         }
 
         public override void AddRecipes()

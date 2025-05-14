@@ -15,30 +15,12 @@ using Terraria.GameContent;
 
 namespace GoldLeaf.Tiles.Grove
 {
-    /*public class GroveGrass : ModItem
-    {
-        public override void SetDefaults()
-        {
-            Item.consumable = true;
-            Item.width = 16;
-            Item.height = 16;
-            Item.value = 100;
-            Item.useStyle = 1;
-            Item.rare = 1;
-            Item.autoReuse = true;
-            Item.createTile = TileType<GroveGrassT>();
-            Item.maxStack = Item.CommonMaxStack;
-            Item.useTime = 10;
-            Item.useAnimation = 15;
-        }
-    }*/
-
     public class GroveGrassSeeds : ModItem 
     {
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 25;
-            ItemSets.Glowmask[Type] = (TextureAssets.Item[Type], Color.White * 0.4f);
+            ItemSets.Glowmask[Type] = (TextureAssets.Item[Type], Color.White * 0.4f, true);
         }
 
         public override void SetDefaults()
@@ -59,10 +41,10 @@ namespace GoldLeaf.Tiles.Grove
             ItemID.Sets.AlsoABuildingItem[Item.type] = true;
         }
 
-        public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+        /*public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
             spriteBatch.Draw(TextureAssets.Item[Item.type].Value, Item.Center - Main.screenPosition, null, Color.White * 0.4f, rotation, TextureAssets.Item[Item.type].Value.Size() / 2, scale, SpriteEffects.None, 0f);
-        }
+        }*/
 
         public override void PostUpdate()
         {

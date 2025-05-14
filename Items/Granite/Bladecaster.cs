@@ -33,7 +33,7 @@ namespace GoldLeaf.Items.Granite
 
         public override void SetStaticDefaults()
         {
-            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite);
+            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite, false);
         }
 
         public override void SetDefaults()

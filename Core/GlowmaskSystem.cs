@@ -27,6 +27,20 @@ using GoldLeaf.Items.Blizzard;
 
 namespace GoldLeaf.Core
 {
+    public class GlowmaskItem : GlobalItem 
+    {
+        public override bool InstancePerEntity => false;
+        public override bool AppliesToEntity(Item entity, bool lateInstantiation)
+        {
+            return ItemSets.Glowmask[entity.type].Item1 != null;
+        }
+        public override void PostDrawInWorld(Item item, SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+        {
+            if (ItemSets.Glowmask[item.type].Item3)
+                spriteBatch.Draw(ItemSets.Glowmask[item.type].Item1.Value, item.Center - Main.screenPosition, null, ItemSets.Glowmask[item.type].Item2, rotation, ItemSets.Glowmask[item.type].Item1.Size()/2, scale, SpriteEffects.None, 0f);
+        }
+    }
+
     public class ItemGlowLayer : PlayerDrawLayer
     {
         public override Position GetDefaultPosition() => new BeforeParent(PlayerDrawLayers.ArmOverItem);
