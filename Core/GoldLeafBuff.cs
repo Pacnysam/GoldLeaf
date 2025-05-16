@@ -51,7 +51,6 @@ namespace GoldLeaf.Core
                 npc.GetGlobalNPC<GoldLeafNPC>().stunned = true;
                 npc.GetGlobalNPC<GoldLeafNPC>().movementSpeed *= 0f;
                 npc.coldDamage = true;
-                npc.damage = 0;
             }
         }
 

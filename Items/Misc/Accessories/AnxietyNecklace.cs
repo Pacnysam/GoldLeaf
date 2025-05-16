@@ -16,6 +16,7 @@ using ReLogic.Content;
 using Terraria.Localization;
 namespace GoldLeaf.Items.Misc.Accessories
 {
+    [AutoloadEquip(EquipType.Neck)]
     public class AnxietyNecklace : ModItem
     {
         private static Asset<Texture2D> glowTex;
