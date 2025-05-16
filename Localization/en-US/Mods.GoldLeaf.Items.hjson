@@ -464,7 +464,7 @@ GlacialScissors: {
 
 NitrogenPerfume: {
 	DisplayName: Nitrogen Perfume
-	Tooltip: First attack on an enemy freezes them briefly
+	Tooltip: First strike on an enemy freezes them briefly
 }
 
 SunstoneDye: {
@@ -499,5 +499,14 @@ ClutchRod: {
 		Summons a clutch familiar when held
 		Hold and release <left> to launch it at enemies
 		<right> to place on the ground
+		'''
+}
+
+AnxietyNecklace: {
+	DisplayName: Anxiety Necklace
+	Tooltip:
+		'''
+		{$CommonItemTooltip.IncreasesMaxMinionsBy}
+		Increases movement and minion speed after taking damage
 		'''
 }

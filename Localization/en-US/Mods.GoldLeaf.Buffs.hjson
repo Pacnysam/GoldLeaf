@@ -96,3 +96,8 @@ EveDropletBuff: {
 	DisplayName: Eve Droplet
 	Description: Covered in eve water
 }
+
+AnxietyNecklaceBuff: {
+	DisplayName: Anxious
+	Description: Movement and minion speed are increased
+}
