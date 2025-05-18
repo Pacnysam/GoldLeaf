@@ -498,7 +498,6 @@ ClutchRod: {
 		'''
 		Summons a clutch familiar when held
 		Hold and release <left> to launch it at enemies
-		<right> to place on the ground
 		'''
 }
 
@@ -509,4 +508,14 @@ AnxietyNecklace: {
 		{$CommonItemTooltip.IncreasesMaxMinionsBy}
 		Increases movement and minion speed after taking damage
 		'''
+}
+
+ClutchRodPlaceable: {
+	Tooltip: ""
+	DisplayName: Placeable Clutch Rod
+}
+
+OxeyeDaisyPlaceable: {
+	Tooltip: ""
+	DisplayName: Placeable Oxeye Daisy
 }

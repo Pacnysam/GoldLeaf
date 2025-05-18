@@ -38,8 +38,9 @@ namespace GoldLeaf.Items.Potions
         {
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.BottledWater);
-            recipe.AddIngredient(ItemID.Deathweed);
-            //recipe.AddIngredient(ItemType<GroveFish>());
+            recipe.AddIngredient(ItemID.Waterleaf);
+            recipe.AddIngredient(ItemType<EveDroplet>());
+            recipe.AddIngredient(ItemID.Lens);
             recipe.AddTile(TileID.Bottles);
             recipe.Register();
         }

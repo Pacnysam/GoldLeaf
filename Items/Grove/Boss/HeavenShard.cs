@@ -45,7 +45,7 @@ namespace GoldLeaf.Items.Grove.Boss
                 Main.spriteBatch.Draw
                 (
                     tex,
-                    position + new Vector2(0f, 2f - (2f * (float)Math.Sin(Main.GlobalTimeWrappedHourly))).RotatedBy((k + (Main.GlobalTimeWrappedHourly * 1.5)) * ((float)Math.PI * 2f)),
+                    position + new Vector2(0f, 1f - (2f * (float)Math.Sin(Main.GlobalTimeWrappedHourly))).RotatedBy((k + (Main.GlobalTimeWrappedHourly * 1.5)) * ((float)Math.PI * 2f)),
                     new Rectangle(0, 0, tex.Width, tex.Height),
                     color * 0.4f,
                     0,
@@ -61,7 +61,7 @@ namespace GoldLeaf.Items.Grove.Boss
                 Main.spriteBatch.Draw
                 (
                     tex,
-                    position + new Vector2(0f, 2f - (2f * (float)Math.Cos(Main.GlobalTimeWrappedHourly))).RotatedBy((k + (Main.GlobalTimeWrappedHourly * -1.5)) * ((float)Math.PI * 2f)),
+                    position + new Vector2(0f, 1f - (2f * (float)Math.Cos(Main.GlobalTimeWrappedHourly))).RotatedBy((k + (Main.GlobalTimeWrappedHourly * -1.5)) * ((float)Math.PI * 2f)),
                     new Rectangle(0, 0, tex.Width, tex.Height),
                     color * 0.4f,
                     0,

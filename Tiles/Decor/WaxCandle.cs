@@ -101,6 +101,7 @@ namespace GoldLeaf.Tiles.Decor
 			TileObjectData.newTile.RandomStyleRange = 6;
             TileObjectData.newTile.StyleMultiplier = 6;
 			TileObjectData.newTile.StyleHorizontal = true;
+            TileObjectData.newTile.WaterDeath = true;
 
 			TileObjectData.newTile.CoordinatePadding = 2;
 

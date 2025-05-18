@@ -44,13 +44,11 @@ namespace GoldLeaf.Core
             if (type == BuffID.Chilled)
             {
                 npc.GetGlobalNPC<GoldLeafNPC>().movementSpeed *= 0.5f;
-                npc.coldDamage = true;
             }
             if (type == BuffID.Frozen)
             {
                 npc.GetGlobalNPC<GoldLeafNPC>().stunned = true;
                 npc.GetGlobalNPC<GoldLeafNPC>().movementSpeed *= 0f;
-                npc.coldDamage = true;
             }
         }
 

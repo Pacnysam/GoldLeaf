@@ -48,7 +48,7 @@ namespace GoldLeaf.Core
         protected override void Draw(ref PlayerDrawSet drawinfo)
         {
             Player player = drawinfo.drawPlayer;
-            if (player.JustDroppedAnItem || ItemSets.Glowmask[player.HeldItem.type].Item1 == null)//!ItemSets.itemGlowmasks.TryGetValue(player.HeldItem.type, out Texture2D tex))
+            if (player.JustDroppedAnItem || ItemSets.Glowmask[player.HeldItem.type].Item1 == null)
                 return;
 
             if (player.heldProj >= 0 && drawinfo.shadow == 0f && !drawinfo.heldProjOverHand)
@@ -58,7 +58,7 @@ namespace GoldLeaf.Core
             int itemType = heldItem.type;
             Main.instance.LoadItem(itemType);
             float adjustedItemScale = player.GetAdjustedItemScale(heldItem);
-            Texture2D tex = ItemSets.Glowmask[itemType].Item1.Value;
+            Texture2D tex = ItemSets.Glowmask[player.HeldItem.type].Item1.Value;
             Vector2 position = new((int)(drawinfo.ItemLocation.X - Main.screenPosition.X), (int)(drawinfo.ItemLocation.Y - Main.screenPosition.Y));
             Rectangle itemDrawFrame = player.GetItemDrawFrame(itemType);
             drawinfo.itemColor = Lighting.GetColor((int)(drawinfo.Position.X + player.width * 0.5) / 16, (int)((drawinfo.Position.Y + player.height * 0.5) / 16));

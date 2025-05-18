@@ -65,7 +65,7 @@ namespace GoldLeaf.Items.Misc.Accessories
         public override void Update(Player player, ref int buffIndex)
         {
             player.moveSpeed += 1f;
-            player.runAcceleration += 0.25f;
+            player.runAcceleration += 0.15f;
             player.GetModPlayer<MinionSpeedPlayer>().minionSpeed += 0.5f;
         }
     }

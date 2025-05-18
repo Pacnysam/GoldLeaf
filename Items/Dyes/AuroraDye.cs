@@ -54,7 +54,7 @@ namespace GoldLeaf.Items.Dyes
             recipe.AddIngredient(ItemID.BottledWater);
             recipe.AddIngredient(ItemType<AuroraCluster>());
             recipe.AddTile(TileID.DyeVat);
-            recipe.AddOnCraftCallback(RecipeCallbacks.AuroraMinor);
+            recipe.AddOnCraftCallback(RecipeCallbacks.DyeMinor);
             recipe.Register();
         }
     }

@@ -16,7 +16,7 @@ namespace GoldLeaf.Biomes
 
         public override bool IsBiomeActive(Player player) 
         {
-			return GetInstance<TileCount>().waxCandleCount >= 10;
+			return GetInstance<TileCount>().waxCandleCount >= 5;
         }
 		public override void OnEnter(Player player) => player.AddBuff(BuffType<WaxCandleBuff>(), 2);
         public override void OnLeave(Player player) => player.ClearBuff(BuffType<WaxCandleBuff>());

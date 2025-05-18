@@ -1,5 +1,6 @@
 using GoldLeaf.Core;
 using GoldLeaf.Items.Granite;
+using GoldLeaf.Items.Misc.Accessories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
@@ -34,7 +35,7 @@ namespace GoldLeaf.Tiles.Granite
         public override void SetStaticDefaults()
         {
             AddMapEntry(new Color(109, 73, 64), Language.GetText("Mods.GoldLeaf.Items.Granite.ClutchRod.DisplayName"));
-            RegisterItemDrop(ItemType<ClutchRod>());
+            RegisterItemDrop(ItemType<ClutchRod>(), 0);
 
             TileID.Sets.DisableSmartCursor[Type] = true;
             TileID.Sets.HasOutlines[Type] = true;
@@ -187,4 +188,35 @@ namespace GoldLeaf.Tiles.Granite
             RecipeSystem.LearnRecipie(GetInstance<ClutchRod>().Item);
         }
     }
+    /*public class ClutchRodPlaceable : ModItem
+    {
+        private static Asset<Texture2D> glowTex;
+        public override void Load()
+        {
+            glowTex = Request<Texture2D>(Texture + "Glow");
+        }
+        public override void SetStaticDefaults()
+        {
+            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite, true);
+        }
+
+        public override void SetDefaults()
+        {
+            Item.value = Item.sellPrice(0, 0, 30, 0);
+            Item.rare = ItemRarityID.White;
+
+            Item.width = 16;
+            Item.height = 28;
+
+            Item.DefaultToPlaceableTile(TileType<BuriedClutchRod>());
+        }
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ItemType<ClutchRod>())
+                .AddCondition(Condition.InGraveyard)
+                .Register();
+        }
+    }*/
 }

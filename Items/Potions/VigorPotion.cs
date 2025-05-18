@@ -37,7 +37,7 @@ namespace GoldLeaf.Items.Potions
             Item.width = 16;
             Item.height = 36;
 
-            Item.rare = ItemRarityID.Pink;
+            Item.rare = ItemRarityID.Green;
 
             Item.buffType = BuffType<VigorPotionBuff>();
             Item.buffTime = TimeToTicks(6, 0);
@@ -49,7 +49,7 @@ namespace GoldLeaf.Items.Potions
             .AddIngredient(ItemID.BottledWater)
             .AddIngredient(ItemID.Hive)
             .AddIngredient(ItemID.Fireblossom)
-            .AddIngredient(ItemType<EveDroplet>())
+            //recipe.AddIngredient(ItemType<GroveFish>());
             .AddTile(TileID.Bottles)
             .Register();
         }

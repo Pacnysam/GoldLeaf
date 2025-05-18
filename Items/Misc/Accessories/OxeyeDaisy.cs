@@ -62,8 +62,30 @@ namespace GoldLeaf.Items.Misc.Accessories
             player.GetModPlayer<OxeyePlayer>().cooldown--;
         }
     }
-    
-	public class OxeyePlayer : ModPlayer
+
+    /*public class OxeyeDaisyPlaceable : ModItem
+    {
+        public override void SetDefaults()
+        {
+            Item.value = Item.sellPrice(0, 0, 30, 0);
+            Item.rare = ItemRarityID.White;
+
+            Item.width = 16;
+            Item.height = 28;
+
+            Item.DefaultToPlaceableTile(TileType<OxeyeDaisyT>());
+        }
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ItemType<OxeyeDaisy>())
+                .AddCondition(Condition.InGraveyard)
+                .Register();
+        }
+    }*/
+
+    public class OxeyePlayer : ModPlayer
 	{
         public bool oxeyeDaisy = false;
         public bool lovesMe = true;
