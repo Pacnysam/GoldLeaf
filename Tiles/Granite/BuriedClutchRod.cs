@@ -1,6 +1,6 @@
 using GoldLeaf.Core;
 using GoldLeaf.Items.Granite;
-using GoldLeaf.Items.Misc.Accessories;
+using GoldLeaf.Items.Accessories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Graphics.PackedVector;

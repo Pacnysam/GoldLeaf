@@ -12,7 +12,7 @@ using GoldLeaf.Items.Grove;
 using System.Diagnostics.Metrics;
 using System;
 using GoldLeaf.Effects.Dusts;
-namespace GoldLeaf.Items.Misc.Accessories
+namespace GoldLeaf.Items.Accessories
 {
     internal class HiveCarcass : ModItem
     {

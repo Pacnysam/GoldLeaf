@@ -33,7 +33,7 @@ namespace GoldLeaf.Items.Granite
 
         public override void SetStaticDefaults()
         {
-            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite, false);
+            ItemSets.Glowmask[Type] = (glowTex, Color.White with { A = 120 }, true);
         }
 
         public override void SetDefaults()
@@ -117,7 +117,7 @@ namespace GoldLeaf.Items.Granite
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
-            spriteBatch.Draw(glowTex.Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite, rotation, TextureAssets.Item[Item.type].Size()/2, scale, SpriteEffects.None, 0f);
+            //spriteBatch.Draw(glowTex.Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite, rotation, TextureAssets.Item[Item.type].Size()/2, scale, SpriteEffects.None, 0f);
 
             /*Texture2D tex = glowTex.Value;
             Vector2 vector = new

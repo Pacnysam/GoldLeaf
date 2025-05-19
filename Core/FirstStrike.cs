@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
-using GoldLeaf.Items.Misc.Accessories;
+using GoldLeaf.Items.Accessories;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.GameContent.Bestiary;
 using System.Collections.Generic;

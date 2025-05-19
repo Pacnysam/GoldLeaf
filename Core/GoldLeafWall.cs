@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.ID;
 using Terraria.ModLoader;
-using GoldLeaf.Items.Misc.Accessories;
+using GoldLeaf.Items.Accessories;
 using Terraria;
 using GoldLeaf.Tiles.Grove;
 using System.Threading.Channels;

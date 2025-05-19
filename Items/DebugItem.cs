@@ -11,7 +11,6 @@ using GoldLeaf.Core;
 using Terraria.Audio;
 using System.Diagnostics.Metrics;
 using GoldLeaf.Items.Pickups;
-using GoldLeaf.Items.Misc;
 using Terraria.GameContent.Drawing;
 using GoldLeaf.Items.Nightshade;
 

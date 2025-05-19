@@ -14,7 +14,7 @@ using GoldLeaf.Core;
 using ReLogic.Content;
 using static GoldLeaf.Core.Helper;
 using GoldLeaf.Items.Blizzard;
-using GoldLeaf.Items.Misc.Accessories;
+using GoldLeaf.Items.Accessories;
 using GoldLeaf.Items.Blizzard.Armor;
 using GoldLeaf.Items.Accessories;
 

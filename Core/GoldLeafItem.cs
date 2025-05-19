@@ -1,4 +1,4 @@
-﻿using GoldLeaf.Items.Misc.Accessories;
+﻿using GoldLeaf.Items.Accessories;
 using GoldLeaf.Items.Pickups;
 using GoldLeaf.Items.VanillaBossDrops;
 using GoldLeaf.Items.Vanity.Watcher;

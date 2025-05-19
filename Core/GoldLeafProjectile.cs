@@ -1,5 +1,5 @@
 ﻿using GoldLeaf.Effects.Dusts;
-using GoldLeaf.Items.Misc.Accessories;
+using GoldLeaf.Items.Accessories;
 using GoldLeaf.Items.Nightshade;
 using Microsoft.Xna.Framework;
 using System;

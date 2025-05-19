@@ -12,7 +12,7 @@ using System.Diagnostics.Metrics;
 using System;
 using GoldLeaf.Effects.Dusts;
 using Terraria.Graphics.Effects;
-using GoldLeaf.Items.Misc.Accessories;
+using GoldLeaf.Items.Accessories;
 using Terraria.Audio;
 using Terraria.DataStructures;
 namespace GoldLeaf.Items.Vanity

@@ -10,7 +10,7 @@ using Terraria.Audio;
 using GoldLeaf.Effects.Dusts;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
-using GoldLeaf.Items.Misc.Accessories;
+using GoldLeaf.Items.Accessories;
 using Terraria.GameContent;
 using System;
 using GoldLeaf.Items.Grove;

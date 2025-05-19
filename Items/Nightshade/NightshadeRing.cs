@@ -10,7 +10,7 @@ using Mono.Cecil;
 using Terraria.DataStructures;
 using GoldLeaf.Items.Grove;
 using Microsoft.Xna.Framework.Graphics;
-using GoldLeaf.Items.Misc;
+
 
 namespace GoldLeaf.Items.Nightshade
 {

@@ -11,7 +11,7 @@ using Terraria.Localization;
 using GoldLeaf.Core;
 using Terraria.Audio;
 using Microsoft.CodeAnalysis;
-using GoldLeaf.Items.Misc;
+
 using Terraria.GameContent.Drawing;
 using GoldLeaf.Items.Grove.Boss;
 using GoldLeaf.Tiles.Decor;

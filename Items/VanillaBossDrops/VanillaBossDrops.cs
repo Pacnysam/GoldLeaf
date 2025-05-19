@@ -6,7 +6,7 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
-using GoldLeaf.Items.Misc;
+
 using GoldLeaf.Tiles.Decor;
 
 namespace GoldLeaf.Items.VanillaBossDrops

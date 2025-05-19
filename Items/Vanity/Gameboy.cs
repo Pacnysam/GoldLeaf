@@ -13,7 +13,7 @@ using System;
 using GoldLeaf.Effects.Dusts;
 using static tModPorter.ProgressUpdate;
 using Terraria.Graphics.Effects;
-using GoldLeaf.Items.Misc.Accessories;
+using GoldLeaf.Items.Accessories;
 using ReLogic.Content;
 using Terraria.Graphics.Shaders;
 
