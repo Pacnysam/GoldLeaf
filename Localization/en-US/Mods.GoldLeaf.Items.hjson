@@ -464,7 +464,7 @@ GlacialScissors: {
 
 NitrogenPerfume: {
 	DisplayName: Nitrogen Perfume
-	Tooltip: First strike on an enemy freezes them briefly
+	Tooltip: Freezes enemies on first strike
 }
 
 SunstoneDye: {
@@ -518,4 +518,19 @@ ClutchRodPlaceable: {
 OxeyeDaisyPlaceable: {
 	Tooltip: ""
 	DisplayName: Placeable Oxeye Daisy
+}
+
+ChampionsCloak: {
+	DisplayName: Champion's Cape
+	Tooltip: ""
+}
+
+ChampionsBelt: {
+	DisplayName: Champion's Belt
+	Tooltip: ""
+}
+
+GymShorts: {
+	DisplayName: Gym Shorts
+	Tooltip: ""
 }
