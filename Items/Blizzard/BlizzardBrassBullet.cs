@@ -200,7 +200,7 @@ namespace GoldLeaf.Items.Blizzard
             if (Projectile.ai[0] > 0)
             {
                 if (Main.myPlayer == Projectile.owner)
-                    BlizzardNPC.AddFrost(target);
+                    FrostNPC.AddFrost(target);
 
                 for (int i = 0; i < Main.rand.Next(6, 9); i++)
                 {

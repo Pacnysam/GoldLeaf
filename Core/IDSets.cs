@@ -16,6 +16,7 @@ using static GoldLeaf.Core.Helper;
 using GoldLeaf.Items.Blizzard;
 using GoldLeaf.Items.Misc.Accessories;
 using GoldLeaf.Items.Blizzard.Armor;
+using GoldLeaf.Items.Accessories;
 
 namespace GoldLeaf.Core
 {

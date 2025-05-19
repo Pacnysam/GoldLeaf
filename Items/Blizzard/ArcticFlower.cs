@@ -119,6 +119,9 @@ namespace GoldLeaf.Items.Blizzard
             Projectile.ignoreWater = true;
             Projectile.netImportant = true;
 
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = 10;
+
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().critDamageMod = -0.5f;
         }
 
@@ -370,12 +373,12 @@ namespace GoldLeaf.Items.Blizzard
                 {
                     Projectile.direction = Projectile.spriteDirection = player.direction;
                     //if (Projectile.Center.Distance(player.MountedCenter) <= 100)
-                        Projectile.position = Vector2.Lerp(Projectile.position, idlePosition - (Projectile.Size/2), 0.1f);
+                        Projectile.position.X = Vector2.Lerp(Projectile.position, idlePosition - (Projectile.Size/2), 0.1f).X;
                 }
 
                 Projectile.direction = Projectile.spriteDirection = (Projectile.Center.X > player.Center.X) ? -1 : 1;
             }
-            Projectile.position.Y += 0.8f * (float)Math.Sin(GoldLeafWorld.rottime + (Projectile.minionPos * 1.25f));
+            Projectile.position.Y += 0.3f * (float)Math.Sin(GoldLeafWorld.rottime + (Projectile.minionPos * 1.25f));
 
             #endregion behavior
         }
@@ -549,7 +552,7 @@ namespace GoldLeaf.Items.Blizzard
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (Main.myPlayer == Projectile.owner)
-                BlizzardNPC.AddFrost(target, 2);
+                FrostNPC.AddFrost(target, 2);
 
             SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Frost") { Volume = 0.4f, Pitch = 0.6f, PitchVariance = 0.4f }, Projectile.Center);
         }

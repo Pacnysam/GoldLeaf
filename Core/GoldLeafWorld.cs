@@ -1,4 +1,4 @@
-﻿using GoldLeaf.Items.Gem;
+﻿
 using GoldLeaf.Items.Grove;
 using Microsoft.Xna.Framework;
 using System;

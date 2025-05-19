@@ -21,25 +21,31 @@ using ReLogic.Content;
 
 namespace GoldLeaf.Items.Blizzard
 {
-    public class BlizzardNPC : GlobalNPC
+    public class FrostNPC : GlobalNPC
     {
         public override bool InstancePerEntity => true;
 
-        const int FREEZETIME = 300;
+        const int FREEZETIME = 240;
 
         public int frost = 0;
         public int defrostTimer = 0;
 
+        public override void SetDefaults(NPC entity)
+        {
+            entity.buffImmune[BuffID.Chilled] = !GoldLeafNPC.CanBeStunned(entity);
+            entity.buffImmune[BuffID.Frozen] = !GoldLeafNPC.CanBeStunned(entity);
+        }
+
         public override void PostAI(NPC npc)
         {
-            if (frost >= 8 && GoldLeafNPC.CanBeStunned(npc))
+            if (frost >= 8 && !npc.buffImmune[BuffID.Frozen])
             { 
                 npc.AddBuff(BuffID.Frozen, FREEZETIME - defrostTimer);
                 
                 if (defrostTimer <= 180)
-                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Frost") { Volume = 1.15f });
+                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Frost") { Volume = 1.15f, PitchVariance = 0.6f }, npc.Center);
                 else
-                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Monolith/Chop") { Volume = 0.75f });
+                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Monolith/Chop") { Volume = 0.75f, PitchVariance = 0.4f }, npc.Center);
 
                 defrostTimer = FREEZETIME;
                 frost = 0;
@@ -57,12 +63,12 @@ namespace GoldLeaf.Items.Blizzard
         public static void AddFrost(NPC npc, int amount)
         {
             if (!npc.HasBuff(BuffID.Frozen))
-                npc.GetGlobalNPC<BlizzardNPC>().frost += amount;
+                npc.GetGlobalNPC<FrostNPC>().frost += amount;
         }
         public static void AddFrost(NPC npc)
         {
             if (!npc.HasBuff(BuffID.Frozen))
-                npc.GetGlobalNPC<BlizzardNPC>().frost++;
+                npc.GetGlobalNPC<FrostNPC>().frost++;
         }
 
         public override void DrawEffects(NPC npc, ref Color drawColor)

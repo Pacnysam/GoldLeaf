@@ -14,7 +14,7 @@ using Terraria.ModLoader;
 using Terraria.Localization;
 using Terraria.GameContent.Drawing;
 using Terraria.GameContent;
-using GoldLeaf.Items.Gem;
+
 
 namespace GoldLeaf.Items.Nightshade
 {

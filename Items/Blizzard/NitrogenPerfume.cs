@@ -18,6 +18,7 @@ using Terraria.Graphics.Shaders;
 using Terraria.Localization;
 using GoldLeaf.Items.Misc.Accessories;
 using ReLogic.Content;
+using GoldLeaf.Items.Blizzard.Armor;
 
 namespace GoldLeaf.Items.Blizzard
 {
@@ -42,7 +43,7 @@ namespace GoldLeaf.Items.Blizzard
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<NitrogenPerfumePlayer>().NitrogenPerfume = true;
+            player.GetModPlayer<NitrogenPerfumePlayer>().nitrogenPerfume = true;
             player.GetModPlayer<NitrogenPerfumePlayer>().perfumeItem = Item;
         }
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
@@ -55,13 +56,36 @@ namespace GoldLeaf.Items.Blizzard
 
     public class NitrogenPerfumePlayer : ModPlayer
     {
-        public bool NitrogenPerfume = false;
+        public bool nitrogenPerfume = false;
         public Item perfumeItem;
 
         public override void ResetEffects()
         {
-            NitrogenPerfume = false;
+            nitrogenPerfume = false;
             perfumeItem = null;
+        }
+
+        public override void Load()
+        {
+            FirstStrikePlayer.FirstStrikeEvent += NitrogenPerfumeEffect;
+        }
+        public override void Unload()
+        {
+            FirstStrikePlayer.FirstStrikeEvent -= NitrogenPerfumeEffect;
+        }
+
+        private void NitrogenPerfumeEffect(Player player, NPC target, NPC.HitModifiers hit)
+        {
+            if (player.GetModPlayer<NitrogenPerfumePlayer>().nitrogenPerfume)
+            {
+                hit.SetCrit();
+
+                target.AddBuff(BuffID.Frozen, TimeToTicks(2));
+                SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Frost") { Pitch = 0.45f, PitchVariance = 0.6f, Volume = 0.85f }, target.Center);
+
+                //target.GetGlobalNPC<FrostNPC>().defrostTimer = 0;
+                //FrostNPC.AddFrost(target, 8);
+            }
         }
     }
 }

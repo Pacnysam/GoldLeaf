@@ -16,6 +16,7 @@ using Terraria.DataStructures;
 using GoldLeaf.Items.Underground;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using GoldLeaf.Items.Accessories;
 
 namespace GoldLeaf.Core
 {

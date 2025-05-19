@@ -17,7 +17,7 @@ using Terraria.GameContent.Drawing;
 using Terraria.Graphics.Shaders;
 using Terraria.Localization;
 
-namespace GoldLeaf.Items.Misc.Accessories
+namespace GoldLeaf.Items.Accessories
 {
 	public class ToxicPositivity : ModItem
 	{

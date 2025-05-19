@@ -18,6 +18,7 @@ using GoldLeaf.Items.Potions;
 using Terraria.GameContent.Bestiary;
 using GoldLeaf.Items.Grove;
 using GoldLeaf.Items.Dyes.HairDye;
+using GoldLeaf.Items.Accessories;
 
 namespace GoldLeaf.Core
 {
@@ -98,35 +99,31 @@ namespace GoldLeaf.Core
             modifiers.DefenseEffectiveness *= defenseFactorMod;
         }
 
-        public static bool CanBeStunned(NPC npc) => (!npc.boss && npc.knockBackResist != 0f);
+        public static bool CanBeStunned(NPC npc) => (!npc.boss /* && npc.knockBackResist != 0f*/);
+
+        public override bool CanHitPlayer(NPC npc, Player target, ref int cooldownSlot)
+        {
+            if (stunned)
+                return false;
+
+            return true;
+        }
 
         public override bool PreAI(NPC npc)
         {
-            if (Main.netMode != NetmodeID.Server)
+            if (Main.netMode != NetmodeID.Server && stunned && !npc.boss/* && npc.knockBackResist != 0f*/)
             {
-                if (stunned)
-                {
-                    if (!npc.boss && npc.knockBackResist != 0f)
-                    {
-                        //npc.netUpdate = true;
-                        npc.velocity *= 0;
-                        npc.frame.Y = 0;
-                        return false;
-                    }
-                }
+                npc.velocity = Vector2.Zero;
+                return false;
             }
-
             return true;
         }
 
         public override void PostAI(NPC npc)
         {
-            if (Slowed)
+            if (Slowed && !npc.boss/* && npc.knockBackResist != 0f*/)
             {
-                if (!npc.boss && npc.knockBackResist != 0f)
-                {
-                    npc.position -= npc.velocity * (1 - movementSpeed);
-                }
+                npc.position -= npc.velocity * (1 - movementSpeed);
             }
         }
 

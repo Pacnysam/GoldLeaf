@@ -17,7 +17,6 @@ using GoldLeaf.Tiles.Grove;
 using ReLogic.Content;
 using GoldLeaf.Items.Vanity;
 using Terraria.Localization;
-using GoldLeaf.Items.Misc.Weapons;
 
 namespace GoldLeaf.Biomes.Grove.Liquids
 {

@@ -16,7 +16,7 @@ using Terraria.Audio;
 using ReLogic.Content;
 using GoldLeaf.Items.Grove.Boss;
 using Terraria.Graphics.Shaders;
-using GoldLeaf.Items.Gem;
+
 
 namespace GoldLeaf.Items.Grove
 {

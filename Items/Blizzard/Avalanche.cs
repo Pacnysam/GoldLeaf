@@ -18,7 +18,7 @@ using Terraria.Graphics.Shaders;
 using Terraria.Localization;
 using GoldLeaf.Items.Misc.Accessories;
 using ReLogic.Content;
-using GoldLeaf.Items.Gem;
+
 using Terraria.ModLoader.IO;
 using System.Collections.Generic;
 

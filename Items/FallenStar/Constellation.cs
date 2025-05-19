@@ -18,7 +18,7 @@ using System;
 using System.Threading;
 using GoldLeaf.Effects.Dusts;
 using ReLogic.Content;
-namespace GoldLeaf.Items.Misc.Weapons
+namespace GoldLeaf.Items.FallenStar
 {
     public class Constellation : ModItem
     {
@@ -132,7 +132,7 @@ namespace GoldLeaf.Items.Misc.Weapons
             Player player = Main.player[Projectile.owner];
 
             Projectile.WhipSettings.Segments += player.GetModPlayer<ConstellationPlayer>().extraSegments;
-            Projectile.WhipSettings.RangeMultiplier += (0.125f * Main.player[Projectile.owner].GetModPlayer<ConstellationPlayer>().extraSegments);
+            Projectile.WhipSettings.RangeMultiplier += 0.125f * Main.player[Projectile.owner].GetModPlayer<ConstellationPlayer>().extraSegments;
         }
 
         public override void AI()
@@ -154,7 +154,7 @@ namespace GoldLeaf.Items.Misc.Weapons
             Player player = Main.player[Projectile.owner];
             target.AddBuff(BuffType<ConstellationTag>(), 180);
             player.MinionAttackTargetNPC = target.whoAmI;
-            
+
             player.GetModPlayer<ConstellationPlayer>().segmentTimer = 300;
 
             if (player.GetModPlayer<ConstellationPlayer>().extraSegments < player.GetModPlayer<ConstellationPlayer>().maxExtraSegments)
@@ -165,9 +165,9 @@ namespace GoldLeaf.Items.Misc.Weapons
 
                 SoundEngine.PlaySound(SoundID.NPCDeath7, player.Center);
             }
-            else 
+            else
             {
-                Projectile.damage = (int)(Projectile.damage * 0.7f + (player.GetModPlayer<ConstellationPlayer>().extraSegments * 0.05f));
+                Projectile.damage = (int)(Projectile.damage * 0.7f + player.GetModPlayer<ConstellationPlayer>().extraSegments * 0.05f);
                 DustHelper.DrawStar(target.Center, DustID.FireworkFountain_Blue, 5, target.scale * 1.4f, 1f, 0.7f, 0.85f, 0.5f, true, 0, -1);
             }
         }
@@ -263,8 +263,8 @@ namespace GoldLeaf.Items.Misc.Weapons
             return false;
         }
     }
-    
-    public class ConstellationPlayer : ModPlayer 
+
+    public class ConstellationPlayer : ModPlayer
     {
         public int extraSegments = 0;
         public int maxExtraSegments = 12;

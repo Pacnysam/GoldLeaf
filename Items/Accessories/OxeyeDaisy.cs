@@ -19,7 +19,7 @@ using Terraria.GameContent;
 using System;
 using Terraria.GameContent.ObjectInteractions;
 
-namespace GoldLeaf.Items.Misc.Accessories
+namespace GoldLeaf.Items.Accessories
 {
 	public class OxeyeDaisy : ModItem
 	{

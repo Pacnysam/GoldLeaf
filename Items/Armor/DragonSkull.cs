@@ -20,7 +20,7 @@ using GoldLeaf.Items.Vanity.Watcher;
 using ReLogic.Content;
 using Terraria.Localization;
 
-namespace GoldLeaf.Items.Misc.Armor
+namespace GoldLeaf.Items.Armor
 {
     [AutoloadEquip(EquipType.Head)]
     public class DragonSkull : ModItem
@@ -44,7 +44,7 @@ namespace GoldLeaf.Items.Misc.Armor
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MinionSpeedPlayer>().sentrySpeed += SentrySpeed/100;
+            player.GetModPlayer<MinionSpeedPlayer>().sentrySpeed += SentrySpeed / 100;
             player.GetModPlayer<DragonSkullPlayer>().dragonSkull = true;
         }
 
@@ -53,13 +53,13 @@ namespace GoldLeaf.Items.Misc.Armor
             ArmorIDs.Head.Sets.PreventBeardDraw[Item.headSlot] = false;
         }
     }
-    
+
     public class DragonSkullLayer : PlayerDrawLayer
     {
         private static Asset<Texture2D> tex;
         public override void Load()
         {
-            tex = Request<Texture2D>("GoldLeaf/Items/Misc/Armor/DragonSkull_Head");
+            tex = Request<Texture2D>("GoldLeaf/Items/Armor/DragonSkull_Head");
         }
 
         public override bool IsHeadLayer => true;
@@ -92,7 +92,7 @@ namespace GoldLeaf.Items.Misc.Armor
         }
     }
 
-    public class DragonSkullPlayer : ModPlayer 
+    public class DragonSkullPlayer : ModPlayer
     {
         public bool dragonSkull = false;
 
@@ -103,7 +103,7 @@ namespace GoldLeaf.Items.Misc.Armor
 
         public override void PostUpdateEquips()
         {
-            if (dragonSkull) 
+            if (dragonSkull)
             {
                 Player.maxTurrets += Player.maxMinions;
                 Player.maxMinions = -1;

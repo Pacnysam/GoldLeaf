@@ -14,7 +14,7 @@ using System;
 using GoldLeaf.Effects.Dusts;
 using ReLogic.Content;
 using Terraria.Localization;
-namespace GoldLeaf.Items.Misc.Accessories
+namespace GoldLeaf.Items.Accessories
 {
     [AutoloadEquip(EquipType.Neck)]
     public class AnxietyNecklace : ModItem
