@@ -21,7 +21,7 @@ namespace GoldLeaf.Core
 {
     public class RecipeSystem : ModSystem
     {
-        public override void PreWorldGen()
+        public override void PostWorldGen()
         {
             learnedRecipes.Clear();
         }
