@@ -16,7 +16,7 @@ using static GoldLeaf.Core.Helper;
 using GoldLeaf.Items.Blizzard;
 using GoldLeaf.Items.Accessories;
 using GoldLeaf.Items.Blizzard.Armor;
-using GoldLeaf.Items.Accessories;
+using GoldLeaf.Items.Armor;
 
 namespace GoldLeaf.Core
 {
@@ -26,6 +26,14 @@ namespace GoldLeaf.Core
         public static (Asset<Texture2D>, Color, bool)[] Glowmask = ItemID.Sets.Factory.CreateNamedSet("Glowmask")
             .Description("Bool automatically draws an in world glowmask")
             .RegisterCustomSet<(Asset<Texture2D>, Color, bool)>((null, Color.White, false));
+
+        public static bool[] FaceMaskLayer = ItemID.Sets.Factory.CreateNamedSet("FaceMaskLayer")
+            .Description("Draws helmet on face mask layer")
+            .RegisterBoolSet(false);
+
+        /*public static Asset<Texture2D>[] FaceMaskLayer = ItemID.Sets.Factory.CreateNamedSet("FaceMaskLayer")
+            .Description("Draws helmet on face mask layer")
+            .RegisterCustomSet<Asset<Texture2D>>(null);*/
     }
     public static class ProjectileSets
     {
@@ -40,5 +48,11 @@ namespace GoldLeaf.Core
         public static bool[] IsRemovable = BuffID.Sets.Factory.CreateNamedSet("IsRemovable")
             .Description("Can be removed by safety blanket and similar methods")
             .RegisterBoolSet(true, BuffID.MoonLeech, BuffID.TheTongue, BuffID.Obstructed, BuffID.Horrified, BuffID.Hunger, BuffID.NeutralHunger, BuffID.Starving, BuffType<ToxicPositivityBuff>());
+    }
+    public static class ArmorSets
+    {
+        public static bool[] FaceMask = ArmorIDs.Head.Sets.Factory.CreateNamedSet("FaceMaskLayer")
+            .Description("Draws armor head on face mask layer")
+            .RegisterBoolSet(false);
     }
 }

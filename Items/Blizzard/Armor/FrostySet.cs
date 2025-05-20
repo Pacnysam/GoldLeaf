@@ -7,23 +7,16 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using GoldLeaf.Items.Grove;
 using System.Diagnostics.Metrics;
 using System;
 using GoldLeaf.Effects.Dusts;
-using Terraria.Graphics.Effects;
 using Terraria.DataStructures;
-using GoldLeaf.Tiles.Grove;
 using ReLogic.Content;
-using GoldLeaf.Items.Vanity;
 using Terraria.Localization;
 using Terraria.Audio;
-using Terraria.WorldBuilding;
 using Terraria.Graphics.Shaders;
 using GoldLeaf.Items.Pickups;
-using Terraria.GameContent.ItemDropRules;
-using Conditions = Terraria.GameContent.ItemDropRules.Conditions;
-using Terraria.GameContent.Bestiary;
+using Terraria.Graphics.Renderers;
 
 namespace GoldLeaf.Items.Blizzard.Armor
 {
@@ -50,8 +43,8 @@ namespace GoldLeaf.Items.Blizzard.Armor
 
         public override void SetStaticDefaults()
         {
-            //ArmorIDs.Face.Sets.PreventHairDraw[Item.headSlot] = false;
-            //ArmorIDs.Face.Sets.DrawInFaceHeadLayer[Item.headSlot] = true;
+            ArmorSets.FaceMask[Item.headSlot] = true;
+
             ArmorIDs.Head.Sets.DrawFullHair[Item.headSlot] = true;
             ArmorIDs.Head.Sets.DrawsBackHairWithoutHeadgear[Item.headSlot] = true;
         }
@@ -93,12 +86,6 @@ namespace GoldLeaf.Items.Blizzard.Armor
             Item.rare = ItemRarityID.Blue;
 
             Item.defense = 5;
-            //Item.vanity = true;
-
-            Item.faceSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Face);
-            //Item.headSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
-
-            //ItemID.Sets.ShimmerTransformToItem[Item.type] = ItemType<FrigidMask>();
         }
 
         public override void AddRecipes()
@@ -111,7 +98,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
         }
     }
 
-    [AutoloadEquip(EquipType.Body)]
+    [AutoloadEquip(EquipType.Body, EquipType.Waist)]
     public class FrostyRobe : ModItem
     {
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(manaMax, magicDamage * 100);
@@ -119,13 +106,13 @@ namespace GoldLeaf.Items.Blizzard.Armor
         private static readonly int manaMax = 40;
         private static readonly float magicDamage = 0.12f;
 
-        public int frontEquip = -1;
+        //public int frontEquip = -1;
         public override void Load()
         {
             if (Main.netMode != NetmodeID.Server)
             {
                 EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Legs}", EquipType.Legs, this);
-                frontEquip = EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Waist}", EquipType.Front, this); //TODO draw this manually
+                //frontEquip = EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Waist}", EquipType.Front, this); //TODO draw this manually
             }
         }
 
@@ -140,7 +127,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
         {
             ArmorIDs.Body.Sets.showsShouldersWhileJumping[Item.bodySlot] = true;
             ArmorIDs.Body.Sets.HidesHands[Item.bodySlot] = false;
-            ArmorIDs.Body.Sets.IncludedCapeFront[Item.bodySlot] = frontEquip;
+            //ArmorIDs.Body.Sets.IncludedCapeFront[Item.bodySlot] = frontEquip;
         }
 
         public override void UpdateEquip(Player player)
@@ -306,49 +293,6 @@ namespace GoldLeaf.Items.Blizzard.Armor
         }*/
     }
     
-    public class FrostyMaskLayer : PlayerDrawLayer
-    {
-        private static Asset<Texture2D> tex;
-        public override void Load()
-        {
-            tex = Request<Texture2D>("GoldLeaf/Items/Blizzard/Armor/FrostyMask_Head");
-        }
-
-        public override bool IsHeadLayer => true;
-
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
-        {
-            return (drawInfo.drawPlayer.armor[0].type == ItemType<FrostyMask>() && drawInfo.drawPlayer.armor[10].type == ItemID.None) || drawInfo.drawPlayer.armor[10].type == ItemType<FrostyMask>();
-        }
-
-        public override Position GetDefaultPosition()
-        {
-            return new AfterParent(PlayerDrawLayers.FaceAcc);
-        }
-
-        protected override void Draw(ref PlayerDrawSet drawInfo)
-        {
-            Player player = drawInfo.drawPlayer;
-
-            if ((player.armor[0].type == ItemType<FrostyMask>() && player.armor[10].type == ItemID.None) || player.armor[10].type == ItemType<FrostyMask>())
-            {
-                int frame = (player.bodyFrame.Y / player.bodyFrame.Height);
-                int height = (tex.Height() / 20);
-
-                Vector2 pos = (player.RotatedRelativePoint(player.MountedCenter) - Main.screenPosition + new Vector2(0, player.gfxOffY - 3)).ToPoint16().ToVector2() + player.headPosition;
-
-                drawInfo.DrawDataCache.Add(new DrawData(tex.Value, pos, new Rectangle(0, frame * height, tex.Width(), height),
-                    drawInfo.colorArmorHead,
-                    player.headRotation,
-                    new Vector2(tex.Width() * 0.5f, tex.Height() * 0.025f),
-                    1f, drawInfo.playerEffect, 0)
-                {
-                    shader = drawInfo.cHead
-                });
-            }
-        }
-    }
-
     public class SnapFreezeBuff : ModBuff
     {
         public override string Texture => CoolBuffTex(base.Texture);

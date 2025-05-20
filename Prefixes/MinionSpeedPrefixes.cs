@@ -39,7 +39,7 @@ namespace GoldLeaf.Prefixes
 
         public override void ModifyValue(ref float valueMult)
         {
-            valueMult *= 1f + (MinionSpeed * 6.5f);
+            valueMult *= 1f + (MinionSpeed * 7f);
         }
 
         public override void ApplyAccessoryEffects(Player player)

@@ -15,6 +15,7 @@ using Terraria.Graphics.Effects;
 using Terraria.DataStructures;
 using GoldLeaf.Tiles.Grove;
 using ReLogic.Content;
+using Terraria.Localization;
 
 namespace GoldLeaf.Items.Vanity.Champion
 {
@@ -27,10 +28,32 @@ namespace GoldLeaf.Items.Vanity.Champion
             Item.height = 34;
 
             Item.value = Item.buyPrice(0, 5, 0, 0);
-            Item.rare = ItemRarityID.Orange;
+            Item.rare = ItemRarityID.Green;
 
             Item.accessory = true;
             Item.vanity = true;
+        }
+    }
+
+    [AutoloadEquip(EquipType.Head)]
+    public class DragonSkull : ModItem
+    {
+        public override LocalizedText Tooltip => null;
+        public override void SetDefaults()
+        {
+            Item.width = 26;
+            Item.height = 24;
+
+            Item.value = Item.buyPrice(0, 5, 0, 0);
+            Item.rare = ItemRarityID.Green;
+
+            Item.vanity = true;
+        }
+
+        public override void SetStaticDefaults()
+        {
+            ArmorSets.FaceMask[Item.headSlot] = true;
+            ArmorIDs.Head.Sets.PreventBeardDraw[Item.headSlot] = false;
         }
     }
 
@@ -43,7 +66,7 @@ namespace GoldLeaf.Items.Vanity.Champion
             Item.height = 14;
 
             Item.value = Item.buyPrice(0, 5, 0, 0);
-            Item.rare = ItemRarityID.Orange;
+            Item.rare = ItemRarityID.Green;
 
             Item.vanity = true;
         }
@@ -58,7 +81,7 @@ namespace GoldLeaf.Items.Vanity.Champion
             Item.height = 12;
 
             Item.value = Item.buyPrice(0, 5, 0, 0);
-            Item.rare = ItemRarityID.Orange;
+            Item.rare = ItemRarityID.Green;
 
             Item.vanity = true;
         }

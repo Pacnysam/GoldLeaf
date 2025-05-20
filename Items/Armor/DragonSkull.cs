@@ -22,7 +22,7 @@ using Terraria.Localization;
 
 namespace GoldLeaf.Items.Armor
 {
-    [AutoloadEquip(EquipType.Head)]
+    /*[AutoloadEquip(EquipType.Head)]
     public class DragonSkull : ModItem
     {
         private readonly float SentrySpeed = 20;
@@ -50,45 +50,8 @@ namespace GoldLeaf.Items.Armor
 
         public override void SetStaticDefaults()
         {
+            ArmorSets.FaceMask[Item.headSlot] = true;
             ArmorIDs.Head.Sets.PreventBeardDraw[Item.headSlot] = false;
-        }
-    }
-
-    public class DragonSkullLayer : PlayerDrawLayer
-    {
-        private static Asset<Texture2D> tex;
-        public override void Load()
-        {
-            tex = Request<Texture2D>("GoldLeaf/Items/Armor/DragonSkull_Head");
-        }
-
-        public override bool IsHeadLayer => true;
-
-        public override Position GetDefaultPosition()
-        {
-            return new AfterParent(PlayerDrawLayers.FaceAcc);
-        }
-
-        protected override void Draw(ref PlayerDrawSet drawInfo)
-        {
-            Player player = drawInfo.drawPlayer;
-
-            if (player.armor[0].type == ItemType<DragonSkull>() && player.armor[10].type == ItemID.None || player.armor[10].type == ItemType<DragonSkull>())
-            {
-                int frame = player.bodyFrame.Y / player.bodyFrame.Height;
-                int height = tex.Height() / 20;
-
-                Vector2 pos = (player.RotatedRelativePoint(player.MountedCenter) - Main.screenPosition + new Vector2(0, player.gfxOffY - 3)).ToPoint16().ToVector2() + player.headPosition;
-
-                drawInfo.DrawDataCache.Add(new DrawData(tex.Value, pos, new Rectangle(0, frame * height, tex.Width(), height),
-                    drawInfo.colorArmorHead,
-                    player.headRotation,
-                    new Vector2(tex.Width() * 0.5f, tex.Height() * 0.025f),
-                    1f, drawInfo.playerEffect, 0)
-                {
-                    shader = drawInfo.cHead
-                });
-            }
         }
     }
 
@@ -109,5 +72,5 @@ namespace GoldLeaf.Items.Armor
                 Player.maxMinions = -1;
             }
         }
-    }
+    }*/
 }

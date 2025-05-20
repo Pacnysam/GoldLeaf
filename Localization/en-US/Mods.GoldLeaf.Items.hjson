@@ -410,7 +410,7 @@ BottledShimmer: {
 }
 
 DragonSkull: {
-	DisplayName: Dragon Skull Helmet
+	DisplayName: Gold Dragon Skull
 	Tooltip:
 		'''
 		Converts all minion slots into sentry slots
