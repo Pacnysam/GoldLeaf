@@ -547,10 +547,10 @@ namespace GoldLeaf.Items.Blizzard
             for (int k = 0; k < Projectile.oldPos.Length; k++)
             {
                 Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + texture.Size() / 2;
-                Color color1 = new(0, 225, 241);
-                Color color2 = new(0, 38, 128);
+                Color color1 = new(0, 225, 241) { A = 185 };
+                Color color2 = new(0, 38, 128) { A = 185 };
 
-                Main.spriteBatch.Draw(texture, drawPos, rect, Color.Lerp(color1, color2, k / (Projectile.oldPos.Length + 2f)) /*with { A = 0 }*/ * (0.8f - (k / 10f)), Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(texture, drawPos, rect, Color.Lerp(color1, color2, k / (Projectile.oldPos.Length + 2f)) /*with { A = 0 }*/ * (0.65f - (k / 10f)), Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
             }
 
             Main.EntitySpriteDraw(texture, Projectile.position - Main.screenPosition + texture.Size() / 2, rect, Color.White, Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None, 0);
