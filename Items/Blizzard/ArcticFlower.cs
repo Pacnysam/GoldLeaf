@@ -468,7 +468,7 @@ namespace GoldLeaf.Items.Blizzard
             return false;
         }
     }
-
+    
     public class ArcticWraithOrb : ModProjectile
     {
         public override void SetStaticDefaults()
@@ -499,6 +499,14 @@ namespace GoldLeaf.Items.Blizzard
         const float accelerationSpeed = 0.7f;
         const float maxSpeed = 7.25f;
 
+        public override bool? CanHitNPC(NPC target)
+        {
+            if (HasTarget && IsTargetValid(target))
+                return target == Main.npc[(int)Projectile.ai[0]];
+
+            return !target.friendly;
+        }
+
         bool HasTarget => (Main.npc[(int)Projectile.ai[0]].active && Main.npc[(int)Projectile.ai[0]].chaseable && Projectile.Distance(Main.npc[(int)Projectile.ai[0]].Center) <= 500) && Counter <= TimeToTicks(10);
         private ref int Counter => ref Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
 
@@ -508,7 +516,7 @@ namespace GoldLeaf.Items.Blizzard
 
             Projectile.tileCollide = !HasTarget;
 
-            if (HasTarget)
+            if (HasTarget && IsTargetValid(target))
             {
                 Projectile.velocity += Vector2.Normalize(target.Center - Projectile.Center) * accelerationSpeed;
             }

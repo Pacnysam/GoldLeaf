@@ -31,14 +31,15 @@ namespace GoldLeaf.Core
         private int ScreenMoveTimer = 0;
         private int panDown = 0;
 
-        public static void QuickScreenShake(Vector2 position, Vector2 destination, float amount = 20f, float speed = 6f, int frames = 20, float distance = 1000f, string uniqueIdentity = null)
+        public static void QuickScreenShake(Vector2 position, Vector2? direction = null, float amount = 20f, float speed = 6f, int frames = 20, float distance = 1000f, string uniqueIdentity = null)
         {
-            PunchCameraModifier modifier = new(position, destination, amount, speed, frames, distance, uniqueIdentity);
-            Main.instance.CameraModifiers.Add(modifier);
-        }
-        public static void QuickScreenShake(Vector2 position, float amount = 20f, float speed = 6f, int frames = 20, float distance = 1000f, string uniqueIdentity = null)
-        {
-            PunchCameraModifier modifier = new(position, (1 * ((float)Math.PI * 2f)).ToRotationVector2(), amount, speed, frames, distance, uniqueIdentity);
+            PunchCameraModifier modifier;
+
+            if (direction.HasValue)
+                modifier = new(position, direction.Value, amount, speed, frames, distance, uniqueIdentity);
+            else
+                modifier = new(position, (-MathHelper.PiOver2 * ((float)Math.PI * 2f)).ToRotationVector2(), amount, speed, frames, distance, uniqueIdentity);
+
             Main.instance.CameraModifiers.Add(modifier);
         }
 
