@@ -74,7 +74,7 @@ namespace GoldLeaf.Items.Vanity
                         Dust.NewDustPerfect(new Vector2(Player.Center.X, Player.Top.Y + 22 + Main.rand.NextFloat(-1f, 2f)), DustID.Blood, new Vector2(Main.rand.NextFloat(-3, 3), Main.rand.NextFloat(-1, -3)), Scale: Main.rand.NextFloat(0.8f, 1.2f));
                     }
 
-                    AddScreenshake(Player, 12);
+                    CameraSystem.AddScreenshake(Player, 12);
                     SoundStyle sound1 = new("GoldLeaf/Sounds/SE/HollowKnight/MawlekExplode") { Volume = 1f, Pitch = 0.2f, PitchVariance = 0.4f };
                     SoundStyle sound2 = new("GoldLeaf/Sounds/SE/DeadCells/Crit") { Volume = 0.65f, Pitch = -0.2f, PitchVariance = 0.6f };
                     SoundEngine.PlaySound(sound1, Player.Center);

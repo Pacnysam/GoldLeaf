@@ -275,7 +275,7 @@ namespace GoldLeaf.Items.Grove.Boss
                             SoundStyle sound1 = new("GoldLeaf/Sounds/SE/RoR2/WispDeath") { Volume = 0.45f, Pitch = -0.35f + (ShotsFired * 0.035f) };
 
                             //SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/AetherBeam"), player.Center);
-                            SoundEngine.PlaySound(sound1, player.Center);
+                            SoundEngine.PlaySound(sound1, Projectile.Center);
                             Vector2 value = Main.npc[num2].Center - Projectile.Center;
                             float num4 = 25f;
                             float num5 = (float)Math.Sqrt((double)(value.X * value.X + value.Y * value.Y));
@@ -335,9 +335,9 @@ namespace GoldLeaf.Items.Grove.Boss
             SoundStyle sound1 = new("GoldLeaf/Sounds/SE/RoR2/EngineerMine") { Volume = 0.7f };
             SoundStyle sound2 = new("GoldLeaf/Sounds/SE/RoR2/Aftershock") { Pitch = 1.6f, Volume = 0.7f };
 
-            SoundEngine.PlaySound(sound1, player.Center);
-            SoundEngine.PlaySound(sound2, player.Center);
-            Helper.AddScreenshake(Main.LocalPlayer, 18 + ShotsFired, Projectile.Center);
+            SoundEngine.PlaySound(sound1, Projectile.Center);
+            SoundEngine.PlaySound(sound2, Projectile.Center);
+            CameraSystem.AddScreenshake(Main.LocalPlayer, 18 + ShotsFired, Projectile.Center);
 
             if (Main.myPlayer == Projectile.owner) 
             {
@@ -761,7 +761,7 @@ namespace GoldLeaf.Items.Grove.Boss
             {
                 int explosion = Projectile.NewProjectile(Player.GetSource_Death(), Player.MountedCenter, Vector2.Zero, ProjectileType<AetherBurst>(), 0, 0, Main.myPlayer);
                 Main.projectile[explosion].ai[0] = 60f;
-                Helper.AddScreenshake(Player, 18);
+                CameraSystem.AddScreenshake(Player, 18);
 
                 SoundEngine.PlaySound(SoundID.Item74);
                 SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/RoR2/EngineerMine") { Volume = 0.4f, Pitch = -0.5f });

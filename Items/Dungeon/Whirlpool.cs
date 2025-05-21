@@ -193,7 +193,7 @@ namespace GoldLeaf.Items.Dungeon
             //SoundEngine.PlaySound(SoundID.Item74, Projectile.Center);
             SoundEngine.PlaySound(sound1, Projectile.Center);
 
-            Helper.AddScreenshake(player, 24, Projectile.Center);
+            CameraSystem.AddScreenshake(player, 24, Projectile.Center);
 
             /*for (float k = 0; k < 6.28f; k += 0.25f)
 				Dust.NewDustPerfect(Projectile.position, DustID.DungeonWater, Vector2.One.RotatedBy(k) * 2, Scale: 2f);

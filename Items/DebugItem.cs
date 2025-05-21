@@ -40,13 +40,13 @@ namespace GoldLeaf.Items
             {
                 //player.GetModPlayer<GoldLeafPlayer>().ScreenMoveTime = temp;
                 //player.GetModPlayer<GoldLeafPlayer>().ScreenMoveHold = false;
-                player.GetModPlayer<GoldLeafPlayer>().ScreenMoveTarget = Main.screenPosition + new Vector2(Main.mouseX, Main.mouseY);
+                player.GetModPlayer<CameraSystem>().ScreenMoveTarget = Main.screenPosition + new Vector2(Main.mouseX, Main.mouseY);
             }
             else
             {
-                player.GetModPlayer<GoldLeafPlayer>().ScreenMoveTime = temp;
-                player.GetModPlayer<GoldLeafPlayer>().ScreenMoveHold = false;
-                player.GetModPlayer<GoldLeafPlayer>().ScreenMovePan = Main.screenPosition + new Vector2(Main.mouseX, Main.mouseY);
+                player.GetModPlayer<CameraSystem>().ScreenMoveTime = temp;
+                player.GetModPlayer<CameraSystem>().ScreenMoveHold = false;
+                player.GetModPlayer<CameraSystem>().ScreenMovePan = Main.screenPosition + new Vector2(Main.mouseX, Main.mouseY);
             }
 
             

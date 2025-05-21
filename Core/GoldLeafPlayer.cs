@@ -22,7 +22,7 @@ using GoldLeaf.Biomes;
 
 namespace GoldLeaf.Core
 {
-    public partial class GoldLeafPlayer : ModPlayer
+    public class GoldLeafPlayer : ModPlayer
     {
         public float temp1, temp2, temp3;
 

@@ -291,7 +291,7 @@ namespace GoldLeaf.Items.Grove
                     Main.projectile[explosion].DamageType = hit.DamageType;
                     Main.projectile[explosion].netUpdate = true;
 
-                    Helper.AddScreenshake(Main.LocalPlayer, 16, npc.Center);
+                    CameraSystem.AddScreenshake(Main.LocalPlayer, 16, npc.Center);
 
                     SoundEngine.PlaySound(SoundID.Item74, npc.Center);
                     SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/RoR2/EngineerMine") { Volume = 0.4f, Pitch = -0.5f }, npc.Center);
@@ -307,7 +307,7 @@ namespace GoldLeaf.Items.Grove
                     Main.projectile[explosion].DamageType = hit.DamageType;
                     Main.projectile[explosion].netUpdate = true;
 
-                    Helper.AddScreenshake(Main.LocalPlayer, 24, npc.Center);
+                    CameraSystem.AddScreenshake(Main.LocalPlayer, 24, npc.Center);
 
                     SoundEngine.PlaySound(SoundID.Item74, npc.Center);
                     SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/RoR2/EngineerMine") { Volume = 0.8f, Pitch = 0.25f }, npc.Center);

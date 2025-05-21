@@ -45,7 +45,7 @@ namespace GoldLeaf.Core
 
                 int explosion = Projectile.NewProjectile(player.GetSource_FromThis(), player.MountedCenter, Vector2.Zero, ProjectileType<AetherBurst>(), 0, 0, Main.myPlayer);
                 Main.projectile[explosion].ai[0] = 60f;
-                AddScreenshake(player, 18);
+                CameraSystem.AddScreenshake(player, 18);
 
                 SoundEngine.PlaySound(SoundID.Item74);
                 SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/RoR2/EngineerMine") { Volume = 0.4f, Pitch = -0.5f });

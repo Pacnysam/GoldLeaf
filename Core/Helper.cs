@@ -523,25 +523,6 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
             return time > 2 && Main.debuff[bufftype] && !Main.buffNoTimeDisplay[bufftype] && !Main.vanityPet[bufftype] && !vitalbuff;
         }
 
-        public static void AddScreenshake(Player player, float amount, Vector2 position)
-        {
-            position -= Main.screenPosition;
-            Vector3 coords = ScreenCoord(new Vector3(position.X, -position.Y, 0));
-            float mult = Vector3.Distance(coords, Vector3.Zero);
-
-            if (!OnScreen(new Vector2(position.X, position.Y)))
-            {
-                amount /= mult;
-                amount -= mult / 70f;
-            }
-
-            player.GetModPlayer<GoldLeafPlayer>().ScreenShake += (int)Math.Clamp(amount * GetInstance<VisualConfig>().ShakeIntensity, 0, 150);
-        }
-        public static void AddScreenshake(Player player, int amount)
-        {
-            player.GetModPlayer<GoldLeafPlayer>().ScreenShake += (int)Math.Clamp(amount * GetInstance<VisualConfig>().ShakeIntensity, 0, 150);
-        }
-
         public static string CoolBuffTex(string input) => (GetInstance<VisualConfig>().CoolBuffs ? input + "Cool" : input);
         //public static string RadcapTex(string input) => (GetInstance<GraphicsConfig>().CoolBuffs ? input + "Rad" : input);
     }
