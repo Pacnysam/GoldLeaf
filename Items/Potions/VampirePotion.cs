@@ -43,16 +43,16 @@ namespace GoldLeaf.Items.Potions
         {
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.BottledWater);
-            recipe.AddIngredient(ItemID.CobaltOre);
-            recipe.AddIngredient(ItemType<Demitoxin>());
+            recipe.AddIngredient(ItemID.CobaltOre, 2);
+            recipe.AddIngredient(ItemType<Demitoxin>(), 4);
             recipe.AddIngredient(ItemID.LifeCrystal);
             recipe.AddTile(TileID.Bottles);
             recipe.Register();
 
             Recipe recipe2 = CreateRecipe();
             recipe2.AddIngredient(ItemID.BottledWater);
-            recipe2.AddIngredient(ItemID.PalladiumOre);
-            recipe2.AddIngredient(ItemType<Demitoxin>());
+            recipe2.AddIngredient(ItemID.PalladiumOre, 2);
+            recipe2.AddIngredient(ItemType<Demitoxin>(), 4);
             recipe2.AddIngredient(ItemID.LifeCrystal);
             recipe2.AddTile(TileID.Bottles);
             recipe2.Register();

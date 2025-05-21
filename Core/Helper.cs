@@ -532,6 +532,7 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
             if (!OnScreen(new Vector2(position.X, position.Y)))
             {
                 amount /= mult;
+                amount -= mult / 70f;
             }
 
             player.GetModPlayer<GoldLeafPlayer>().ScreenShake += (int)Math.Clamp(amount * GetInstance<VisualConfig>().ShakeIntensity, 0, 150);
@@ -863,7 +864,7 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
                     {
                         return new Color(41, 206, 131);
                     }
-                case 5: //rubyCounter
+                case 5: //ruby
                 case ItemID.Ruby:
                     {
                         return new Color(237, 26, 30);
