@@ -4,3 +4,5 @@ FrostySet:
 	Double Tap {1} to snap freeze enemies near the cursor
 	Snap frozen enemies die at 25% health, does not work on bosses
 	'''
+Echobark: Gains bonus defense when struck
+EchobarkDefense: "{0}(+{1}) defense"
