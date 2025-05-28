@@ -9,7 +9,9 @@ AetherEmber.DisplayName: Aether Ember
 WhirlpoolP.DisplayName: Whirlpool
 WhirlpoolBurst.DisplayName: Whirlpool
 QuetzalP.DisplayName: Quetzalcoatl Bolt
-QuetzalSmallP.DisplayName: Quetzalcoatl Spark
+QuetzalShard.DisplayName: Quetzal Shard
+QuetzalOrb.DisplayName: Quetzal Rift
+QuetzalRift.DisplayName: Quetzal Rift
 ClutterScale.DisplayName: Shadow Scale
 ClutterTissue.DisplayName: Tissue Sample
 MeteorMissileP.DisplayName: Meteor Missile

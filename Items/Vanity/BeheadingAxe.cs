@@ -46,9 +46,9 @@ namespace GoldLeaf.Items.Vanity
 
         public override void UpdateVanity(Player player)
         {
-            ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
-            ArmorIDs.Head.Sets.DrawFullHair[Item.headSlot] = true;
-            ArmorIDs.Head.Sets.PreventBeardDraw[Item.headSlot] = false;
+            ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = false;
+            ArmorIDs.Head.Sets.DrawFullHair[Item.headSlot] = false;
+            ArmorIDs.Head.Sets.PreventBeardDraw[Item.headSlot] = true;
         }
     }
 

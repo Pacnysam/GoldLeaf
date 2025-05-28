@@ -534,3 +534,23 @@ GymShorts: {
 	DisplayName: Gym Shorts
 	Tooltip: ""
 }
+
+GrantMask: {
+	DisplayName: Grant Mask
+	Tooltip: ""
+}
+
+EchobarkHelmet: {
+	Tooltip: ""
+	DisplayName: Echobark Helmet
+}
+
+EchobarkGreaves: {
+	Tooltip: ""
+	DisplayName: Echobark Greaves
+}
+
+EchobarkBreastplate: {
+	Tooltip: ""
+	DisplayName: Echobark Breastplate
+}

@@ -69,7 +69,7 @@ namespace GoldLeaf.Items.Granite
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.Wood, 15)
+                .AddRecipeGroup(RecipeGroupID.Wood, 15)
                 .AddIngredient(ItemID.Granite, 10)
                 .AddRecipeGroup("GoldLeaf:GoldBars", 2)
                 .AddCondition(GoldLeafConditions.LearnedRecipe(Item.type))

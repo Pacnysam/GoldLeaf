@@ -196,7 +196,7 @@ namespace GoldLeaf.Items.Grove.Boss
             if (!player.channel)
             {
                 Projectile.timeLeft -= 9;
-                if (Counter <= THRESHHOLD/2) 
+                if (Counter <= THRESHHOLD/2 && Main.myPlayer == Projectile.owner) 
                 {
                     Projectile.velocity += Vector2.Normalize(Main.MouseWorld - Projectile.Center) * 0.1f;
                     //if (Projectile.velocity.Length() > 6) Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 6;
