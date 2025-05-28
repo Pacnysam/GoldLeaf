@@ -139,4 +139,49 @@ namespace GoldLeaf.Effects.Dusts
             dust.frame = new Rectangle(0, Main.rand.Next(3) * 8, 8, 8);
         }
     }
+    
+    public class SnowCloud : ModDust 
+    {
+        public override string Texture => "GoldLeaf/Effects/Dusts/SpecialSmoke";
+
+        public override void OnSpawn(Dust dust)
+        {
+            dust.noGravity = true;
+            dust.frame = new Rectangle(0, Main.rand.Next(3) * 36, 34, 36);
+            dust.color = new Color(238, 248, 252);
+            dust.scale *= 0.1f;
+            dust.alpha += 30;
+            dust.position -= dust.frame.Size() * dust.scale;
+        }
+
+        public override Color? GetAlpha(Dust dust, Color lightColor)
+        {
+            Color color = Color.Lerp(dust.color, new Color(121, 151, 203), 0.05f);
+
+            return Color.Lerp(color, lightColor, 0.45f) * (1f - (dust.alpha/255f)) * 0.5f;
+        }
+
+        public override bool Update(Dust dust)
+        {
+            dust.scale *= 1.015f;
+
+            if (dust.alpha > 120)
+            {
+                dust.velocity *= 0.96f;
+                dust.alpha += 4;
+            }
+            else
+            {
+                dust.velocity *= 0.94f;
+                dust.alpha += 6;
+            }
+
+            dust.position += dust.velocity;
+
+            if (dust.alpha >= 255)
+                dust.active = false;
+
+            return false;
+        }
+    }
 }

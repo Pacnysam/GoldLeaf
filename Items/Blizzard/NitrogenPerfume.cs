@@ -67,20 +67,37 @@ namespace GoldLeaf.Items.Blizzard
 
         public override void Load()
         {
-            FirstStrikePlayer.FirstStrikeEvent += NitrogenPerfumeEffect;
+            FirstStrikePlayer.OnFirstStrike += NitrogenPerfume;
+            FirstStrikePlayer.ModifyFirstStrike += NitrogenPerfumeModifications;
         }
         public override void Unload()
         {
-            FirstStrikePlayer.FirstStrikeEvent -= NitrogenPerfumeEffect;
+            FirstStrikePlayer.OnFirstStrike -= NitrogenPerfume;
+            FirstStrikePlayer.ModifyFirstStrike -= NitrogenPerfumeModifications;
         }
 
-        private void NitrogenPerfumeEffect(Player player, NPC target, NPC.HitModifiers hit)
+        private void NitrogenPerfumeModifications(Player player, NPC target, NPC.HitModifiers hit)
         {
-            if (player.GetModPlayer<NitrogenPerfumePlayer>().nitrogenPerfume)
+            if (player.GetModPlayer<NitrogenPerfumePlayer>().nitrogenPerfume && GoldLeafNPC.CanBeStunned(target))
             {
                 hit.SetCrit();
+            }
+        }
+        private void NitrogenPerfume(Player player, NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (player.GetModPlayer<NitrogenPerfumePlayer>().nitrogenPerfume && GoldLeafNPC.CanBeStunned(target))
+            {
+                int smokeCount = Main.rand.Next(50, 75);
+                for (int j = 0; j < smokeCount; j++)
+                {
+                    var dust = Dust.NewDustDirect(target.Center, 0, 0, DustType<SnowCloud>());
+                    dust.velocity = Main.rand.NextVector2Circular((target.width / 6.5f), (target.height / 7.5f)) * Main.rand.NextFloat(0.5f, 1f);
+                    dust.scale = Main.rand.NextFloat(0.65f, 1.15f);
+                    dust.alpha = 10 + Main.rand.Next(20);
+                    dust.rotation = Main.rand.NextFloat(6.28f);
+                }
 
-                target.AddBuff(BuffID.Frozen, TimeToTicks(2));
+                target.AddBuff(BuffID.Frozen, TimeToTicks(2.5f));
                 SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Frost") { Pitch = 0.45f, PitchVariance = 0.6f, Volume = 0.85f }, target.Center);
 
                 //target.GetGlobalNPC<FrostNPC>().defrostTimer = 0;

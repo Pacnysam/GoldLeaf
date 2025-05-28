@@ -8,19 +8,30 @@ using GoldLeaf.Items.Accessories;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.GameContent.Bestiary;
 using System.Collections.Generic;
+using Terraria.WorldBuilding;
 
 namespace GoldLeaf.Core
 {
     public class FirstStrikePlayer : ModPlayer
     {
-        public delegate void FirstStrikeDelegate(Player player, NPC target, NPC.HitModifiers hit);
-        public static event FirstStrikeDelegate FirstStrikeEvent;
+        public delegate void FirstStrikeModificationDelegate(Player player, NPC target, NPC.HitModifiers hit);
+        public static event FirstStrikeModificationDelegate ModifyFirstStrike;
+
+        public delegate void FirstStrikeDelegate(Player player, NPC target, NPC.HitInfo hit, int damageDone);
+        public static event FirstStrikeDelegate OnFirstStrike;
 
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-           if (!target.GetGlobalNPC<FirstStrikeNPC>().hasBeenStruck)
+           if (!target.GetGlobalNPC<FirstStrikeNPC>().hasBeenStruck && IsTargetValid(target))
+           {
+                ModifyFirstStrike?.Invoke(Player, target, modifiers);
+           }
+        }
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (!target.GetGlobalNPC<FirstStrikeNPC>().hasBeenStruck && IsTargetValid(target))
             {
-                FirstStrikeEvent?.Invoke(Player, target, modifiers);
+                OnFirstStrike?.Invoke(Player, target, hit, damageDone);
                 target.GetGlobalNPC<FirstStrikeNPC>().hasBeenStruck = true;
             }
         }
