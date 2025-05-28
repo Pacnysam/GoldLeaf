@@ -151,7 +151,7 @@ namespace GoldLeaf.Effects.Dusts
             dust.color = new Color(238, 248, 252);
             dust.scale *= 0.1f;
             dust.alpha += 30;
-            dust.position -= dust.frame.Size() * dust.scale;
+            dust.position -= dust.frame.Size()/2 * dust.scale;
         }
 
         public override Color? GetAlpha(Dust dust, Color lightColor)
@@ -177,6 +177,73 @@ namespace GoldLeaf.Effects.Dusts
             }
 
             dust.position += dust.velocity;
+
+            if (dust.alpha >= 255)
+                dust.active = false;
+
+            return false;
+        }
+    }
+    
+    public class FrostShard : ModDust
+    {
+        public override string Texture => "GoldLeaf/Items/Blizzard/FrostShards";
+
+        public override void OnSpawn(Dust dust)
+        {
+            dust.frame = new Rectangle(Main.rand.Next(7) * 14, 0, 14, 24);
+            dust.position -= dust.frame.Size() / 2 * dust.scale;
+
+            if (dust.noGravity)
+                dust.alpha -= 30;
+        }
+
+        public override bool Update(Dust dust)
+        {
+            if (dust.noGravity)
+            {
+                dust.velocity *= 0.9f;
+                dust.rotation *= 0.95f;
+            }   
+            else
+            {
+                dust.velocity.X *= 0.97f;
+                dust.velocity.Y += 0.15f;
+
+                dust.rotation = dust.velocity.ToRotation() + 1.57f;
+            }
+
+            dust.position += dust.velocity;
+
+            Tile tile = Main.tile[(int)dust.position.X / 16, (int)dust.position.Y / 16];
+            if (tile.HasTile && Main.tileSolid[tile.TileType] && !dust.noGravity)
+            {
+                dust.velocity *= 0.6f;
+                /*if (dust.customData != null && dust.customData is Vector2 oldVelocity)
+                {
+                    if (dust.velocity.X != oldVelocity.X)
+                    {
+                        dust.velocity.X = -oldVelocity.X;
+                    }
+                    if (dust.velocity.Y != oldVelocity.Y)
+                    {
+                        dust.velocity.Y = -oldVelocity.Y;
+                    }
+
+                    dust.velocity *= 0.6f;
+                }
+                dust.customData = dust.velocity;*/
+            }
+
+            if (dust.velocity.Length() <= 2f)
+            {
+                dust.alpha += 5;
+                //dust.noGravity = true;
+            }
+            else 
+            {
+                dust.alpha += 1;
+            }
 
             if (dust.alpha >= 255)
                 dust.active = false;

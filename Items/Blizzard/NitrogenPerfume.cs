@@ -94,7 +94,7 @@ namespace GoldLeaf.Items.Blizzard
                     dust.velocity = Main.rand.NextVector2Circular((target.width / 6.5f), (target.height / 7.5f)) * Main.rand.NextFloat(0.5f, 1f);
                     dust.scale = Main.rand.NextFloat(0.65f, 1.15f);
                     dust.alpha = 10 + Main.rand.Next(20);
-                    dust.rotation = Main.rand.NextFloat(6.28f);
+                    dust.rotation = Main.rand.NextFloat(-6.28f, 6.28f);
                 }
 
                 target.AddBuff(BuffID.Frozen, TimeToTicks(2.5f));
