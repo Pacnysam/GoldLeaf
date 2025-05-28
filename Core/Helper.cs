@@ -510,6 +510,21 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
                 PlaceTile(rect.X + rect.Width, rect.Y + i, tileType, true, true);
         }
 
+        public static bool TileNearby(Point position, int distance, int type)
+        {
+            for (int i = position.X - distance; i <= position.X + distance; i++)
+            {
+                for (int j = position.Y - distance; j <= position.Y + distance; j++)
+                {
+                    if (Vector2.Distance(new Vector2(position.X, position.Y), new Vector2(i, j)) <= distance && Main.tile[i, j].TileType == type)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         public static bool IsValidDebuff(Player player, int buffindex)
         {
             int bufftype = player.buffType[buffindex];

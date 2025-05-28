@@ -619,7 +619,7 @@ namespace GoldLeaf.Items.Grove.Boss
 
             if (Main.rand.NextBool(10))
             {
-                Dust.NewDust(npc.position, npc.width, npc.height, DustType<AetherSmoke>(), Main.rand.NextFloat(-0.15f, 0.15f), Main.rand.NextFloat(-0.85f, -0.4f), 0, Color.White * Main.rand.NextFloat(0.4f, 0.55f), Main.rand.NextFloat(0.5f, 0.65f));
+                Dust.NewDust(npc.position, npc.width, npc.height, DustType<AetherSmoke>(), Main.rand.NextFloat(-0.05f, 0.05f), Main.rand.NextFloat(-0.85f, -0.4f), 0, Color.White * Main.rand.NextFloat(0.4f, 0.55f), Main.rand.NextFloat(0.5f, 0.65f));
             }
         }
     }

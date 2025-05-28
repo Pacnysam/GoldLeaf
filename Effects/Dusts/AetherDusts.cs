@@ -59,7 +59,7 @@ namespace GoldLeaf.Effects.Dusts
         public override Color? GetAlpha(Dust dust, Color lightColor)
             => new Color(255, 255, 255, 0);
     }
-
+    
     public class AetherSmoke : ModDust
     {
         public override string Texture => "GoldLeaf/Effects/Dusts/SpecialSmoke";
@@ -67,7 +67,7 @@ namespace GoldLeaf.Effects.Dusts
         public override void OnSpawn(Dust dust)
         {
             dust.noGravity = true;
-            dust.scale *= Main.rand.NextFloat(0.8f, 2f);
+            dust.scale *= Main.rand.NextFloat(0.8f, 1.6f);
             dust.frame = new Rectangle(0, Main.rand.Next(3) * 36, 34, 36);
             dust.position -= new Vector2(17f, 18f) * dust.scale;
         }
@@ -89,23 +89,20 @@ namespace GoldLeaf.Effects.Dusts
 
         public override bool Update(Dust dust)
         {
-            dust.velocity.Y -= dust.alpha / 1500;
-
-            if (dust.velocity.Length() > 4)
-                dust.velocity *= 0.875f;
-            else
-                dust.velocity *= 0.96f;
+            dust.velocity.Y -= dust.alpha / 1750f;
 
             if (dust.alpha > 100)
             {
-                dust.scale += 0.012f;
+                dust.scale += 0.015f;
                 dust.alpha += 2;
+                dust.velocity *= 0.925f;
             }
             else
             {
                 Lighting.AddLight(dust.position, dust.color.ToVector3() * 0.1f);
-                dust.scale *= 0.985f;
+                dust.scale *= 0.99f;
                 dust.alpha += 4;
+                dust.velocity *= 0.975f;
             }
 
             dust.position += dust.velocity;

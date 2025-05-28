@@ -95,7 +95,7 @@ namespace GoldLeaf.Items.Blizzard
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 6;
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
 
             ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = true;
@@ -135,11 +135,11 @@ namespace GoldLeaf.Items.Blizzard
         private const int Turning = 3;
         //private const int Spawning = 4;
 
-        const int teleportRange = 1500;
+        const int teleportRange = 1600;
         const int targetingRange = 800;
         const float attackingRange = 400;
 
-        const float speed = 9f;
+        const float speed = 12f;
         const float inertia = 50f;
         const float shootSpeed = 2.75f;
 
@@ -275,7 +275,6 @@ namespace GoldLeaf.Items.Blizzard
             #endregion targeting
 
             #region behavior
-
             if (hasTarget)
             {
                 Projectile.direction = Projectile.spriteDirection = (Projectile.Center.X > targetCenter.X) ? -1 : 1;
@@ -308,26 +307,34 @@ namespace GoldLeaf.Items.Blizzard
                         ChangeState(Idle);
                 }
 
-                Vector2 direction = targetCenter - Projectile.Center;
+                /*Vector2 direction = targetCenter - Projectile.Center;
                 direction.Normalize();
-                direction *= speed;
-                if (Projectile.Center.Distance(targetCenter) >= attackingRange)
+                direction *= speed;*/
+
+                if (Projectile.Center.Distance(targetCenter) > attackingRange)
                 {
-                    Projectile.velocity = (Projectile.velocity * (inertia - 1) + direction) / inertia;
+                    //Projectile.velocity = (Projectile.velocity * (inertia - 1) + direction) / inertia;
+                    Projectile.velocity -= (Projectile.Center - targetCenter) / 800;
                 }
                 else 
                 {
-                    if (MathHelper.Distance(Projectile.Center.X, targetCenter.X) <= attackingRange - 50)
+                    if (MathHelper.Distance(Projectile.Center.X, targetCenter.X) <= attackingRange - 200)
                     {
-                        Projectile.velocity.X = -0.35f * ((Projectile.velocity.X * (inertia - 1) + direction.X) / inertia);
+                        Projectile.velocity.X += (Projectile.Center.X - targetCenter.X) / 600;
+                        //Projectile.velocity.X = -0.35f * ((Projectile.velocity.X * (inertia - 1) + direction.X) / inertia);
                     }
                     else
-                    { 
-                        Projectile.velocity.X *= 0.9f; 
+                    {
+                        Projectile.velocity.X *= 0.9f;
                     }
                     if (MathHelper.Distance(Projectile.Center.Y, targetCenter.Y) <= attackingRange/2)
                     {
                         Projectile.velocity.Y *= 0.925f;
+                    }
+
+                    if (Projectile.Center.Distance(targetCenter) <= attackingRange / 2)
+                    {
+                        Projectile.velocity *= 0.9f;
                     }
                 }
             }
@@ -397,18 +404,27 @@ namespace GoldLeaf.Items.Blizzard
 
         private void Shoot(NPC target, Vector2 velocity) 
         {
-            /*for (int j = 0; j < 16; j++)
+            /*for (float n = 0; n <= 6.28f; n += 0.42f)
             {
-                Vector2 vector = Vector2.UnitX * -Projectile.width / 2f;
-                //vector += -Utils.RotatedBy(Vector2.UnitY, (j * 3.141591734f / 6f), default) * new Vector2(8f, 16f);
-                vector = Utils.RotatedBy(vector, (velocity.ToRotation() - 1.57079637f), default);
-                Dust dust = Dust.NewDustDirect(Projectile.Center + vector + (velocity * 2), 0, 0, DustType<ArcticDust>(), 0f, 0f, 160, new Color(), 1f);
+                Vector2 targetDirection = Vector2.Normalize(Projectile.Center - target.Center);
+                Vector2 off = new Vector2((float)Math.Cos(n), (float)Math.Sin(n) * 2) * (7f);
+                Dust dust = Dust.NewDustPerfect(Projectile.Center + off.RotatedBy(targetDirection.ToRotation()), DustType<ArcticDust>(), targetDirection * -2.5f, 0, Color.White, 1f);
+                dust.fadeIn = Main.rand.NextFloat(0.5f, 0.85f);
+                dust.rotation = Main.rand.NextFloat(-9, 9);
                 dust.noGravity = true;
-                dust.velocity *= 0.1f;
-                dust.velocity = Vector2.Normalize(Projectile.Center - Projectile.velocity * 3f - dust.position) * 2.25f;
+                dust.frame = new Rectangle(0, Main.rand.Next(3) * 10, 10, 10);
             }*/
 
-            Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, velocity, ProjectileType<ArcticWraithOrb>(), Projectile.damage, Projectile.knockBack, Projectile.owner, target.whoAmI);
+            Projectile.velocity += (Projectile.Center - target.Center) / 30;
+
+            Vector2 position;
+
+            if (target.Center.X > Projectile.Center.X)
+                position = Projectile.Right;
+            else
+                position = Projectile.Left;
+
+            Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), position, velocity, ProjectileType<ArcticWraithOrb>(), Projectile.damage, Projectile.knockBack, Projectile.owner, target.whoAmI);
             SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/ForgottenLand/StarShot") { Volume = 0.5f, PitchVariance = 0.5f }, Projectile.Center);
             SoundEngine.PlaySound(new SoundStyle("Goldleaf/Sounds/SE/SplashBounce") { Volume = 0.3f }, Projectile.Center);
             ChangeState(Recoil);
