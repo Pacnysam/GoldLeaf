@@ -36,9 +36,9 @@ namespace GoldLeaf.Core
             PunchCameraModifier modifier;
 
             if (direction.HasValue)
-                modifier = new(position, direction.Value, amount, speed, frames, distance, uniqueIdentity);
+                modifier = new(position, direction.Value, amount * GetInstance<VisualConfig>().ShakeIntensity, speed, frames, distance, uniqueIdentity);
             else
-                modifier = new(position, (-MathHelper.PiOver2 * ((float)Math.PI * 2f)).ToRotationVector2(), amount, speed, frames, distance, uniqueIdentity);
+                modifier = new(position, (-MathHelper.PiOver2).ToRotationVector2(), amount * GetInstance<VisualConfig>().ShakeIntensity, speed, frames, distance, uniqueIdentity);
 
             Main.instance.CameraModifiers.Add(modifier);
         }

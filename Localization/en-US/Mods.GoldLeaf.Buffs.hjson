@@ -101,3 +101,8 @@ AnxietyNecklaceBuff: {
 	DisplayName: Anxious
 	Description: Movement and minion speed are increased
 }
+
+QuetzalBuff: {
+	DisplayName: Serpentine Agility
+	Description: Movement speed and is increased
+}

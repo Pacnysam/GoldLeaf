@@ -75,7 +75,8 @@ Quetzalcoatl: {
 	Tooltip:
 		'''
 		Shoots an explosive cluster of light
-		<right> to summon a rift to teleport through
+		<right> to summon a rift, <right> again to warp to it
+		Shooting a rift detonates it
 		'''
 }
 
