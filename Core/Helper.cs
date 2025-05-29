@@ -752,7 +752,7 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
 
     public static class ColorHelper
     {
-        public static Color AdditiveWhite => new(255, 255, 255) { A = 0 };
+        public static Color AdditiveWhite(byte alpha = 0) => new(255, 255, 255) { A = alpha };
 
         public static Color AuroraColor() 
         {

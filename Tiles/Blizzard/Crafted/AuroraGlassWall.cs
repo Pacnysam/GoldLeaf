@@ -32,7 +32,7 @@ namespace GoldLeaf.Tiles.Blizzard.Crafted
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 100;
-            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite * 0.3f, false);
+            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite() * 0.3f, false);
         }
 
         public override void SetDefaults()
@@ -69,14 +69,14 @@ namespace GoldLeaf.Tiles.Blizzard.Crafted
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {
             spriteBatch.Draw(TextureAssets.Item[Type].Value, Item.Center - Main.screenPosition, null, ColorHelper.AuroraAccentColor(Item.timeSinceItemSpawned * 0.05f) * 0.4f, rotation, TextureAssets.Item[Type].Value.Size() / 2, scale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(glowTex.Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite * 0.3f, rotation, glowTex.Size() / 2, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(glowTex.Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite() * 0.3f, rotation, glowTex.Size() / 2, scale, SpriteEffects.None, 0f);
             return false;
         }
 
         public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             spriteBatch.Draw(TextureAssets.Item[Type].Value, position, null, ColorHelper.AuroraAccentColor(Main.GlobalTimeWrappedHourly * 1.5f) * 0.4f, 0, origin, scale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(glowTex.Value, position, null, ColorHelper.AdditiveWhite * 0.3f, 0, origin, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(glowTex.Value, position, null, ColorHelper.AdditiveWhite() * 0.3f, 0, origin, scale, SpriteEffects.None, 0f);
             return false;
         }
     }
@@ -117,7 +117,7 @@ namespace GoldLeaf.Tiles.Blizzard.Crafted
 
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
-            GoldLeafWall.DrawSimpleWall(i, j, glowTex.Value, ColorHelper.AdditiveWhite * 0.2f, Vector2.Zero);
+            GoldLeafWall.DrawSimpleWall(i, j, glowTex.Value, ColorHelper.AdditiveWhite() * 0.2f, Vector2.Zero);
         }
     }
 }

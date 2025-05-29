@@ -73,7 +73,7 @@ namespace GoldLeaf.Items.FallenStar
                     Item.position.Y - Main.screenPosition.Y + Item.height - glowTex.Height() * 0.5f
                 ),
                 new Rectangle(0, 0, glowTex.Width(), glowTex.Height()),
-                ColorHelper.AdditiveWhite,
+                ColorHelper.AdditiveWhite(),
                 rotation,
                 glowTex.Size() * 0.5f,
                 scale,
@@ -252,11 +252,11 @@ namespace GoldLeaf.Items.FallenStar
                 {
                     Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + origin; //+ new Vector2(0f, Projectile.gfxOffY);
 
-                    Main.spriteBatch.Draw(glowTex.Value, drawPos, frame, ColorHelper.AdditiveWhite * (0.6f - (0.055f * k)), Projectile.rotation, origin, scale * (1f - (0.075f * k)), flip, 0f);
+                    Main.spriteBatch.Draw(glowTex.Value, drawPos, frame, ColorHelper.AdditiveWhite() * (0.6f - (0.055f * k)), Projectile.rotation, origin, scale * (1f - (0.075f * k)), flip, 0f);
                 }*/
 
                 Main.EntitySpriteDraw(TextureAssets.Projectile[Type].Value, pos - Main.screenPosition, frame, color, rotation, origin, scale, flip, 0);
-                Main.spriteBatch.Draw(glowTex.Value, pos - Main.screenPosition, frame, ColorHelper.AdditiveWhite, rotation, origin, scale, flip, 0);
+                Main.spriteBatch.Draw(glowTex.Value, pos - Main.screenPosition, frame, ColorHelper.AdditiveWhite(), rotation, origin, scale, flip, 0);
 
                 pos += diff;
             }

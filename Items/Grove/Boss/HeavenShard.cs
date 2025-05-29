@@ -41,7 +41,7 @@ namespace GoldLeaf.Items.Grove.Boss
 
             for (float k = 0f; k < 1f; k += 0.5f)
             {
-                Color color = ColorHelper.AdditiveWhite * (1 - (float)Math.Sin(Main.GlobalTimeWrappedHourly));
+                Color color = ColorHelper.AdditiveWhite() * (1 - (float)Math.Sin(Main.GlobalTimeWrappedHourly));
                 Main.spriteBatch.Draw
                 (
                     tex,
@@ -57,7 +57,7 @@ namespace GoldLeaf.Items.Grove.Boss
             }
             for (float k = 0f; k < 1f; k += 0.5f)
             {
-                Color color = ColorHelper.AdditiveWhite * (1 - (float)Math.Cos(Main.GlobalTimeWrappedHourly));
+                Color color = ColorHelper.AdditiveWhite() * (1 - (float)Math.Cos(Main.GlobalTimeWrappedHourly));
                 Main.spriteBatch.Draw
                 (
                     tex,
@@ -76,7 +76,7 @@ namespace GoldLeaf.Items.Grove.Boss
 
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
-            spriteBatch.Draw(TextureAssets.Item[Item.type].Value, position, null, ColorHelper.AdditiveWhite * ((float)Math.Sin(Main.GlobalTimeWrappedHourly * 3) * 0.65f), 0, origin, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(TextureAssets.Item[Item.type].Value, position, null, ColorHelper.AdditiveWhite() * ((float)Math.Sin(Main.GlobalTimeWrappedHourly * 3) * 0.65f), 0, origin, scale, SpriteEffects.None, 0f);
         }
     }
 }

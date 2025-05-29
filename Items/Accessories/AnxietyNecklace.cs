@@ -26,7 +26,7 @@ namespace GoldLeaf.Items.Accessories
         }
         public override void SetStaticDefaults()
         {
-            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite, true);
+            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite(), true);
         }
 
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(1);

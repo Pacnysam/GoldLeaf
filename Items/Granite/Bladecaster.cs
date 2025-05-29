@@ -96,7 +96,7 @@ namespace GoldLeaf.Items.Granite
         /*public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             Texture2D tex = glowTex.Value;
-            Color color = ColorHelper.AdditiveWhite * (1 - ((float)Math.Sin(GoldLeafWorld.rottime) * 0.5f));
+            Color color = ColorHelper.AdditiveWhite() * (1 - ((float)Math.Sin(GoldLeafWorld.rottime) * 0.5f));
 
             for (float k = 0f; k < 1f; k += 1 / 3f)
             {
@@ -105,7 +105,7 @@ namespace GoldLeaf.Items.Granite
                     tex,
                     position + new Vector2(0f, 1.8f).RotatedBy((k + (GoldLeafWorld.rottime / 4)) * (((float)Math.PI * 2f)) + (0.5f - (float)Math.Sin(GoldLeafWorld.rottime) * 0.5f)),
                     new Rectangle(0, 0, tex.Width, tex.Height),
-                    color * 0.4f, //ColorHelper.AdditiveWhite, 
+                    color * 0.4f, //ColorHelper.AdditiveWhite(), 
                     0,
                     tex.Size() * 0.5f,
                     scale,
@@ -117,7 +117,7 @@ namespace GoldLeaf.Items.Granite
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
-            //spriteBatch.Draw(glowTex.Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite, rotation, TextureAssets.Item[Item.type].Size()/2, scale, SpriteEffects.None, 0f);
+            //spriteBatch.Draw(glowTex.Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite(), rotation, TextureAssets.Item[Item.type].Size()/2, scale, SpriteEffects.None, 0f);
 
             /*Texture2D tex = glowTex.Value;
             Vector2 vector = new
@@ -125,7 +125,7 @@ namespace GoldLeaf.Items.Granite
                     Item.position.X - Main.screenPosition.X + Item.width * 0.5f,
                     Item.position.Y - Main.screenPosition.Y + Item.height - tex.Height * 0.5f
                 );
-            Color color = ColorHelper.AdditiveWhite * (1 - ((float)Math.Sin(GoldLeafWorld.rottime) * 0.5f));
+            Color color = ColorHelper.AdditiveWhite() * (1 - ((float)Math.Sin(GoldLeafWorld.rottime) * 0.5f));
 
             for (float k = 0f; k < 1f; k += 1/3f)
             {
@@ -134,7 +134,7 @@ namespace GoldLeaf.Items.Granite
                     tex, 
                     vector + new Vector2(0f, 2.4f).RotatedBy((k + (GoldLeafWorld.rottime / 4)) * (((float)Math.PI * 2f)) + (0.5f - (float)Math.Sin(GoldLeafWorld.rottime) * 0.5f)), 
                     new Rectangle(0, 0, tex.Width, tex.Height),
-                    color * 0.4f, //ColorHelper.AdditiveWhite, 
+                    color * 0.4f, //ColorHelper.AdditiveWhite(), 
                     rotation,
                     tex.Size() * 0.5f, 
                     scale, 

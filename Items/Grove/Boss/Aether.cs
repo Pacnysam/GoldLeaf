@@ -76,7 +76,7 @@ namespace GoldLeaf.Items.Grove.Boss
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
-            spriteBatch.Draw(glowTex.Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite, rotation, TextureAssets.Item[Item.type].Size() / 2, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(glowTex.Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite(), rotation, TextureAssets.Item[Item.type].Size() / 2, scale, SpriteEffects.None, 0f);
             /*Texture2D tex = glowTex.Value;
             spriteBatch.Draw
             (
@@ -178,7 +178,7 @@ namespace GoldLeaf.Items.Grove.Boss
             for (int k = 0; k < Projectile.oldPos.Length-1; k++)
             {
                 Vector2 drawPos = Projectile.oldPos[k+1] - Main.screenPosition + tex.Size()/2;
-                Main.spriteBatch.Draw(tex, drawPos, null, ColorHelper.AdditiveWhite * (1f - (0.1f * k)), Projectile.rotation, tex.Size() / 2, Projectile.scale - (0.075f * k), SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(tex, drawPos, null, ColorHelper.AdditiveWhite() * (1f - (0.1f * k)), Projectile.rotation, tex.Size() / 2, Projectile.scale - (0.075f * k), SpriteEffects.None, 0f);
             }*/
             return false;
         }

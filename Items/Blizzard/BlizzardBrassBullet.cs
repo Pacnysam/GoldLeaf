@@ -67,7 +67,7 @@ namespace GoldLeaf.Items.Blizzard
         {
             float brightness = Lighting.Brightness((int)Item.Center.X / 16, (int)Item.Center.Y / 16);
             if (brightness <= 0.3f)
-                spriteBatch.Draw(TextureAssets.Item[Item.type].Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite * (0.3f - brightness), rotation, TextureAssets.Item[Item.type].Value.Size() / 2, scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(TextureAssets.Item[Item.type].Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite() * (0.3f - brightness), rotation, TextureAssets.Item[Item.type].Value.Size() / 2, scale, SpriteEffects.None, 0f);
         }
     }
     
@@ -156,7 +156,7 @@ namespace GoldLeaf.Items.Blizzard
                     Main.spriteBatch.Draw(glowTex.Value, drawPos, null, Color.White * (0.8f - (0.035f * k)), Projectile.rotation, drawOrigin, Projectile.scale * (1.25f - (0.035f * k)), SpriteEffects.None, 0f);
                     //Main.EntitySpriteDraw(glowTex.Value, drawPos, null, Color.White * (0.8f - (0.05f * k)), Projectile.oldRot[k], drawOrigin, Projectile.scale * (1f - (0.045f * k)), SpriteEffects.None);
                 }
-                Main.EntitySpriteDraw(glowTex.Value, Projectile.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite, Projectile.rotation, glowTex.Size() / 2, Projectile.scale, SpriteEffects.None);
+                Main.EntitySpriteDraw(glowTex.Value, Projectile.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite(), Projectile.rotation, glowTex.Size() / 2, Projectile.scale, SpriteEffects.None);
             }
             else 
             {
@@ -167,14 +167,14 @@ namespace GoldLeaf.Items.Blizzard
                     Vector2 drawOrigin = new(texture.Width * 0.5f, Projectile.height * 0.5f);
                     Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin;
 
-                    Main.spriteBatch.Draw(texture, drawPos, null, ColorHelper.AdditiveWhite * (0.6f - (0.075f * k)), Projectile.rotation, drawOrigin, Projectile.scale * (1f - (0.1f * k)), SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(texture, drawPos, null, ColorHelper.AdditiveWhite() * (0.6f - (0.075f * k)), Projectile.rotation, drawOrigin, Projectile.scale * (1f - (0.1f * k)), SpriteEffects.None, 0f);
                     //Main.EntitySpriteDraw(glowTex.Value, drawPos, null, Color.White * (0.8f - (0.05f * k)), Projectile.oldRot[k], drawOrigin, Projectile.scale * (1f - (0.045f * k)), SpriteEffects.None);
                 }
                 Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None);
 
                 float brightness = Lighting.Brightness((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16);
                 if (brightness <= 0.3f)
-                    Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite * (0.3f - brightness), Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite() * (0.3f - brightness), Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
 
                 /*
                 for (int k = 0; k < Projectile.oldPos.Length/3; k++)
@@ -188,8 +188,8 @@ namespace GoldLeaf.Items.Blizzard
 
                 Texture2D texture = TextureAssets.Projectile[Type].Value;
                 Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None);
-                Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite * 0.3f, Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
-                //Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite * 0.3f, Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None);
+                Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite() * 0.3f, Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
+                //Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite() * 0.3f, Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None);
                 */
             }
             return false;

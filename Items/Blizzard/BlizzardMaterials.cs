@@ -139,7 +139,7 @@ namespace GoldLeaf.Items.Blizzard
         {
             float brightness = Lighting.Brightness((int)Item.Center.X / 16, (int)Item.Center.Y / 16);
             if (brightness <= 0.3f)
-                spriteBatch.Draw(glowTex.Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite * (0.3f - brightness), rotation, glowTex.Size() / 2, scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(glowTex.Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite() * (0.3f - brightness), rotation, glowTex.Size() / 2, scale, SpriteEffects.None, 0f);
         }
     }
 }

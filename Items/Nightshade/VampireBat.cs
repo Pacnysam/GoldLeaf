@@ -155,7 +155,7 @@ namespace GoldLeaf.Items.Nightshade
 			}
 
             Texture2D glowTex = Request<Texture2D>("GoldLeaf/Items/Nightshade/VampireBatGlowOutline").Value;
-            Main.spriteBatch.Draw(glowTex, Projectile.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite * 0.5f, Projectile.rotation, new Vector2(0, -8) + glowTex.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(glowTex, Projectile.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite() * 0.5f, Projectile.rotation, new Vector2(0, -8) + glowTex.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
             return true;
 		}
 
@@ -281,7 +281,7 @@ namespace GoldLeaf.Items.Nightshade
             Vector2 drawOrigin = new(texture.Width * 0.5f, Projectile.height * 0.5f);
             Vector2 drawPos = Projectile.position - Main.screenPosition + drawOrigin;
 
-            Main.spriteBatch.Draw(texture, drawPos, null, ColorHelper.AdditiveWhite * 0.5f, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(texture, drawPos, null, ColorHelper.AdditiveWhite() * 0.5f, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
         }
     }
 }

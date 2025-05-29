@@ -28,7 +28,7 @@ namespace GoldLeaf.Items.Dungeon
 
         public override void SetStaticDefaults()
         {
-            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite * 0.5f, true);
+            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite() * 0.5f, true);
         }
 
         public override void SetDefaults() 
@@ -73,7 +73,7 @@ namespace GoldLeaf.Items.Dungeon
 					Item.position.Y - Main.screenPosition.Y + Item.height - tex.Height * 0.5f
 				),
 				new Rectangle(0, 0, tex.Width, tex.Height),
-                ColorHelper.AdditiveWhite,
+                ColorHelper.AdditiveWhite(),
 				rotation,
 				tex.Size() * 0.5f,
 				scale,

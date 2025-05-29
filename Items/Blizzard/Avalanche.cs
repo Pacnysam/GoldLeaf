@@ -33,7 +33,7 @@ namespace GoldLeaf.Items.Blizzard
         }
         public override void SetStaticDefaults()
         {
-            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite * 0.5f, false);
+            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite() * 0.5f, false);
         }
 
         public int consecutiveHits = 0;
@@ -189,7 +189,7 @@ namespace GoldLeaf.Items.Blizzard
             Color color = ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 3); color.A = 0;
 
             //spriteBatch.Draw(glowTex.Value, Item.Center - Main.screenPosition, null, ColorHelper.AuroraAccentColor(Main.GlobalTimeWrappedHourly * 3), rotation, glowTex.Size() / 2, scale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(glowTex.Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite * 0.5f, rotation, glowTex.Size() / 2, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(glowTex.Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite() * 0.5f, rotation, glowTex.Size() / 2, scale, SpriteEffects.None, 0f);
         }
     }
     

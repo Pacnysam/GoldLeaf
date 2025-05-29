@@ -50,7 +50,7 @@ namespace GoldLeaf.Items.Grove
                     Item.position.Y - Main.screenPosition.Y + Item.height - glowTex.Height() * 0.5f
                 ),
                 new Rectangle(0, 0, glowTex.Width(), glowTex.Height()),
-                ColorHelper.AdditiveWhite * ((float)Math.Sin(GoldLeafWorld.rottime) * 0.75f + 0.75f),
+                ColorHelper.AdditiveWhite() * ((float)Math.Sin(GoldLeafWorld.rottime) * 0.75f + 0.75f),
                 rotation,
                 glowTex.Size() * 0.5f,
                 scale,
@@ -66,7 +66,7 @@ namespace GoldLeaf.Items.Grove
                 glowTex.Value,
                 position,
                 new Rectangle(0, 0, glowTex.Width(), glowTex.Height()),
-                ColorHelper.AdditiveWhite * ((float)Math.Sin(GoldLeafWorld.rottime) * 0.75f + 0.75f),
+                ColorHelper.AdditiveWhite() * ((float)Math.Sin(GoldLeafWorld.rottime) * 0.75f + 0.75f),
                 0,
                 origin,
                 scale,

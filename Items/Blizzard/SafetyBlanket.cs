@@ -48,7 +48,7 @@ namespace GoldLeaf.Items.Blizzard
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
-            spriteBatch.Draw(glowTex.Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite, rotation, glowTex.Size() / 2, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(glowTex.Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite(), rotation, glowTex.Size() / 2, scale, SpriteEffects.None, 0f);
         }
 
         public override void AddRecipes()

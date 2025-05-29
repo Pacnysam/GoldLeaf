@@ -477,7 +477,7 @@ namespace GoldLeaf.Items.Blizzard
 
             float brightness = Lighting.Brightness((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16);
             if (brightness <= 0.3f)
-                Main.spriteBatch.Draw(trimTex.Value, (Projectile.Center + offset) - Main.screenPosition, rect, ColorHelper.AdditiveWhite * (0.3f - brightness), Projectile.rotation, rect.Size()/2, Projectile.scale, effects, 0);
+                Main.spriteBatch.Draw(trimTex.Value, (Projectile.Center + offset) - Main.screenPosition, rect, ColorHelper.AdditiveWhite() * (0.3f - brightness), Projectile.rotation, rect.Size()/2, Projectile.scale, effects, 0);
             
             Main.spriteBatch.Draw(glowTex.Value, (Projectile.Center + offset) - Main.screenPosition, rect, Color.White, Projectile.rotation, rect.Size()/2, Projectile.scale, effects, 0f);
 

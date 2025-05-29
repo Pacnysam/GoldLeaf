@@ -34,7 +34,7 @@ namespace GoldLeaf.Items.Granite
         }
         public override void SetStaticDefaults()
         {
-            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite, true);
+            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite(), true);
         }
 
         public override bool? PrefixChance(int pre, UnifiedRandom rand) => false;

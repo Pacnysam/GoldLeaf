@@ -89,7 +89,7 @@ namespace GoldLeaf.Tiles.Granite
             }
 
             /*Texture2D tex = glowTex.Value;
-            Color color = ColorHelper.AdditiveWhite * (1 - (float)Math.Sin(GoldLeafWorld.rottime) * 0.5f);
+            Color color = ColorHelper.AdditiveWhite() * (1 - (float)Math.Sin(GoldLeafWorld.rottime) * 0.5f);
             Vector2 position = new(i * 16, j * 16);
 
             for (float k = 0f; k < 1f; k += 1 / 3f)
@@ -197,7 +197,7 @@ namespace GoldLeaf.Tiles.Granite
         }
         public override void SetStaticDefaults()
         {
-            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite, true);
+            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite(), true);
         }
 
         public override void SetDefaults()
