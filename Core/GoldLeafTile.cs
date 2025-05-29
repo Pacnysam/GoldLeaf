@@ -27,7 +27,7 @@ namespace GoldLeaf.Core
         {
             Tile tile = Main.tile[i, j - 1];
             
-            if (oxeyeSafeTiles.Contains(Framing.GetTileSafely(i, j).TileType) && j < Main.worldSurface && !TileID.Sets.Platforms[type] && Main.rand.NextBool(1750) && Main._shouldUseWindyDayMusic && !Main.tile[i, j].TopSlope && (Main.tileCut[tile.TileType] || TileID.Sets.BreakableWhenPlacing[tile.TileType] || !tile.HasTile) && !tile.IsActuated && Main.dayTime)
+            if (oxeyeSafeTiles.Contains(Framing.GetTileSafely(i, j).TileType) && j < Main.worldSurface && !TileID.Sets.Platforms[type] && Main.rand.NextBool(2750) && Main._shouldUseWindyDayMusic && !Main.tile[i, j].TopSlope && (Main.tileCut[tile.TileType] || TileID.Sets.BreakableWhenPlacing[tile.TileType] || !tile.HasTile) && !tile.IsActuated && Main.dayTime)
             {
                 if (!Helper.TileNearby(new Point(i, j), 300, TileType<OxeyeDaisyT>()))
                 {

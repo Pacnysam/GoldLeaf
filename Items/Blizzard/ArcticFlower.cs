@@ -314,13 +314,13 @@ namespace GoldLeaf.Items.Blizzard
                 if (Projectile.Center.Distance(targetCenter) > attackingRange)
                 {
                     //Projectile.velocity = (Projectile.velocity * (inertia - 1) + direction) / inertia;
-                    Projectile.velocity -= (Projectile.Center - targetCenter) / 800;
+                    Projectile.velocity -= (Projectile.Center - targetCenter) / 900;
                 }
                 else 
                 {
-                    if (MathHelper.Distance(Projectile.Center.X, targetCenter.X) <= attackingRange - 200)
+                    if (MathHelper.Distance(Projectile.Center.X, targetCenter.X) <= attackingRange - 100)
                     {
-                        Projectile.velocity.X += (Projectile.Center.X - targetCenter.X) / 600;
+                        Projectile.velocity.X += (Projectile.Center.X - targetCenter.X) / 700;
                         //Projectile.velocity.X = -0.35f * ((Projectile.velocity.X * (inertia - 1) + direction.X) / inertia);
                     }
                     else

@@ -43,7 +43,7 @@ namespace GoldLeaf.Core
         }*/
 
         public override void OnSpawn(Projectile projectile, IEntitySource source) {
-			if (source is EntitySource_ItemUse realSource) {
+			if (source is IEntitySource_WithStatsFromItem realSource) {
 				projectile.GetGlobalProjectile<GoldLeafProjectile>().critDamageMod += realSource.Item.GetGlobalItem<GoldLeafItem>().critDamageMod;
                 projectile.netUpdate = true;
 			}
