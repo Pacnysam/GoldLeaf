@@ -22,7 +22,7 @@ namespace GoldLeaf.Items.Nightshade
 	{
 		public override void SetDefaults() 
 		{
-			Item.damage = 22;
+			Item.damage = 17;
             //Item.GetGlobalItem<GoldLeafItem>().throwingDamageType = DamageClass.Magic;
             Item.DamageType = DamageClass.Magic;
 
