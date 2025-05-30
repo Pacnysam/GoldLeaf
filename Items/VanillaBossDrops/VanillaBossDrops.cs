@@ -26,6 +26,14 @@ namespace GoldLeaf.Items.VanillaBossDrops
                         npcLoot.Add(notExpertRule);
                         break;
                     }
+                case NPCID.EyeofCthulhu:
+                    {
+                        LeadingConditionRule notExpertRule = new(new Conditions.NotExpert());
+
+                        notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<Lunar>(), 20));
+                        npcLoot.Add(notExpertRule);
+                        break;
+                    }
                 case NPCID.BrainofCthulhu:
                     {
                         LeadingConditionRule notExpertRule = new(new Conditions.NotExpert());
@@ -62,15 +70,6 @@ namespace GoldLeaf.Items.VanillaBossDrops
                         noDaylightRule.OnSuccess(ItemDropRule.Common(ItemID.EmpressBlade, 20));
                         break;
                     }*/
-                case NPCID.MoonLordCore: //TODO: move to grove boss when it's done
-                    {
-                        LeadingConditionRule notExpertRule = new(new Conditions.NotExpert());
-
-                        notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<MadcapPainting>(), 1));
-                        notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<BatPlushie>(), 1));
-                        npcLoot.Add(notExpertRule);
-                        break;
-                    }
             }
         }
     }
@@ -87,6 +86,11 @@ namespace GoldLeaf.Items.VanillaBossDrops
                         itemLoot.Add(ItemDropRule.Common(ItemType<Goonai>(), 2, 100, 120));
                         break;
                     }
+                case ItemID.EyeOfCthulhuBossBag:
+                    {
+                        itemLoot.Add(ItemDropRule.Common(ItemType<Lunar>(), 15));
+                        break;
+                    }
                 case ItemID.EaterOfWorldsBossBag:
                     {
                         itemLoot.Add(ItemDropRule.Common(ItemType<ClutterGloveCorruption>(), 2));
@@ -100,12 +104,6 @@ namespace GoldLeaf.Items.VanillaBossDrops
                 case ItemID.SkeletronBossBag:
                     {
                         itemLoot.Add(ItemDropRule.Common(ItemID.Bone, 1, 30, 45));
-                        break;
-                    }
-                case ItemID.MoonLordBossBag: //TODO: move to grove boss when it's done
-                    {
-                        itemLoot.Add(ItemDropRule.Common(ItemType<MadcapPainting>(), 1));
-                        itemLoot.Add(ItemDropRule.Common(ItemType<BatPlushie>(), 1));
                         break;
                     }
             }

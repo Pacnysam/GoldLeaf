@@ -542,16 +542,21 @@ GrantMask: {
 }
 
 EchobarkHelmet: {
-	Tooltip: ""
 	DisplayName: Echobark Helmet
+	Tooltip: ""
 }
 
 EchobarkGreaves: {
-	Tooltip: ""
 	DisplayName: Echobark Greaves
+	Tooltip: ""
 }
 
 EchobarkBreastplate: {
-	Tooltip: ""
 	DisplayName: Echobark Breastplate
+	Tooltip: ""
+}
+
+Lunar: {
+	DisplayName: Lunar
+	Tooltip: Consumes fallen stars to change moon phase at night
 }

@@ -160,7 +160,7 @@ namespace GoldLeaf.Items.Accessories
             TileID.Sets.HasOutlines[Type] = true;
 
             AddMapEntry(new Color(235, 255, 240));
-            RegisterItemDrop(ItemType<OxeyeDaisy>());
+            RegisterItemDrop(ItemType<OxeyeDaisy>(), 0);
 
             Main.tileSolid[Type] = false;
             Main.tileFrameImportant[Type] = true;
