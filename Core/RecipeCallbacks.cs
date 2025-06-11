@@ -43,6 +43,15 @@ namespace GoldLeaf.Core
             {
                 player.GetModPlayer<GoldLeafPlayer>().craftTimer = 60;
 
+                for (int j = 0; j < 15; j++)
+                {
+                    Dust dust = Dust.NewDustDirect(player.MountedCenter, 0, 0, DustType<AetherSmoke>());
+                    dust.velocity = Main.rand.NextVector2Circular(9f, 9f);
+                    dust.scale = Main.rand.NextFloat(0.9f, 1.2f);
+                    dust.alpha = 20 + Main.rand.Next(60);
+                    dust.rotation = Main.rand.NextFloat(6.28f);
+                }
+
                 int explosion = Projectile.NewProjectile(player.GetSource_FromThis(), player.MountedCenter, Vector2.Zero, ProjectileType<AetherBurst>(), 0, 0, Main.myPlayer);
                 Main.projectile[explosion].ai[0] = 60f;
                 CameraSystem.AddScreenshake(player, 18);
@@ -69,7 +78,7 @@ namespace GoldLeaf.Core
 
                 for (float k = 0; k < Main.rand.Next(4, 6); k++)
                 {
-                    var d = Dust.NewDustDirect(player.MountedCenter, 12, 0, DustID.Torch, 0f, Main.rand.NextFloat(-3.8f, -6.2f), 0, default, Main.rand.NextFloat(0.7f, 0.9f));
+                    Dust d = Dust.NewDustDirect(player.MountedCenter, 12, 0, DustID.Torch, 0f, Main.rand.NextFloat(-3.8f, -6.2f), 0, default, Main.rand.NextFloat(0.7f, 0.9f));
                     //d.fadeIn = 1f;
                 }
                 SoundEngine.PlaySound(SoundID.Item37);

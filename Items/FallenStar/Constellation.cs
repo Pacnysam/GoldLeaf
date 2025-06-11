@@ -18,6 +18,7 @@ using System;
 using System.Threading;
 using GoldLeaf.Effects.Dusts;
 using ReLogic.Content;
+using System.IO;
 namespace GoldLeaf.Items.FallenStar
 {
     public class Constellation : ModItem
@@ -105,6 +106,11 @@ namespace GoldLeaf.Items.FallenStar
     {
         private static Asset<Texture2D> glowTex;
 
+        public override void Load()
+        {
+            glowTex = Request<Texture2D>(Texture + "Glow");
+        }
+
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 8;
@@ -118,25 +124,28 @@ namespace GoldLeaf.Items.FallenStar
             Projectile.DefaultToWhip();
             Projectile.WhipSettings.Segments = 8;
             Projectile.WhipSettings.RangeMultiplier = 0.6f;
+
+            Projectile.netImportant = true;
         }
 
         ref float Timer => ref Projectile.ai[0];
-
-        public override void Load()
-        {
-            glowTex = Request<Texture2D>(Texture + "Glow");
-        }
 
         public override void OnSpawn(IEntitySource source)
         {
             Player player = Main.player[Projectile.owner];
 
-            Projectile.WhipSettings.Segments += player.GetModPlayer<ConstellationPlayer>().extraSegments;
-            Projectile.WhipSettings.RangeMultiplier += 0.125f * Main.player[Projectile.owner].GetModPlayer<ConstellationPlayer>().extraSegments;
+            Projectile.WhipSettings.Segments = 8 + player.GetModPlayer<ConstellationPlayer>().extraSegments;
+            Projectile.WhipSettings.RangeMultiplier = 0.6f + (0.125f * Main.player[Projectile.owner].GetModPlayer<ConstellationPlayer>().extraSegments);
+
+            Projectile.netUpdate = true;
         }
 
         public override void AI()
         {
+            Player player = Main.player[Projectile.owner];
+            Projectile.WhipSettings.Segments = 8 + player.GetModPlayer<ConstellationPlayer>().extraSegments;
+            Projectile.WhipSettings.RangeMultiplier = 0.6f + (0.125f * Main.player[Projectile.owner].GetModPlayer<ConstellationPlayer>().extraSegments);
+
             List<Vector2> list = [];
             Projectile.FillWhipControlPoints(Projectile, list);
             Vector2 pos = list[^1];
@@ -172,31 +181,22 @@ namespace GoldLeaf.Items.FallenStar
             }
         }
 
-        private void DrawLine(List<Vector2> list)
+        /*public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            Texture2D texture = TextureAssets.FishingLine.Value;
-            Rectangle frame = texture.Frame();
-            Vector2 origin = new(frame.Width / 2, 2);
+            Player player = Main.player[Projectile.owner];
 
-            Vector2 pos = list[0];
-            for (int i = 0; i < list.Count - 1; i++)
+            player.GetModPlayer<ConstellationPlayer>().segmentTimer = 300;
+
+            if (player.GetModPlayer<ConstellationPlayer>().extraSegments < player.GetModPlayer<ConstellationPlayer>().maxExtraSegments)
             {
-                Vector2 element = list[i];
-                Vector2 diff = list[i + 1] - element;
-
-                float rotation = diff.ToRotation() - MathHelper.PiOver2;
-                Color color = Lighting.GetColor(element.ToTileCoordinates(), new Color(180, 224, 255));
-                Vector2 scale = new(1, (diff.Length() + 2) / frame.Height);
-
-                Main.EntitySpriteDraw(texture, pos - Main.screenPosition, frame, color, rotation, origin, scale, SpriteEffects.None, 0);
-
-                pos += diff;
+                player.GetModPlayer<ConstellationPlayer>().extraSegments++;
+                DustHelper.DrawStar(target.Center, DustID.FireworkFountain_Blue, 5, 3.8f, 1f, 0.7f, 0.85f, 0.5f, true, 0, 1);
             }
-        }
+        }*/
 
         public override bool PreDraw(ref Color lightColor)
         {
-            List<Vector2> list = new List<Vector2>();
+            List<Vector2> list = [];
             Projectile.FillWhipControlPoints(Projectile, list);
             Vector2 pos = list[0];
             //Vector2 tipPos = list[list.Count - 1];
@@ -285,6 +285,40 @@ namespace GoldLeaf.Items.FallenStar
             if (extraSegments > maxExtraSegments) extraSegments = maxExtraSegments;
 
             segmentTimer--;
+        }
+
+        public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+        {
+            ModPacket packet = Mod.GetPacket();
+            packet.Write((byte)GoldLeaf.MessageType.ConstellationSync);
+            packet.Write((byte)Player.whoAmI);
+            packet.Write((byte)extraSegments);
+            packet.Write((byte)maxExtraSegments);
+            packet.Write((byte)segmentTimer);
+            packet.Send(toWho, fromWho);
+        }
+
+        public void ReceivePlayerSync(BinaryReader reader)
+        {
+            extraSegments = reader.ReadByte();
+            maxExtraSegments = reader.ReadByte();
+            segmentTimer = reader.ReadByte();
+        }
+
+        public override void CopyClientState(ModPlayer targetCopy)
+        {
+            ConstellationPlayer clone = (ConstellationPlayer)targetCopy;
+            clone.extraSegments = extraSegments;
+            clone.maxExtraSegments = maxExtraSegments;
+            clone.segmentTimer = segmentTimer;
+        }
+
+        public override void SendClientChanges(ModPlayer clientPlayer)
+        {
+            ConstellationPlayer clone = (ConstellationPlayer)clientPlayer;
+
+            if (extraSegments != clone.extraSegments || maxExtraSegments != clone.maxExtraSegments || segmentTimer != clone.segmentTimer)
+                SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
         }
     }
 

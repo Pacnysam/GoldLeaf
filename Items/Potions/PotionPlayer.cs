@@ -46,7 +46,7 @@ namespace GoldLeaf.Items.Potions
                 Player.Heal(1 + damageDone / 45);
             }
 
-            if (vigorPotion && hit.DamageType ==  DamageClass.Melee)
+            if (vigorPotion && hit.DamageType.CountsAsClass(DamageClass.Melee))
             {
                 OverhealthManager.AddOverhealth(Player, hit.Damage/10, TimeToTicks(5));
             }

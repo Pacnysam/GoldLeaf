@@ -9,7 +9,7 @@ using Terraria.ID;
 
 namespace GoldLeaf.Effects.Dusts
 {
-    public class HotSmoke : ModDust //i did not make any of this! i nabbed it from starlight river
+    public class HotSmoke : ModDust
     {
         public override string Texture => "GoldLeaf/Effects/Dusts/SpecialSmoke";
 
@@ -35,21 +35,20 @@ namespace GoldLeaf.Effects.Dusts
 
         public override bool Update(Dust dust)
         {
-            if (dust.velocity.Length() > 3)
-                dust.velocity *= 0.85f;
-            else
-                dust.velocity *= 0.9f;
+            dust.velocity.Y -= dust.alpha / 1750f;
 
             if (dust.alpha > 100)
             {
-                dust.scale += 0.012f;
+                dust.scale += 0.015f;
                 dust.alpha += 2;
+                dust.velocity *= 0.925f;
             }
             else
             {
-                Lighting.AddLight(dust.position, dust.color.ToVector3() * 0.1f);
-                dust.scale *= 0.985f;
+                Lighting.AddLight(dust.position, dust.color.ToVector3() * 0.15f);
+                dust.scale *= 0.99f;
                 dust.alpha += 4;
+                dust.velocity *= 0.975f;
             }
 
             dust.position += dust.velocity;
@@ -64,7 +63,6 @@ namespace GoldLeaf.Effects.Dusts
     public class HotSmokeFast : ModDust
     {
         public override string Texture => "GoldLeaf/Effects/Dusts/SpecialSmoke";
-
         public override void OnSpawn(Dust dust)
         {
             dust.noGravity = true;
@@ -143,6 +141,12 @@ namespace GoldLeaf.Effects.Dusts
                 dust.scale = 0.65f * Projectile.scale;
                 dust.rotation = Main.rand.NextFloatDirection();
             }
+        }
+
+        public override void PostAI()
+        {
+            if (Projectile.wet)
+                Projectile.Kill();
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)

@@ -56,9 +56,12 @@ namespace GoldLeaf.Prefixes.Enchantments
         {
             if (hit.Crit && IsTargetValid(target) && item.GetGlobalItem<VitalItem>().vital && heartTimer <= 0)
             {
-                int i = Item.NewItem(Player.GetSource_OnHit(target), target.Hitbox, ItemType<HeartTiny>());
+                int i = Item.NewItem(Player.GetSource_OnHit(target), target.Hitbox, ItemType<HeartTiny>(), 1, true, 0, true);
                 heartTimer = HEARTCOOLDOWN;
                 Main.item[i].playerIndexTheItemIsReservedFor = Player.whoAmI;
+
+                if (Main.netMode == NetmodeID.MultiplayerClient && i >= 0)
+                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, i, 1f);
             }
         }
 
@@ -66,9 +69,12 @@ namespace GoldLeaf.Prefixes.Enchantments
         {
             if (hit.Crit && IsTargetValid(target) && proj.GetGlobalProjectile<VitalProjectile>().vital && heartTimer <= 0)
             {
-                int i = Item.NewItem(Player.GetSource_OnHit(target), target.Hitbox, ItemType<HeartTiny>());
+                int i = Item.NewItem(Player.GetSource_OnHit(target), target.Hitbox, ItemType<HeartTiny>(), 1, true, 0, true);
                 heartTimer = HEARTCOOLDOWN;
                 Main.item[i].playerIndexTheItemIsReservedFor = Player.whoAmI;
+
+                if (Main.netMode == NetmodeID.MultiplayerClient && i >= 0)
+                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, i, 1f);
             }
         }
     }

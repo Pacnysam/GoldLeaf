@@ -15,7 +15,7 @@ namespace GoldLeaf.Core
     {
         public static Condition InSurface = new("Mods.GoldLeaf.GoldLeafConditions.InSurface", () => !Main.LocalPlayer.ShoppingZone_BelowSurface);
         public static Condition UsingGameboy = new("Mods.GoldLeaf.GoldLeafConditions.UsingGameboy", () => Main.LocalPlayer.GetModPlayer<GameboyPlayer>().gameboy);
-        public static Condition HasClutterGlove = new("Mods.GoldLeaf.GoldLeafConditions.HasClutterGlove", () => HasItem(Main.LocalPlayer, ItemType<ClutterGloveCorruption>(), 1) || HasItem(Main.LocalPlayer, ItemType<ClutterGloveCrimson>(), 1));
+        public static Condition HasClutterGlove = new("Mods.GoldLeaf.GoldLeafConditions.HasClutterGlove", () => Main.LocalPlayer.HasItem(ItemType<ClutterGloveCorruption>()) || Main.LocalPlayer.HasItem(ItemType<ClutterGloveCrimson>()));
 
         public class IsDaytime : IItemDropRuleCondition, IProvideItemConditionDescription
         {

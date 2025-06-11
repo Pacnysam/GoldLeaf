@@ -155,6 +155,14 @@ namespace GoldLeaf.Items.VanillaBossDrops
             }
         }
 
+        /*public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
+        {
+            if (Projectile.Center.Y <= target.Center.Y && Projectile.velocity.Y > 5 && Projectile.ai[0] >= 60)
+            {
+                modifiers.FinalDamage *= 3;
+            }
+        }*/
+
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             if (Projectile.Center.Y <= target.Center.Y && Projectile.velocity.Y > 5 && Projectile.ai[0] >= 60) 

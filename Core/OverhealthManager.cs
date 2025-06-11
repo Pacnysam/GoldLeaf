@@ -80,6 +80,7 @@ namespace GoldLeaf.Core
                 for (amountAdded = 0; (amountAdded < amount) && (player.GetModPlayer<OverhealthManager>().overhealth < player.GetModPlayer<OverhealthManager>().overhealthMax); amountAdded++)
                 {
                     player.GetModPlayer<OverhealthManager>().overhealth++;
+                    player.statLifeMax2++;
                     player.statLife++;
                 }
 
@@ -89,6 +90,43 @@ namespace GoldLeaf.Core
 
             if (time > player.GetModPlayer<OverhealthManager>().overhealthTimer)
                 player.GetModPlayer<OverhealthManager>().overhealthTimer = time;
+        }
+
+        public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+        {
+            ModPacket packet = Mod.GetPacket();
+            packet.Write((byte)GoldLeaf.MessageType.OverhealthSync);
+            packet.Write((byte)Player.whoAmI);
+            packet.Write((byte)overhealth);
+            packet.Write((byte)overhealthMax);
+            packet.Write((byte)overhealthDecayTime);
+            packet.Write((byte)overhealthTimer);
+            packet.Send(toWho, fromWho);
+        }
+
+        public void ReceivePlayerSync(BinaryReader reader)
+        {
+            overhealth = reader.ReadByte();
+            overhealthMax = reader.ReadByte();
+            overhealthDecayTime = reader.ReadByte();
+            overhealthTimer = reader.ReadByte();
+        }
+
+        public override void CopyClientState(ModPlayer targetCopy)
+        {
+            OverhealthManager clone = (OverhealthManager)targetCopy;
+            clone.overhealth = overhealth;
+            clone.overhealthMax = overhealthMax;
+            clone.overhealthDecayTime = overhealthDecayTime;
+            clone.overhealthTimer = overhealthTimer;
+        }
+
+        public override void SendClientChanges(ModPlayer clientPlayer)
+        {
+            OverhealthManager clone = (OverhealthManager)clientPlayer;
+
+            if (overhealth != clone.overhealth || overhealthMax != clone.overhealthMax || overhealthDecayTime != clone.overhealthDecayTime || overhealthTimer != clone.overhealthTimer)
+                SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
         }
 
         /*public static void AddOverhealthPool(Player player, string type, int amount, int maxAnount, int time = 240, int decaySpeed = 5)

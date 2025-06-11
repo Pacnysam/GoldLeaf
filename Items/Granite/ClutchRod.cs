@@ -37,8 +37,8 @@ namespace GoldLeaf.Items.Granite
             ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite(), true);
         }
 
-        public override bool? PrefixChance(int pre, UnifiedRandom rand) => false;
-        public override int ChoosePrefix(UnifiedRandom rand) => 0;
+        //public override bool? PrefixChance(int pre, UnifiedRandom rand) => false;
+        //public override int ChoosePrefix(UnifiedRandom rand) => 0;
 
         public override void SetDefaults()
 		{

@@ -65,9 +65,17 @@ namespace GoldLeaf.Core
 
             if (projectile.type == ProjectileID.SnowBallFriendly)
             {
-                target.AddBuff(BuffID.Chilled, 60);
+                target.AddBuff(BuffID.Chilled, Helper.TimeToTicks(3));
             }
         }
+
+        /*public override void OnHitPlayer(Projectile projectile, Player target, Player.HurtInfo info)
+        {
+            if (projectile.type == ProjectileID.SnowBallFriendly || projectile.type == ProjectileID.SnowBallHostile)
+            {
+                target.AddBuff(BuffID.Chilled, 60, false);
+            }
+        }*/
 
         /*public override void SetDefaults(Projectile entity)
         {
@@ -86,16 +94,15 @@ namespace GoldLeaf.Core
 
         public override void AI(Projectile projectile)
         {
-            if (gravity != 0f && counter >= gravityDelay)
+            if (gravity != 0f && counter >= gravityDelay) //TODO, fix this
             {
                 projectile.velocity.Y += gravity;
+                projectile.netUpdate = true;    
             }
-
             if ((projectile.type == ProjectileID.FallingStar) && counter % 15 == 0) 
             {
                 DustHelper.DrawStar(projectile.Center, DustID.FireworkFountain_Blue, 5, 1.8f, 0.65f, 0.55f, 0.6f, 0.5f, true, 0, -1);
             }
-
             counter++;
         }
 
@@ -119,15 +126,19 @@ namespace GoldLeaf.Core
 
         public override void SendExtraAI(Projectile projectile, BitWriter bitWriter, BinaryWriter binaryWriter)
         {
+            binaryWriter.Write(projectile.extraUpdates);
             binaryWriter.Write(counter);
             binaryWriter.Write(gravity);
+            //binaryWriter.Write(gravityDelay);
             binaryWriter.Write(critDamageMod);
         }
 
         public override void ReceiveExtraAI(Projectile projectile, BitReader bitReader, BinaryReader binaryReader)
         {
+            projectile.extraUpdates = binaryReader.ReadInt32();
             counter = binaryReader.ReadInt32();
             gravity = binaryReader.ReadInt32();
+            //gravityDelay = binaryReader.ReadInt32();
             critDamageMod = binaryReader.ReadSingle();
         }
 

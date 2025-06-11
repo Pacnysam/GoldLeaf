@@ -107,7 +107,7 @@ namespace GoldLeaf.Core.Bases
         {
             Player player = Main.player[Projectile.owner];
 
-            if (!player.active || player.dead || player.noItems || player.CCed || Vector2.Distance(Projectile.Center, player.Center) > 800f)
+            if (!player.active || player.dead || player.noItems || player.Stunned() || Vector2.Distance(Projectile.Center, player.Center) > 800f)
             {
                 Projectile.Kill();
                 return;

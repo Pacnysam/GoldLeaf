@@ -32,6 +32,8 @@ namespace GoldLeaf.Items
             Item.useAnimation = 15;
             Item.useTime = 15;
             Item.rare = ItemRarityID.Quest;
+            Item.damage = 3;
+            //Item.fishingPole = 5;
         }
 
         public override bool? UseItem(Player player)

@@ -302,6 +302,20 @@ namespace GoldLeaf.Items.Underground
         private int rubyCounter = 0;
         private int rubyShotCounter = 15;
 
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.Write(empowered);
+            writer.Write(emeraldDropCounter);
+            writer.Write(rubyCounter);
+            writer.Write(rubyShotCounter);
+        }
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            empowered = reader.ReadBoolean();
+            emeraldDropCounter = reader.ReadInt32();
+            rubyCounter = reader.ReadInt32();
+            rubyShotCounter = reader.ReadInt32();
+        }
 
         public override string Texture => "GoldLeaf/Items/Underground/SedimentFull";
 
@@ -324,13 +338,16 @@ namespace GoldLeaf.Items.Underground
 
             Projectile.width = 20;
             Projectile.height = 20;
+
+            Projectile.netImportant = true;
         }
 
         public override void OnSpawn(IEntitySource source)
         {
             counter = Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
 
-            Gem = (int)Projectile.ai[2];
+            Projectile.netUpdate = true;
+
             Projectile.frame = (int)Projectile.ai[2];
 
             if (Gem == (int)Gems.Ruby || Gem == (int)Gems.None)
@@ -345,7 +362,8 @@ namespace GoldLeaf.Items.Underground
             counter = Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
             if (counter <= 1)
             {
-                Gem = (int)Projectile.ai[2];
+                Projectile.netUpdate = true;
+
                 Projectile.frame = (int)Projectile.ai[2];
 
                 if (Gem == (int)Gems.Ruby || Gem == (int)Gems.None)
@@ -370,7 +388,7 @@ namespace GoldLeaf.Items.Underground
                 {
                     empowered = false;
                 }
-                if (Gem == (int)Gems.Emerald && counter > 40)
+                if (Gem == (int)Gems.Emerald && counter > 42)
                 {
                     empowered = false;
                 }
@@ -401,7 +419,7 @@ namespace GoldLeaf.Items.Underground
             return true;
         }
 
-        public override void PostAI()
+        public override void AI()
         {
             if (Gem == (int)Gems.Amethyst && empowered && Main.myPlayer == Projectile.owner)
             {
@@ -410,12 +428,12 @@ namespace GoldLeaf.Items.Underground
             }
             if (Gem == (int)Gems.Emerald && empowered)
             {
-                emeraldDropCounter--;
                 if (emeraldDropCounter <= 0)
                 {
                     Projectile.NewProjectile(Projectile.GetSource_FromAI(), new Vector2(Projectile.Center.X, Projectile.Center.Y + Main.rand.NextFloat(-4, 4)), Vector2.Zero, ProjectileType<FallingEmerald>(), (int)(Projectile.damage * 0.7f), Projectile.knockBack * 0.3f, Projectile.owner);
-                    emeraldDropCounter = 4;
+                    emeraldDropCounter = 5;
                 }
+                emeraldDropCounter--;
             }
             if (Gem == (int)Gems.Ruby && empowered && counter > 1)
             {
@@ -452,12 +470,46 @@ namespace GoldLeaf.Items.Underground
 
                             Vector2 velocity = shootVelocity.RotatedByRandom(MathHelper.ToRadians(4f));
 
-                            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, velocity * 0.55f, ProjectileType<BasicRubyBolt>(), (int)(Projectile.damage * 0.7f), Projectile.knockBack * 0.3f, Projectile.owner);
+                            if (Main.myPlayer == Projectile.owner)
+                                Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, velocity * 0.55f, ProjectileType<BasicRubyBolt>(), (int)(Projectile.damage * 0.7f), Projectile.knockBack * 0.3f, Projectile.owner);
                         }
                     }
                 }
             }
         }
+
+        /*public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        {
+            if (Gem == (int)Gems.Amethyst && empowered)
+            {
+                ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.NightsEdge,
+                        new ParticleOrchestraSettings { PositionInWorld = Projectile.Center },
+                        Projectile.owner);
+                empowered = false;
+            }
+            if (Gem == (int)Gems.Sapphire && empowered)
+            {
+                empowered = false;
+                int explosion = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ProjectileType<SapphireBurst>(), Projectile.damage, 0, Projectile.owner, 60f);
+                SoundEngine.PlaySound(SoundID.NPCDeath7, Projectile.Center);
+                SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact, Projectile.Center);
+            }
+            if (Gem == (int)Gems.Emerald && empowered)
+            {
+                Projectile.velocity.Y -= 9;
+
+                ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.TrueNightsEdge,
+                    new ParticleOrchestraSettings { PositionInWorld = target.MountedCenter }, Projectile.owner);
+            }
+            if (Gem == (int)Gems.Amber && empowered)
+            {
+                empowered = false;
+                target.AddBuff(BuffType<AmberStun>(), 30, false);
+                ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.ChlorophyteLeafCrystalShot,
+                    new ParticleOrchestraSettings { PositionInWorld = target.MountedCenter },
+                    Projectile.owner);
+            }
+        }*/
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
@@ -514,6 +566,7 @@ namespace GoldLeaf.Items.Underground
             {
                 empowered = false;
                 Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0f;
+                Projectile.netUpdate = true;
             }
             if (Gem == (int)Gems.Topaz && empowered)
             {
@@ -529,6 +582,7 @@ namespace GoldLeaf.Items.Underground
                     Projectile.velocity.Y = -oldVelocity.Y;
                 }
                 empowered = false;
+                Projectile.netUpdate = true;
                 return false;
             }
 
@@ -551,31 +605,33 @@ namespace GoldLeaf.Items.Underground
         {
             Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
 
+            Vector2 drawOrigin = new(texture.Width * 0.5f, Projectile.height * 0.5f);
+
+            var effects = Projectile.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             if (empowered && Gem != (int)Gems.None)
             {
                 //texture = Request<Texture2D>("GoldLeaf/Textures/Slash").Value;
                 texture = Request<Texture2D>("GoldLeaf/Items/Underground/SedimentGlow").Value;
 
-                Vector2 drawOrigin = new(texture.Width * 0.5f/* * 0.07f*/, Projectile.height * 0.5f/* * 0.07f*/);
                 for (int k = 0; k < Projectile.oldPos.Length; k++)
                 {
                     Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                    Main.spriteBatch.Draw(texture, drawPos, null, GemColor((int)Gem) * (0.35f - k * 0.025f), Projectile.oldRot[k], drawOrigin, Projectile.scale * (1f - k * 0.075f) /* * 0.07f*/, SpriteEffects.None, 0f);
+                    Main.EntitySpriteDraw(texture, drawPos, null, GemColor((int)Gem) * (0.35f - k * 0.025f), Projectile.oldRot[k], drawOrigin, Projectile.scale * (1f - k * 0.075f) /* * 0.07f*/, SpriteEffects.None, 0f);
                 }
             }
             else
             {
-                Vector2 drawOrigin = new(texture.Width * 0.5f, Projectile.height * 0.5f);
                 for (int k = 0; k < Projectile.oldPos.Length / 2; k++)
                 {
-                    var effects = Projectile.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
                     Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
                     Color color = Projectile.GetAlpha(lightColor) * (float)((float)(Projectile.oldPos.Length - k) / Projectile.oldPos.Length / 2);
 
-                    Main.spriteBatch.Draw(texture, drawPos, new Microsoft.Xna.Framework.Rectangle?(texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), color, Projectile.oldRot[k], drawOrigin, Projectile.scale, effects, 0f);
+                    Main.EntitySpriteDraw(texture, drawPos, new Microsoft.Xna.Framework.Rectangle?(texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), color, Projectile.oldRot[k], drawOrigin, Projectile.scale, effects, 0f);
                 }
             }
-            return true;
+            Vector2 projDrawPos = Projectile.position - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
+            Main.EntitySpriteDraw(TextureAssets.Projectile[Projectile.type].Value, projDrawPos, new Microsoft.Xna.Framework.Rectangle?(TextureAssets.Projectile[Projectile.type].Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), lightColor, Projectile.rotation, drawOrigin, Projectile.scale, effects, 0);
+            return false;
         }
     }
 
@@ -763,7 +819,7 @@ namespace GoldLeaf.Items.Underground
                     Projectile.position.X - Main.screenPosition.X + Projectile.width * 0.5f,
                     Projectile.position.Y - Main.screenPosition.Y + Projectile.height * 0.5f
                 ),
-                new Rectangle(0, 0, tex.Width, tex.Height),
+                null,
                 color,
                 0f,
                 tex.Size() * 0.5f,
@@ -780,7 +836,7 @@ namespace GoldLeaf.Items.Underground
             target.immune[Projectile.owner] = 8;
         }
     }
-
+    
     public class FallingEmerald : ModProjectile
     {
         public override string Texture => "Terraria/Images/Item_" + ItemID.Emerald;
@@ -799,10 +855,9 @@ namespace GoldLeaf.Items.Underground
             Projectile.friendly = true;
             Projectile.extraUpdates = 1;
 
-            Projectile.DamageType = DamageClass.Melee;
+            Projectile.timeLeft = TimeToTicks(10);
 
-            Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.08f;
-            Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravityDelay = 20;
+            Projectile.DamageType = DamageClass.Melee;
         }
 
         public override void OnKill(int timeLeft)
@@ -811,6 +866,12 @@ namespace GoldLeaf.Items.Underground
 
             for (float k = 0; k < 6.28f; k += 0.52f)
                 Dust.NewDustPerfect(Projectile.Center, DustType<LightDust>(), Vector2.One.RotatedBy(k) * 0.45f, 0, GemColor(4), 0.35f);
+        }
+
+        public override void AI()
+        {
+            if (Projectile.Counter() > 20)
+                Projectile.velocity.Y += 0.08f;
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -868,6 +929,13 @@ namespace GoldLeaf.Items.Underground
             Main.debuff[Type] = true;
             Main.pvpBuff[Type] = false;
             Main.buffNoSave[Type] = true;
+
+            Main.pvpBuff[Type] = true;
+        }
+
+        public override void Update(Player player, ref int buffIndex)
+        {
+            player.GetModPlayer<GoldLeafPlayer>().stunned = true;
         }
 
         public override void Update(NPC npc, ref int buffIndex)

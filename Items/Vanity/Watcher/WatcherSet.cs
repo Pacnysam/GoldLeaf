@@ -15,6 +15,8 @@ using Terraria.Graphics.Effects;
 using Terraria.DataStructures;
 using GoldLeaf.Tiles.Grove;
 using ReLogic.Content;
+using GoldLeaf.Items.Granite;
+using Terraria.Audio;
 
 namespace GoldLeaf.Items.Vanity.Watcher
 {
@@ -83,7 +85,7 @@ namespace GoldLeaf.Items.Vanity.Watcher
             Item.vanity = true;
         }
     }
-
+    
     public class WatcherPlayer : ModPlayer
     {
         public bool watcherDrops = false;
@@ -124,14 +126,49 @@ namespace GoldLeaf.Items.Vanity.Watcher
                 float manaPercent = (float)Player.statMana / Player.statManaMax2;
                 float manaRatio = (float)Player.statManaMax2 / Player.statMana;
 
-                Dust dust = Dust.NewDustPerfect(position, DustType<LightDust>(), new Vector2(0, Main.rand.NextFloat(-2f, -0.5f)), Main.rand.Next(0, 80), new Color(47, 41, 76) * manaPercent, Main.rand.NextFloat(0.7f, 1.2f));
+                Dust dust = Dust.NewDustPerfect(position, DustType<LightDust>(), new Vector2(0, Main.rand.NextFloat(-2f, -0.5f)), Main.rand.Next(0, 80), new Color(47, 41, 76) * manaPercent, Main.rand.NextFloat(1.5f, 1.85f));
 
                 if (manaRatio > 20) manaRatio = 20;
                 dustCooldown = (int)(Main.rand.Next(1, 4) + manaRatio);
             }
         }
-    }
 
+        public override void ModifyHurt(ref Player.HurtModifiers modifiers)
+        {
+            if (watcherCloak && watcherDrops)
+            {
+                modifiers.DisableSound();
+            }
+        }
+        public override void OnHurt(Player.HurtInfo info)
+        {
+            if (watcherCloak && watcherDrops && Player.statLife > 0)
+            {
+                //SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/StarSlot") { Variants = [1, 2, 3] }, Player.Center);
+                //SoundEngine.PlaySound(SoundID.DD2_LightningBugHurt, Player.position);
+                SoundEngine.PlaySound(SoundID.DD2_KoboldIgnite, Player.Center);
+                SoundEngine.PlaySound(SoundID.NPCHit52 with { Volume = 0.9f, Pitch = 0.35f }, Player.position);
+            }
+        }
+        public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genDust, ref PlayerDeathReason damageSource)
+        {
+            if (watcherCloak && watcherDrops)
+            {
+                playSound = false;
+            }
+            return base.PreKill(damage, hitDirection, pvp, ref playSound, ref genDust, ref damageSource);
+        }
+        public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
+        {
+            if (watcherCloak && watcherDrops)
+            {
+                SoundEngine.PlaySound(SoundID.NPCHit52 with { Volume = 0.7f }, Player.position);
+                SoundEngine.PlaySound(SoundID.DD2_KoboldIgnite, Player.position);
+                SoundEngine.PlaySound(SoundID.Item68, Player.position);
+            }
+        }
+    }
+    
     public class WatcherPunch : ModProjectile
     {
         private static Asset<Texture2D> tex;

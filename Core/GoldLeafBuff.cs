@@ -21,6 +21,11 @@ namespace GoldLeaf.Core
 {
     public class GoldLeafBuff : GlobalBuff
     {
+        public override void SetStaticDefaults()
+        {
+            Main.pvpBuff[BuffID.Chilled] = true;
+        }
+
         public override void Update(int type, Player player, ref int buffIndex)
         {
             if ((type == BuffID.OnFire || type == BuffID.OnFire3)) 

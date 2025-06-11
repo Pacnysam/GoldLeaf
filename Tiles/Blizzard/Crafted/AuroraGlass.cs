@@ -166,6 +166,8 @@ namespace GoldLeaf.Tiles.Blizzard.Crafted
                     projectile.velocity.Y = -oldVelocity.Y;
                 }
 
+                projectile.netUpdate = true;
+
                 auroraBounces++;
 
                 AuroraBounce(projectile, projectile.Center + projectile.velocity.SafeNormalize(Vector2.UnitX) * 8f, (-projectile.velocity).SafeNormalize(Vector2.UnitX));

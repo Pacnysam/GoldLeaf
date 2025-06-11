@@ -94,7 +94,7 @@ namespace GoldLeaf.Items.Meteor
             if (counter == 24) { Projectile.damage = damage; }
 
             if (counter > 24) { Projectile.velocity *= 1.01f;}
-            if (counter > 120) { Projectile.velocity *= 1.003f; Projectile.timeLeft -= 2; Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity += 0.0002f; }
+            if (counter > 120) { Projectile.velocity *= 1.003f; Projectile.timeLeft -= 2; }//Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity += 0.0002f; }
 
             counter++;
 

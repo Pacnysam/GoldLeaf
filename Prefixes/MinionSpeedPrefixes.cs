@@ -16,16 +16,16 @@ namespace GoldLeaf.Prefixes
 {
     public class Peppy : MinionSpeedPrefix
     {
-        public override float MinionSpeed => 0.01f;
+        public override float MinionSpeed => 0.02f;
     }
-    public class Spunky : MinionSpeedPrefix
+    /*public class Spunky : MinionSpeedPrefix
     {
         public override float MinionSpeed => 0.02f;
     }
     public class Vivacious : MinionSpeedPrefix
     {
         public override float MinionSpeed => 0.03f;
-    }
+    }*/
     public class Jubilated : MinionSpeedPrefix
     {
         public override float MinionSpeed => 0.04f;

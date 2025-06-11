@@ -1,4 +1,5 @@
 ﻿using GoldLeaf.Items.Accessories;
+using GoldLeaf.Items.Hell;
 using GoldLeaf.Items.Pickups;
 using GoldLeaf.Items.VanillaBossDrops;
 using GoldLeaf.Items.Vanity.Watcher;
@@ -78,6 +79,16 @@ namespace GoldLeaf.Core
             if (ItemID.Sets.BossBag[item.type]) 
             {
                 itemLoot.Add(ItemDropRule.FewFromOptions(5, 50, [ItemType<WatcherEyedrops>(), ItemType<WatcherCloak>(), ItemType<BatPlushie>(), ItemType<RedPlushie>(), ItemType<MadcapPainting>()]));
+            }
+
+            switch (item.type)
+            {
+                case ItemID.LavaCrate:
+                case ItemID.LavaCrateHard:
+                    {
+                        itemLoot.Add(ItemDropRule.Common(ItemType<HeatFlask>(), 4, 125, 175));
+                        break;
+                    }
             }
         }
 

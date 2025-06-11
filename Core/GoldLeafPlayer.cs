@@ -19,6 +19,7 @@ using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
 using GoldLeaf.Items.Vanity.Watcher;
 using GoldLeaf.Biomes;
+using GoldLeaf.Items.Vanity.Grant;
 
 namespace GoldLeaf.Core
 {
@@ -35,6 +36,7 @@ namespace GoldLeaf.Core
         public int craftTimer = 0;
 
         public float itemSpeed;
+        public bool stunned = false;
 
         public float meleeCritDamageMult = 1f;
         public float rangedCritDamageMult = 1f;
@@ -78,21 +80,12 @@ namespace GoldLeaf.Core
             modifiers.CritDamage += (proj.GetGlobalProjectile<GoldLeafProjectile>().critDamageMod);
             modifiers.CritDamage *= critDamageMult;
         }
-
-        public delegate void DoubleTapDelegate(Player player);
-        public static event DoubleTapDelegate DoubleTapEvent;
-        public static event DoubleTapDelegate DoubleTapPrimaryEvent;
-        public static event DoubleTapDelegate DoubleTapSecondaryEvent;
-
-        public void DoubleTap(Player player, int keyDir)
+        
+        public delegate void OnHitNPCDelegate(Player player, NPC target, NPC.HitInfo hit, int damageDone);
+        public static event OnHitNPCDelegate OnHitNPCEvent;
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            DoubleTapEvent?.Invoke(player);
-
-            if ((Main.ReversedUpDownArmorSetBonuses && keyDir == 1) || (!Main.ReversedUpDownArmorSetBonuses && keyDir == 0))
-                DoubleTapPrimaryEvent?.Invoke(player);
-
-            if ((Main.ReversedUpDownArmorSetBonuses && keyDir == 0) || (!Main.ReversedUpDownArmorSetBonuses && keyDir == 1))
-                DoubleTapSecondaryEvent?.Invoke(player);
+            OnHitNPCEvent?.Invoke(Player, target, hit, damageDone);
         }
 
         public delegate void ResetEffectsDelegate(GoldLeafPlayer player);
@@ -106,28 +99,16 @@ namespace GoldLeaf.Core
             meleeCritDamageMult = rangedCritDamageMult = magicCritDamageMult = summonCritDamageMult = 1f;
             summonCritChance = 0;
 
+            stunned = false;
+
             #region minor variables
             royalGel = false;
             #endregion minor variables
         }
 
-        public override void Load()
-        {
-            On_Player.KeyDoubleTap += DoubleTapKey;
-        }
-
         public override void Unload()
         {
-            On_Player.KeyDoubleTap -= DoubleTapKey;
-
             ResetEffectsEvent = null;
-        }
-
-        private static void DoubleTapKey(On_Player.orig_KeyDoubleTap orig, Player self, int keyDir)
-        {
-            orig(self, keyDir);
-
-            self.GetModPlayer<GoldLeafPlayer>().DoubleTap(self, keyDir);
         }
 
         public override void PreUpdateBuffs()
@@ -143,11 +124,27 @@ namespace GoldLeaf.Core
             if (craftTimer > 0) { craftTimer--; }
         }
 
-        /*public override void PreUpdateBuffs()
+        /*public override void PostUpdateBuffs()
         {
-            if (ZoneCandle) 
+            if (stunned)
             {
-                Main.LocalPlayer.AddBuff(BuffType<WaxCandleBuff>(), 1);
+                if (Player.velocity.Y != 0f)
+                {
+                    Player.velocity = new Vector2(0f, 1E-06f);
+                }
+                else
+                {
+                    Player.velocity = Vector2.Zero;
+                }
+                Player.jumpSpeedBoost = 0;
+                Player.blockExtraJumps = true;
+                //Player.jumpHeight = 0;
+                Player.gravity = 0f;
+                Player.moveSpeed = 0f;
+                Player.dash = 0;
+                Player.dashType = 0;
+                Player.noKnockback = true;
+                Player.RemoveAllGrapplingHooks();
             }
         }*/
 
@@ -161,7 +158,8 @@ namespace GoldLeaf.Core
                     {
                         return 
                             [
-                            new Item(ItemType<BatPlushie>(), 9999), 
+                            new Item(ItemType<BatPlushie>(), 9999),
+                            new Item(ItemType<RedPlushie>(), 9999),
                             new Item(ItemType<MadcapPainting>()), 
                             new Item(ItemType<WatcherEyedrops>()), 
                             new Item(ItemType<WatcherCloak>())
@@ -179,6 +177,10 @@ namespace GoldLeaf.Core
                     {
                         return Enumerable.Empty<Item>();
                         //return [new Item(ItemType<CypherHat>()), new Item(ItemType<CypherCoat>()), new Item(ItemType<CypherPants>())];
+                    }
+                case "Grant":
+                    {
+                        return [new Item(ItemType<GrantMask>()) ];//, new Item(ItemType<CypherCoat>()), new Item(ItemType<CypherPants>())];
                     }
                 case "Gameboy":
                 case "Game Boy":

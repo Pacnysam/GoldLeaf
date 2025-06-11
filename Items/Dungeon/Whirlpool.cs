@@ -122,16 +122,14 @@ namespace GoldLeaf.Items.Dungeon
             Projectile.ai[1] = 5;
 
             Projectile.DamageType = DamageClass.Magic;
-
-            Counter = Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
-
-			Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.35f;
-            Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravityDelay = 15;
         }
 
 		public override void AI()
 		{
-			Player player = Main.player[Projectile.owner];
+            if (Projectile.Counter() > 15)
+                Projectile.velocity.Y += 0.35f;
+
+            Player player = Main.player[Projectile.owner];
 
 			Lighting.AddLight((int)(Projectile.position.X / 16), (int)(Projectile.position.Y / 16), 0.38f, 0.68f, 1.16f);
             Dust dust;
@@ -146,13 +144,12 @@ namespace GoldLeaf.Items.Dungeon
 
 			if (player.channel)
 			{
-				if (Counter >= 10 && Counter <= 40 && Main.myPlayer == Projectile.owner)
+				if (Projectile.Counter() >= 10 && Projectile.Counter() <= 40 && Main.myPlayer == Projectile.owner)
 				{
 					Projectile.velocity = Projectile.velocity.Length() * Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.MouseWorld) * Projectile.velocity.Length() * 0.5f, 0.15f).SafeNormalize(Vector2.Normalize(Projectile.velocity));
 					Projectile.netUpdate = true;
 				}
 			}
-			Counter++;
 		}
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
@@ -202,10 +199,15 @@ namespace GoldLeaf.Items.Dungeon
 
             for (float k = 0; k < Main.rand.Next(7, 11); k++) 
 			{
-				int p = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center.X, Projectile.Center.Y, Main.rand.Next(-7, 7), Main.rand.Next(-16, 7), ProjectileID.WaterBolt, Projectile.damage / 3, 0, Projectile.owner, 0f, 0f);
-				Main.projectile[p].GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.7f;
-				Main.projectile[p].ai[0] = 3;
-			}
+				Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat(2f, 7f), ProjectileType<WaterBoltGravity>(), Projectile.damage/3, 0, Projectile.owner, 0f, 0f);
+                
+                if (proj.velocity.Y < 0)
+                    proj.velocity.Y *= 2f;
+                
+                proj.ai[0] = 3;
+                proj.netUpdate = true;
+
+            }
 
             //Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ProjectileType<WhirlpoolBurst>(), 0, 0, Projectile.owner);			
 		}
@@ -213,7 +215,7 @@ namespace GoldLeaf.Items.Dungeon
 		public override bool PreDraw(ref Color lightColor)
         {
             Texture2D tex = Request<Texture2D>("GoldLeaf/Textures/Vortex1").Value;
-            Texture2D tex2 = Request<Texture2D>("Goldleaf/Items/Dungeon/WhirlpoolP").Value;
+            Texture2D tex2 = TextureAssets.Projectile[Projectile.type].Value;
             //Main.spriteBatch.Draw(glowTex, new Vector2(Projectile.position.X - Main.screenPosition.X + Projectile.width * 0.5f, Projectile.position.Y - Main.screenPosition.Y + Projectile.height - glowTex.Height * 0.5f + 2f), Color.White, );
 
             Main.spriteBatch.Draw //vortex texture
@@ -228,7 +230,7 @@ namespace GoldLeaf.Items.Dungeon
                 new Color(42, 43, 152) * 0.8f,
                 GoldLeafWorld.rottime * -4.5f,
                 tex.Size() * 0.5f,
-                Projectile.scale * 0.9f,
+                Projectile.scale * 0.85f,
                 SpriteEffects.FlipHorizontally,
                 0f
             );
@@ -240,7 +242,7 @@ namespace GoldLeaf.Items.Dungeon
 
                 Main.spriteBatch.Draw //trail
 				(
-					tex2,
+                    tex2,
                     Projectile.oldPos[k] - Main.screenPosition + Projectile.Size * 0.5f + new Vector2(0f, Projectile.gfxOffY),
                     null,
 					new Color(255 - (9 * k), 255 - (9 * k), 255 - (4 * k)) * (0.8f - (0.15f * k)),
@@ -275,6 +277,20 @@ namespace GoldLeaf.Items.Dungeon
                 SpriteEffects.None,
                 0f
             );
+        }
+    }
+
+    public class WaterBoltGravity : ModProjectile
+    {
+        public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.WaterBolt;
+        public override void SetDefaults()
+        {
+            Projectile.CloneDefaults(ProjectileID.WaterBolt);
+            AIType = ProjectileID.WaterBolt;
+        }
+        public override void AI()
+        {
+            Projectile.velocity.Y += 0.7f;
         }
     }
 

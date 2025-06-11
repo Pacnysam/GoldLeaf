@@ -15,6 +15,8 @@ using Terraria.Localization;
 using ReLogic.Content;
 using GoldLeaf.Items.Blizzard;
 using GoldLeaf.Items.Blizzard.Armor;
+using System.IO;
+using System.Diagnostics.Metrics;
 
 
 namespace GoldLeaf.Core //most of this is snatched from starlight river and spirit, i (pacnysam) did not code most of this!
@@ -64,6 +66,8 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
             return min + (difference * val);
         }
 
+        public static float LavaLayer => Main.maxTilesY * 0.72f;
+
         public static bool CheckCircularCollision(Vector2 center, int radius, Rectangle hitbox)
         {
             if (Vector2.Distance(center, hitbox.TopLeft()) <= radius) return true;
@@ -107,6 +111,12 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
             return false;
         }*/
 
+        public static float Counter(this Projectile projectile) => projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
+        public static float Counter(this NPC npc) => npc.GetGlobalNPC<GoldLeafNPC>().counter;
+
+        public static bool Stunned(this Player player) => player.CCed || player.GetModPlayer<GoldLeafPlayer>().stunned;
+
+        public static bool ZoneGrove(this Player player) => player.GetModPlayer<GoldLeafPlayer>().ZoneGrove;
         public static bool ZoneForest(this Player Player)
         {
             return !Player.ZoneJungle
@@ -205,6 +215,11 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
                     player = Main.player[k];
             return player;
         }
+        
+        public static bool Toggle(this bool input) => input = !input;
+
+        public static void WritePoint16(this BinaryWriter writer, Point16 point) { writer.Write(point.X); writer.Write(point.Y); }
+        public static Point16 ReadPoint16(this BinaryReader reader) => new(reader.ReadInt16(), reader.ReadInt16());
 
         public static float BezierEase(float time)
         {
@@ -220,6 +235,7 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
 
             return combined;
         }
+
 
         public static bool ConsumeItems(this Item[] inventory, Predicate<Item> predicate, int count)
         {
@@ -270,7 +286,7 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
             }
             return indeces;
         }
-        public static bool HasItem(Player player, int type, int count)
+        public static bool HasItem(this Player player, int type, int count = 1)
         {
             int items = 0;
 
@@ -297,7 +313,7 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
             }
             return false;
         }
-        public static bool HasAccessory(Player player, int item)
+        public static bool HasAccessory(this Player player, int item)
         {
             int maxAccessoryIndex = 5 + player.extraAccessorySlots;
 
@@ -311,9 +327,9 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
             return false;
         }
 
-        public static bool TryTakeItem(Player player, int type, int count)
+        public static bool TryTakeItem(Player player, int type, int count = 1)
         {
-            if (HasItem(player, type, count))
+            if (player.HasItem(type, count))
             {
                 int toTake = count;
 
@@ -489,6 +505,7 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
         }
 
         public static bool IsTargetValid(NPC npc) => npc.active && !npc.friendly && !npc.immortal && !npc.dontTakeDamage && npc.lifeMax > 5;
+        public static bool IsValid(this NPC npc) => IsTargetValid(npc);
 
         public static double Distribution(int pos, int maxVal, float posOffset = 0.5f, float maxChance = 100f)
         {
@@ -510,11 +527,11 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
                 PlaceTile(rect.X + rect.Width, rect.Y + i, tileType, true, true);
         }
 
-        public static bool TileNearby(Point position, int distance, int type)
+        public static bool TileNearby(Point position, int distance, int type/*, Predicate<Tile> predicate*/)
         {
-            for (int i = position.X - distance; i <= position.X + distance; i++)
+            for (int i = Math.Clamp(position.X - distance, 0, Main.maxTilesX); i <= position.X + distance || i > Main.maxTilesX; i++)
             {
-                for (int j = position.Y - distance; j <= position.Y + distance; j++)
+                for (int j = Math.Clamp(position.Y - distance, 0, Main.maxTilesY); j <= position.Y + distance || j > Main.maxTilesY; j++)
                 {
                     if (Vector2.Distance(new Vector2(position.X, position.Y), new Vector2(i, j)) <= distance && Main.tile[i, j].TileType == type)
                     {
@@ -524,6 +541,21 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
             }
             return false;
         }
+
+        /*public static Point FindTileNearby(Point position, int distance, int type)
+        {
+            for (int i = position.X - distance; i <= position.X + distance; i++)
+            {
+                for (int j = position.Y - distance; j <= position.Y + distance; j++)
+                {
+                    if (Vector2.Distance(new Vector2(position.X, position.Y), new Vector2(i, j)) <= distance && Main.tile[i, j].TileType == type)
+                    {
+                        return new Point(i, j);
+                    }
+                }
+            }
+            return position;
+        }*/
 
         public static bool IsValidDebuff(Player player, int buffindex)
         {

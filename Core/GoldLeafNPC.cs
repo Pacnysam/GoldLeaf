@@ -18,7 +18,8 @@ using GoldLeaf.Items.Potions;
 using Terraria.GameContent.Bestiary;
 using GoldLeaf.Items.Grove;
 using GoldLeaf.Items.Dyes.HairDye;
-using GoldLeaf.Items.Accessories;
+using Terraria.ModLoader.IO;
+using GoldLeaf.Items.Granite;
 
 namespace GoldLeaf.Core
 {
@@ -33,6 +34,8 @@ namespace GoldLeaf.Core
 
         public float movementSpeed = 1f;
 
+        public int counter = 0;
+
         public bool Slowed => movementSpeed < 1f;
         public bool stunned = false;
 
@@ -45,6 +48,19 @@ namespace GoldLeaf.Core
 
             movementSpeed = 1f;
             stunned = false;
+        }
+
+        public override void SendExtraAI(NPC npc, BitWriter bitWriter, BinaryWriter binaryWriter)
+        {
+            binaryWriter.Write(movementSpeed);
+            binaryWriter.Write(stunned);
+            binaryWriter.Write(counter);
+        }
+        public override void ReceiveExtraAI(NPC npc, BitReader bitReader, BinaryReader binaryReader)
+        {
+            movementSpeed = binaryReader.ReadSingle();
+            stunned = binaryReader.ReadBoolean();
+            counter = binaryReader.ReadInt32();
         }
 
         public override void ModifyShop(NPCShop shop)
@@ -99,14 +115,14 @@ namespace GoldLeaf.Core
             modifiers.DefenseEffectiveness *= defenseFactorMod;
         }
 
-        public static bool CanBeStunned(NPC npc) => (!npc.boss && npc.aiStyle != NPCAIStyleID.Worm /* && npc.knockBackResist != 0f*/);
+        public static bool CanBeStunned(NPC npc) => (!npc.boss && npc.aiStyle != NPCAIStyleID.Worm/* && npc.knockBackResist != 0f*/);
 
         public override bool CanHitPlayer(NPC npc, Player target, ref int cooldownSlot)
         {
             if (stunned)
                 return false;
 
-            return true;
+            return base.CanHitPlayer(npc, target, ref cooldownSlot);
         }
 
         public override bool PreAI(NPC npc)
@@ -114,9 +130,15 @@ namespace GoldLeaf.Core
             if (Main.netMode != NetmodeID.Server && stunned && !npc.boss && npc.aiStyle != NPCAIStyleID.Worm/* && npc.knockBackResist != 0f*/)
             {
                 npc.velocity = Vector2.Zero;
+                npc.GetGlobalNPC<GoldLeafNPC>().movementSpeed *= 0f;
                 return false;
             }
             return true;
+        }
+
+        public override void AI(NPC npc)
+        {
+            counter++;
         }
 
         public override void PostAI(NPC npc)
@@ -135,6 +157,17 @@ namespace GoldLeaf.Core
                 case NPCID.Vampire:
                     {
                         npcLoot.Add(ItemDropRule.Common(ItemType<VampirePotion>(), 2));
+                        break;
+                    }
+                case NPCID.GraniteGolem:
+                    {
+                        npcLoot.Add(ItemDropRule.Common(ItemType<GraniteVoice>(), 50));
+                        break;
+                    }
+                case NPCID.DD2OgreT2:
+                case NPCID.DD2OgreT3:
+                    {
+                        npcLoot.Add(ItemDropRule.NormalvsExpert(ItemType<OgreVoice>(), 20, 10));
                         break;
                     }
             }

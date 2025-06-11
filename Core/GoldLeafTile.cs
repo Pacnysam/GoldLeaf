@@ -16,6 +16,11 @@ using Terraria.DataStructures;
 using GoldLeaf.Items.Underground;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using GoldLeaf.Items.VanillaBossDrops;
+using GoldLeaf.Items.Hell;
+using Terraria.Audio;
+using GoldLeaf.Effects.Dusts;
+using GoldLeaf.Items.Potions;
 
 namespace GoldLeaf.Core
 {
@@ -27,9 +32,9 @@ namespace GoldLeaf.Core
         {
             Tile tile = Main.tile[i, j - 1];
             
-            if (oxeyeSafeTiles.Contains(Framing.GetTileSafely(i, j).TileType) && j < Main.worldSurface && !TileID.Sets.Platforms[type] && Main.rand.NextBool(2750) && Main._shouldUseWindyDayMusic && !Main.tile[i, j].TopSlope && (Main.tileCut[tile.TileType] || TileID.Sets.BreakableWhenPlacing[tile.TileType] || !tile.HasTile) && !tile.IsActuated && Main.dayTime)
+            if (oxeyeSafeTiles.Contains(Framing.GetTileSafely(i, j).TileType) && j < Main.worldSurface && !TileID.Sets.Platforms[type] && Main.rand.NextBool(3000) && Main._shouldUseWindyDayMusic && !Main.tile[i, j].TopSlope && (Main.tileCut[tile.TileType] || TileID.Sets.BreakableWhenPlacing[tile.TileType] || !tile.HasTile) && !tile.IsActuated && Main.dayTime)
             {
-                if (!Helper.TileNearby(new Point(i, j), 300, TileType<OxeyeDaisyT>()))
+                if (!Helper.TileNearby(new Point(i, j), 200, TileType<OxeyeDaisyT>()))
                 {
                     WorldGen.PlaceTile(i, j - 1, TileType<OxeyeDaisyT>(), false, false);
                     NetMessage.SendObjectPlacement(-1, i, j - 1, TileType<OxeyeDaisyT>(), 0, 0, -1, -1);
@@ -39,9 +44,60 @@ namespace GoldLeaf.Core
 
         public override void Drop(int i, int j, int type)
         {
+            Tile tile = Main.tile[i, j];
+
             if (TileID.Sets.CountsAsGemTree[type] && Main.rand.NextBool(10) && (!Main.tile[i - 1, j].HasTile && !Main.tile[i + 1, j].HasTile && !Main.tile[i, j - 1].HasTile))
             {
                 Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, ItemType<Sediment>());
+            }
+
+            switch (type)
+            {
+				case TileID.Pots:
+                    #region pot types
+                    bool forestPot = tile.TileFrameY <= 36 * 3;
+                    bool snowPot = tile.TileFrameY >= 36 * 4 && tile.TileFrameY <= 36 * 6;
+                    bool junglePot = tile.TileFrameY >= 36 * 7 && tile.TileFrameY <= 36 * 9;
+                    bool dungeonPot = tile.TileFrameY >= 36 * 10 && tile.TileFrameY <= 36 * 12;
+                    bool hellPot = tile.TileFrameY >= 36 * 13 && tile.TileFrameY <= 36 * 15;
+                    bool corruptPot = tile.TileFrameY >= 36 * 16 && tile.TileFrameY <= 36 * 18;
+                    bool spiderPot = tile.TileFrameY >= 36 * 19 && tile.TileFrameY <= 36 * 21;
+                    bool crimsonPot = tile.TileFrameY >= 36 * 22 && tile.TileFrameY <= 36 * 24;
+                    bool pyramidPot = tile.TileFrameY >= 36 * 25 && tile.TileFrameY <= 36 * 27;
+                    bool templePot = tile.TileFrameY >= 36 * 28 && tile.TileFrameY <= 36 * 30;
+                    bool marblePot = tile.TileFrameY >= 36 * 31 && tile.TileFrameY <= 36 * 33;
+                    bool desertPot = tile.TileFrameY >= 36 * 34 && tile.TileFrameY <= 36 * 36;
+                    #endregion pot types
+
+                    #region potions
+                    if (tile.TileFrameX % 36 == 0) //10% drop chance checks for hell pots
+                    {
+                        if (Main.rand.NextBool(60) && j <= Main.worldSurface)
+                        { 
+                            Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, ItemType<JumpBoostPotion>()); 
+                            break;
+                        }
+                    }
+                    #endregion potions
+
+                    #region heat flask
+                    if (tile.TileFrameX % 36 == 0 && hellPot && Main.rand.NextBool(10)) //10% drop chance checks for hell pots
+                    {
+                        Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, ItemType<HeatFlask>(), Main.rand.Next(20, 35));
+                    }
+                    else if (tile.TileFrameX % 36 == 0 && j > Helper.LavaLayer && j < Main.UnderworldLayer && Main.rand.NextBool(20)) //5% drop chance checks for any pots in lava layer
+                    {
+                        Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, ItemType<HeatFlask>(), Main.rand.Next(20, 35));
+                    }
+                    #endregion heat flask
+                    break;
+                /*case TileID.ShadowOrbs:
+                    if (tile.TileFrameY == 0 && tile.TileFrameX % 36 == 0 && Main.rand.NextBool(4))
+                    {
+                        int itemType = (tile.TileFrameX == 0) ? ItemType<Rattlestaff>() : ItemType<LostCreeper>(); //checks for orb or heart
+                        Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, itemType);
+                    }
+                    break;*/
             }
         }
 

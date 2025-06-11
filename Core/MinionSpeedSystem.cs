@@ -68,6 +68,7 @@ namespace GoldLeaf.Core
             {
                 for (int k = 0; k < extraUpdateCache; extraUpdateCache--)
                 {
+                    projectile.netUpdate = true;
                     if (projectile.extraUpdates > 0)
                         projectile.extraUpdates--;
                 }
@@ -78,6 +79,7 @@ namespace GoldLeaf.Core
 
                     for (; minionSpeedCounter >= 1; minionSpeedCounter--)
                     {
+                        projectile.netUpdate = true;
                         projectile.extraUpdates++; extraUpdateCache++;
                     }
                 }
@@ -87,6 +89,7 @@ namespace GoldLeaf.Core
 
                     for (; sentrySpeedCounter >= 1; sentrySpeedCounter--)
                     {
+                        projectile.netUpdate = true;
                         projectile.extraUpdates++; extraUpdateCache++;
                     }
                 }
@@ -96,6 +99,7 @@ namespace GoldLeaf.Core
 
                     for (; familiarSpeedCounter >= 1; familiarSpeedCounter--)
                     {
+                        projectile.netUpdate = true;
                         projectile.extraUpdates++; extraUpdateCache++;
                     }
                 }*/

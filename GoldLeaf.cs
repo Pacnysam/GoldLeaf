@@ -15,11 +15,13 @@ using GoldLeaf.Items.Dyes;
 
 namespace GoldLeaf
 {
-    public class GoldLeaf : Mod
+    public partial class GoldLeaf : Mod
     {
+        public static GoldLeaf Instance;
         public GoldLeaf() 
         {
             MusicSkipsVolumeRemap = true;
+            Instance = this;
         }
 
         public override void Load()

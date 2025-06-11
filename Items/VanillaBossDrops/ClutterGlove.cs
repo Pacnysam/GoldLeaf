@@ -136,13 +136,13 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Projectile.extraUpdates = 1;
 
             Projectile.DamageType = DamageClass.Ranged;
-
-            Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.08f;
-            Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravityDelay = 15;
         }
 
         public override void AI()
         {
+            if (Projectile.Counter() > 15)
+                Projectile.velocity.Y += 0.08f;
+
             Projectile.rotation = Projectile.velocity.ToRotation() + 1.57f;
 
             Projectile.spriteDirection = Projectile.direction;
@@ -208,12 +208,12 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Projectile.ignoreWater = false;
 
             Projectile.DamageType = DamageClass.Ranged;
-
-            Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.15f;
         }
 
         public override void AI()
         {
+            Projectile.velocity.Y += 0.15f;
+
             Projectile.rotation = Projectile.velocity.ToRotation() + 1.57f;
 
             Projectile.spriteDirection = Projectile.direction;
@@ -246,6 +246,11 @@ namespace GoldLeaf.Items.VanillaBossDrops
 
             target.SimpleStrikeNPC((int)(damageDone * 0.7), hit.HitDirection, hit.Crit, 0, DamageClass.Ranged);
         }
+
+        /*public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        {
+            target.Hurt(info.DamageSource, (int)(info.Damage * 0.7), info.HitDirection, true);
+        }*/
 
         public override void OnKill(int timeLeft)
         {
@@ -317,18 +322,20 @@ namespace GoldLeaf.Items.VanillaBossDrops
                         item.value = Item.buyPrice(0, 0, 7, 50);
                         break;
                     }
-                /*case ItemID.Stinger:
+                case ItemID.Stinger:
                     {
                         item.ammo = ItemType<EveDroplet>();
                         item.shoot = ProjectileID.HornetStinger;
+                        item.consumable = true;
                         break;
                     }
                 case ItemID.JungleSpores:
                     {
                         item.ammo = ItemType<EveDroplet>();
                         item.shoot = ProjectileID.SporeTrap;
+                        item.consumable = true;
                         break;
-                    }*/
+                    }
                 case ItemID.Bone:
                     {
                         item.ammo = ItemType<EveDroplet>();

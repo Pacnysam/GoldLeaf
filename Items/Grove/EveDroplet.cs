@@ -16,6 +16,7 @@ using Terraria.Audio;
 using ReLogic.Content;
 using GoldLeaf.Items.Grove.Boss;
 using Terraria.Graphics.Shaders;
+using Terraria.GameContent.Drawing;
 
 
 namespace GoldLeaf.Items.Grove
@@ -32,7 +33,7 @@ namespace GoldLeaf.Items.Grove
 
         public override void SetStaticDefaults()
         {
-            Item.ResearchUnlockCount = 100;
+            Item.ResearchUnlockCount = 99;
         }
 
         public override void SetDefaults()
@@ -70,7 +71,7 @@ namespace GoldLeaf.Items.Grove
             Main.projectile[p].GetGlobalProjectile<GoldLeafProjectile>().gravityDelay = Main.rand.Next(10, 20);
             Main.projectile[p].timeLeft = (Main.rand.Next(40, 125));
             Main.projectile[p].velocity *= (Main.rand.NextFloat(0.9f, 1.1f));
-
+            Main.projectile[p].netUpdate = true;
             return false;
         }
 
@@ -179,13 +180,20 @@ namespace GoldLeaf.Items.Grove
 
             Projectile.DamageType = DamageClass.Ranged;
             //Projectile.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType = DamageClass.Ranged;
+        }
 
-            Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.3f;
-            Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravityDelay = 15;
+        public override void OnSpawn(IEntitySource source)
+        {
+            Projectile.ai[0] = Main.rand.NextFloat(0.25f, 0.35f);
+            Projectile.ai[1] = Main.rand.Next(10, 20);
+            Projectile.netUpdate = true;
         }
 
         public override void AI()
         {
+            if (Projectile.Counter() > Projectile.ai[1])
+                Projectile.velocity.Y += Projectile.ai[0];
+
             Projectile.rotation = Projectile.velocity.ToRotation() + 1.57f;
 
             Projectile.spriteDirection = -Projectile.direction;
@@ -217,22 +225,21 @@ namespace GoldLeaf.Items.Grove
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (!target.HasBuff(BuffType<AetherFlameBuff>()))
+            if (!target.HasBuff(BuffType<AetherFlameBuff>()) && target.IsValid())
                 target.AddBuff(BuffType<EveDropletBuff>(), Helper.TimeToTicks(8));
-            
-            /*target.buffImmune[BuffID.OnFire] = false;
-            target.buffImmune[BuffID.Frostburn] = false;
-            target.buffImmune[BuffID.CursedInferno] = false;
-            target.buffImmune[BuffID.Ichor] = false;
-            target.buffImmune[BuffID.ShadowFlame] = false;*/
         }
+
+        /*public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        {
+            if (!target.HasBuff(BuffType<AetherFlameBuff>()))
+                target.AddBuff(BuffType<EveDropletBuff>(), Helper.TimeToTicks(8), false);
+        }*/
 
         public override void OnKill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];
 
-            SoundStyle sound1 = new("GoldLeaf/Sounds/SE/HollowKnight/JellyfishEggPop") { Volume = 0.65f, PitchVariance = 0.4f };
-            SoundEngine.PlaySound(sound1, Projectile.Center);
+            SoundEngine.PlaySound(new("GoldLeaf/Sounds/SE/HollowKnight/JellyfishEggPop") { Volume = 0.65f, PitchVariance = 0.4f }, Projectile.Center);
 
             //SoundEngine.PlaySound(SoundID.Shimmer1, Projectile.Center);
 
@@ -254,6 +261,7 @@ namespace GoldLeaf.Items.Grove
 
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
+            Main.pvpBuff[Type] = true;
         }
 
         public override void Update(NPC npc, ref int buffIndex)
@@ -273,7 +281,6 @@ namespace GoldLeaf.Items.Grove
         {
             EveExplode(npc, hit);
         }
-
         public override void OnHitByProjectile(NPC npc, Projectile projectile, NPC.HitInfo hit, int damageDone)
         {
             EveExplode(npc, hit);
@@ -281,39 +288,81 @@ namespace GoldLeaf.Items.Grove
 
         private static void EveExplode(NPC npc, NPC.HitInfo hit)
         {
-            if (npc.HasBuff(BuffType<EveDropletBuff>()))
+            if (npc.IsValid() && npc.HasBuff(BuffType<EveDropletBuff>()))
             {
+                bool didExplode = false;
                 if (npc.HasBuff(BuffID.OnFire))
                 {
-                    npc.AddBuff(BuffType<AetherFlameBuff>(), Helper.TimeToTicks(5));
-
-                    int explosion = Projectile.NewProjectile(npc.GetSource_Buff(npc.FindBuffIndex(BuffType<EveDropletBuff>())), npc.Center, Vector2.Zero, ProjectileType<AetherBurst>(), 65, 0.5f, -1, 65f, 0, 1f);
+                    int explosion = Projectile.NewProjectile(npc.GetSource_Buff(npc.FindBuffIndex(BuffType<EveDropletBuff>())), npc.Center, Vector2.Zero, ProjectileType<AetherBurst>(), 30, 0.5f, -1, 65f, 0, 1f);
                     Main.projectile[explosion].DamageType = hit.DamageType;
                     Main.projectile[explosion].netUpdate = true;
 
                     CameraSystem.AddScreenshake(Main.LocalPlayer, 16, npc.Center);
+                    CameraSystem.QuickScreenShake(npc.Center, 0f.ToRotationVector2(), 12.5f, 6.5f, 30, 1500);
 
                     SoundEngine.PlaySound(SoundID.Item74, npc.Center);
                     SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/RoR2/EngineerMine") { Volume = 0.4f, Pitch = -0.5f }, npc.Center);
 
-                    npc.DelBuff(npc.FindBuffIndex(BuffID.OnFire));
-                    npc.RequestBuffRemoval(BuffType<EveDropletBuff>());
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        npc.DelBuff(npc.FindBuffIndex(BuffID.OnFire));
+                        npc.netUpdate = true;
+                    }
+
+                    didExplode = true;
+
+                    /*for (int i = 0; i < 4; i++)
+                    {
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                            Projectile.NewProjectileDirect(npc.GetSource_FromAI(), npc.Center, Main.rand.NextFloat(6.28f).ToRotationVector2() * Main.rand.NextFloat(2, 3), ProjectileType<AetherEmber>(), 0, 0, -1).scale = Main.rand.NextFloat(0.75f, 1.25f);
+                    }
+
+                    ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.TrueExcalibur,
+                        new ParticleOrchestraSettings { PositionInWorld = npc.Center });*/
                 }
                 if (npc.HasBuff(BuffID.OnFire3))
                 {
-                    npc.AddBuff(BuffType<AetherFlameBuff>(), Helper.TimeToTicks(5));
-
-                    int explosion = Projectile.NewProjectile(npc.GetSource_Buff(npc.FindBuffIndex(BuffType<EveDropletBuff>())), npc.Center, Vector2.Zero, ProjectileType<AetherBurst>(), 90, 0.5f, -1, 120f, 0, 1f);
+                    int explosion = Projectile.NewProjectile(npc.GetSource_Buff(npc.FindBuffIndex(BuffType<EveDropletBuff>())), npc.Center, Vector2.Zero, ProjectileType<AetherBurst>(), 55, 0.5f, -1, 130f, 0, 1f);
                     Main.projectile[explosion].DamageType = hit.DamageType;
                     Main.projectile[explosion].netUpdate = true;
 
                     CameraSystem.AddScreenshake(Main.LocalPlayer, 24, npc.Center);
+                    CameraSystem.QuickScreenShake(npc.Center, 0f.ToRotationVector2(), 12.5f, 9f, 30, 1500);
 
                     SoundEngine.PlaySound(SoundID.Item74, npc.Center);
                     SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/RoR2/EngineerMine") { Volume = 0.8f, Pitch = 0.25f }, npc.Center);
 
-                    npc.DelBuff(npc.FindBuffIndex(BuffID.OnFire3));
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        npc.DelBuff(npc.FindBuffIndex(BuffID.OnFire3));
+                        npc.netUpdate = true;
+                    }
+
+                    didExplode = true;
+                    
+                    /*for (int i = 0; i < 4; i++)
+                    {
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                            Projectile.NewProjectileDirect(npc.GetSource_FromAI(), npc.Center, Main.rand.NextFloat(6.28f).ToRotationVector2() * Main.rand.NextFloat(2, 3), ProjectileType<AetherEmber>(), 0, 0, -1).scale = Main.rand.NextFloat(0.75f, 1.25f);
+                    }
+
+                    ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.TrueExcalibur,
+                        new ParticleOrchestraSettings { PositionInWorld = npc.Center });*/
+                }
+
+                if (didExplode)
+                {
+                    npc.AddBuff(BuffType<AetherFlameBuff>(), Helper.TimeToTicks(5));
                     npc.RequestBuffRemoval(BuffType<EveDropletBuff>());
+
+                    for (int j = 0; j < 10; j++)
+                    {
+                        var dust = Dust.NewDustDirect(npc.Center, 0, 0, DustType<AetherSmoke>());
+                        dust.velocity = Main.rand.NextVector2Circular(7.5f, 7.5f);
+                        dust.scale = Main.rand.NextFloat(0.9f, 1.2f);
+                        dust.alpha = 20 + Main.rand.Next(60);
+                        dust.rotation = Main.rand.NextFloat(6.28f);
+                    }
                 }
             }
         }
@@ -323,4 +372,68 @@ namespace GoldLeaf.Items.Grove
             if (npc.HasBuff(BuffType<EveDropletBuff>())) drawColor = NPC.buffColor(drawColor, 255f/255, 80f/255, 202f/255, 1f);
         }
     }
+
+    /*public class EveDropletPlayer : ModPlayer
+    {
+        public override void OnHitByProjectile(Projectile proj, Player.HurtInfo hurtInfo)
+        {
+            if (hurtInfo.PvP)
+            {
+                EveExplode(Player, hurtInfo);
+            }
+        }
+
+        private static void EveExplode(Player victim, Player.HurtInfo hurtInfo)
+        {
+            if (!victim.dead && victim.HasBuff(BuffType<EveDropletBuff>()))
+            {
+                bool didExplode = false;
+                if (victim.HasBuff(BuffID.OnFire))
+                {
+                    int explosion = Projectile.NewProjectile(victim.GetSource_Buff(victim.FindBuffIndex(BuffType<EveDropletBuff>())), victim.MountedCenter, Vector2.Zero, ProjectileType<AetherBurst>(), 30, 0.5f, -1, 65f, 0, 1f);
+                    Main.projectile[explosion].netUpdate = true;
+
+                    CameraSystem.AddScreenshake(Main.LocalPlayer, 16, victim.Center);
+                    CameraSystem.QuickScreenShake(victim.Center, 0f.ToRotationVector2(), 12.5f, 6.5f, 30, 1500);
+
+                    SoundEngine.PlaySound(SoundID.Item74, victim.Center);
+                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/RoR2/EngineerMine") { Volume = 0.4f, Pitch = -0.5f }, victim.Center);
+
+                    victim.ClearBuff(BuffID.OnFire);
+
+                    didExplode = true;
+                }
+                if (victim.HasBuff(BuffID.OnFire3))
+                {
+                    int explosion = Projectile.NewProjectile(victim.GetSource_Buff(victim.FindBuffIndex(BuffType<EveDropletBuff>())), victim.MountedCenter, Vector2.Zero, ProjectileType<AetherBurst>(), 55, 0.5f, -1, 130f, 0, 1f);
+                    Main.projectile[explosion].netUpdate = true;
+
+                    CameraSystem.AddScreenshake(Main.LocalPlayer, 24, victim.Center);
+                    CameraSystem.QuickScreenShake(victim.Center, 0f.ToRotationVector2(), 12.5f, 9f, 30, 1500);
+
+                    SoundEngine.PlaySound(SoundID.Item74, victim.Center);
+                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/RoR2/EngineerMine") { Volume = 0.8f, Pitch = 0.25f }, victim.Center);
+
+                    victim.ClearBuff(BuffID.OnFire3);
+
+                    didExplode = true;
+                }
+
+                if (didExplode)
+                {
+                    victim.AddBuff(BuffType<AetherFlameBuff>(), Helper.TimeToTicks(5));
+                    victim.ClearBuff(BuffType<EveDropletBuff>());
+
+                    for (int j = 0; j < 10; j++)
+                    {
+                        var dust = Dust.NewDustDirect(victim.Center, 0, 0, DustType<AetherSmoke>());
+                        dust.velocity = Main.rand.NextVector2Circular(7.5f, 7.5f);
+                        dust.scale = Main.rand.NextFloat(0.9f, 1.2f);
+                        dust.alpha = 20 + Main.rand.Next(60);
+                        dust.rotation = Main.rand.NextFloat(6.28f);
+                    }
+                }
+            }
+        }
+    }*/
 }

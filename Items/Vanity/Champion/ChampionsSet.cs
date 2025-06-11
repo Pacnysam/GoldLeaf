@@ -16,6 +16,8 @@ using Terraria.DataStructures;
 using GoldLeaf.Tiles.Grove;
 using ReLogic.Content;
 using Terraria.Localization;
+using Terraria.Audio;
+using GoldLeaf.Items.Vanity.Watcher;
 
 namespace GoldLeaf.Items.Vanity.Champion
 {
@@ -32,6 +34,15 @@ namespace GoldLeaf.Items.Vanity.Champion
 
             Item.accessory = true;
             Item.vanity = true;
+        }
+
+        public override void UpdateAccessory(Player player, bool hideVisual)
+        {
+            player.GetModPlayer<ChampionSetPlayer>().championCloak = true;
+        }
+        public override void UpdateVanity(Player player)
+        {
+            player.GetModPlayer<ChampionSetPlayer>().championCloak = true;
         }
     }
 
@@ -84,6 +95,65 @@ namespace GoldLeaf.Items.Vanity.Champion
             Item.rare = ItemRarityID.Green;
 
             Item.vanity = true;
+        }
+    }
+    
+    public class ChampionSetPlayer : ModPlayer
+    {
+        public bool championCloak = false;
+        public bool championSet = false;
+        public override void ResetEffects()
+        {
+            championSet = IsVanitySet(Player, ItemType<DragonSkull>(), ItemType<ChampionsBelt>(), ItemType<GymShorts>()) && championCloak;
+            championCloak = false;
+        }
+
+        public override void ModifyHurt(ref Player.HurtModifiers modifiers)
+        {
+            if (championSet)
+            {
+                modifiers.DisableSound();
+            }
+        }
+        public override void OnHurt(Player.HurtInfo info)
+        {
+            if (championSet)
+            {
+                switch (Main.rand.Next(1, 3))
+                {
+                    case 0:
+                        SoundEngine.PlaySound(SoundID.NPCHit10 with { Pitch = -1f, PitchVariance = 0.3f, MaxInstances = 0 }, Player.position); break;
+                    case 1:
+                        SoundEngine.PlaySound(SoundID.Zombie27 with { Volume = 1f, Pitch = 0.3f, PitchVariance = 0.4f, MaxInstances = 0 }, Player.position); break;
+                    case 2:
+                        SoundEngine.PlaySound(SoundID.NPCDeath8 with { Pitch = 0.15f, PitchVariance = 0.3f, MaxInstances = 0 }, Player.position); break;
+                }
+            }
+        }
+        /*public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genDust, ref PlayerDeathReason damageSource)
+        {
+            if (championSet)
+            {
+                playSound = false;
+            }
+            return base.PreKill(damage, hitDirection, pvp, ref playSound, ref genDust, ref damageSource);
+        }*/
+        public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
+        {
+            if (championSet)
+            {
+                /*switch (Main.rand.Next(1, 3))
+                {
+                    case 0:
+                        SoundEngine.PlaySound(SoundID.NPCHit10 with { Pitch = -1f, PitchVariance = 0.3f }, Player.position); break;
+                    case 1:
+                        SoundEngine.PlaySound(SoundID.Zombie27 with { Volume = 1f, Pitch = 0.3f, PitchVariance = 0.4f }, Player.position); break;
+                    case 2:
+                        SoundEngine.PlaySound(SoundID.NPCDeath8 with { Pitch = 0.15f, PitchVariance = 0.3f }, Player.position); break;
+                }*/
+
+                SoundEngine.PlaySound(SoundID.NPCHit56 with { Volume = 1.15f, Pitch = -0.5f, PitchVariance = 0.3f, MaxInstances = 0 }, Player.position);
+            }
         }
     }
 }

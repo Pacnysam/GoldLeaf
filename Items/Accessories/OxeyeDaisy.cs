@@ -18,6 +18,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using System;
 using Terraria.GameContent.ObjectInteractions;
+using GoldLeaf.Items.Granite;
+using GoldLeaf.Tiles.Granite;
 
 namespace GoldLeaf.Items.Accessories
 {
@@ -113,7 +115,7 @@ namespace GoldLeaf.Items.Accessories
                         {
                             CombatText.NewText(new Rectangle((int)Player.Center.X, (int)Player.Center.Y - 12, Player.width / 4, Player.height / 4), new Color(235, 99, 139, 100), "Loves me!", true, true);
                             Player.AddBuff(BuffID.Lovestruck, 600);
-                            int i = Item.NewItem(Player.GetSource_Accessory(oxeyeItem), target.Hitbox, ItemID.Heart);
+                            int i = Item.NewItem(Player.GetSource_Accessory(oxeyeItem), target.Hitbox, ItemID.Heart, 1, true, 0, true);
                             Main.item[i].playerIndexTheItemIsReservedFor = Player.whoAmI;
 
                             if (Main.netMode == NetmodeID.MultiplayerClient && i >= 0)
@@ -148,7 +150,7 @@ namespace GoldLeaf.Items.Accessories
             }            
         }
     }
-
+    
     public class OxeyeDaisyT : ModTile 
     {
         public override void SetStaticDefaults()
@@ -169,7 +171,7 @@ namespace GoldLeaf.Items.Accessories
             Main.tileNoAttach[Type] = true;
 
             TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
-            TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
+            //TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
             Main.tileNoFail[Type] = true;
 
             TileObjectData.newTile.AnchorValidTiles = [TileID.Grass, TileID.JungleGrass, TileID.MushroomGrass, TileID.CorruptGrass, TileID.CrimsonGrass, TileID.CorruptJungleGrass, TileID.CrimsonJungleGrass, TileID.HallowedGrass, TileType<GroveGrassT>()];
@@ -213,6 +215,23 @@ namespace GoldLeaf.Items.Accessories
         }*/
     }
     
+    public class OxeyeDaisyFake : OxeyeDaisyT
+    {
+        public override string Texture => "GoldLeaf/Items/Accessories/OxeyeDaisyT";
+        public override void SetStaticDefaults()
+        {
+            base.SetStaticDefaults();
+
+            FlexibleTileWand.RubblePlacementSmall.AddVariations(ItemType<OxeyeDaisy>(), Type, 0);
+            //RegisterItemDrop(ItemType<OxeyeDaisy>());
+        }
+
+        public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
+            => Item.NewItem(null, new Rectangle(i * 16, j * 16, 32, 32), new Item(ItemType<OxeyeDaisy>()), false, true);
+
+        public override bool CanDrop(int i, int j) => false;
+    }
+
     public class OxeyePetal : ModGore
     {
         public override void OnSpawn(Gore gore, IEntitySource source)

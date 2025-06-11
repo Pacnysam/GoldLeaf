@@ -19,6 +19,9 @@ using Terraria.Localization;
 using GoldLeaf.Items.Accessories;
 using ReLogic.Content;
 using GoldLeaf.Items.Blizzard.Armor;
+using System.IO;
+using Terraria.ModLoader.IO;
+using static GoldLeaf.GoldLeaf;
 
 namespace GoldLeaf.Items.Blizzard
 {
@@ -34,8 +37,8 @@ namespace GoldLeaf.Items.Blizzard
 
         const int FREEZETIME = 240;
 
-        public int frost = 0;
-        public int defrostTimer = 0;
+        public int frost;
+        public int defrostTimer;
         
         public int frostVisualTime = -30;
         public float frozenNumeralSize = 1f;
@@ -52,6 +55,22 @@ namespace GoldLeaf.Items.Blizzard
 
             if (frost >= 8 && !npc.buffImmune[BuffID.Frozen])
             {
+                //if (Main.netMode != NetmodeID.MultiplayerClient)
+                    //npc.netUpdate = true;
+
+                npc.AddBuff(BuffID.Frozen, Math.Clamp(FREEZETIME - defrostTimer / 2, 30, FREEZETIME));
+                
+                if (Main.netMode != NetmodeID.Server) 
+                {
+                    if (defrostTimer <= 180)
+                        SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Frost") { Volume = 1.15f, PitchVariance = 0.6f }, npc.Center);
+                    else
+                        SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Monolith/Chop") { Volume = 0.75f, PitchVariance = 0.4f }, npc.Center);
+                }
+
+                defrostTimer = FREEZETIME * 2;
+                frost = 0;
+
                 /*for (float k = 0; k < 6.28f; k += (6.28f / 12))
                 {
                     Dust dust = Dust.NewDustPerfect(npc.Center, DustType<FrostShard>(), Vector2.One.RotatedBy(k) * Main.rand.NextFloat(1f, 2f) + new Vector2(0, -Main.rand.NextFloat(1.5f, 2.5f)), 0, new Color(79, 180, 255), 1f);
@@ -61,15 +80,15 @@ namespace GoldLeaf.Items.Blizzard
                     //dust.customData = npc;
                 }*/
 
-                npc.AddBuff(BuffID.Frozen, FREEZETIME - defrostTimer);
-                
-                if (defrostTimer <= 180)
-                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Frost") { Volume = 1.15f, PitchVariance = 0.6f }, npc.Center);
-                else
-                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Monolith/Chop") { Volume = 0.75f, PitchVariance = 0.4f }, npc.Center);
-
-                defrostTimer = FREEZETIME;
-                frost = 0;
+                int smokeCount = Main.rand.Next(40, 60);
+                for (int j = 0; j < smokeCount; j++)
+                {
+                    Dust dust = Dust.NewDustDirect(npc.Center, 0, 0, DustType<SnowCloud>());
+                    dust.velocity = Main.rand.NextVector2Circular((npc.width / 5.5f), (npc.height / 6f)) * Main.rand.NextFloat(0.5f, 1f);
+                    dust.scale = Main.rand.NextFloat(0.65f, 1.15f);
+                    dust.alpha = 80 + Main.rand.Next(60);
+                    dust.rotation = Main.rand.NextFloat(-6.28f, 6.28f);
+                }
             }
             else if (defrostTimer > 0 && !npc.HasBuff(BuffID.Frozen))
             {
@@ -85,12 +104,26 @@ namespace GoldLeaf.Items.Blizzard
 
         public static void AddFrost(NPC npc, int amount = 1)
         {
-            if (!npc.HasBuff(BuffID.Frozen))
+            if (!npc.HasBuff(BuffID.Frozen) && !npc.buffImmune[BuffID.Frozen])
             {
                 npc.GetGlobalNPC<FrostNPC>().frost += amount;
                 
-                npc.GetGlobalNPC<FrostNPC>().frozenNumeralSize = Math.Clamp(npc.GetGlobalNPC<FrostNPC>().frost / 2f, 1f, 3f);
+                npc.GetGlobalNPC<FrostNPC>().frozenNumeralSize = Math.Clamp(npc.GetGlobalNPC<FrostNPC>().frost / 2f, 1.5f, 3f);
                 npc.GetGlobalNPC<FrostNPC>().frostVisualTime = TimeToTicks(3);
+
+                if (Main.netMode != NetmodeID.SinglePlayer)
+                {
+                    ModPacket packet = GoldLeaf.Instance.GetPacket();
+                    packet.Write((byte)MessageType.FrostSync);
+                    packet.Write((byte)Main.myPlayer);
+                    packet.Write((byte)npc.whoAmI);
+
+                    packet.Write((byte)npc.GetGlobalNPC<FrostNPC>().frost);
+                    packet.Write((byte)npc.GetGlobalNPC<FrostNPC>().defrostTimer);
+                    packet.Send();
+                }
+                //if (Main.netMode != NetmodeID.MultiplayerClient)
+                //npc.netUpdate = true;
             }
         }
 

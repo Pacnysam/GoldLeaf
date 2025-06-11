@@ -107,11 +107,7 @@ namespace GoldLeaf.Items.Nightshade
 			Projectile.penetrate = 2;
 			Projectile.scale = 1f;
 
-            //Projectile.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType = DamageClass.Magic;
             Projectile.DamageType = DamageClass.Magic;
-
-            Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.012f;
-            Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravityDelay = 10;
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -136,6 +132,27 @@ namespace GoldLeaf.Items.Nightshade
                 }
             }
         }
+
+        public override void AI()
+        {
+            if (Projectile.Counter() > 10)
+                Projectile.velocity.Y += 0.012f;
+        }
+
+        /*public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        {
+            Player player = Main.player[Projectile.owner];
+            player.GetModPlayer<NightshadePlayer>().nightshade++;
+            player.GetModPlayer<NightshadePlayer>().nightshadeTimer = 300;
+
+            if (player.GetModPlayer<NightshadePlayer>().nightshade <= player.GetModPlayer<NightshadePlayer>().nightshadeMax)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    Dust.NewDust(target.position, target.width, target.height, DustType<SparkDustTiny>(), 0f, Main.rand.NextFloat(-2f, -5f), 0, new Color(210, 136, 107), Main.rand.NextFloat(0.6f, 0.9f));
+                }
+            }
+        }*/
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
@@ -204,9 +221,6 @@ namespace GoldLeaf.Items.Nightshade
 
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType = DamageClass.Magic;
 
-            Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.012f;
-            Projectile.GetGlobalProjectile<GoldLeafProjectile>().gravityDelay = 10;
-
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().lifesteal = 2;
 			Projectile.GetGlobalProjectile<GoldLeafProjectile>().lifestealMax = 1;
         }
@@ -223,6 +237,9 @@ namespace GoldLeaf.Items.Nightshade
 
         public override void AI()
         {
+            if (Projectile.Counter() > 10)
+                Projectile.velocity.Y += 0.012f;
+
             if (Main.rand.NextBool(5))
             {
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<SparkDustTiny>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, new Color(210, 136, 107), 0.6f);

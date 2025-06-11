@@ -9,6 +9,10 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.GameContent.Bestiary;
 using System.Collections.Generic;
 using Terraria.WorldBuilding;
+using Terraria.ModLoader.IO;
+using System.IO;
+using System.Threading;
+using Terraria.ID;
 
 namespace GoldLeaf.Core
 {
@@ -41,6 +45,36 @@ namespace GoldLeaf.Core
     {
         public override bool InstancePerEntity => true;
 
+        //public delegate void FirstStruckDelegate(NPC npc, NPC.HitInfo hit, Entity attacker);
+        //public static event FirstStruckDelegate FirstStruckEvent;
+
         public bool hasBeenStruck = false;
+
+
+        /*public override void OnHitByItem(NPC npc, Player player, Item item, NPC.HitInfo hit, int damageDone)
+        {
+            if (!hasBeenStruck && IsTargetValid(npc))
+            {
+                FirstStruckEvent?.Invoke(npc, hit, player);
+                hasBeenStruck = true;
+            }
+        }
+        public override void OnHitByProjectile(NPC npc, Projectile projectile, NPC.HitInfo hit, int damageDone)
+        {
+            if (!hasBeenStruck && IsTargetValid(npc))
+            {
+                FirstStruckEvent?.Invoke(npc, hit, projectile);
+                hasBeenStruck = true;
+            }
+        }*/
+
+        /*public override void SendExtraAI(NPC npc, BitWriter bitWriter, BinaryWriter binaryWriter)
+        {
+            binaryWriter.Write(hasBeenStruck);
+        }
+        public override void ReceiveExtraAI(NPC npc, BitReader bitReader, BinaryReader binaryReader)
+        {
+            hasBeenStruck = binaryReader.ReadBoolean();
+        }*/
     }
 }

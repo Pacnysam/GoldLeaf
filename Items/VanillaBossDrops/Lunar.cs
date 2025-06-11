@@ -65,6 +65,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
 
             Item.shoot = ProjectileType<LunarP>();
             Item.shootSpeed = 14f;
+            Item.GetGlobalItem<GoldLeafItem>().critDamageMod = 0.5f;
         }
 
         public override bool NeedsAmmo(Player player) => false;

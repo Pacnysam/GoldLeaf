@@ -65,8 +65,8 @@ namespace GoldLeaf.Items.Accessories
         public override void Update(Player player, ref int buffIndex)
         {
             player.moveSpeed += 1f;
-            player.runAcceleration += 0.15f;
-            player.GetModPlayer<MinionSpeedPlayer>().minionSpeed += 0.5f;
+            player.runAcceleration += 0.1f;
+            player.GetModPlayer<MinionSpeedPlayer>().minionSpeed += 0.4f;
         }
     }
 
@@ -83,14 +83,14 @@ namespace GoldLeaf.Items.Accessories
         {
             if (Player.whoAmI == Main.myPlayer && anxietyNecklace)
             {
-                Player.AddBuff(BuffType<AnxietyNecklaceBuff>(), TimeToTicks(5));
+                Player.AddBuff(BuffType<AnxietyNecklaceBuff>(), TimeToTicks(8));
             }
         }
         public override void OnHitByProjectile(Projectile proj, Player.HurtInfo hurtInfo)
         {
             if (Player.whoAmI == Main.myPlayer && anxietyNecklace)
             {
-                Player.AddBuff(BuffType<AnxietyNecklaceBuff>(), TimeToTicks(5));
+                Player.AddBuff(BuffType<AnxietyNecklaceBuff>(), TimeToTicks(8));
             }
         }
     }

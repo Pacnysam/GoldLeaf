@@ -37,9 +37,9 @@ Aether: {
 	Tooltip: Casts an explosive flame that sparks at nearby enemies
 }
 
-GraniteWard: {
-	DisplayName: Granite Ward
-	Tooltip: Dealing damage or mining generates a decaying energy barrier that keeps enemies away
+GraniteVoice: {
+	DisplayName: Granite Voice Modulator
+	Tooltip: Changes your voice
 }
 
 MeteorMissile: {
@@ -58,11 +58,7 @@ ToxicPositivity: {
 
 ArcticFlower: {
 	DisplayName: Rimeflora Rod
-	Tooltip:
-		'''
-		Summons a ghost to freeze your enemies
-		Inflicts both summon and magic damage
-		'''
+	Tooltip: Summons a ghost to freeze your enemies
 }
 
 EveDroplet: {
@@ -559,4 +555,18 @@ EchobarkBreastplate: {
 Lunar: {
 	DisplayName: Lunar
 	Tooltip: Consumes fallen stars to change moon phase at night
+}
+
+HeatFlask: {
+	DisplayName: Magmatic Mixture
+	Tooltip: ""
+}
+
+OgreVoice: {
+	DisplayName: Ogrephone
+	Tooltip:
+		'''
+		Changes your voice
+		'Does this mod add any drops to ogre?'
+		'''
 }

@@ -59,6 +59,7 @@ namespace GoldLeaf.Items.Blizzard
 
             var projectile = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, Main.myPlayer);
             projectile.originalDamage = Item.damage;
+            projectile.netUpdate = true;
 
             for (float k = 0; k < 6.28f; k += Main.rand.NextFloat(0.15f, 0.3f))
             {
@@ -81,7 +82,7 @@ namespace GoldLeaf.Items.Blizzard
 			recipe.Register();
 		}
     }
-
+    
     public class ArcticWraith : ModProjectile
     {
         private static Asset<Texture2D> glowTex;
@@ -113,11 +114,10 @@ namespace GoldLeaf.Items.Blizzard
 
             Projectile.friendly = true;
             Projectile.minion = true;
-            Projectile.DamageType = DamageClass.MagicSummonHybrid;
+            Projectile.DamageType = DamageClass.Summon;
             Projectile.minionSlots = 1f;
             Projectile.penetrate = -1;
             Projectile.ignoreWater = true;
-            Projectile.netImportant = true;
 
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 10;
@@ -141,7 +141,7 @@ namespace GoldLeaf.Items.Blizzard
 
         const float speed = 12f;
         const float inertia = 50f;
-        const float shootSpeed = 2.75f;
+        const float shootSpeed = 6.75f;
 
         const int animationSpeed = 6;
 
@@ -152,11 +152,13 @@ namespace GoldLeaf.Items.Blizzard
         {
             writer.Write(animReverse);
             writer.Write(hasTarget);
+            writer.Write(Projectile.frame);
         }
         public override void ReceiveExtraAI(BinaryReader reader)
         {
             animReverse = reader.ReadBoolean();
             hasTarget = reader.ReadBoolean();
+            Projectile.frame = reader.ReadInt32();
         }
 
         public override bool? CanCutTiles() => false;
@@ -236,7 +238,7 @@ namespace GoldLeaf.Items.Blizzard
             {
                 foreach (var other in Main.ActiveProjectiles)
                 {
-                    if (other.whoAmI != Projectile.whoAmI && other.owner == Projectile.owner && Math.Abs(Projectile.position.X - other.position.X) + Math.Abs(Projectile.position.Y - other.position.Y) < Projectile.width)
+                    if (other.whoAmI != Projectile.whoAmI && other.owner == Projectile.owner && Math.Abs(Projectile.position.X - other.position.X) + Math.Abs(Projectile.position.Y - other.position.Y) < Projectile.width * 1.5f)
                     {
                         if (Projectile.position.X < other.position.X)
                         {
@@ -314,13 +316,22 @@ namespace GoldLeaf.Items.Blizzard
                 if (Projectile.Center.Distance(targetCenter) > attackingRange)
                 {
                     //Projectile.velocity = (Projectile.velocity * (inertia - 1) + direction) / inertia;
-                    Projectile.velocity -= (Projectile.Center - targetCenter) / 900;
+                    Projectile.velocity -= (Projectile.Center - targetCenter) / 1200;
                 }
                 else 
                 {
                     if (MathHelper.Distance(Projectile.Center.X, targetCenter.X) <= attackingRange - 100)
                     {
-                        Projectile.velocity.X += (Projectile.Center.X - targetCenter.X) / 700;
+                        if (Projectile.Center.X < targetCenter.X)
+                        {
+                            Projectile.velocity.X -= ((attackingRange - 100) - Math.Abs(Projectile.Center.X - targetCenter.X)) / 700;
+                        }
+                        else
+                        {
+                            Projectile.velocity.X += ((attackingRange - 100) - Math.Abs(Projectile.Center.X - targetCenter.X)) / 700;
+                        }
+
+                        //Projectile.velocity.X += Math.Abs((Projectile.Center.X - targetCenter.X) / 700);
                         //Projectile.velocity.X = -0.35f * ((Projectile.velocity.X * (inertia - 1) + direction.X) / inertia);
                     }
                     else
@@ -355,10 +366,10 @@ namespace GoldLeaf.Items.Blizzard
                     direction.Normalize();
                     direction *= speed;
 
-                    if (Projectile.velocity.Length() < 4f && Projectile.Center.Distance(idlePosition) <= 20)
+                    if (Projectile.Center.Distance(idlePosition) <= 30)
                     {
-                        Projectile.velocity *= 0.8f;
-                        if (Projectile.velocity.Length() < 0.2f)
+                        Projectile.velocity *= 0.9f;
+                        if (Projectile.velocity.Length() < 0.5f)
                             Projectile.velocity = Vector2.Zero;
                         else
                             Projectile.velocity = (Projectile.velocity * (20 - 1) + direction) / 20;
@@ -386,8 +397,20 @@ namespace GoldLeaf.Items.Blizzard
                 Projectile.direction = Projectile.spriteDirection = (Projectile.Center.X > player.Center.X) ? -1 : 1;
             }
             Projectile.position.Y += 0.3f * (float)Math.Sin(GoldLeafWorld.rottime + (Projectile.minionPos * 1.25f));
-
+            Projectile.rotation = Projectile.velocity.X * 0.03f;
             #endregion behavior
+        }
+
+        public override void PostAI()
+        {
+            if (hasTarget)
+            {
+                Projectile.localAI[0] = MathHelper.Lerp(Projectile.localAI[0], 1f, 0.1f);
+            }
+            else
+            {
+                Projectile.localAI[0] = MathHelper.Lerp(Projectile.localAI[0], 0f, 0.15f);
+            }
         }
 
         private void ChangeState(float newState)
@@ -398,6 +421,8 @@ namespace GoldLeaf.Items.Blizzard
             AnimLoops = 0;
             animReverse = false;
             Counter = 0;
+
+            Projectile.netUpdate = true;
 
             State = newState;
         }
@@ -414,18 +439,22 @@ namespace GoldLeaf.Items.Blizzard
                 dust.noGravity = true;
                 dust.frame = new Rectangle(0, Main.rand.Next(3) * 10, 10, 10);
             }*/
+            
+            if (Main.myPlayer == Projectile.owner)
+            {
+                Projectile.velocity += (Projectile.Center - target.Center) / 30;
 
-            Projectile.velocity += (Projectile.Center - target.Center) / 30;
+                Vector2 position;
 
-            Vector2 position;
+                if (target.Center.X > Projectile.Center.X)
+                    position = Projectile.Right;
+                else
+                    position = Projectile.Left;
 
-            if (target.Center.X > Projectile.Center.X)
-                position = Projectile.Right;
-            else
-                position = Projectile.Left;
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), position, velocity, ProjectileType<ArcticWraithOrb>(), Projectile.damage, Projectile.knockBack, Projectile.owner, target.whoAmI);
+            }
 
-            Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), position, velocity, ProjectileType<ArcticWraithOrb>(), Projectile.damage, Projectile.knockBack, Projectile.owner, target.whoAmI);
-            SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/ForgottenLand/StarShot") { Volume = 0.5f, PitchVariance = 0.5f }, Projectile.Center);
+            SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/ForgottenLand/StarShot") { Volume = 0.5f, PitchVariance = 0.5f, MaxInstances = 0 }, Projectile.Center);
             SoundEngine.PlaySound(new SoundStyle("Goldleaf/Sounds/SE/SplashBounce") { Volume = 0.3f }, Projectile.Center);
             ChangeState(Recoil);
         }
@@ -465,7 +494,7 @@ namespace GoldLeaf.Items.Blizzard
                     Color color1 = new(0, 225, 241);
                     Color color2 = new(0, 38, 128);
 
-                    Main.spriteBatch.Draw(texture, drawPos, rect, Color.Lerp(color1, color2, k / (Projectile.oldPos.Length + 2f)) with { A = 0 } * (0.8f - (k / (Projectile.oldPos.Length + 4f))), Projectile.oldRot[k], rect.Size() / 2, Projectile.scale, oldEffects, 0f);
+                    Main.spriteBatch.Draw(texture, drawPos, rect, Color.Lerp(color1, color2, k / (Projectile.oldPos.Length + 2f)) with { A = 0 } * (0.8f - (k / (Projectile.oldPos.Length + 4f))) * Projectile.localAI[0], Projectile.oldRot[k], rect.Size() / 2, Projectile.scale, oldEffects, 0f);
                 }
             }
             else
@@ -507,7 +536,7 @@ namespace GoldLeaf.Items.Blizzard
             Projectile.timeLeft = TimeToTicks(15);
             Projectile.extraUpdates = 1;
 
-            Projectile.DamageType = DamageClass.MagicSummonHybrid;
+            Projectile.DamageType = DamageClass.Summon;
 
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().critDamageMod = -0.5f;
         }
@@ -592,7 +621,7 @@ namespace GoldLeaf.Items.Blizzard
             }
         }
     }
-
+    
     public class ArcticWraithBuff : ModBuff
     {
         public override string Texture => CoolBuffTex(base.Texture);

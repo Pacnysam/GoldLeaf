@@ -21,6 +21,7 @@ using ReLogic.Content;
 
 using Terraria.ModLoader.IO;
 using System.Collections.Generic;
+using System.IO;
 
 namespace GoldLeaf.Items.Blizzard
 {
@@ -64,7 +65,7 @@ namespace GoldLeaf.Items.Blizzard
             Item.value = Item.sellPrice(0, 1, 50, 0);
             Item.rare = ItemRarityID.Green;
 
-            Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/Monolith/Revolver") { Volume = 0.6f, PitchVariance = 0.3f, MaxInstances = 5 };
+            Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/Monolith/Revolver") { Volume = 0.6f, PitchVariance = 0.3f, MaxInstances = 5, SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest };
         }
 
         public override bool CanConsumeAmmo(Item ammo, Player player)
@@ -130,6 +131,7 @@ namespace GoldLeaf.Items.Blizzard
             proj.extraUpdates += Math.Clamp((int)(consecutiveHits / 5f), 0, 3);
             proj.usesLocalNPCImmunity = true;
             proj.localNPCHitCooldown = 10;
+            proj.netUpdate = true;
             return false;
         }
 
@@ -213,6 +215,15 @@ namespace GoldLeaf.Items.Blizzard
                 hitbox.Inflate(6, 6);
         }
 
+        public override void SendExtraAI(Projectile projectile, BitWriter bitWriter, BinaryWriter binaryWriter)
+        {
+            binaryWriter.Write(shotFromAvalanche);
+        }
+        public override void ReceiveExtraAI(Projectile projectile, BitReader bitReader, BinaryReader binaryReader)
+        {
+            shotFromAvalanche = binaryReader.ReadBoolean();
+        }
+
         public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (shotFromAvalanche && avalancheInstance != null) 
@@ -229,6 +240,18 @@ namespace GoldLeaf.Items.Blizzard
                 }
             }
         }
+
+        /*public override void OnHitPlayer(Projectile projectile, Player target, Player.HurtInfo info)
+        {
+            if (projectile.GetGlobalProjectile<AvalancheProjectile>().shotFromAvalanche && projectile.GetGlobalProjectile<AvalancheProjectile>().avalancheInstance != null)
+            {
+                projectile.GetGlobalProjectile<AvalancheProjectile>().hasHitTarget = true;
+
+                Main.player[projectile.owner].GetModPlayer<AvalanchePlayer>().streakLossImmuneTime += 15;
+                var avalanche = projectile.GetGlobalProjectile<AvalancheProjectile>().avalancheInstance.ModItem as Avalanche;
+                Math.Clamp(avalanche.consecutiveHits++, 0, 100);
+            }
+        }*/
 
         public override void OnKill(Projectile projectile, int timeLeft)
         {

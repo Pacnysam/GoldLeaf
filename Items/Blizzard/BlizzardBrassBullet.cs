@@ -200,9 +200,10 @@ namespace GoldLeaf.Items.Blizzard
             if (Projectile.ai[0] > 0)
             {
                 if (Main.myPlayer == Projectile.owner)
+                {
                     FrostNPC.AddFrost(target);
-
-                for (int i = 0; i < Main.rand.Next(6, 9); i++)
+                }
+                for (int i = 0; i < 6; i++)
                 {
                     Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustType<AuroraTwinkle>(), 0, 0, 5, ColorHelper.AuroraAccentColor(Main.rand.NextFloat(0f, 8f) + (i * 5.4f)), Main.rand.NextFloat(0.6f, 0.9f));
                     dust.rotation = Main.rand.NextFloat(-14.5f, 14.5f);
@@ -210,18 +211,18 @@ namespace GoldLeaf.Items.Blizzard
                     dust.customData = target.whoAmI;
                 }
             }
-            else 
+            /*else 
             {
                 for (int i = 0; i < Main.rand.Next(3, 7); i++)
                 {
                     Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<BlizzardBrassDust>());
                 }
-            }
+            }*/
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            for (int i = 0; i < Main.rand.Next(3, 7); i++)
+            for (int i = 0; i < 6; i++)
             {
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<BlizzardBrassDust>());
             }

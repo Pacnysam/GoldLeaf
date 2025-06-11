@@ -64,19 +64,6 @@ namespace GoldLeaf.Tiles.Granite
 
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
-        /*public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-            Tile tile = Framing.GetTileSafely(i, j);
-            {
-                Color colour = Color.White * MathHelper.Lerp(0.2f, 1f, (float)((Math.Sin(SpiritMod.GlobalNoise.Noise(i * 0.2f, j * 0.2f) * 3f + Main.GlobalTimeWrappedHourly * 1.3f) + 1f) * 0.5f));
-
-                Texture2D glow = ModContent.Request<Texture2D>("SpiritMod/Tiles/Furniture/NeonLights/BlueLightsLarge_Glow", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-                Vector2 zero = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange);
-
-                spriteBatch.Draw(glow, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), colour);
-            }
-        }*/
-
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
             Tile tile = Framing.GetTileSafely(i, j);
@@ -87,26 +74,6 @@ namespace GoldLeaf.Tiles.Granite
                     spriteBatch.Draw(glowTex.Value, new Vector2((i * 16) -2, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), Color.White);
                 }
             }
-
-            /*Texture2D tex = glowTex.Value;
-            Color color = ColorHelper.AdditiveWhite() * (1 - (float)Math.Sin(GoldLeafWorld.rottime) * 0.5f);
-            Vector2 position = new(i * 16, j * 16);
-
-            for (float k = 0f; k < 1f; k += 1 / 3f)
-            {
-                Main.spriteBatch.Draw
-                (
-                    tex,
-                    position + new Vector2(0f, 0.8f).RotatedBy((k + (GoldLeafWorld.rottime + i) / 4) * ((float)Math.PI * 2f) + (0.5f - (float)Math.Sin(GoldLeafWorld.rottime) * 0.5f)),
-                    new Rectangle(0, 0, tex.Width, tex.Height),
-                    color * 0.4f,
-                    0,
-                    tex.Size() * 0.5f,
-                    1f,
-                    SpriteEffects.None,
-                    0f
-                );
-            }*/
         }
 
         public override void MouseOver(int i, int j)
@@ -188,35 +155,21 @@ namespace GoldLeaf.Tiles.Granite
             RecipeSystem.LearnRecipie(GetInstance<ClutchRod>().Item);
         }
     }
-    /*public class ClutchRodPlaceable : ModItem
+
+    public class BuriedClutchRodFake : BuriedClutchRod 
     {
-        private static Asset<Texture2D> glowTex;
-        public override void Load()
-        {
-            glowTex = Request<Texture2D>(Texture + "Glow");
-        }
+        public override string Texture => "GoldLeaf/Tiles/Granite/BuriedClutchRod";
         public override void SetStaticDefaults()
         {
-            ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite(), true);
+            base.SetStaticDefaults();
+
+            FlexibleTileWand.RubblePlacementMedium.AddVariations(ItemType<ClutchRod>(), Type, 0);
+            //RegisterItemDrop(ItemType<ClutchRod>());
         }
 
-        public override void SetDefaults()
-        {
-            Item.value = Item.sellPrice(0, 0, 30, 0);
-            Item.rare = ItemRarityID.White;
+        public override void KillMultiTile(int i, int j, int frameX, int frameY)
+            => Item.NewItem(null, new Rectangle(i * 16, j * 16, 32, 32), new Item(ItemType<ClutchRod>()), false, true);
 
-            Item.width = 16;
-            Item.height = 28;
-
-            Item.DefaultToPlaceableTile(TileType<BuriedClutchRod>());
-        }
-
-        public override void AddRecipes()
-        {
-            CreateRecipe()
-                .AddIngredient(ItemType<ClutchRod>())
-                .AddCondition(Condition.InGraveyard)
-                .Register();
-        }
-    }*/
+        public override bool CanDrop(int i, int j) => false;
+    }
 }

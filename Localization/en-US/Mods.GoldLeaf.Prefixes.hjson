@@ -1,5 +1,9 @@
 CritMultTooltip: "{0:+0;-#}% critical strike damage"
 MinionSpeedTooltip: "{0:+0;-#}% summon speed"
+FishingPowerAccessoryTooltip: "{0:+0;-#} fishing power"
+FishingRodPowerTooltip: "{0:+0;-#} fishing power"
+FishingRodBaitTooltip: "{0:+0;-#}% chance to save bait"
+FishingRodSonarTooltip: Detects hooked fish
 Vindictive.DisplayName: Vindictive
 Accurate.DisplayName: Accurate
 Pinpoint.DisplayName: Pinpoint
@@ -16,4 +20,19 @@ Jubilated.DisplayName: Jubilated
 Vital: {
 	DisplayName: Vital
 	Tooltip: Critical strikes spawn hearts
+}
+
+Profishient.DisplayName: Profishient
+Luring.DisplayName: Luring
+Flimsy.DisplayName: Flimsy
+Resourceful.DisplayName: Resourceful
+Riveting.DisplayName: Riveting
+Shallow.DisplayName: Shallow
+Sonorous.DisplayName: Sonorous
+Steady.DisplayName: Steady
+Fishy.DisplayName: Fishy
+
+Priceless: {
+	DisplayName: Cursed
+	Tooltip: This'll take a fortune to get off...
 }
