@@ -86,7 +86,7 @@ namespace GoldLeaf.Core
                 case ItemID.LavaCrate:
                 case ItemID.LavaCrateHard:
                     {
-                        itemLoot.Add(ItemDropRule.Common(ItemType<HeatFlask>(), 4, 125, 175));
+                        itemLoot.Add(ItemDropRule.Common(ItemType<HeatFlask>(), 4, 60, 75));
                         break;
                     }
             }

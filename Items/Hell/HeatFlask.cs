@@ -40,7 +40,7 @@ namespace GoldLeaf.Items.Hell
 
         public override void SetDefaults()
 		{
-			Item.damage = 24;
+			Item.damage = 26;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 22;
 			Item.height = 40;
@@ -167,7 +167,7 @@ namespace GoldLeaf.Items.Hell
                     proj.netUpdate = true;
                 }
                 Projectile burst = Projectile.NewProjectileDirect(Projectile.GetSource_Death(), Projectile.Center, Vector2.Zero, ProjectileID.InfernoFriendlyBlast, (int)(Projectile.damage * 1.25f), Projectile.knockBack, Projectile.owner);
-                burst.timeLeft = 10;
+                burst.timeLeft = 15;
                 burst.scale = 1.5f;
                 burst.usesLocalNPCImmunity = true;
                 burst.localNPCHitCooldown = -1;
