@@ -113,9 +113,10 @@ namespace GoldLeaf.Core
 
         public override void OnKill(Projectile projectile, int timeLeft)
         {
-            if (projectile.type == ProjectileID.BeeHive && Main.rand.NextBool(10)) 
+            if (projectile.type == ProjectileID.BeeHive && Main.rand.NextBool(15))
             {
                 Item.NewItem(projectile.GetSource_DropAsItem(), projectile.Hitbox, ItemType<HiveCarcass>());
+
                 SoundEngine.PlaySound(SoundID.Item87, projectile.Center);
                 for (int i = 0; i < 8; i++)
                 {

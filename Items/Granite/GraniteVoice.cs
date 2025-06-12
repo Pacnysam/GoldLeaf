@@ -68,7 +68,7 @@ namespace GoldLeaf.Items.Granite
         {
             if (graniteVoice)
             {
-                SoundEngine.PlaySound(SoundID.NPCHit41, Player.position);
+                SoundEngine.PlaySound(SoundID.NPCHit41 with { Volume = 1.1f }, Player.position);
             }
         }
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genDust, ref PlayerDeathReason damageSource)
@@ -83,7 +83,7 @@ namespace GoldLeaf.Items.Granite
         {
             if (graniteVoice)
             {
-                SoundEngine.PlaySound(SoundID.NPCDeath43, Player.position);
+                SoundEngine.PlaySound(SoundID.NPCDeath43 with { Volume = 1.1f }, Player.position);
             }
         }
     }

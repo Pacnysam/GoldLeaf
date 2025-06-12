@@ -64,15 +64,11 @@ namespace GoldLeaf.Items.Nightshade
             if (player.altFunctionUse == 2)
 			{
 				if (player.GetModPlayer<NightshadePlayer>().nightshade == player.GetModPlayer<NightshadePlayer>().nightshadeMin) 
-				{
 					return false;
-				}
-                for (int k = 0; k <= Main.maxProjectiles; k++)
-                {
-                    if (Main.projectile[k].active && Main.projectile[k].owner == player.whoAmI && Main.projectile[k].type == ProjectileType<VampireBolt>())
-                        return false;
-                }
-				Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/Monolith/Dash");
+                if (player.ownedProjectileCounts[ProjectileType<VampireBolt>()] > 0)
+                    return false;
+
+                Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/Monolith/Dash");
                 Item.shoot = ProjectileType<VampireBolt>();
 			}
 			else

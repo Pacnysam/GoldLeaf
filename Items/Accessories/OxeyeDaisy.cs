@@ -205,14 +205,21 @@ namespace GoldLeaf.Items.Accessories
             return true;
         }
 
-        /*public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData)
+        public override void NearbyEffects(int i, int j, bool closer)
         {
-            if (Main._shouldUseWindyDayMusic && Main.IsItDay() && Main.rand.NextBool(12))
+            if (closer && Main._shouldUseWindyDayMusic && Main.IsItDay() && Main.rand.NextBool(10) && !Main.gamePaused)
             {
-                //Dust.NewDust(new Vector2(i * 16, (j - 1) * 16), 16, 16, DustType<LightDust>(), Main.instance.TilesRenderer.GetWindGridPush(i, j, 1, 1), Main.rand.NextFloat(-0.8f, -1.2f), 0, new Color(231, 168, 16), Main.rand.NextFloat(0.4f, 0.6f));
-                //Gore.NewGore(null, new Vector2(i * 16, j * 16), new Vector2(Main.windSpeedCurrent, Main.rand.NextFloat(-0.8f, -1.2f)), GoreType<OxeyePetal>());
+                Dust dust = Dust.NewDustDirect(new Vector2(i * 16, (j - 1) * 16), 16, 16, DustType<LightDustFast>(), 0, 0, 0, new Color(231, 168, 16), Main.rand.NextFloat(0.35f, 0.5f));
+                dust.velocity = new Vector2(Main.windSpeedCurrent * 0.025f, Main.rand.NextFloat(-0.4f, -0.65f));
+                
+                /*if (Main.tile[i, j].WallType != 0)
+                    dust.noLight = true;*/
             }
-        }*/
+            if (closer && Main._shouldUseWindyDayMusic && Main.IsItDay() && Main.rand.NextBool(45) && !Main.gamePaused)
+            {
+                Gore.NewGore(new EntitySource_TileUpdate(i, j), new Vector2(i * 16f, j * 16f), new Vector2(Main.windSpeedCurrent * 0.005f, Main.rand.NextFloat(-0.025f, -0.125f)), GoreType<OxeyePetal>(), 1f);
+            }
+        }
     }
     
     public class OxeyeDaisyFake : OxeyeDaisyT

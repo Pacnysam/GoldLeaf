@@ -17,6 +17,7 @@ using GoldLeaf.Tiles.Grove;
 using ReLogic.Content;
 using GoldLeaf.Items.Granite;
 using Terraria.Audio;
+using Terraria.Graphics.Shaders;
 
 namespace GoldLeaf.Items.Vanity.Watcher
 {
@@ -126,7 +127,8 @@ namespace GoldLeaf.Items.Vanity.Watcher
                 float manaPercent = (float)Player.statMana / Player.statManaMax2;
                 float manaRatio = (float)Player.statManaMax2 / Player.statMana;
 
-                Dust dust = Dust.NewDustPerfect(position, DustType<LightDust>(), new Vector2(0, Main.rand.NextFloat(-2f, -0.5f)), Main.rand.Next(0, 80), new Color(47, 41, 76) * manaPercent, Main.rand.NextFloat(1.5f, 1.85f));
+                Dust dust = Dust.NewDustPerfect(position, DustType<LightDust>(), new Vector2(0, Main.rand.NextFloat(-2f, -0.5f)), Main.rand.Next(0, 80), new Color(47, 41, 76) * manaPercent, Main.rand.NextFloat(1.75f, 2.5f));
+                dust.shader = GameShaders.Armor.GetSecondaryShader(Player.dye[2].dye, Player);
 
                 if (manaRatio > 20) manaRatio = 20;
                 dustCooldown = (int)(Main.rand.Next(1, 4) + manaRatio);
@@ -146,8 +148,8 @@ namespace GoldLeaf.Items.Vanity.Watcher
             {
                 //SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/StarSlot") { Variants = [1, 2, 3] }, Player.Center);
                 //SoundEngine.PlaySound(SoundID.DD2_LightningBugHurt, Player.position);
-                SoundEngine.PlaySound(SoundID.DD2_KoboldIgnite, Player.Center);
-                SoundEngine.PlaySound(SoundID.NPCHit52 with { Volume = 0.9f, Pitch = 0.35f }, Player.position);
+                SoundEngine.PlaySound(SoundID.DD2_KoboldIgnite with { Volume = 1.1f }, Player.Center);
+                SoundEngine.PlaySound(SoundID.NPCHit52 with { Volume = 0.95f, Pitch = 0.35f }, Player.position);
             }
         }
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genDust, ref PlayerDeathReason damageSource)
@@ -162,8 +164,8 @@ namespace GoldLeaf.Items.Vanity.Watcher
         {
             if (watcherCloak && watcherDrops)
             {
-                SoundEngine.PlaySound(SoundID.NPCHit52 with { Volume = 0.7f }, Player.position);
-                SoundEngine.PlaySound(SoundID.DD2_KoboldIgnite, Player.position);
+                SoundEngine.PlaySound(SoundID.NPCHit52 with { Volume = 0.8f }, Player.position);
+                SoundEngine.PlaySound(SoundID.DD2_KoboldIgnite with { Volume = 1.1f }, Player.position);
                 SoundEngine.PlaySound(SoundID.Item68, Player.position);
             }
         }

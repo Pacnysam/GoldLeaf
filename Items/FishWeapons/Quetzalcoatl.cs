@@ -823,7 +823,7 @@ namespace GoldLeaf.Items.FishWeapons
             Projectile.DamageType = DamageClass.Magic;
         }
 
-        const float teleportRange = 850f;
+        const float teleportRange = 900f;
         public float rottime = 0;
 
         public override bool? CanHitNPC(NPC target) => false;
@@ -902,13 +902,11 @@ namespace GoldLeaf.Items.FishWeapons
 
             if (Projectile.owner == Main.myPlayer)
             {
-                int shards = Main.rand.Next(16, 20);
-
                 for (float k = 0; k < 18; k++)
                 {
                     Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Main.rand.NextFloat((float)Math.PI * 2f).ToRotationVector2() * Main.rand.NextFloat(12.5f, 18.5f), ProjectileType<QuetzalShard>(), (int)(Projectile.damage * 0.5f), 0, Projectile.owner, 2);
                     proj.scale = 1.4f;
-                    proj.ai[2] = Main.rand.Next(140, 280) - Math.Abs(proj.velocity.Length());
+                    proj.ai[2] = Main.rand.Next(120, 280) - Math.Abs(proj.velocity.Length());
                     proj.extraUpdates = 1;
                     proj.netUpdate = true;
                 }

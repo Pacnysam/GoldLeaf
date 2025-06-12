@@ -570,3 +570,12 @@ OgreVoice: {
 		'Does this mod add any drops to ogre?'
 		'''
 }
+
+Jellyfisher: {
+	DisplayName: Jellyfisher
+	Tooltip:
+		'''
+		Summons a jellyfish to shock nearby enemies
+		<right> to use as a normal fishing rod
+		'''
+}

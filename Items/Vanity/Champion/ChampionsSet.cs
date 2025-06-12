@@ -124,9 +124,9 @@ namespace GoldLeaf.Items.Vanity.Champion
                     case 0:
                         SoundEngine.PlaySound(SoundID.NPCHit10 with { Pitch = -1f, PitchVariance = 0.3f, MaxInstances = 0 }, Player.position); break;
                     case 1:
-                        SoundEngine.PlaySound(SoundID.Zombie27 with { Volume = 1f, Pitch = 0.3f, PitchVariance = 0.4f, MaxInstances = 0 }, Player.position); break;
+                        SoundEngine.PlaySound(SoundID.Zombie27 with { Volume = 1.15f, Pitch = 0.3f, PitchVariance = 0.4f, MaxInstances = 0 }, Player.position); break;
                     case 2:
-                        SoundEngine.PlaySound(SoundID.NPCDeath8 with { Pitch = 0.15f, PitchVariance = 0.3f, MaxInstances = 0 }, Player.position); break;
+                        SoundEngine.PlaySound(SoundID.NPCDeath8 with { Volume = 1.15f, Pitch = 0.15f, PitchVariance = 0.3f, MaxInstances = 0 }, Player.position); break;
                 }
             }
         }

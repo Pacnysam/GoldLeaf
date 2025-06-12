@@ -5,8 +5,6 @@ GoldLeafConditions: {
 	LearnedRecipe: Learned Recipe
 }
 
-RecipeGroups.Dye: Any Dye
-
 Mechanics: {
 	CritMult: "{0}x critical strike multiplier"
 	LearnRecipe: Learned Recipe: {0}

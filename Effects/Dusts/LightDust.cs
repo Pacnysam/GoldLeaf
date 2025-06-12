@@ -47,7 +47,7 @@ namespace GoldLeaf.Effects.Dusts
             }
 
             if (!dust.noLight)
-                Lighting.AddLight(dust.position, dust.color.ToVector3() * 0.3f);
+                Lighting.AddLight(dust.position, dust.color.ToVector3() * 0.3f * dust.scale);
             
             if (dust.alpha > 250)
             {
@@ -119,7 +119,7 @@ namespace GoldLeaf.Effects.Dusts
             }
 
             if (!dust.noLight)
-                Lighting.AddLight(dust.position, dust.color.ToVector3() * 0.3f);
+                Lighting.AddLight(dust.position, dust.color.ToVector3() * 0.3f * dust.scale);
 
             if (dust.alpha > 250)
             {

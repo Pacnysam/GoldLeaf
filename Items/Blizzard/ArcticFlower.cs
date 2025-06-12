@@ -473,6 +473,7 @@ namespace GoldLeaf.Items.Blizzard
             return true;
         }
 
+        public override bool OnTileCollide(Vector2 oldVelocity) => false;
         public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) => false;
         
         public override bool PreDraw(ref Color lightColor)

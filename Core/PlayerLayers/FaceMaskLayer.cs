@@ -18,13 +18,22 @@ namespace GoldLeaf.Core.PlayerLayers
 {
     public class FaceMaskLayer : PlayerDrawLayer
     {
-        public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FaceAcc);
+        public override Position GetDefaultPosition() => new BeforeParent(PlayerDrawLayers.FaceAcc);
+
+        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
+        {
+            Player player = drawInfo.drawPlayer;
+
+            return (player.armor[0].type != ItemID.None && ArmorSets.FaceMask[player.armor[0].headSlot] && player.armor[10].type == ItemID.None) ||
+                (player.armor[10].type != ItemID.None && ArmorSets.FaceMask[player.armor[10].headSlot]);
+        }
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player player = drawInfo.drawPlayer;
             
-            if (player.armor[0].type != ItemID.None && ArmorSets.FaceMask[player.armor[0].headSlot] && player.armor[10].type == ItemID.None || player.armor[10].type != ItemID.None && ArmorSets.FaceMask[player.armor[10].headSlot])
+            if ((player.armor[0].type != ItemID.None && ArmorSets.FaceMask[player.armor[0].headSlot] && player.armor[10].type == ItemID.None) ||
+                (player.armor[10].type != ItemID.None && ArmorSets.FaceMask[player.armor[10].headSlot]))
             {
                 Texture2D tex;
                 if (player.armor[10].type == ItemID.None)

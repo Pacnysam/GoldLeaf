@@ -60,9 +60,10 @@ namespace GoldLeaf.Core
 
         public override void AddRecipeGroups()
         {
-            RecipeGroup BaseGroup(object GroupName, int[] Items) //yoinked from spirit
+            RecipeGroup BaseGroup(object GroupName, int[] Items, bool Prefix = true) //yoinked from spirit
             {
-                string Name = "";
+                string Name = Prefix? Language.GetTextValue("LegacyMisc.37") + " " : "";
+
                 Name += GroupName switch
                 {
                     //modcontent items
@@ -72,23 +73,22 @@ namespace GoldLeaf.Core
                     //custom group names
                     _ => GroupName.ToString(),
                 };
-                return new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + Name, Items);
+                return new RecipeGroup(() => Name, Items);
             }
 
             RecipeGroup woodGrp = RecipeGroup.recipeGroups[RecipeGroup.recipeGroupIDs["Wood"]];
             woodGrp.ValidItems.Add(ItemType<Echobark>());
 
             RecipeGroup.RegisterGroup("GoldLeaf:CopperBars", BaseGroup(ItemID.CopperBar, [ItemID.CopperBar, ItemID.TinBar]));
-
             RecipeGroup.RegisterGroup("GoldLeaf:SilverBars", BaseGroup(ItemID.SilverBar, [ItemID.SilverBar, ItemID.TungstenBar]));
-
             RecipeGroup.RegisterGroup("GoldLeaf:GoldBars", BaseGroup(ItemID.GoldBar, [ItemID.GoldBar, ItemID.PlatinumBar]));
 
             RecipeGroup.RegisterGroup("GoldLeaf:CobaltBars", BaseGroup(ItemID.CobaltBar, [ItemID.CobaltBar, ItemID.PalladiumBar]));
-
             RecipeGroup.RegisterGroup("GoldLeaf:MythrilBars", BaseGroup(ItemID.MythrilBar, [ItemID.MythrilBar, ItemID.OrichalcumBar]));
-
             RecipeGroup.RegisterGroup("GoldLeaf:AdamantiteBars", BaseGroup(ItemID.AdamantiteBar, [ItemID.AdamantiteBar, ItemID.TitaniumBar]));
+
+            RecipeGroup.RegisterGroup("GoldLeaf:EvilMaterial", BaseGroup(Language.GetTextValue("Mods.GoldLeaf.RecipeGroups.Or", Language.GetTextValue("ItemName.ShadowScale"), Language.GetTextValue("ItemName.TissueSample")), [ItemID.ShadowScale, ItemID.TissueSample], false));
+            RecipeGroup.RegisterGroup("GoldLeaf:JellyfishBait", BaseGroup(Language.GetTextValue("Mods.GoldLeaf.RecipeGroups.Jellyfish"), [ItemID.PinkJellyfish, ItemID.BlueJellyfish, ItemID.GreenJellyfish]));
         }
 
         public static List<int> learnedRecipes = [];
