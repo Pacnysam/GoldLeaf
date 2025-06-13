@@ -24,16 +24,14 @@ namespace GoldLeaf.Core.PlayerLayers
         {
             Player player = drawInfo.drawPlayer;
 
-            return (player.armor[0].type != ItemID.None && ArmorSets.FaceMask[player.armor[0].headSlot] && player.armor[10].type == ItemID.None) ||
-                (player.armor[10].type != ItemID.None && ArmorSets.FaceMask[player.armor[10].headSlot]);
+            return ItemSets.FaceMask[player.armor[0].type] && player.armor[10].type == ItemID.None || ItemSets.FaceMask[player.armor[10].type];
         }
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player player = drawInfo.drawPlayer;
             
-            if ((player.armor[0].type != ItemID.None && ArmorSets.FaceMask[player.armor[0].headSlot] && player.armor[10].type == ItemID.None) ||
-                (player.armor[10].type != ItemID.None && ArmorSets.FaceMask[player.armor[10].headSlot]))
+            if (ItemSets.FaceMask[player.armor[0].type] && player.armor[10].type == ItemID.None || ItemSets.FaceMask[player.armor[10].type])
             {
                 Texture2D tex;
                 if (player.armor[10].type == ItemID.None)

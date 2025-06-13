@@ -44,7 +44,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
 
         public override void SetStaticDefaults()
         {
-            ArmorSets.FaceMask[Item.headSlot] = true;
+            ItemSets.FaceMask[Item.type] = true;
 
             ArmorIDs.Head.Sets.DrawFullHair[Item.headSlot] = true;
             ArmorIDs.Head.Sets.DrawsBackHairWithoutHeadgear[Item.headSlot] = true;

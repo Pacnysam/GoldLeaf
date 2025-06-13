@@ -31,6 +31,8 @@ namespace GoldLeaf.Core
             .Description("Draws helmet on face mask layer")
             .RegisterBoolSet(false);
 
+        public static bool[] FaceMask = ItemID.Sets.Factory.CreateBoolSet(false);
+
         /*public static Asset<Texture2D>[] FaceMaskLayer = ItemID.Sets.Factory.CreateNamedSet("FaceMaskLayer")
             .Description("Draws helmet on face mask layer")
             .RegisterCustomSet<Asset<Texture2D>>(null);*/
@@ -51,8 +53,6 @@ namespace GoldLeaf.Core
     }
     public static class ArmorSets
     {
-        public static bool[] FaceMask = ArmorIDs.Head.Sets.Factory.CreateNamedSet("FaceMaskLayer")
-            .Description("Draws armor head on face mask layer")
-            .RegisterBoolSet(false);
+        
     }
 }

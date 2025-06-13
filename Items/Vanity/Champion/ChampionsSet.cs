@@ -63,7 +63,7 @@ namespace GoldLeaf.Items.Vanity.Champion
 
         public override void SetStaticDefaults()
         {
-            ArmorSets.FaceMask[Item.headSlot] = true;
+            ItemSets.FaceMask[Item.type] = true;
             ArmorIDs.Head.Sets.PreventBeardDraw[Item.headSlot] = false;
         }
     }
