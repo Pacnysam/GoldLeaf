@@ -17,6 +17,7 @@ using Terraria.Localization;
 using GoldLeaf.Items.Blizzard.Armor;
 using System.Collections.Generic;
 using GoldLeaf.Items.Blizzard;
+using System.Linq;
 
 namespace GoldLeaf.Items.Grove.Wood.Armor
 {
@@ -74,15 +75,18 @@ namespace GoldLeaf.Items.Grove.Wood.Armor
         {
             if (Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkArmor && Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkDefense > 0) 
             {
-                string text = Language.GetTextValue("Mods.GoldLeaf.SetBonuses.EchobarkDefense", Item.defense, Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkDefense);
+                //string text = Language.GetTextValue("Mods.GoldLeaf.SetBonuses.Echobark.Defense", Item.defense, Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkDefense);
 
                 int index = tooltips.IndexOf(tooltips.Find(n => n.Name == "Defense"));
 
-                for (int i = 0; i < text.Length; i++)
-                {
-                    tooltips.Insert(index + 1, new TooltipLine(Mod, "Defense", text));
-                    tooltips.Remove(tooltips.Find(n => n.Name == "Defense"));
-                }
+                tooltips.ElementAt(index).Text = tooltips.ElementAt(index).Text.Insert(Item.defense.ToString().Length, "[c/78BE78:(+" + Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkDefense + ")]"); //prefix color (this could probably be done better)
+                //tooltips.ElementAt(index).Text.Insert(Item.defense.ToString().Length, "(+" + Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkDefense + ")"); //all white
+
+                /*for (int i = 0; i < text.Length; i++)
+                {                    
+                    //tooltips.Insert(index + 1, new TooltipLine(Mod, "Defense", text));
+                    //tooltips.Remove(tooltips.Find(n => n.Name == "Defense"));
+                }*/
             }
         }
     }
@@ -135,7 +139,7 @@ namespace GoldLeaf.Items.Grove.Wood.Armor
 
         public override void OnHurt(Player.HurtInfo info)
         {
-            if (echobarkArmor && info.Damage >= 20) 
+            if (echobarkArmor && info.Damage >= 10) 
             {
                 echobarkDefense += Math.Clamp(info.Damage / 20, 1, 5);
                 echobarkCooldown = 240;

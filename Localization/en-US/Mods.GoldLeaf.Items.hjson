@@ -579,3 +579,18 @@ Jellyfisher: {
 		<right> to use as a normal fishing rod
 		'''
 }
+
+EchobarkBow: {
+	DisplayName: Echobark Bow
+	Tooltip: ""
+}
+
+EchobarkHammer: {
+	DisplayName: Echobark Hammer
+	Tooltip: ""
+}
+
+EchobarkSword: {
+	DisplayName: Echobark Sword
+	Tooltip: ""
+}

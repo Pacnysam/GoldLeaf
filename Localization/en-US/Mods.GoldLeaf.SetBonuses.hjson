@@ -5,4 +5,4 @@ FrostySet:
 	Snap frozen enemies die at 25% health, does not work on bosses
 	'''
 Echobark: Gains bonus defense when struck
-EchobarkDefense: "{0}(+{1}) defense"
+EchobarkDefense: "{0}[c/78BE78:(+{1})] defense"
