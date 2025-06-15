@@ -38,10 +38,10 @@ namespace GoldLeaf.Core
         public float itemSpeed;
         public bool stunned = false;
 
-        public float meleeCritDamageMult = 1f;
-        public float rangedCritDamageMult = 1f;
-        public float magicCritDamageMult = 1f;
-        public float summonCritDamageMult = 1f;
+        public float meleeCritDamageMod = 0f;
+        public float rangedCritDamageMod = 0f;
+        public float magicCritDamageMod = 0f;
+        public float summonCritDamageMod = 0f;
         public float critDamageMult = 1f;
 
         public int summonCritChance = 0;
@@ -61,12 +61,13 @@ namespace GoldLeaf.Core
                 modifiers.SetCrit();
             }
 
-            if (item.DamageType == DamageClass.Melee) critDamageMult *= meleeCritDamageMult;
-            if (item.DamageType == DamageClass.Ranged) critDamageMult *= rangedCritDamageMult;
-            if (item.DamageType == DamageClass.Magic) critDamageMult *= magicCritDamageMult;
-            if (item.DamageType == DamageClass.Summon) critDamageMult *= summonCritDamageMult;
-
             modifiers.CritDamage += (item.GetGlobalItem<GoldLeafItem>().critDamageMod);
+
+            if (item.DamageType.CountsAsClass(DamageClass.Melee)) modifiers.CritDamage += meleeCritDamageMod;
+            if (item.DamageType.CountsAsClass(DamageClass.Ranged)) modifiers.CritDamage += rangedCritDamageMod;
+            if (item.DamageType.CountsAsClass(DamageClass.Magic)) modifiers.CritDamage += magicCritDamageMod;
+            if (item.DamageType.CountsAsClass(DamageClass.Summon)) modifiers.CritDamage += summonCritDamageMod;
+
             modifiers.CritDamage *= critDamageMult;
         }
         public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
@@ -96,7 +97,7 @@ namespace GoldLeaf.Core
 
             itemSpeed = 1;
             critDamageMult = 1f;
-            meleeCritDamageMult = rangedCritDamageMult = magicCritDamageMult = summonCritDamageMult = 1f;
+            meleeCritDamageMod = rangedCritDamageMod = magicCritDamageMod = summonCritDamageMod = 1f;
             summonCritChance = 0;
 
             stunned = false;

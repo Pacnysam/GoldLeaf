@@ -49,7 +49,13 @@ namespace GoldLeaf.Core
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            float updatedCritMod = (2 + item.GetGlobalItem<GoldLeafItem>().critDamageMod) * Main.LocalPlayer.GetModPlayer<GoldLeafPlayer>().critDamageMult;
+            GoldLeafPlayer glPlayer = Main.LocalPlayer.GetModPlayer<GoldLeafPlayer>();
+            float updatedCritMod = (1 + item.GetGlobalItem<GoldLeafItem>().critDamageMod) * Main.LocalPlayer.GetModPlayer<GoldLeafPlayer>().critDamageMult;
+
+            if (item.DamageType.CountsAsClass(DamageClass.Melee)) updatedCritMod += glPlayer.meleeCritDamageMod;
+            if (item.DamageType.CountsAsClass(DamageClass.Ranged)) updatedCritMod += glPlayer.rangedCritDamageMod;
+            if (item.DamageType.CountsAsClass(DamageClass.Magic)) updatedCritMod += glPlayer.magicCritDamageMod;
+            if (item.DamageType.CountsAsClass(DamageClass.Summon)) updatedCritMod += glPlayer.summonCritDamageMod;
 
             if (updatedCritMod != 2 && updatedCritMod > 1 && Helper.IsWeapon(item))
             {
