@@ -27,7 +27,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
         public override string Texture => "GoldLeaf/Items/Blizzard/Armor/FrostyMask";
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(manaMax);
 
-        private static readonly int manaMax = 40;
+        private static readonly int manaMax = 80;
 
         public override void Load()
         {
@@ -52,7 +52,6 @@ namespace GoldLeaf.Items.Blizzard.Armor
 
         public override void UpdateEquip(Player player)
         {
-            player.aggro -= 200;
             player.statManaMax2 += manaMax;
         }
 
@@ -73,8 +72,8 @@ namespace GoldLeaf.Items.Blizzard.Armor
 
         public override void UpdateArmorSet(Player player)
         {
-            player.setBonus = Language.GetTextValue("Mods.GoldLeaf.SetBonuses.FrostySet", player.GetModPlayer<FrostyPlayer>().frostyDamageBonus * 100, SetBonusKey);
-            player.GetDamage(DamageClass.Magic) += player.GetModPlayer<FrostyPlayer>().frostyDamageBonus;
+            player.setBonus = Language.GetTextValue("Mods.GoldLeaf.SetBonuses.FrostySet", 30, SetBonusKey);
+            player.GetModPlayer<GoldLeafPlayer>().magicCritDamageMod += 0.3f;
             player.GetModPlayer<FrostyPlayer>().frostySet = true;
         }
 
@@ -102,12 +101,12 @@ namespace GoldLeaf.Items.Blizzard.Armor
     [AutoloadEquip(EquipType.Body, EquipType.Waist)]
     public class FrostyRobe : ModItem
     {
-        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(manaMax, magicDamage * 100);
+        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(/*manaMax, */magicDamage * 100);
 
-        private static readonly int manaMax = 40;
+        //private static readonly int manaMax = 40;
         private static readonly float magicDamage = 0.12f;
+        private static readonly int bonusAggro = -250;
 
-        //public int frontEquip = -1;
         public override void Load()
         {
             if (Main.netMode != NetmodeID.Server)
@@ -128,13 +127,13 @@ namespace GoldLeaf.Items.Blizzard.Armor
         {
             ArmorIDs.Body.Sets.showsShouldersWhileJumping[Item.bodySlot] = true;
             ArmorIDs.Body.Sets.HidesHands[Item.bodySlot] = false;
-            //ArmorIDs.Body.Sets.IncludedCapeFront[Item.bodySlot] = frontEquip;
         }
 
         public override void UpdateEquip(Player player)
         {
-            player.statManaMax2 += manaMax;
+            //player.statManaMax2 += manaMax;
             player.GetDamage(DamageClass.Magic) += magicDamage;
+            player.aggro += bonusAggro;
         }
 
         public override void SetDefaults()
@@ -175,7 +174,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
     public class FrostyPlayer : ModPlayer 
     {
         public bool frostySet = false;
-        public float frostyDamageBonus = 0.1f;
+        //public float frostyDamageBonus = 0.08f;
         //public int frostyCooldown = 0;
 
         public override void Load()
@@ -224,7 +223,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
 
                     Main.npc[target].AddBuff(BuffType<SnapFreezeBuff>(), TimeToTicks(10));
 
-                    player.AddBuff(BuffType<SnapFreezeBuff>(), TimeToTicks(15));
+                    player.AddBuff(BuffType<SnapFreezeBuff>(), TimeToTicks(10));
 
                     float seed = Main.rand.NextFloat(0f, 8f);
 
@@ -262,8 +261,8 @@ namespace GoldLeaf.Items.Blizzard.Armor
                 if (Main.netMode != NetmodeID.Server)
                     SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/IceSmash") { Volume = 1f, Pitch = 0.2f, PitchVariance = 0.2f });
 
-                ReduceBuffTime(Player, BuffType<SnapFreezeBuff>(), TimeToTicks(10));
-
+                Player.ClearBuff(BuffType<SnapFreezeBuff>());
+                
                 int i = Item.NewItem(Player.GetSource_Loot(), target.Center, ItemType<StarLarge>(), 1, true, 0, true);
                 Main.item[i].playerIndexTheItemIsReservedFor = Player.whoAmI;
                 Main.item[i].timeSinceTheItemHasBeenReservedForSomeone = 0;

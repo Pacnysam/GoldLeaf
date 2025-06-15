@@ -765,7 +765,7 @@ namespace GoldLeaf.Items.FishWeapons
 
             if (Projectile.owner == Main.myPlayer)
             {
-                Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ProjectileType<QuetzalRift>(), (int)(Projectile.damage * 2f), Projectile.knockBack, Projectile.owner);
+                Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ProjectileType<QuetzalRift>(), (int)(Projectile.damage * 1.5f), Projectile.knockBack, Projectile.owner);
                 SoundEngine.PlaySound(SoundID.Item105);
             }
             else

@@ -335,7 +335,7 @@ BeheadingAxe: {
 
 AuroraCluster: {
 	DisplayName: Aurora Cluster
-	Tooltip: ""
+	Tooltip: "'A guiding light in the dark of the blizzard'"
 }
 
 FrostCloth: {
@@ -348,7 +348,6 @@ FrostyMask: {
 	Tooltip:
 		'''
 		{$CommonItemTooltip.IncreasesMaxManaBy}
-		Enemies are less likely to target you
 		'Usable as an ice pack!'
 		'''
 }
@@ -357,8 +356,8 @@ FrostyRobe: {
 	DisplayName: Frosty Robe
 	Tooltip:
 		'''
-		{$CommonItemTooltip.IncreasesMaxManaBy}
-		{$CommonItemTooltip.PercentIncreasedMagicDamage@1}
+		{$CommonItemTooltip.PercentIncreasedMagicDamage}
+		Enemies are less likely to target you
 		'''
 }
 
@@ -369,11 +368,6 @@ SafetyBlanket: {
 		Prevents a single debuff, goes on cooldown for a portion of the unrealized debuff's duration
 		'It's not very warm...'
 		'''
-}
-
-FrigidMask: {
-	DisplayName: Frosty Mask
-	Tooltip: This definitely isnt a bandaid solution to a playerlayer issue because pac wasnt good enough a programmer to draw it manually
 }
 
 AncientEchoslate: {
