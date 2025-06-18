@@ -45,8 +45,9 @@ namespace GoldLeaf.Tiles.Decor
 			TileObjectData.newTile.CoordinatePadding = 2;
 
 			TileObjectData.newTile.Origin = new Point16(0, 1);
+            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.Table | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
 
-			TileObjectData.newTile.CoordinateHeights =
+            TileObjectData.newTile.CoordinateHeights =
             [
                 16, 22
 			];

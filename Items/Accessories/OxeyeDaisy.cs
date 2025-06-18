@@ -175,6 +175,7 @@ namespace GoldLeaf.Items.Accessories
             Main.tileNoFail[Type] = true;
 
             TileObjectData.newTile.AnchorValidTiles = [TileID.Grass, TileID.JungleGrass, TileID.MushroomGrass, TileID.CorruptGrass, TileID.CrimsonGrass, TileID.CorruptJungleGrass, TileID.CrimsonJungleGrass, TileID.HallowedGrass, TileType<GroveGrassT>()];
+            TileObjectData.newTile.AnchorAlternateTiles = [TileID.ClayPot, TileID.PlanterBox];
 
             TileObjectData.newTile.CoordinateHeights = [28];
             TileObjectData.newTile.CoordinateWidth = 16;

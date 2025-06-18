@@ -12,6 +12,7 @@ using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
 using GoldLeaf.Tiles.Blizzard.Crafted;
 using GoldLeaf.Core;
+using Terraria.DataStructures;
 
 namespace GoldLeaf.Tiles.Decor
 {
@@ -103,7 +104,9 @@ namespace GoldLeaf.Tiles.Decor
 			TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.newTile.WaterDeath = true;
 
-			TileObjectData.newTile.CoordinatePadding = 2;
+            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.Table, TileObjectData.newTile.Width, 0);
+
+            TileObjectData.newTile.CoordinatePadding = 2;
 
 			TileObjectData.newTile.CoordinateHeights =
             [

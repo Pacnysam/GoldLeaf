@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -43,12 +44,14 @@ namespace GoldLeaf.Tiles.Decor
 			Main.tileLavaDeath[Type] = true;
 			Main.tileNoAttach[Type] = true;
 
-			TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
-			TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
+            TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
 			TileObjectData.newTile.StyleHorizontal = true;
 			TileObjectData.newTile.CoordinatePadding = 2;
 
-			TileObjectData.newTile.CoordinateHeights =
+            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.Table | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
+
+            TileObjectData.newTile.CoordinateHeights =
             [
                 24
 			];

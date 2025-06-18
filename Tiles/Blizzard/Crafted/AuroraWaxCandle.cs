@@ -14,6 +14,7 @@ using GoldLeaf.Items.Blizzard;
 using GoldLeaf.Core;
 using GoldLeaf.Tiles.Decor;
 using Terraria.GameContent;
+using Terraria.DataStructures;
 
 namespace GoldLeaf.Tiles.Blizzard.Crafted
 {
@@ -108,6 +109,8 @@ namespace GoldLeaf.Tiles.Blizzard.Crafted
             TileObjectData.newTile.RandomStyleRange = 6;
             TileObjectData.newTile.StyleMultiplier = 6;
             TileObjectData.newTile.StyleHorizontal = true;
+
+            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.Table, TileObjectData.newTile.Width, 0);
 
             TileObjectData.newTile.CoordinatePadding = 2;
 
