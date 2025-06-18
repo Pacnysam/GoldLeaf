@@ -56,7 +56,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Item.noUseGraphic = true;
             Item.UseSound = SoundID.Item1;
 
-            Item.damage = 15;
+            Item.damage = 18;
             Item.DamageType = DamageClass.MeleeNoSpeed;
             Item.knockBack = 4.25f;
             Item.channel = true;

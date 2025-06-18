@@ -29,7 +29,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
     {
         public override void SetStaticDefaults()
         {
-            Item.ResearchUnlockCount = 100;
+            Item.ResearchUnlockCount = 99;
         }
 
         public override void SetDefaults() 
