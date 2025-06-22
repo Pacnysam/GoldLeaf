@@ -27,7 +27,7 @@ namespace GoldLeaf.Items
 {
     public class ExclamationIcon : ModItem
     {
-        public override string Texture => "GoldLeaf/Textures/Specific/Exclamation";
+        public override string Texture => "GoldLeaf/Textures/Exclamation";
 
         public override void SetStaticDefaults()
         {
