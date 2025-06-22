@@ -22,6 +22,11 @@ Vital: {
 	Tooltip: Critical strikes spawn hearts
 }
 
+Radiant: {
+	DisplayName: Radiant
+	Tooltip: Critical strikes spawn stars
+}
+
 Profishient.DisplayName: Profishient
 Luring.DisplayName: Luring
 Flimsy.DisplayName: Flimsy
