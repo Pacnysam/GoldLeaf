@@ -61,13 +61,12 @@ namespace GoldLeaf.Core
                 modifiers.SetCrit();
             }
 
-            modifiers.CritDamage += (item.GetGlobalItem<GoldLeafItem>().critDamageMod);
-
             if (item.DamageType.CountsAsClass(DamageClass.Melee)) modifiers.CritDamage += meleeCritDamageMod;
             if (item.DamageType.CountsAsClass(DamageClass.Ranged)) modifiers.CritDamage += rangedCritDamageMod;
             if (item.DamageType.CountsAsClass(DamageClass.Magic)) modifiers.CritDamage += magicCritDamageMod;
             if (item.DamageType.CountsAsClass(DamageClass.Summon)) modifiers.CritDamage += summonCritDamageMod;
 
+            modifiers.CritDamage += (item.GetGlobalItem<GoldLeafItem>().critDamageMod);
             modifiers.CritDamage *= critDamageMult;
         }
         public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
@@ -77,6 +76,11 @@ namespace GoldLeaf.Core
             {
                 modifiers.SetCrit();
             }
+
+            if (proj.DamageType.CountsAsClass(DamageClass.Melee)) modifiers.CritDamage += meleeCritDamageMod;
+            if (proj.DamageType.CountsAsClass(DamageClass.Ranged)) modifiers.CritDamage += rangedCritDamageMod;
+            if (proj.DamageType.CountsAsClass(DamageClass.Magic)) modifiers.CritDamage += magicCritDamageMod;
+            if (proj.DamageType.CountsAsClass(DamageClass.Summon)) modifiers.CritDamage += summonCritDamageMod;
 
             modifiers.CritDamage += (proj.GetGlobalProjectile<GoldLeafProjectile>().critDamageMod);
             modifiers.CritDamage *= critDamageMult;
@@ -97,7 +101,7 @@ namespace GoldLeaf.Core
 
             itemSpeed = 1;
             critDamageMult = 1f;
-            meleeCritDamageMod = rangedCritDamageMod = magicCritDamageMod = summonCritDamageMod = 1f;
+            meleeCritDamageMod = rangedCritDamageMod = magicCritDamageMod = summonCritDamageMod = 0f;
             summonCritChance = 0;
 
             stunned = false;

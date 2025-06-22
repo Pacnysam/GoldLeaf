@@ -61,6 +61,12 @@ namespace GoldLeaf.Items.Blizzard
             }
         }
 
+        public override void PostUpdate()
+        {
+            Color color = ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 3);
+            Lighting.AddLight((int)(Item.Center.X / 16f), (int)(Item.Center.Y / 16f), (color.R / 255f) * 0.3f, (color.G / 255f) * 0.3f, (color.B / 255f) * 0.3f);
+        }
+
         public override void UpdateInventory(Player player)
         {
             Item.color = ColorHelper.AuroraColor(Item.timeSinceItemSpawned) * (0.875f + (float)Math.Sin(GoldLeafWorld.rottime) * 0.125f);

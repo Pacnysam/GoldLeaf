@@ -116,7 +116,8 @@ namespace GoldLeaf.Items.Blizzard
             Projectile.minion = true;
             Projectile.DamageType = DamageClass.Summon;
             Projectile.minionSlots = 1f;
-            Projectile.penetrate = -1;
+            Projectile.penetrate = -1; 
+            Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
 
             Projectile.usesLocalNPCImmunity = true;
@@ -473,9 +474,6 @@ namespace GoldLeaf.Items.Blizzard
             return true;
         }
 
-        public override bool OnTileCollide(Vector2 oldVelocity) => false;
-        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) => false;
-        
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
