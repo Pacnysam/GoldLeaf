@@ -49,7 +49,7 @@ namespace GoldLeaf.Items.Grove.Wood.Armor
             Item.width = 30;
             Item.height = 20;
 
-            Item.defense = 2;
+            Item.defense = 1;
         }
 
         public override void AddRecipes()
@@ -141,8 +141,20 @@ namespace GoldLeaf.Items.Grove.Wood.Armor
         {
             if (echobarkArmor && info.Damage >= 10) 
             {
-                echobarkDefense += Math.Clamp(info.Damage / 20, 1, 5);
-                echobarkCooldown = 240;
+                int amount = Math.Clamp(info.Damage / 12, 1, 10);
+
+                int amountAdded;
+                if (echobarkDefense < 15)
+                {
+                    for (amountAdded = 0; (amountAdded < amount) && (echobarkDefense < 15); amountAdded++)
+                    {
+                        echobarkDefense ++;
+                    }
+
+                    if (amountAdded > 0)
+                        CombatText.NewText(Player.Hitbox, Color.LightGray, amountAdded, true, true);
+                }
+                echobarkCooldown = TimeToTicks(5);
             }
         }
     }

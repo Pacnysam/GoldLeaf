@@ -286,11 +286,7 @@ FinessePotion: {
 
 VigorPotion: {
 	DisplayName: Vigor Potion
-	Tooltip:
-		'''
-		Melee strikes generate overhealth
-		Increases maximum overhealth by {0}
-		'''
+	Tooltip: Melee strikes generate overhealth
 }
 
 ConsistencyPotion: {
