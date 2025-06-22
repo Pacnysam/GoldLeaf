@@ -36,7 +36,7 @@ namespace GoldLeaf.Effects.Dusts
                 dust.customData = 1;
             }
 
-            if (dust.alpha % 40 == 35)
+            if (dust.alpha % 30 == 25)
                 dust.frame.Y += 10;
 
             if (!dust.noLight)

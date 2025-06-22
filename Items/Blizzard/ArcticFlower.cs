@@ -26,6 +26,14 @@ namespace GoldLeaf.Items.Blizzard
             ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
 
             ItemID.Sets.StaffMinionSlotsRequired[Type] = 1f;
+
+            
+            if (!ModLoader.TryGetMod("Redemption", out var redemption))
+                return;
+
+            redemption.Call("addElementItem", (int)RedemptionElement.Ice, Type);
+            redemption.Call("addElementItem", (int)RedemptionElement.Arcane, Type);
+            redemption.Call("addElementItem", (int)RedemptionElement.Nature, Type);
         }
 
         public override void SetDefaults()
@@ -105,6 +113,13 @@ namespace GoldLeaf.Items.Blizzard
 
             ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
             ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
+
+            if (!ModLoader.TryGetMod("Redemption", out var redemption))
+                return;
+
+            redemption.Call("addElementProj", (int)RedemptionElement.Ice, Type);
+            redemption.Call("addElementProj", (int)RedemptionElement.Arcane, Type);
+            redemption.Call("addElementProj", (int)RedemptionElement.Nature, Type);
         }
         
         public override void SetDefaults()
@@ -523,6 +538,13 @@ namespace GoldLeaf.Items.Blizzard
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 
             ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
+
+            if (!ModLoader.TryGetMod("Redemption", out var redemption))
+                return;
+
+            redemption.Call("addElementProj", (int)RedemptionElement.Ice, Type);
+            redemption.Call("addElementProj", (int)RedemptionElement.Arcane, Type);
+            redemption.Call("addElementProj", (int)RedemptionElement.Nature, Type);
         }
 
         public override void SetDefaults()

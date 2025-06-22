@@ -186,7 +186,7 @@ namespace GoldLeaf.Items.FishWeapons
             else if (player.altFunctionUse == 2 && (player.ownedProjectileCounts[ProjectileType<QuetzalOrb>()] > 0 || player.ownedProjectileCounts[ProjectileType<QuetzalRift>()] > 0))
                 mult = 0f;
             else 
-                mult = 3.5f;
+                mult = 4f;
         }
 
         public override bool AltFunctionUse(Player player) => true;
@@ -339,7 +339,7 @@ namespace GoldLeaf.Items.FishWeapons
             }
             else 
             {
-                const int homingRange = 200;
+                const int homingRange = 175;
 
                 float targetDistance = 8000f;
                 int targetEnemy = -1;
@@ -765,7 +765,7 @@ namespace GoldLeaf.Items.FishWeapons
 
             if (Projectile.owner == Main.myPlayer)
             {
-                Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ProjectileType<QuetzalRift>(), (int)(Projectile.damage * 1.5f), Projectile.knockBack, Projectile.owner);
+                Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ProjectileType<QuetzalRift>(), (int)(Projectile.damage * 1.25f), Projectile.knockBack, Projectile.owner);
                 SoundEngine.PlaySound(SoundID.Item105);
             }
             else
@@ -823,7 +823,7 @@ namespace GoldLeaf.Items.FishWeapons
             Projectile.DamageType = DamageClass.Magic;
         }
 
-        const float teleportRange = 900f;
+        const float teleportRange = 800f;
         public float rottime = 0;
 
         public override bool? CanHitNPC(NPC target) => false;
@@ -904,7 +904,7 @@ namespace GoldLeaf.Items.FishWeapons
             {
                 for (float k = 0; k < 18; k++)
                 {
-                    Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Main.rand.NextFloat((float)Math.PI * 2f).ToRotationVector2() * Main.rand.NextFloat(12.5f, 18.5f), ProjectileType<QuetzalShard>(), (int)(Projectile.damage * 0.5f), 0, Projectile.owner, 2);
+                    Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Main.rand.NextFloat((float)Math.PI * 2f).ToRotationVector2() * Main.rand.NextFloat(12.5f, 18.5f), ProjectileType<QuetzalShard>(), (int)(Projectile.damage * 0.45f), 0, Projectile.owner, 2);
                     proj.scale = 1.4f;
                     proj.ai[2] = Main.rand.Next(120, 280) - Math.Abs(proj.velocity.Length());
                     proj.extraUpdates = 1;
@@ -916,7 +916,7 @@ namespace GoldLeaf.Items.FishWeapons
                     float range = Vector2.Distance(Projectile.Center, Main.npc[f].Center);
                     if (range < teleportRange && IsTargetValid(Main.npc[f]))
                     {
-                        Main.npc[f].AddBuff(BuffType<AmberStun>(), TimeToTicks(1.5f));
+                        Main.npc[f].AddBuff(BuffType<AmberStun>(), TimeToTicks(1f));
                         Main.npc[f].SimpleStrikeNPC(Projectile.damage, 0, true, 0, DamageClass.Magic, true, Main.player[Projectile.owner].luck);
                     }
                 }
