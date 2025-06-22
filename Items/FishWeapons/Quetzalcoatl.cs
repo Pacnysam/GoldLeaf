@@ -1,6 +1,7 @@
 using GoldLeaf.Core;
 using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
+using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 using System.Diagnostics.Metrics;
 using Terraria;
 using Terraria.ID;
@@ -26,6 +27,7 @@ using Steamworks;
 using GoldLeaf.Effects.Dusts;
 using Terraria.GameContent;
 using Terraria.GameInput;
+
 using static GoldLeaf.GoldLeaf;
 
 namespace GoldLeaf.Items.FishWeapons
@@ -40,6 +42,7 @@ namespace GoldLeaf.Items.FishWeapons
         public override void SetStaticDefaults()
         {
             ItemSets.Glowmask[Type] = (glowTex, Color.White, false);
+            Item.AddElements([Element.Arcane, Element.Holy, Element.Earth]);
         }
 
         public override void SetDefaults()
@@ -295,6 +298,8 @@ namespace GoldLeaf.Items.FishWeapons
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
             ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
+
+            Projectile.AddElements([Element.Arcane, Element.Holy, Element.Earth]);
         }
 
         public override void SetDefaults()
@@ -504,6 +509,8 @@ namespace GoldLeaf.Items.FishWeapons
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
             ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
+
+            Projectile.AddElements([Element.Arcane, Element.Holy, Element.Earth]);
         }
 
         public override void SetDefaults()
@@ -663,6 +670,8 @@ namespace GoldLeaf.Items.FishWeapons
             Main.projFrames[Projectile.type] = 8;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+
+            Projectile.AddElements([Element.Arcane, Element.Holy, Element.Earth, Element.Explosive]);
         }
 
         public override void SetDefaults()
@@ -807,6 +816,8 @@ namespace GoldLeaf.Items.FishWeapons
             Main.projFrames[Projectile.type] = 9;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+
+            Projectile.AddElements([Element.Arcane, Element.Holy, Element.Earth, Element.Explosive]);
         }
 
         public override void SetDefaults()

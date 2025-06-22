@@ -22,6 +22,8 @@ using GoldLeaf.Effects.Dusts;
 using System.IO;
 using Terraria.ModLoader.IO;
 using System.Linq;
+using GoldLeaf.Core.CrossMod;
+using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
 namespace GoldLeaf.Items.Underground
 {
@@ -47,6 +49,7 @@ namespace GoldLeaf.Items.Underground
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(Type, new DrawAnimationVertical(2, 8) { NotActuallyAnimating = true });
+            Item.AddElements([Element.Earth]);
         }
 
         public override void SetDefaults()
@@ -115,6 +118,14 @@ namespace GoldLeaf.Items.Underground
         }
 
         #region Stats
+        public override void HoldItem(Player player)
+        {
+            if (gem != (int)Gem.None && !Item.HasElement(Element.Arcane))
+                Item.SetElements([Element.Arcane], 1);
+            else if (gem == (int)Gem.None && Item.HasElement(Element.Arcane))
+                Item.SetElements([Element.Arcane], -1);
+        }
+
         public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
         {
             if (gem == (int)Gem.Amethyst || gem == (int)Gem.Emerald)
@@ -275,7 +286,7 @@ namespace GoldLeaf.Items.Underground
             return true;
         }
     }
-
+    
     public class SedimentP : ModProjectile
     {
         private int counter;
@@ -324,6 +335,8 @@ namespace GoldLeaf.Items.Underground
             Main.projFrames[Projectile.type] = 8;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 8;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
+
+            Projectile.AddElements([Element.Earth]);
         }
 
         public override void SetDefaults()
@@ -415,6 +428,14 @@ namespace GoldLeaf.Items.Underground
                 {
                     Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<LightDust>(), Projectile.velocity.X * 0.4f, Projectile.velocity.Y * 0.4f, 0, GemColor((int)Gem), 0.6f);
                 }
+
+                if (!Projectile.HasElement(Element.Arcane))
+                    Projectile.SetElements([Element.Arcane], 1);
+            }
+            else
+            {
+                if (Projectile.HasElement(Element.Arcane))
+                    Projectile.SetElements([Element.Arcane], -1);
             }
             return true;
         }
@@ -642,6 +663,8 @@ namespace GoldLeaf.Items.Underground
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
+
+            Projectile.AddElements([Element.Earth, Element.Arcane]);
         }
 
         public override void SetDefaults()
@@ -744,6 +767,11 @@ namespace GoldLeaf.Items.Underground
         public float Radius => BezierEase((20 - Projectile.timeLeft) / 20f) * Projectile.ai[0];
         int counter;
 
+        public override void SetStaticDefaults()
+        {
+            Projectile.AddElements([Element.Arcane]);
+        }
+
         public override void SetDefaults()
         {
             Projectile.friendly = true;
@@ -845,6 +873,8 @@ namespace GoldLeaf.Items.Underground
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+
+            Projectile.AddElements([Element.Arcane]);
         }
 
         public override void SetDefaults()
@@ -895,6 +925,8 @@ namespace GoldLeaf.Items.Underground
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
+
+            Projectile.AddElements([Element.Arcane]);
         }
 
         public override void SetDefaults()

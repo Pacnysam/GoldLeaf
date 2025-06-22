@@ -14,13 +14,20 @@ using Terraria.ModLoader;
 using Terraria.Localization;
 using Terraria.GameContent.Drawing;
 using Terraria.GameContent;
+using GoldLeaf.Core.CrossMod;
+using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
 
 namespace GoldLeaf.Items.Nightshade
 {
 	public class VampireBat : ModItem
 	{
-		public override void SetDefaults() 
+        public override void SetStaticDefaults()
+        {
+            Item.AddElements([Element.Shadow]);
+        }
+
+        public override void SetDefaults() 
 		{
 			Item.damage = 17;
             //Item.GetGlobalItem<GoldLeafItem>().throwingDamageType = DamageClass.Magic;
@@ -89,7 +96,9 @@ namespace GoldLeaf.Items.Nightshade
 			// DisplayName.SetDefault("Vampire Bat");
 			ProjectileID.Sets.TrailCacheLength[Projectile.type] = 9;
 			ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-		}
+
+            Projectile.AddElements([Element.Shadow]);
+        }
 
 		public override void SetDefaults()
 		{
@@ -202,7 +211,9 @@ namespace GoldLeaf.Items.Nightshade
 			// DisplayName.SetDefault("Vampire Bolt");
 			ProjectileID.Sets.TrailCacheLength[Projectile.type] = 12;
 			ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-		}
+
+            Projectile.AddElements([Element.Shadow]);
+        }
 
 		public override void SetDefaults()
 		{

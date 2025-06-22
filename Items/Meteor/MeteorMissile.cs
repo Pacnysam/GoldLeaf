@@ -13,6 +13,8 @@ using System.Diagnostics.Metrics;
 using System;
 using GoldLeaf.Effects.Dusts;
 using Terraria.DataStructures;
+using GoldLeaf.Core.CrossMod;
+using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
 namespace GoldLeaf.Items.Meteor
 {
@@ -55,6 +57,8 @@ namespace GoldLeaf.Items.Meteor
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 4;
+
+            Projectile.AddElements([Element.Explosive]);
         }
 
         public override void SetDefaults()

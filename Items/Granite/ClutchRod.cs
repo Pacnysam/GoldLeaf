@@ -18,6 +18,7 @@ using Terraria.UI;
 using Terraria.ModLoader.IO;
 using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
+using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 using ReLogic.Content;
 using GoldLeaf.Tiles.Granite;
 using GoldLeaf.Items.Nightshade;
@@ -35,6 +36,7 @@ namespace GoldLeaf.Items.Granite
         public override void SetStaticDefaults()
         {
             ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite(), true);
+            Item.AddElements([Element.Earth]);
         }
 
         //public override bool? PrefixChance(int pre, UnifiedRandom rand) => false;

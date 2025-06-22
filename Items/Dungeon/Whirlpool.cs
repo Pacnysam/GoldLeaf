@@ -15,6 +15,7 @@ using Terraria.GameContent.Drawing;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
 using System.Diagnostics.Metrics;
 using ReLogic.Content;
+using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
 namespace GoldLeaf.Items.Dungeon
 {
@@ -29,6 +30,7 @@ namespace GoldLeaf.Items.Dungeon
         public override void SetStaticDefaults()
         {
             ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite() * 0.5f, true);
+            Item.AddElements([Element.Arcane, Element.Water]);
         }
 
         public override void SetDefaults() 
@@ -103,7 +105,9 @@ namespace GoldLeaf.Items.Dungeon
 			// DisplayName.SetDefault("Whirlpool");
 			ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
 			ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-		}
+
+            Projectile.AddElements([Element.Arcane, Element.Water]);
+        }
         
         public ref float Counter => ref Projectile.ai[0];
         public ref float Bounces => ref Projectile.ai[1];
@@ -287,6 +291,8 @@ namespace GoldLeaf.Items.Dungeon
         {
             Projectile.CloneDefaults(ProjectileID.WaterBolt);
             AIType = ProjectileID.WaterBolt;
+
+            Projectile.AddElements([Element.Arcane, Element.Water]);
         }
         public override void AI()
         {

@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
+using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 using GoldLeaf.Core;
 using GoldLeaf.Items.Grove;
 using Microsoft.Xna.Framework.Graphics;
@@ -27,13 +28,7 @@ namespace GoldLeaf.Items.Blizzard
 
             ItemID.Sets.StaffMinionSlotsRequired[Type] = 1f;
 
-            
-            if (!ModLoader.TryGetMod("Redemption", out var redemption))
-                return;
-
-            redemption.Call("addElementItem", (int)RedemptionElement.Ice, Type);
-            redemption.Call("addElementItem", (int)RedemptionElement.Arcane, Type);
-            redemption.Call("addElementItem", (int)RedemptionElement.Nature, Type);
+            Item.AddElements([Element.Ice, Element.Arcane, Element.Nature]);
         }
 
         public override void SetDefaults()
@@ -114,12 +109,7 @@ namespace GoldLeaf.Items.Blizzard
             ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
             ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
 
-            if (!ModLoader.TryGetMod("Redemption", out var redemption))
-                return;
-
-            redemption.Call("addElementProj", (int)RedemptionElement.Ice, Type);
-            redemption.Call("addElementProj", (int)RedemptionElement.Arcane, Type);
-            redemption.Call("addElementProj", (int)RedemptionElement.Nature, Type);
+            Projectile.AddElements([Element.Ice, Element.Arcane, Element.Nature]);
         }
         
         public override void SetDefaults()
@@ -539,12 +529,7 @@ namespace GoldLeaf.Items.Blizzard
 
             ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
 
-            if (!ModLoader.TryGetMod("Redemption", out var redemption))
-                return;
-
-            redemption.Call("addElementProj", (int)RedemptionElement.Ice, Type);
-            redemption.Call("addElementProj", (int)RedemptionElement.Arcane, Type);
-            redemption.Call("addElementProj", (int)RedemptionElement.Nature, Type);
+            Projectile.AddElements([Element.Ice, Element.Arcane, Element.Nature]);
         }
 
         public override void SetDefaults()

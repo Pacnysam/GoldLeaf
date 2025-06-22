@@ -18,11 +18,19 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.UI;
 using Terraria.ModLoader.IO;
 using System.Collections.Generic;
+using GoldLeaf.Core.CrossMod;
+using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
 namespace GoldLeaf.Items.VanillaBossDrops
 {
     public abstract class ClutterGlove : ModItem //TODO fix like, ALL of this
     {
+        public override void SetStaticDefaults()
+        {
+            Main.RegisterItemAnimation(Type, new DrawAnimationVertical(2, 8) { NotActuallyAnimating = true });
+            Item.SetElements([Element.Arcane, Element.Nature], -1);
+        }
+
         public override void SetDefaults()
         {
             Item.damage = 9;

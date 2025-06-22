@@ -17,6 +17,8 @@ using ReLogic.Content;
 using GoldLeaf.Items.Grove.Boss;
 using Terraria.Graphics.Shaders;
 using Terraria.GameContent.Drawing;
+using GoldLeaf.Core.CrossMod;
+using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
 
 namespace GoldLeaf.Items.Grove
@@ -34,6 +36,8 @@ namespace GoldLeaf.Items.Grove
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 99;
+
+            Item.AddElements([Element.Arcane, Element.Nature]);
         }
 
         public override void SetDefaults()
@@ -167,6 +171,8 @@ namespace GoldLeaf.Items.Grove
             Main.projFrames[Projectile.type] = 6;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+
+            Projectile.AddElements([Element.Arcane, Element.Nature]);
         }
 
         public override void SetDefaults()

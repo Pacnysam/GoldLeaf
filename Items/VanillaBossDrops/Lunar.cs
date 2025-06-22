@@ -19,6 +19,8 @@ using GoldLeaf.Items.Underground;
 using System.IO;
 using Terraria.ModLoader.IO;
 using Terraria.Chat;
+using GoldLeaf.Core.CrossMod;
+using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
 namespace GoldLeaf.Items.VanillaBossDrops
 {
@@ -41,6 +43,8 @@ namespace GoldLeaf.Items.VanillaBossDrops
             ItemID.Sets.Yoyo[Item.type] = true;
             ItemID.Sets.GamepadExtraRange[Item.type] = 12;
             ItemID.Sets.GamepadSmartQuickReach[Item.type] = true;
+
+            Item.AddElements([Element.Celestial]);
         }
 
         public override void SetDefaults()
@@ -116,6 +120,8 @@ namespace GoldLeaf.Items.VanillaBossDrops
 
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
+
+            Projectile.AddElements([Element.Celestial]);
         }
 
         const int MaxCharge = 60;

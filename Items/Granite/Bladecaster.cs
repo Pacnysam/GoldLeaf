@@ -20,6 +20,8 @@ using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
 using GoldLeaf.Items.Blizzard;
 using ReLogic.Content;
+using GoldLeaf.Core.CrossMod;
+using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
 namespace GoldLeaf.Items.Granite
 {
@@ -34,6 +36,9 @@ namespace GoldLeaf.Items.Granite
         public override void SetStaticDefaults()
         {
             ItemSets.Glowmask[Type] = (glowTex, Color.White with { A = 120 }, true);
+
+            Item.AddElements([Element.Thunder]);
+            Item.SetSlash();
         }
 
         public override void SetDefaults()

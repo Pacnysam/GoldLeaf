@@ -11,12 +11,19 @@ using Terraria.DataStructures;
 using GoldLeaf.Items.Grove;
 using Microsoft.Xna.Framework.Graphics;
 using static GoldLeaf.Core.Helper;
+using GoldLeaf.Core.CrossMod;
+using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
 namespace GoldLeaf.Items.Nightshade
 {
 	public class PorcelainPunch : ModItem
 	{
-		public override void SetDefaults()
+        public override void SetStaticDefaults()
+        {
+            Item.AddElements([Element.Shadow]);
+        }
+
+        public override void SetDefaults()
 		{
 			Item.damage = 19;
 			Item.DamageType = DamageClass.Melee;

@@ -20,6 +20,8 @@ using GoldLeaf.Items.Grove.Wood;
 using GoldLeaf.Items.Grove;
 using GoldLeaf.Tiles.Decor;
 using GoldLeaf.Items.Blizzard;
+using GoldLeaf.Core.CrossMod;
+using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
 
 namespace GoldLeaf.Items.Hell
@@ -36,6 +38,8 @@ namespace GoldLeaf.Items.Hell
         {
             Item.ResearchUnlockCount = 99;
             ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite(100), true);
+
+            Item.AddElements([Element.Fire, Element.Explosive]);
         }
 
         public override void SetDefaults()
@@ -88,6 +92,8 @@ namespace GoldLeaf.Items.Hell
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
+
+            Projectile.AddElements([Element.Fire, Element.Explosive]);
         }
 
         public override void SetDefaults()

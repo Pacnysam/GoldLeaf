@@ -22,6 +22,8 @@ using ReLogic.Content;
 using Terraria.ModLoader.IO;
 using System.Collections.Generic;
 using System.IO;
+using GoldLeaf.Core.CrossMod;
+using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
 namespace GoldLeaf.Items.Blizzard
 {
@@ -35,6 +37,7 @@ namespace GoldLeaf.Items.Blizzard
         public override void SetStaticDefaults()
         {
             ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite() * 0.5f, false);
+            Item.AddElements([Element.Ice]);
         }
 
         public int consecutiveHits = 0;

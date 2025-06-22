@@ -17,6 +17,8 @@ using GoldLeaf.Items.Grove.Boss;
 using System.IO;
 using GoldLeaf.Items.Blizzard;
 using GoldLeaf.Items.Nightshade;
+using GoldLeaf.Core.CrossMod;
+using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
 namespace GoldLeaf.Items.Ocean
 {
@@ -28,6 +30,7 @@ namespace GoldLeaf.Items.Ocean
             ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
 
             //ItemID.Sets.StaffMinionSlotsRequired[Type] = 1f;
+            Item.AddElements([Element.Water, Element.Thunder]);
         }
 
         public override void SetDefaults()

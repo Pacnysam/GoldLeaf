@@ -18,6 +18,7 @@ using Terraria.Graphics.Shaders;
 using Terraria.Localization;
 using GoldLeaf.Items.Accessories;
 using ReLogic.Content;
+using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
 namespace GoldLeaf.Items.Blizzard
 {
@@ -30,6 +31,13 @@ namespace GoldLeaf.Items.Blizzard
             glowTex = Request<Texture2D>(Texture + "Glow");
             baseTex = Request<Texture2D>(Texture + "Base");
         }
+
+        public override void SetStaticDefaults()
+        {
+            Item.AddElements([Element.Ice]);
+            Item.SetSlash(true);
+        }
+
         public override void SetDefaults()
         {
             Item.width = Item.height = 44;

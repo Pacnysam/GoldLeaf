@@ -22,6 +22,8 @@ using Terraria.Graphics.Shaders;
 using ReLogic.Content;
 using Terraria.GameContent;
 using System.Diagnostics.Metrics;
+using GoldLeaf.Core.CrossMod;
+using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
 namespace GoldLeaf.Items.Grove.Boss
 {
@@ -35,6 +37,7 @@ namespace GoldLeaf.Items.Grove.Boss
         public override void SetStaticDefaults()
         {
             ItemSets.Glowmask[Type] = (glowTex, Color.White, false);
+            Item.AddElements([Element.Fire, Element.Arcane, Element.Holy]);
         }
 
         public override void SetDefaults()
@@ -121,6 +124,8 @@ namespace GoldLeaf.Items.Grove.Boss
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+
+            Projectile.AddElements([Element.Fire, Element.Arcane, Element.Holy]);
         }
 
         public override void SetDefaults()
@@ -357,8 +362,13 @@ namespace GoldLeaf.Items.Grove.Boss
         }
         public override string Texture => Helper.EmptyTexString;
 
-        public float Radius => Helper.BezierEase(1 - (Projectile.timeLeft / 24f)) * Projectile.ai[0]; 
-        
+        public float Radius => Helper.BezierEase(1 - (Projectile.timeLeft / 24f)) * Projectile.ai[0];
+
+        public override void SetStaticDefaults()
+        {
+            Projectile.AddElements([Element.Fire, Element.Arcane, Element.Holy, Element.Explosive]);
+        }
+
         public override void SetDefaults()
         {
             Projectile.friendly = true;
@@ -458,6 +468,8 @@ namespace GoldLeaf.Items.Grove.Boss
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 7;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+
+            Projectile.AddElements([Element.Fire, Element.Arcane, Element.Holy]);
         }
 
         public override void SetDefaults()
@@ -516,6 +528,11 @@ namespace GoldLeaf.Items.Grove.Boss
     public class AetherEmber : ModProjectile
     {
         public override string Texture => "GoldLeaf/Effects/Dusts/SpecialSmokeDust";
+
+        public override void SetStaticDefaults()
+        {
+            Projectile.AddElements([Element.Fire, Element.Arcane, Element.Holy]);
+        }
 
         public override void SetDefaults()
         {

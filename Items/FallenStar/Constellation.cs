@@ -19,6 +19,8 @@ using System.Threading;
 using GoldLeaf.Effects.Dusts;
 using ReLogic.Content;
 using System.IO;
+using GoldLeaf.Core.CrossMod;
+using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 namespace GoldLeaf.Items.FallenStar
 {
     public class Constellation : ModItem
@@ -29,6 +31,11 @@ namespace GoldLeaf.Items.FallenStar
         public override void Load()
         {
             glowTex = Request<Texture2D>(Texture + "Glow");
+        }
+
+        public override void SetStaticDefaults()
+        {
+            Item.AddElements([Element.Celestial]);
         }
 
         public override void SetDefaults()
@@ -117,6 +124,8 @@ namespace GoldLeaf.Items.FallenStar
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
 
             ProjectileID.Sets.IsAWhip[Type] = true;
+
+            Projectile.AddElements([Element.Celestial]);
         }
 
         public override void SetDefaults()

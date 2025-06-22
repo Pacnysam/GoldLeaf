@@ -18,6 +18,8 @@ using Terraria.Graphics.Shaders;
 using Terraria.Localization;
 using GoldLeaf.Items.Accessories;
 using ReLogic.Content;
+using GoldLeaf.Core.CrossMod;
+using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
 namespace GoldLeaf.Items.Blizzard
 {
@@ -26,6 +28,7 @@ namespace GoldLeaf.Items.Blizzard
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 99;
+            Item.AddElements([Element.Ice]);
         }
 
         public override void SetDefaults()
@@ -83,6 +86,8 @@ namespace GoldLeaf.Items.Blizzard
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
+
+            Projectile.AddElements([Element.Ice]);
         }
 
         public override void SetDefaults()

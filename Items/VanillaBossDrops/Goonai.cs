@@ -22,6 +22,7 @@ using Terraria.WorldBuilding;
 using ReLogic.Content;
 using System.Collections.Generic;
 using Terraria.GameContent.Drawing;
+using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
 namespace GoldLeaf.Items.VanillaBossDrops
 {
@@ -30,6 +31,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 99;
+            Item.AddElements([Element.Water]);
         }
 
         public override void SetDefaults() 
@@ -102,6 +104,8 @@ namespace GoldLeaf.Items.VanillaBossDrops
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
+
+            Projectile.AddElements([Element.Water]);
         }
 
         public override void SetDefaults()
