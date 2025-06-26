@@ -31,6 +31,30 @@ namespace GoldLeaf.Items.Potions
             vigorPotion = false;
         }
 
+        public override void Load()
+        {
+            On_NPC.AI_001_Slimes_GenerateItemInsideBody += SlimePotionDrops;
+        }
+        public override void Unload()
+        {
+            On_NPC.AI_001_Slimes_GenerateItemInsideBody -= SlimePotionDrops;
+        }
+
+        private int SlimePotionDrops(On_NPC.orig_AI_001_Slimes_GenerateItemInsideBody orig, bool isBallooned)
+        {
+            switch (Main.rand.Next(30))
+            {
+                case 0:
+                    return ItemType<JumpBoostPotion>();
+                case 1:
+                    return ItemType<FinessePotion>();
+                default:
+                    break;
+            }
+
+            return orig(isBallooned);
+        }
+
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             if (consistencyPotion)
