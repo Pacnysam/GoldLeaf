@@ -6,59 +6,94 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Graphics;
 using GoldLeaf.Core;
 using ReLogic.Content;
+using Terraria.GameContent;
 
 namespace GoldLeaf.Effects.Dusts
 {
     public class LightDust : ModDust
     {
-        private static Asset<Texture2D> tex;
-        public override void Load()
+        public struct LightDustData(float drag = 0.95f, Player owner = null) //TODO: fix this, doesnt work fsr
         {
-            tex = Request<Texture2D>(Texture);
+            public int counter;
+            public float drag = drag;
+            public Player owner = owner;
         }
+        public static Dust Spawn(Vector2 position, Vector2 spawnBox, Vector2 velocity, int alpha = 0, Color color = default, float scale = 1f, float drag = 0.95f, Player owner = null)
+        {
+            Dust dust = Dust.NewDustDirect(position, (int)spawnBox.X, (int)spawnBox.Y, DustType<LightDust>(), velocity.X, velocity.Y, alpha, color, scale);;
+            
+            dust.customData = new LightDustData(drag, owner);
+            return dust;
+        }
+        public static void SpawnPerfect(Vector2 position, Vector2 velocity, int alpha = 0, Color color = default, float scale = 1f, float drag = 0.95f, Player owner = null)
+        {
+            Dust dust = Dust.NewDustPerfect(position, DustType<LightDust>(), velocity, alpha, color, scale); ;
+            dust.customData = new LightDustData(drag, owner);
+        }
+
+        const float MaxFadeIn = 3f;
 
         public override void OnSpawn(Dust dust)
         {
             dust.noGravity = true;
             dust.frame = new Rectangle(0, 0, 14, 14);
-            dust.scale *= 0.35f;
-            dust.alpha -= 15;
+            dust.scale *= 0.225f;
+            dust.alpha -= 20;
+            dust.fadeIn += 1;
+
+            if (dust.customData is not LightDustData)
+                dust.customData = new LightDustData(0.95f);
         }
 
         public override bool Update(Dust dust)
         {
-            dust.position += dust.velocity;
-            dust.velocity *= 0.95f;
-
-            
-            if (dust.alpha > 1) dust.alpha *= (int)1.03f;
-
-            if (dust.alpha < 1)
+            if (dust.customData is LightDustData data)
             {
-                //dust.scale += 0.045f;
-                dust.alpha += 1;
-                dust.scale *= 1.05f;
-            }
-            else
-            {
-                //dust.scale -= 0.025f;
-                dust.scale *= 0.94f;
-                dust.alpha += 7;
-            }
+                data.counter++;
 
-            if (!dust.noLight)
-                Lighting.AddLight(dust.position, dust.color.ToVector3() * 0.3f * dust.scale);
-            
-            if (dust.alpha > 250)
-            {
-                dust.active = false;
+                dust.position += dust.velocity;
+                dust.velocity *= data.drag;
+
+                if (dust.alpha > 1) dust.alpha = (int)(dust.alpha * (1 + (0.03f * (MaxFadeIn - Math.Clamp(dust.fadeIn, 0, MaxFadeIn)))));
+
+                if (dust.alpha < 1)
+                {
+                    dust.alpha += 1;
+                    dust.scale *= 1.05f;
+                    //dust.scale *= 1 + (0.05f * (MaxFadeIn - Math.Clamp(dust.fadeIn, 0, MaxFadeIn)));
+
+                    //dust.scale += 0.045f;
+                    /*if (data.counter > dust.fadeIn)
+                    {
+                        dust.alpha += 1;
+                        dust.scale *= 1 + (0.05f * (MaxFadeIn - Math.Clamp(dust.fadeIn, 0, MaxFadeIn)));
+                    }
+                    else
+                        data.counter++;*/
+                }
+                else
+                {
+                    //dust.scale -= 0.025f;
+                    //dust.scale *= 0.94f;
+
+                    dust.scale *= 1 - (0.06f * (MaxFadeIn - Math.Clamp(dust.fadeIn, 0, MaxFadeIn)));
+                    dust.alpha += 7 * (int)(MaxFadeIn - Math.Clamp(dust.fadeIn, 0, MaxFadeIn));
+                }
+
+                if (!dust.noLight)
+                    Lighting.AddLight(dust.position, dust.color.ToVector3() * 0.3f * dust.scale);
+
+                if (dust.alpha > 250)
+                {
+                    dust.active = false;
+                }
             }
             return false;
         }
 
         public override Color? GetAlpha(Dust dust, Color lightColor)
         {
-            return Color.White * ((255 - dust.alpha) / 255f);
+            return Color.White * (1f - (Math.Clamp(dust.alpha, 0, 255) / 255f));
         }
 
         public override bool PreDraw(Dust dust)
@@ -68,10 +103,10 @@ namespace GoldLeaf.Effects.Dusts
             Color coreColor = new(color.R + (brightness * 1.4f), color.G + (brightness * 1.4f), color.B + (brightness * 1.4f));
             color.A = 0; coreColor.A = 0;
 
-            Main.spriteBatch.Draw(tex.Value, new Vector2(dust.position.X, dust.position.Y) - Main.screenPosition, dust.frame, Color.Black * ((175 - dust.alpha) / 255f) * 0.2f, dust.rotation, new Vector2(7, 7), dust.scale * 1.6f, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(tex.Value, new Vector2(dust.position.X, dust.position.Y) - Main.screenPosition, dust.frame, color * ((100 - dust.alpha) / 255f) * 0.5f, dust.rotation, new Vector2(7, 7), dust.scale * 1.35f, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(tex.Value, dust.position - Main.screenPosition, dust.frame, color, dust.rotation, new Vector2(7, 7), dust.scale, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(tex.Value, dust.position - Main.screenPosition, dust.frame, coreColor * (1 - (brightness/255)) /** ((225 - dust.alpha) / 255f) * 0.5f*/, dust.rotation, new Vector2(7, 7), dust.scale * 0.55f, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, Color.Black * ((175 - dust.alpha) / 255f) * 0.2f, dust.rotation, dust.frame.Size() / 2f, dust.scale * 1.6f, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, color * ((100 - dust.alpha) / 255f) * 0.5f, dust.rotation, dust.frame.Size() / 2f, dust.scale * 1.35f, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, color, dust.rotation, dust.frame.Size() / 2f, dust.scale, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, coreColor * (1 - (brightness/255)) /** ((225 - dust.alpha) / 255f) * 0.5f*/, dust.rotation, dust.frame.Size() / 2f, dust.scale * 0.55f, SpriteEffects.None, 0);
 
             //Main.spriteBatch.Draw(Request<Texture2D>("GoldLeaf/Effects/Dusts/LightDust").Value, dust.position - Main.screenPosition, dust.frame, dust.color * dust.alpha, GoldLeafWorld.rottime * 2, new Vector2(0, 0), dust.scale * 1.5f, SpriteEffects.None, 0);
             //Main.spriteBatch.Draw(Request<Texture2D>("GoldLeaf/Effects/Dusts/LightDust").Value, dust.position - Main.screenPosition, dust.frame, dust.color * dust.alpha, GoldLeafWorld.rottime * -2, new Vector2(0, 0), dust.scale * 1.5f, SpriteEffects.None, 0);
@@ -140,10 +175,10 @@ namespace GoldLeaf.Effects.Dusts
             Color coreColor = new(color.R + (brightness * 1.4f), color.G + (brightness * 1.4f), color.B + (brightness * 1.4f));
             color.A = 0; coreColor.A = 0;
 
-            Main.spriteBatch.Draw(tex.Value, new Vector2(dust.position.X, dust.position.Y) - Main.screenPosition, dust.frame, Color.Black * ((175 - dust.alpha) / 255f) * 0.2f, dust.rotation, new Vector2(7, 7), dust.scale * 1.6f, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(tex.Value, new Vector2(dust.position.X, dust.position.Y) - Main.screenPosition, dust.frame, color * ((100 - dust.alpha) / 255f) * 0.5f, dust.rotation, new Vector2(7, 7), dust.scale * 1.35f, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(tex.Value, dust.position - Main.screenPosition, dust.frame, color, dust.rotation, new Vector2(7, 7), dust.scale, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(tex.Value, dust.position - Main.screenPosition, dust.frame, coreColor * (1 - (brightness / 255)) /** ((225 - dust.alpha) / 255f) * 0.5f*/, dust.rotation, new Vector2(7, 7), dust.scale * 0.55f, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(tex.Value, new Vector2(dust.position.X, dust.position.Y) - Main.screenPosition, dust.frame, Color.Black * ((175 - dust.alpha) / 255f) * 0.2f, dust.rotation, dust.frame.Size() / 2f, dust.scale * 1.6f, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(tex.Value, new Vector2(dust.position.X, dust.position.Y) - Main.screenPosition, dust.frame, color * ((100 - dust.alpha) / 255f) * 0.5f, dust.rotation, dust.frame.Size() / 2f, dust.scale * 1.35f, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(tex.Value, dust.position - Main.screenPosition, dust.frame, color, dust.rotation, dust.frame.Size() / 2f, dust.scale, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(tex.Value, dust.position - Main.screenPosition, dust.frame, coreColor * (1 - (brightness / 255)) /** ((225 - dust.alpha) / 255f) * 0.5f*/, dust.rotation, dust.frame.Size() / 2f, dust.scale * 0.55f, SpriteEffects.None, 0);
 
             return false;
         }

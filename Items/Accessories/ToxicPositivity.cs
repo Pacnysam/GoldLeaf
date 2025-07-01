@@ -16,6 +16,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
 using Terraria.Graphics.Shaders;
 using Terraria.Localization;
+using GoldLeaf.Items.Blizzard;
 
 namespace GoldLeaf.Items.Accessories
 {
@@ -49,14 +50,13 @@ namespace GoldLeaf.Items.Accessories
             Main.pvpBuff[Type] = false;
             Main.buffNoSave[Type] = true;
 
-            BuffID.Sets.GrantImmunityWith[Type].Add(BuffID.Poisoned);
+            //BuffID.Sets.GrantImmunityWith[Type].Add(BuffID.Poisoned);
         }
 
         public override void Update(NPC npc, ref int buffIndex)
         {
             npc.GetGlobalNPC<ToxicPositiveNPC>().toxicPositive = true;
-            npc.GetGlobalNPC<GoldLeafNPC>().defenseModFlat -= 6;
-            npc.GetGlobalNPC<GoldLeafNPC>().defenseFactorMod *= 0.9f;
+            npc.GetGlobalNPC<GoldLeafNPC>().defenseModFlat -= Math.Clamp(npc.buffTime[buffIndex] / 60, 1, 30);
         }
 
         public override void Update(Player player, ref int buffIndex)
@@ -100,7 +100,26 @@ namespace GoldLeaf.Items.Accessories
             toxicPositive = false;
         }
 
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        public override void Load()
+        {
+            FirstStrikePlayer.OnFirstStrike += ToxicFirstStrike;
+        }
+        public override void Unload()
+        {
+            FirstStrikePlayer.OnFirstStrike -= ToxicFirstStrike;
+        }
+
+        private void ToxicFirstStrike(Player player, NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (player.GetModPlayer<ToxicPositivePlayer>().toxicPositivity && !target.buffImmune[BuffType<ToxicPositivityBuff>()])
+            {
+                Projectile.NewProjectile(player.GetSource_OnHit(target), target.position, Vector2.Zero, ProjectileType<ToxicPositivityEffect>(), 0, 0, player.whoAmI);
+                target.AddBuff(BuffType<ToxicPositivityBuff>(), TimeToTicks(Math.Clamp(player.CountBuffs(), 1, 30)));
+                SoundEngine.PlaySound(SoundID.Zombie60, target.Center);
+            }
+        }
+
+        /*public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (toxicPositivity && Main.rand.NextBool(6 + (Main.LocalPlayer.CountBuffs() * 2), 100) && !target.buffImmune[BuffType<ToxicPositivityBuff>()])
             {
@@ -110,7 +129,7 @@ namespace GoldLeaf.Items.Accessories
 
                 Projectile.NewProjectile(Player.GetSource_OnHit(target), target.position, Vector2.Zero, ProjectileType<ToxicPositivityEffect>(), 0, 0, Player.whoAmI);
             }
-        }
+        }*/
 
         public override void UpdateBadLifeRegen()
         {
@@ -147,7 +166,7 @@ namespace GoldLeaf.Items.Accessories
             }
         }
         
-        public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo)
+        /*public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo)
         {
             if (toxicPositivity && Main.rand.NextBool(Main.LocalPlayer.CountBuffs() * 2, 100))
             {
@@ -166,7 +185,7 @@ namespace GoldLeaf.Items.Accessories
 
                 Projectile.NewProjectile(Player.GetSource_Accessory_OnHurt(toxicPositiveItem, proj), Player.position, Vector2.Zero, ProjectileType<ToxicPositivityEffect>(), 0, 0, Player.whoAmI);
             }
-        }
+        }*/
 
         public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
         {
@@ -224,10 +243,10 @@ namespace GoldLeaf.Items.Accessories
                     npc.lifeRegen = 0;
                 }
 
-                npc.lifeRegen -= 2 * 36;
-                if (damage < 12)
+                npc.lifeRegen -= 2 * 20;
+                if (damage < 10)
                 {
-                    damage = 12;
+                    damage = 10;
                 }
             }
         }

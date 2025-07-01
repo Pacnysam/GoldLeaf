@@ -51,8 +51,8 @@ ToxicPositivity: {
 	DisplayName: Toxic Positivity
 	Tooltip:
 		'''
-		Attacks may apply a defense crippling toxin, chance and duration increases for every buff you have
-		Taking damage may poison you, chance increasing for every buff you have
+		First strike applies a powerful, defense crippling toxin
+		Duration and effectiveness increases for every buff you have
 		'''
 }
 
