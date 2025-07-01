@@ -27,7 +27,7 @@ namespace GoldLeaf.Effects.Dusts
         {
             dust.rotation = dust.velocity.ToRotation() + 1.57f;
 
-            if (dust.alpha % 40 == 35)
+            if (dust.alpha % 20 == 15)
                 dust.frame.Y += 18;
 
             if (!dust.noLight)

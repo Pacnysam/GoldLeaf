@@ -259,8 +259,10 @@ namespace GoldLeaf.Items.Blizzard.Armor
                 target.RequestBuffRemoval(BuffType<SnapFreezeBuff>());
 
                 if (Main.netMode != NetmodeID.Server)
-                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/IceSmash") { Volume = 1f, Pitch = 0.2f, PitchVariance = 0.2f });
-
+                {
+                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/ColdChime") { Volume = 0.6f, PitchVariance = 0.2f });
+                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/IceSmash") { Volume = 1.15f, Pitch = 0.35f, PitchVariance = 0.2f });
+                }
                 Player.ClearBuff(BuffType<SnapFreezeBuff>());
                 
                 int i = Item.NewItem(Player.GetSource_Loot(), target.Center, ItemType<StarLarge>(), 1, true, 0, true);

@@ -48,7 +48,8 @@ namespace GoldLeaf.Tiles.Grove
 
         public override void PostUpdate()
         {
-            Lighting.AddLight(new Vector2(Item.position.X / 16f, Item.position.Y / 16f), new Vector3(190/255, 99/255, 37/255) * 0.8f);
+            if (!Main.dedServ)
+                Lighting.AddLight(new Vector2(Item.position.X / 16f, Item.position.Y / 16f), new Vector3(190/255, 99/255, 37/255) * 0.8f);
         }
 
         public override bool? UseItem(Player player)

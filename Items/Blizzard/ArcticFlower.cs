@@ -459,9 +459,11 @@ namespace GoldLeaf.Items.Blizzard
 
                 Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), position, velocity, ProjectileType<ArcticWraithOrb>(), Projectile.damage, Projectile.knockBack, Projectile.owner, target.whoAmI);
             }
-
-            SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/ForgottenLand/StarShot") { Volume = 0.5f, PitchVariance = 0.5f, MaxInstances = 0 }, Projectile.Center);
-            SoundEngine.PlaySound(new SoundStyle("Goldleaf/Sounds/SE/SplashBounce") { Volume = 0.3f }, Projectile.Center);
+            if (!Main.dedServ)
+            {
+                SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/ForgottenLand/StarShot") { Volume = 0.45f, PitchVariance = 0.5f, MaxInstances = 0 }, Projectile.Center);
+                SoundEngine.PlaySound(new SoundStyle("Goldleaf/Sounds/SE/SplashBounce") { Volume = 0.3f, Pitch = 0.15f, PitchVariance = 0.25f, MaxInstances = 0 }, Projectile.Center);
+            }
             ChangeState(Recoil);
         }
 
@@ -581,7 +583,8 @@ namespace GoldLeaf.Items.Blizzard
                 Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
             }
 
-            Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), (0 / 255f) * 0.6f, (164 / 255f) * 0.6f, (242 / 255f) * 0.6f);
+            if (!Main.dedServ)
+                Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), (0 / 255f) * 0.6f, (164 / 255f) * 0.6f, (242 / 255f) * 0.6f);
 
             if (Main.rand.NextBool(4))
             {

@@ -18,6 +18,8 @@ using GoldLeaf.Items.Blizzard.Armor;
 using System.Collections.Generic;
 using GoldLeaf.Items.Blizzard;
 using System.Linq;
+using GoldLeaf.Prefixes;
+using Terraria.Utilities;
 
 namespace GoldLeaf.Items.Grove.Wood.Armor
 {
@@ -49,7 +51,7 @@ namespace GoldLeaf.Items.Grove.Wood.Armor
             Item.width = 30;
             Item.height = 20;
 
-            Item.defense = 1;
+            Item.defense = 2;
         }
 
         public override void AddRecipes()
@@ -69,25 +71,6 @@ namespace GoldLeaf.Items.Grove.Wood.Armor
         {
             player.setBonus = Language.GetTextValue("Mods.GoldLeaf.SetBonuses.Echobark", player.GetModPlayer<EchobarkPlayer>().echobarkDefense);
             player.GetModPlayer<EchobarkPlayer>().echobarkArmor = true;
-        }
-
-        public override void ModifyTooltips(List<TooltipLine> tooltips)
-        {
-            if (Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkArmor && Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkDefense > 0) 
-            {
-                //string text = Language.GetTextValue("Mods.GoldLeaf.SetBonuses.Echobark.Defense", Item.defense, Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkDefense);
-
-                int index = tooltips.IndexOf(tooltips.Find(n => n.Name == "Defense"));
-
-                tooltips.ElementAt(index).Text = tooltips.ElementAt(index).Text.Insert(Item.defense.ToString().Length, "[c/78BE78:(+" + Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkDefense + ")]"); //prefix color (this could probably be done better)
-                //tooltips.ElementAt(index).Text.Insert(Item.defense.ToString().Length, "(+" + Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkDefense + ")"); //all white
-
-                /*for (int i = 0; i < text.Length; i++)
-                {                    
-                    //tooltips.Insert(index + 1, new TooltipLine(Mod, "Defense", text));
-                    //tooltips.Remove(tooltips.Find(n => n.Name == "Defense"));
-                }*/
-            }
         }
     }
 
@@ -155,6 +138,32 @@ namespace GoldLeaf.Items.Grove.Wood.Armor
                         CombatText.NewText(Player.Hitbox, Color.LightGray, amountAdded, true, true);
                 }
                 echobarkCooldown = TimeToTicks(5);
+            }
+        }
+    }
+
+    public class EchobarkArmorItem : GlobalItem
+    {
+        public override bool InstancePerEntity => true;
+
+        public override bool AppliesToEntity(Item entity, bool lateInstantiation)
+        {
+            return entity.type == ItemType<EchobarkHelmet>() || entity.type == ItemType<EchobarkBreastplate>() || entity.type == ItemType<EchobarkGreaves>();
+        }
+
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
+        {
+            TooltipLine tipLine = tooltips.Find(n => n.Name == "Defense");
+
+            if (tipLine != null)
+            {
+                if (Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkArmor && Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkDefense > 0)
+                {
+                    int updatedDefense = item.defense + Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkDefense;
+                    string text = updatedDefense + "(+" + Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkDefense + ")" + Language.GetTextValue("LegacyTooltip.25");
+
+                    tooltips.ElementAt(tooltips.IndexOf(tipLine)).Text = text;
+                }
             }
         }
     }

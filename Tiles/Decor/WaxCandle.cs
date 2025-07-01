@@ -69,7 +69,8 @@ namespace GoldLeaf.Tiles.Decor
 
         public override void PostUpdate()
         {
-            Lighting.AddLight((int)((Item.position.X + (Item.width / 2)) / 16f), (int)((Item.position.Y + (Item.height / 2)) / 16f), (255f / 255) * 0.3f, (201f / 255) * 0.3f, (94f / 255) * 0.3f);
+            if (!Main.dedServ)
+                Lighting.AddLight((int)((Item.position.X + (Item.width / 2)) / 16f), (int)((Item.position.Y + (Item.height / 2)) / 16f), (255f / 255) * 0.3f, (201f / 255) * 0.3f, (94f / 255) * 0.3f);
         }
     }
 

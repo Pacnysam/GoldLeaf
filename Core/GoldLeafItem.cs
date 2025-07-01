@@ -50,7 +50,7 @@ namespace GoldLeaf.Core
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
             GoldLeafPlayer glPlayer = Main.LocalPlayer.GetModPlayer<GoldLeafPlayer>();
-            float updatedCritMod = (1 + item.GetGlobalItem<GoldLeafItem>().critDamageMod) * Main.LocalPlayer.GetModPlayer<GoldLeafPlayer>().critDamageMult;
+            float updatedCritMod = (2 + item.GetGlobalItem<GoldLeafItem>().critDamageMod) * Main.LocalPlayer.GetModPlayer<GoldLeafPlayer>().critDamageMult;
 
             if (item.DamageType.CountsAsClass(DamageClass.Melee)) updatedCritMod += glPlayer.meleeCritDamageMod;
             if (item.DamageType.CountsAsClass(DamageClass.Ranged)) updatedCritMod += glPlayer.rangedCritDamageMod;

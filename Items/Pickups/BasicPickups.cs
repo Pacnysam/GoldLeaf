@@ -67,7 +67,9 @@ namespace GoldLeaf.Items.Pickups
         {
             float glo = 70 * 0.005f;
             glo *= Main.essScale * 0.5f;
-            Lighting.AddLight((int)((Item.position.X + (Item.width / 2)) / 16f), (int)((Item.position.Y + (Item.height / 2)) / 16f), 0.75f * glo, 0.15f * glo, 0.15f * glo);
+
+            if (!Main.dedServ)
+                Lighting.AddLight((int)((Item.position.X + (Item.width / 2)) / 16f), (int)((Item.position.Y + (Item.height / 2)) / 16f), 0.75f * glo, 0.15f * glo, 0.15f * glo);
         }
     }
 
@@ -120,7 +122,9 @@ namespace GoldLeaf.Items.Pickups
         {
             float glo = 180 * 0.01f;
             glo *= Main.essScale * 0.5f;
-            Lighting.AddLight((int)((Item.position.X + (Item.width / 2)) / 16f), (int)((Item.position.Y + (Item.height / 2)) / 16f), 1f * glo, 0.2f * glo, 0.2f * glo);
+
+            if (!Main.dedServ)
+                Lighting.AddLight((int)((Item.position.X + (Item.width / 2)) / 16f), (int)((Item.position.Y + (Item.height / 2)) / 16f), 1f * glo, 0.2f * glo, 0.2f * glo);
         }
     }
 
@@ -165,7 +169,9 @@ namespace GoldLeaf.Items.Pickups
         {
             float glo = 70 * 0.005f;
             glo *= Main.essScale * 0.5f;
-            Lighting.AddLight((int)((Item.position.X + (Item.width / 2)) / 16f), (int)((Item.position.Y + (Item.height / 2)) / 16f), 0.15f * glo, 0.15f * glo, 0.75f * glo);
+
+            if (!Main.dedServ)
+                Lighting.AddLight((int)((Item.position.X + (Item.width / 2)) / 16f), (int)((Item.position.Y + (Item.height / 2)) / 16f), 0.15f * glo, 0.15f * glo, 0.75f * glo);
         }
     }
 
@@ -214,7 +220,9 @@ namespace GoldLeaf.Items.Pickups
         {
             float glo = 180 * 0.01f;
             glo *= Main.essScale * 0.5f;
-            Lighting.AddLight((int)((Item.position.X + (Item.width / 2)) / 16f), (int)((Item.position.Y + (Item.height / 2)) / 16f), 0.2f * glo, 0.2f * glo, 1f * glo);
+
+            if (!Main.dedServ)
+                Lighting.AddLight((int)((Item.position.X + (Item.width / 2)) / 16f), (int)((Item.position.Y + (Item.height / 2)) / 16f), 0.2f * glo, 0.2f * glo, 1f * glo);
         }
     }
 }

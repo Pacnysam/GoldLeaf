@@ -27,7 +27,6 @@ namespace GoldLeaf.Items.VanillaBossDrops
     {
         public override void SetStaticDefaults()
         {
-            Main.RegisterItemAnimation(Type, new DrawAnimationVertical(2, 8) { NotActuallyAnimating = true });
             Item.SetElements([Element.Arcane, Element.Nature], -1);
         }
 

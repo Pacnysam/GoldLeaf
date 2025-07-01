@@ -185,7 +185,9 @@ namespace GoldLeaf.Items.Grove.Boss
 
         public override void AI()
         {
-            Lighting.AddLight((int)(Projectile.Center.X/16), (int)(Projectile.Center.Y/16), 0.7f, 0.2f, 0.9f);
+            if (!Main.dedServ)
+                Lighting.AddLight((int)(Projectile.Center.X/16), (int)(Projectile.Center.Y/16), 0.7f, 0.2f, 0.9f);
+
             Counter++;
 
             Player player = Main.player[Projectile.owner];
@@ -240,12 +242,12 @@ namespace GoldLeaf.Items.Grove.Boss
 
             if (Counter >= THRESHHOLD)
             {
-                if (Main.rand.NextBool(16) && Main.myPlayer == Projectile.owner) 
+                /*if (Main.rand.NextBool(16) && Main.myPlayer == Projectile.owner) 
                 {
                     int ember = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Main.rand.NextFloat(6.28f).ToRotationVector2() * Main.rand.NextFloat(2, 3), ProjectileType<AetherEmber>(), 0, 0, Projectile.owner);
                     Main.projectile[ember].scale = Main.rand.NextFloat(0.45f, 0.75f);
                     Main.projectile[ember].timeLeft /= 3;
-                }
+                }*/
 
                 Projectile.velocity += Vector2.Normalize(Main.MouseWorld - Projectile.Center) * 0.65f;
                 if (Projectile.velocity.Length() > (4f + (Counter * 0.005f))) Projectile.velocity = Vector2.Normalize(Projectile.velocity) * (4f + (Counter * 0.005f));
@@ -270,10 +272,8 @@ namespace GoldLeaf.Items.Grove.Boss
                         bool flag = Collision.CanHit(Projectile.position, Projectile.width, Projectile.height, Main.npc[num2].position, Main.npc[num2].width, Main.npc[num2].height) && player.CheckMana(3, true);
                         if (flag)
                         {
-                            SoundStyle sound1 = new("GoldLeaf/Sounds/SE/RoR2/WispDeath") { Volume = 0.45f, Pitch = -0.35f + (ShotsFired * 0.035f) };
-
                             //SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/AetherBeam"), player.Center);
-                            SoundEngine.PlaySound(sound1, Projectile.Center);
+                            SoundEngine.PlaySound(new("GoldLeaf/Sounds/SE/RoR2/WispDeath") { Volume = 0.45f, Pitch = -0.35f + (ShotsFired * 0.035f) }, Projectile.Center);
                             Vector2 value = Main.npc[num2].Center - Projectile.Center;
                             float num4 = 25f;
                             float num5 = (float)Math.Sqrt((double)(value.X * value.X + value.Y * value.Y));
@@ -289,7 +289,7 @@ namespace GoldLeaf.Items.Grove.Boss
 
                             ShotsFired++;
                             if (Main.myPlayer == Projectile.owner)
-                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y, perturbedSpeed.X * 0.3f, perturbedSpeed.Y * 0.3f, ProjectileType<AetherBeam>(), (int)(Projectile.damage * 0.7f), Projectile.knockBack * 0.35f, Projectile.owner, 0f, 0f);
+                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y, perturbedSpeed.X * 0.3f, perturbedSpeed.Y * 0.3f, ProjectileType<AetherBeam>(), (int)(Projectile.damage * 0.75f), Projectile.knockBack * 0.35f, Projectile.owner, 0f, 0f);
                         }
                     }
                 }
@@ -316,13 +316,13 @@ namespace GoldLeaf.Items.Grove.Boss
 
             if (!player.channel && Counter <= (THRESHHOLD/2)) target.immune[Projectile.owner] = 0; else target.immune[Projectile.owner] = 15;
 
-            target.AddBuff(BuffType<AetherFlameBuff>(), Main.rand.Next(Helper.TimeToTicks(1f), Helper.TimeToTicks(1.75f)));
+            //target.AddBuff(BuffType<AetherFlameBuff>(), Helper.TimeToTicks(1f));
         }
 
-        public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        /*public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(BuffType<AetherFlameBuff>(), Helper.TimeToTicks(1.5f), false);
-        }
+        }*/
 
         public override void OnKill(int timeLeft)
         {
@@ -330,25 +330,27 @@ namespace GoldLeaf.Items.Grove.Boss
             
             SoundEngine.PlaySound(new("GoldLeaf/Sounds/SE/RoR2/EngineerMine") { Volume = 0.7f }, Projectile.Center);
             SoundEngine.PlaySound(new("GoldLeaf/Sounds/SE/RoR2/Aftershock") { Pitch = 1.6f, Volume = 0.7f }, Projectile.Center);
-            CameraSystem.AddScreenshake(Main.LocalPlayer, 18 + ShotsFired, Projectile.Center);
-            CameraSystem.QuickScreenShake(Projectile.Center, 0f.ToRotationVector2(), 12.5f, 9f, 30, 1500);
 
+            //CameraSystem.AddScreenshake(Main.LocalPlayer, 18 + ShotsFired, Projectile.Center);
+            CameraSystem.QuickScreenShake(Projectile.Center, 0f.ToRotationVector2(), 14.5f + (ShotsFired * 0.25f), 6f + (ShotsFired * 0.1f), 30 + (int)(ShotsFired * 1.5f), 1500);
+            
             float explosionVolume = (Counter >= THRESHHOLD) ? 110f : 30f + (Counter * 0.65f);
 
-            for (int j = 0; j < 10 + (explosionVolume / 10f); j++)
+            for (int j = 0; j < 10 + (explosionVolume / 8f); j++)
             {
                 var dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustType<AetherSmoke>());
-                dust.velocity = Main.rand.NextVector2Circular(6.25f, 6.25f) * Math.Clamp(explosionVolume / 85f, 1f, 2f);
-                dust.scale = Main.rand.NextFloat(0.9f, 1.2f);
-                dust.alpha = 20 + Main.rand.Next(60);
+                dust.velocity = Main.rand.NextVector2Circular(6.75f, 6.75f) * Math.Clamp(explosionVolume / 85f, 1f, 2f);
+                dust.scale = Main.rand.NextFloat(0.9f, 1.8f);
+                dust.alpha = 40 + Main.rand.Next(60);
                 dust.rotation = Main.rand.NextFloat(6.28f);
             }
 
             if (Main.myPlayer == Projectile.owner) 
             {
-                Projectile explosion = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ProjectileType<AetherBurst>(), (int)(Projectile.damage * 1.5f) + (int)(ShotsFired * 2.2), Projectile.knockBack, player.whoAmI);
+                Projectile explosion = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ProjectileType<AetherBurst>(), (int)(Projectile.damage * 2f) + (int)(ShotsFired * 2.2), Projectile.knockBack, player.whoAmI);
                 explosion.ai[0] = explosionVolume;
                 if (Counter < THRESHHOLD) explosion.ai[1] = 12;
+                if (ShotsFired >= 20) explosion.ai[2] = 1;
             }
         }
     }
@@ -356,9 +358,13 @@ namespace GoldLeaf.Items.Grove.Boss
     public class AetherBurst : ModProjectile
     {
         private static Asset<Texture2D> ringTex;
+        private static Asset<Texture2D> coronaTex;
+        private static Asset<Texture2D> flareTex;
         public override void Load()
         {
             ringTex = Request<Texture2D>("GoldLeaf/Textures/Flares/wavering");
+            coronaTex = Request<Texture2D>("GoldLeaf/Textures/Flares/aura");
+            flareTex = Request<Texture2D>("GoldLeaf/Textures/Flares/Flare4");
         }
         public override string Texture => Helper.EmptyTexString;
 
@@ -379,7 +385,7 @@ namespace GoldLeaf.Items.Grove.Boss
             Projectile.ArmorPenetration = 4;
             Projectile.ai[1] = 20;
 
-            //Projectile.extraUpdates = 1;
+            Projectile.extraUpdates = 1;
 
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 6;
@@ -395,15 +401,23 @@ namespace GoldLeaf.Items.Grove.Boss
                     Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Main.rand.NextFloat(6.28f).ToRotationVector2() * Main.rand.NextFloat(2, 3), ProjectileType<AetherEmber>(), 0, 0, Projectile.owner).scale = Main.rand.NextFloat(0.75f, 1.25f);
             }
 
-            ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.TrueExcalibur,
+            /*ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.TrueExcalibur,
                 new ParticleOrchestraSettings { PositionInWorld = Projectile.Center },
-                Projectile.owner);
+                Projectile.owner);*/
+        }
+
+        public override bool PreAI()
+        {
+            Projectile.extraUpdates = (Projectile.Counter() <= 8) ? 1 : 0;
+            return true;
         }
 
         public override void AI()
         {
             Projectile.netUpdate = true;
-            Lighting.AddLight((int)(Projectile.position.X / 16), (int)(Projectile.position.Y / 16), 1.4f, 0.4f, 1.8f);
+
+            if (!Main.dedServ)
+                Lighting.AddLight((int)(Projectile.position.X / 16), (int)(Projectile.position.Y / 16), 1.4f, 0.4f, 1.8f);
             //Main.NewText(Radius / Projectile.ai[0]);
         }
 
@@ -417,7 +431,7 @@ namespace GoldLeaf.Items.Grove.Boss
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Main.EntitySpriteDraw
+            Main.EntitySpriteDraw //Wave
             (
                 ringTex.Value,
                 new Vector2
@@ -435,6 +449,45 @@ namespace GoldLeaf.Items.Grove.Boss
                 0f
             );
 
+            Main.EntitySpriteDraw //Light Ring
+            (
+                coronaTex.Value,
+                new Vector2
+                (
+                    Projectile.position.X - Main.screenPosition.X + Projectile.width * 0.5f,
+                    Projectile.position.Y - Main.screenPosition.Y + Projectile.height * 0.5f
+                ),
+                null,
+                new Color(228, 139, 245) { A = 0 } * (1f - (Radius / Projectile.ai[0])) * 0.65f,
+                0f,
+                coronaTex.Size() / 2f,
+                2f * ((Radius + 30) / 90f),
+                //Projectile.scale * 0.1f + (((Radius * Projectile.ai[0]) + 30)/5500f),
+                SpriteEffects.None,
+                0f
+            );
+
+            if (Projectile.ai[0] > 80 || Projectile.ai[2] != 0) 
+            {
+                Main.EntitySpriteDraw //Flare
+                (
+                    flareTex.Value,
+                    new Vector2
+                    (
+                       Projectile.position.X - Main.screenPosition.X + Projectile.width * 0.5f,
+                        Projectile.position.Y - Main.screenPosition.Y + Projectile.height * 0.5f
+                    ),
+                    null,
+                    new Color(255, 231, 206) { A = 0 } * (1f - (Radius / (Projectile.ai[0] * 1.15f))) * 0.45f,
+                    0f,
+                    flareTex.Size() / 2f,
+                    2.25f - (1f * ((Radius + 30) / 110f)),
+                    //Projectile.scale * 0.1f + (((Radius * Projectile.ai[0]) + 30)/5500f),
+                    SpriteEffects.None,
+                    0f
+                );
+            }
+
             return false;
         }
 
@@ -446,8 +499,8 @@ namespace GoldLeaf.Items.Grove.Boss
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (hit.Crit || Projectile.ai[2] != 0)
-                target.AddBuff(BuffType<AetherFlameBuff>(), Main.rand.Next(Helper.TimeToTicks(3), Helper.TimeToTicks(4f)));
+            if (/*hit.Crit || */Projectile.ai[2] != 0)
+                target.AddBuff(BuffType<AetherFlameBuff>(), Helper.TimeToTicks(2.5f));
 
             //target.velocity += Vector2.Normalize(target.Center - Projectile.Center) * (12 + (damageDone * 0.05f)) * target.knockBackResist;
 
@@ -520,8 +573,8 @@ namespace GoldLeaf.Items.Grove.Boss
                 dust.rotation = Main.rand.NextFloatDirection();
             }
 
-            if (hit.Crit)
-                target.AddBuff(BuffType<AetherFlameBuff>(), Main.rand.Next(Helper.TimeToTicks(2f), Helper.TimeToTicks(3f)));
+            /*if (hit.Crit)
+                target.AddBuff(BuffType<AetherFlameBuff>(), Main.rand.Next(Helper.TimeToTicks(2f), Helper.TimeToTicks(3f)));*/
         }
     }
     
@@ -570,17 +623,17 @@ namespace GoldLeaf.Items.Grove.Boss
                 return false;
             return base.Colliding(projHitbox, targetHitbox);
         }
-
+        /*
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             Projectile.damage--;
             target.AddBuff(BuffType<AetherFlameBuff>(), Main.rand.Next(Helper.TimeToTicks(1.5f), Helper.TimeToTicks(2.5f)));
-        }
+        }*/
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Projectile.damage--;
-            target.AddBuff(BuffType<AetherFlameBuff>(), Main.rand.Next(Helper.TimeToTicks(1.5f), Helper.TimeToTicks(2.5f)));
+            //target.AddBuff(BuffType<AetherFlameBuff>(), Helper.TimeToTicks(1f));
         }
     }
 
@@ -602,12 +655,20 @@ namespace GoldLeaf.Items.Grove.Boss
         {
             if (Main.rand.NextBool(3) && !player.dead)
             {
-                Dust.NewDust(player.position, player.width, player.height, DustType<AetherDust>(), Main.rand.NextFloat(-0.05f, 0.05f), Main.rand.NextFloat(-1.25f, -0.9f), 0, Color.White, Main.rand.NextFloat(0.6f, 0.85f));
+                Dust dust = Dust.NewDustDirect(player.position, player.width, player.height, DustType<AetherDust>(), 0f, Main.rand.NextFloat(-1.25f, -0.9f), 0, Color.White, Main.rand.NextFloat(0.6f, 0.85f));
+                dust.velocity.X *= 0.25f;
+
+                if (dust.velocity.Y > 0)
+                    dust.velocity.Y *= -1f;
             }
 
-            if (Main.rand.NextBool(10) && !player.dead)
+            if (Main.rand.NextBool(8) && !player.dead)
             {
-                Dust.NewDust(player.position, player.width, player.height, DustType<AetherSmoke>(), Main.rand.NextFloat(-0.15f, 0.15f), Main.rand.NextFloat(-0.85f, -0.4f), 0, Color.White * Main.rand.NextFloat(0.4f, 0.55f), Main.rand.NextFloat(0.5f, 0.65f));
+                Dust smoke = Dust.NewDustDirect(player.position, player.width, player.height, DustType<AetherSmoke>(), 0f, Main.rand.NextFloat(-0.85f, -0.4f), 0, Color.White * Main.rand.NextFloat(0.2f, 0.3f), Main.rand.NextFloat(0.5f, 0.65f));
+                smoke.velocity.X *= 0.5f;
+
+                if (smoke.velocity.Y > 0)
+                    smoke.velocity.Y *= -1;
             }
 
             if (player.HasBuff(BuffID.OnFire))
@@ -620,12 +681,20 @@ namespace GoldLeaf.Items.Grove.Boss
         {
             if (Main.rand.NextBool(4)) 
             {
-                Dust.NewDust(npc.position, npc.width, npc.height, DustType<AetherDust>(), Main.rand.NextFloat(-0.05f, 0.05f), Main.rand.NextFloat(-1.25f, -0.9f), 0, Color.White, Main.rand.NextFloat(0.6f, 1.2f));
+                Dust dust = Dust.NewDustDirect(npc.position, npc.width, npc.height, DustType<AetherDust>(), 0f, Main.rand.NextFloat(-1.25f, -0.9f), 0, Color.White, Main.rand.NextFloat(0.6f, 1.2f));
+                dust.velocity.X *= 0.25f;
+
+                if (dust.velocity.Y > 0)
+                    dust.velocity.Y *= -1;
             }
 
-            if (Main.rand.NextBool(10))
+            if (Main.rand.NextBool(8))
             {
-                Dust.NewDust(npc.position, npc.width, npc.height, DustType<AetherSmoke>(), Main.rand.NextFloat(-0.05f, 0.05f), Main.rand.NextFloat(-0.85f, -0.4f), 0, Color.White * Main.rand.NextFloat(0.4f, 0.55f), Main.rand.NextFloat(0.5f, 0.65f));
+                Dust smoke = Dust.NewDustDirect(npc.position, npc.width, npc.height, DustType<AetherSmoke>(), 0f, Main.rand.NextFloat(-0.85f, -0.4f), 0, Color.White * Main.rand.NextFloat(0.2f, 0.3f), Main.rand.NextFloat(0.5f, 0.65f));
+                smoke.velocity.X *= 0.5f;
+
+                if (smoke.velocity.Y > 0)
+                    smoke.velocity.Y *= -1;
             }
 
             if (npc.HasBuff(BuffID.OnFire))

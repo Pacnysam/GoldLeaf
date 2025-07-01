@@ -335,7 +335,9 @@ namespace GoldLeaf.Items.FishWeapons
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            Lighting.AddLight(Projectile.Center, (255/255) * 0.7f, (114/255) * 0.7f, (57/255) * 0.7f);
+
+            if (!Main.dedServ)
+                Lighting.AddLight(Projectile.Center, (255/255) * 0.7f, (114/255) * 0.7f, (57/255) * 0.7f);
 
             if (Projectile.ai[0] > 0)
             {
@@ -537,7 +539,8 @@ namespace GoldLeaf.Items.FishWeapons
 
         public override void AI()
         {
-            Lighting.AddLight(Projectile.Center, (255 / 255) * 0.3f, (114 / 255) * 0.3f, (57 / 255) * 0.3f);
+            if (!Main.dedServ)
+                Lighting.AddLight(Projectile.Center, (255 / 255) * 0.3f, (114 / 255) * 0.3f, (57 / 255) * 0.3f);
 
             Projectile.rotation = Projectile.velocity.ToRotation();
 
@@ -722,7 +725,8 @@ namespace GoldLeaf.Items.FishWeapons
                 Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
             }
 
-            Lighting.AddLight(Projectile.Center, (255 / 255) * 0.4f + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.5f), (114 / 255) * 0.4f + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.5f), (57 / 255) * 0.4f + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.5f));
+            if (!Main.dedServ)
+                Lighting.AddLight(Projectile.Center, (255 / 255) * 0.4f + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.5f), (114 / 255) * 0.4f + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.5f), (57 / 255) * 0.4f + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.5f));
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -892,7 +896,8 @@ namespace GoldLeaf.Items.FishWeapons
             Projectile.localAI[0] = MathHelper.Lerp(Projectile.localAI[0], 1f, 0.05f);
             Projectile.localAI[1] *= 0.9f;
 
-            Lighting.AddLight(Projectile.Center, (255 / 255) * 0.6f + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.3f), (114 / 255) * 0.6f + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.3f), (57 / 255) * 0.6f + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.3f));
+            if (!Main.dedServ)
+                Lighting.AddLight(Projectile.Center, (255 / 255) * 0.6f + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.3f), (114 / 255) * 0.6f + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.3f), (57 / 255) * 0.6f + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.3f));
         }
 
         public void Detonate() 
@@ -909,7 +914,8 @@ namespace GoldLeaf.Items.FishWeapons
             CameraSystem.QuickScreenShake(Projectile.Center, null, 20f, 5f, 90, 2000);
             CameraSystem.QuickScreenShake(Projectile.Center, (0f).ToRotationVector2(), 20f, 8f, 100, 2000);
 
-            Lighting.AddLight(Projectile.Center, (255 / 255) * 2f, (114 / 255) * 2f, (57 / 255) * 2f);
+            if (!Main.dedServ)
+                Lighting.AddLight(Projectile.Center, (255 / 255) * 2f, (114 / 255) * 2f, (57 / 255) * 2f);
 
             if (Projectile.owner == Main.myPlayer)
             {

@@ -801,7 +801,8 @@ namespace GoldLeaf.Items.Underground
         float rot = 0;
         public override void AI()
         {
-            Lighting.AddLight((int)(Projectile.position.X / 16), (int)(Projectile.position.Y / 16), GemColor(3).R / 255, GemColor(3).G / 255, GemColor(3).B / 255);
+            if (!Main.dedServ)
+                Lighting.AddLight((int)(Projectile.position.X / 16), (int)(Projectile.position.Y / 16), GemColor(3).R / 255, GemColor(3).G / 255, GemColor(3).B / 255);
 
             if (counter <= 10 /*&& counter % 2 == 0*/)
             {

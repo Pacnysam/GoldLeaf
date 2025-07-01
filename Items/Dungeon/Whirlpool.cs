@@ -135,7 +135,9 @@ namespace GoldLeaf.Items.Dungeon
 
             Player player = Main.player[Projectile.owner];
 
-			Lighting.AddLight((int)(Projectile.position.X / 16), (int)(Projectile.position.Y / 16), 0.38f, 0.68f, 1.16f);
+            if (!Main.dedServ)
+                Lighting.AddLight((int)(Projectile.position.X / 16), (int)(Projectile.position.Y / 16), 0.38f, 0.68f, 1.16f);
+
             Dust dust;
             dust = Main.dust[Dust.NewDust(new Vector2(Projectile.position.X + 2, Projectile.position.Y - 2), 30, 30, DustID.DungeonWater)];
 

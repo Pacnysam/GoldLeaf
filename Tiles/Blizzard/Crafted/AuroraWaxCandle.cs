@@ -76,7 +76,9 @@ namespace GoldLeaf.Tiles.Blizzard.Crafted
         public override void PostUpdate()
         {
             Color color = ColorHelper.AuroraAccentColor(Item.timeSinceItemSpawned * 0.1f);
-            Lighting.AddLight((int)((Item.position.X + Item.width / 2) / 16f), (int)((Item.position.Y + Item.height / 2) / 16f), color.R / 255f * 0.2f, color.G / 255f * 0.2f, color.B / 255f * 0.2f);
+
+            if (!Main.dedServ)
+                Lighting.AddLight((int)((Item.position.X + Item.width / 2) / 16f), (int)((Item.position.Y + Item.height / 2) / 16f), color.R / 255f * 0.2f, color.G / 255f * 0.2f, color.B / 255f * 0.2f);
         }
     }
 

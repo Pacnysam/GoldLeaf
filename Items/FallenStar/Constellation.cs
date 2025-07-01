@@ -51,7 +51,8 @@ namespace GoldLeaf.Items.FallenStar
         {
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.FallenStar, 5);
-            recipe.AddRecipeGroup(RecipeGroupID.IronBar, 8);
+            recipe.AddIngredient(ItemID.SunplateBlock, 18);
+            //recipe.AddRecipeGroup(RecipeGroupID.IronBar, 8);
             recipe.AddTile(TileID.Anvils);
             recipe.AddCondition(Condition.TimeNight);
             recipe.Register();
@@ -281,7 +282,7 @@ namespace GoldLeaf.Items.FallenStar
 
         public override void ResetEffects()
         {
-            maxExtraSegments = 12;
+            maxExtraSegments = 9;
             if (Player.HasBuff(BuffID.StarInBottle))
                 maxExtraSegments += 3;
             if (!Main.dayTime)
