@@ -4,6 +4,7 @@ FishingPowerAccessoryTooltip: "{0:+0;-#} fishing power"
 FishingRodPowerTooltip: "{0:+0;-#} fishing power"
 FishingRodBaitTooltip: "{0:+0;-#}% chance to save bait"
 FishingRodSonarTooltip: Detects hooked fish
+FishFearMeTooltip: Women want me, fish fear me
 Vindictive.DisplayName: Vindictive
 Accurate.DisplayName: Accurate
 Pinpoint.DisplayName: Pinpoint
@@ -35,7 +36,8 @@ Riveting.DisplayName: Riveting
 Shallow.DisplayName: Shallow
 Sonorous.DisplayName: Sonorous
 Steady.DisplayName: Steady
-Fishy.DisplayName: Fishy
+Barren.DisplayName: Barren
+Fishless.DisplayName: Fishless
 
 Priceless: {
 	DisplayName: Cursed
