@@ -171,10 +171,10 @@ namespace GoldLeaf.Items.FallenStar
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Player player = Main.player[Projectile.owner];
-            target.AddBuff(BuffType<ConstellationTag>(), 180);
+            target.AddBuff(BuffType<ConstellationTag>(), 240);
             player.MinionAttackTargetNPC = target.whoAmI;
 
-            player.GetModPlayer<ConstellationPlayer>().segmentTimer = 300;
+            player.GetModPlayer<ConstellationPlayer>().segmentTimer = 240;
 
             if (player.GetModPlayer<ConstellationPlayer>().extraSegments < player.GetModPlayer<ConstellationPlayer>().maxExtraSegments)
             {

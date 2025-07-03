@@ -18,7 +18,7 @@ namespace GoldLeaf.Prefixes.Enchantments
 {
     public class Radiant : TooltipPrefix
     {
-        public override PrefixCategory Category => PrefixCategory.AnyWeapon;
+        public override PrefixCategory Category => PrefixCategory.Magic;
         public override bool IsNegative => false;
         
         public override void Apply(Item item)
