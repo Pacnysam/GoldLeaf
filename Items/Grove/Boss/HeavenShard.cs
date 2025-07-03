@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.Audio;
 using System.IO;
+using System.Collections.Generic;
 
 namespace GoldLeaf.Items.Grove.Boss
 {
@@ -33,6 +34,19 @@ namespace GoldLeaf.Items.Grove.Boss
 
             ItemID.Sets.ItemNoGravity[Item.type] = true;
             ItemID.Sets.ShimmerTransformToItem[Item.type] = ItemType<EveDroplet>();
+        }
+
+        public List<Vector2> oldPos = [];
+
+        public override void PostUpdate()
+        {
+            if (Item.velocity.Length() > 0)
+                oldPos.Add(Item.Center);
+
+            if (oldPos.Count > 15 || (oldPos.Count > 0 && Item.velocity.Length() <= 0.2f))
+            {
+                oldPos.RemoveAt(0);
+            }
         }
 
         public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)

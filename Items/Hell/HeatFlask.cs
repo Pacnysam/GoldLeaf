@@ -58,7 +58,7 @@ namespace GoldLeaf.Items.Hell
 			Item.knockBack = 3;
             Item.value = Item.sellPrice(0, 0, 2, 75);
             Item.rare = ItemRarityID.Blue;
-            Item.UseSound = SoundID.Item1;
+            Item.UseSound = SoundID.Item106;
 			Item.autoReuse = true;
             Item.GetGlobalItem<GoldLeafItem>().critDamageMod = 0.25f;
 

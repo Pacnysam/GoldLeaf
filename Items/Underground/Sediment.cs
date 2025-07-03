@@ -98,6 +98,8 @@ namespace GoldLeaf.Items.Underground
                 gem = Array.IndexOf(sedimentValidGems, Main.mouseItem.type) + 1;
                 Main.mouseItem.stack--;
 
+                Item.SetElement(Element.Arcane, 1);
+
                 if (Main.netMode != NetmodeID.Server)
                 {
                     SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact);
@@ -108,6 +110,8 @@ namespace GoldLeaf.Items.Underground
             {
                 player.QuickSpawnItem(player.GetSource_ItemUse(Item), sedimentValidGems[gem - 1]);
                 gem = (int)Gem.None;
+
+                Item.SetElement(Element.Arcane, -1);
 
                 if (Main.netMode != NetmodeID.Server)
                 {
@@ -121,9 +125,9 @@ namespace GoldLeaf.Items.Underground
         public override void HoldItem(Player player)
         {
             if (gem != (int)Gem.None && !Item.HasElement(Element.Arcane))
-                Item.SetElements([Element.Arcane], 1);
+                Item.SetElement(Element.Arcane, 1);
             else if (gem == (int)Gem.None && Item.HasElement(Element.Arcane))
-                Item.SetElements([Element.Arcane], -1);
+                Item.SetElement(Element.Arcane, -1);
         }
 
         public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
@@ -430,12 +434,12 @@ namespace GoldLeaf.Items.Underground
                 }
 
                 if (!Projectile.HasElement(Element.Arcane))
-                    Projectile.SetElements([Element.Arcane], 1);
+                    Projectile.SetElement(Element.Arcane, 1);
             }
             else
             {
                 if (Projectile.HasElement(Element.Arcane))
-                    Projectile.SetElements([Element.Arcane], -1);
+                    Projectile.SetElement(Element.Arcane, -1);
             }
             return true;
         }

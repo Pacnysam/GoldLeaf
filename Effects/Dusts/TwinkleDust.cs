@@ -14,17 +14,16 @@ namespace GoldLeaf.Effects.Dusts
     {
         public override string Texture => "GoldLeaf/Textures/Flares/FlareSmall";
 
-        public static new Dust Spawn(Vector2 position, Vector2 spawnBox, Vector2 velocity, int alpha = 0, Color color = default, float scale = 1f, float drag = 0.925f, Player owner = null)
+        public static new Dust Spawn(LightDustData data, Vector2 position, Vector2 spawnBox, Vector2 velocity, int alpha = 0, Color color = default, float scale = 1f)
         {
-            Dust dust = Dust.NewDustDirect(position, (int)spawnBox.X, (int)spawnBox.Y, DustType<TwinkleDust>(), velocity.X, velocity.Y, alpha, color, scale); ;
-
-            dust.customData = new LightDustData(drag, owner);
+            Dust dust = Dust.NewDustDirect(position, (int)spawnBox.X, (int)spawnBox.Y, DustType<TwinkleDust>(), velocity.X, velocity.Y, alpha, color, scale);
+            dust.customData = data;
             return dust;
         }
-        public static new void SpawnPerfect(Vector2 position, Vector2 velocity, int alpha = 0, Color color = default, float scale = 1f, float drag = 0.925f, Player owner = null)
+        public static new void SpawnPerfect(LightDustData data, Vector2 position, Vector2 velocity, int alpha = 0, Color color = default, float scale = 1f)
         {
-            Dust dust = Dust.NewDustPerfect(position, DustType<TwinkleDust>(), velocity, alpha, color, scale); ;
-            dust.customData = new LightDustData(drag, owner);
+            Dust dust = Dust.NewDustPerfect(position, DustType<TwinkleDust>(), velocity, alpha, color, scale);
+            dust.customData = data;
         }
 
         public override void OnSpawn(Dust dust)
@@ -36,8 +35,12 @@ namespace GoldLeaf.Effects.Dusts
             dust.alpha -= 25;
             dust.fadeIn += 1;
 
-            if (dust.customData is not LightDustData)
-                dust.customData = new LightDustData(0.9f);
+            dust.customData ??= new LightDustData(0.925f);
+        }
+
+        public override bool MidUpdate(Dust dust)
+        {
+            return true;
         }
 
         public override bool PreDraw(Dust dust)

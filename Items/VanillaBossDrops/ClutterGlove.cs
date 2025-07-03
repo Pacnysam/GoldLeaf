@@ -25,11 +25,6 @@ namespace GoldLeaf.Items.VanillaBossDrops
 {
     public abstract class ClutterGlove : ModItem //TODO fix like, ALL of this
     {
-        public override void SetStaticDefaults()
-        {
-            Item.SetElements([Element.Arcane, Element.Nature], -1);
-        }
-
         public override void SetDefaults()
         {
             Item.damage = 9;
@@ -50,6 +45,9 @@ namespace GoldLeaf.Items.VanillaBossDrops
 
             Item.value = Item.sellPrice(0, 1, 50, 0);
             Item.rare = ItemRarityID.Blue;
+
+            Item.SetElement(Element.Arcane, -1);
+            Item.SetElement(Element.Nature, -1);
 
             ItemID.Sets.IsRangedSpecialistWeapon[Type] = true;
 
@@ -93,6 +91,11 @@ namespace GoldLeaf.Items.VanillaBossDrops
 
     public class ClutterGloveCorruption : ClutterGlove 
     {
+        public override void SetStaticDefaults()
+        {
+            Item.AddElements([Element.None]);
+        }
+
         public override bool CanConsumeAmmo(Item ammo, Player player)
         {
             if (ammo.type == ItemID.ShadowScale)
@@ -108,6 +111,11 @@ namespace GoldLeaf.Items.VanillaBossDrops
 
     public class ClutterGloveCrimson : ClutterGlove
     {
+        public override void SetStaticDefaults()
+        {
+            Item.AddElements([Element.None]);
+        }
+
         public override bool CanConsumeAmmo(Item ammo, Player player)
         {
             if (ammo.type == ItemID.TissueSample)
@@ -128,6 +136,8 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Main.projFrames[Projectile.type] = 5;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+
+            Projectile.AddElements([Element.Shadow]);
         }
 
         public override void SetDefaults()
@@ -203,6 +213,8 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Main.projFrames[Projectile.type] = 5;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 2;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+
+            Projectile.AddElements([Element.Blood]);
         }
 
         public override void SetDefaults()

@@ -7,31 +7,47 @@ using Microsoft.Xna.Framework.Graphics;
 using GoldLeaf.Core;
 using ReLogic.Content;
 using Terraria.GameContent;
+using System.Diagnostics.CodeAnalysis;
 
 namespace GoldLeaf.Effects.Dusts
 {
     public class LightDust : ModDust
     {
-        public struct LightDustData(float drag = 0.95f, Player owner = null) //TODO: fix this, doesnt work fsr
+        public struct LightDustData(float drag = 0f, float rotationVelocity = 0f, Player owner = null)
         {
             public int counter;
             public float drag = drag;
+            public float rotationVelocity = rotationVelocity;
             public Player owner = owner;
-        }
-        public static Dust Spawn(Vector2 position, Vector2 spawnBox, Vector2 velocity, int alpha = 0, Color color = default, float scale = 1f, float drag = 0.95f, Player owner = null)
-        {
-            Dust dust = Dust.NewDustDirect(position, (int)spawnBox.X, (int)spawnBox.Y, DustType<LightDust>(), velocity.X, velocity.Y, alpha, color, scale);;
+
+            /*public override readonly bool Equals([NotNullWhen(true)] object obj)
+            {
+                return (drag != 0f !& rotationVelocity != 0f || owner != null);
+            }
+            public static bool operator ==(LightDustData left, LightDustData right) 
+                => (left.drag == right.drag && left.rotationVelocity == right.rotationVelocity && left.owner == right.owner);
+            public static bool operator !=(LightDustData left, LightDustData right) 
+                => !(left.drag == right.drag && left.rotationVelocity == right.rotationVelocity && left.owner == right.owner);
             
-            dust.customData = new LightDustData(drag, owner);
+            public override int GetHashCode()
+            {
+                throw new NotImplementedException();
+            }*/
+        }
+        public static Dust Spawn(LightDustData data, Vector2 position, Vector2 spawnBox, Vector2 velocity, int alpha = 0, Color color = default, float scale = 1f)
+        {
+            Dust dust = Dust.NewDustDirect(position, (int)spawnBox.X, (int)spawnBox.Y, DustType<LightDust>(), velocity.X, velocity.Y, alpha, color, scale);
+            dust.customData = data;
             return dust;
         }
-        public static void SpawnPerfect(Vector2 position, Vector2 velocity, int alpha = 0, Color color = default, float scale = 1f, float drag = 0.95f, Player owner = null)
+        public static void SpawnPerfect(LightDustData data, Vector2 position, Vector2 velocity, int alpha = 0, Color color = default, float scale = 1f)
         {
-            Dust dust = Dust.NewDustPerfect(position, DustType<LightDust>(), velocity, alpha, color, scale); ;
-            dust.customData = new LightDustData(drag, owner);
+            Dust dust = Dust.NewDustPerfect(position, DustType<LightDust>(), velocity, alpha, color, scale);
+            dust.customData = data;
         }
 
-        const float MaxFadeIn = 3f;
+        public virtual float MaxFadeIn => 3f;
+        //public virtual LightDustData DefaultData => new(0.95f, 0.5f);
 
         public override void OnSpawn(Dust dust)
         {
@@ -41,8 +57,26 @@ namespace GoldLeaf.Effects.Dusts
             dust.alpha -= 20;
             dust.fadeIn += 1;
 
-            if (dust.customData is not LightDustData)
-                dust.customData = new LightDustData(0.95f);
+            dust.customData ??= new LightDustData(0.95f, 0f);
+
+            /*if (dust.customData is not LightDustData)
+                dust.customData = new LightDustData(0.95f);*/
+        }
+
+        public virtual void SafeUpdate(Dust dust)
+        {
+
+        }
+
+        public override bool MidUpdate(Dust dust)
+        {
+            if (dust.customData is LightDustData data)
+            {
+                dust.rotation += data.rotationVelocity;
+            }
+
+            SafeUpdate(dust);
+            return true;
         }
 
         public override bool Update(Dust dust)

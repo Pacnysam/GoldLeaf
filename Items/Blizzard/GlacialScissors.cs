@@ -35,7 +35,6 @@ namespace GoldLeaf.Items.Blizzard
         public override void SetStaticDefaults()
         {
             Item.AddElements([Element.Ice]);
-            Item.SetSlash(true);
         }
 
         public override void SetDefaults()
@@ -50,6 +49,8 @@ namespace GoldLeaf.Items.Blizzard
 
             Item.value = Item.sellPrice(0, 1, 70, 0);
             Item.rare = ItemRarityID.Green;
+
+            Item.SetSlash();
         }
 
         public override void AddRecipes()

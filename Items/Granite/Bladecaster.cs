@@ -38,7 +38,6 @@ namespace GoldLeaf.Items.Granite
             ItemSets.Glowmask[Type] = (glowTex, Color.White with { A = 120 }, true);
 
             Item.AddElements([Element.Thunder]);
-            Item.SetSlash();
         }
 
         public override void SetDefaults()
@@ -61,6 +60,8 @@ namespace GoldLeaf.Items.Granite
 
             Item.width = 38;
             Item.height = 42;
+
+            Item.SetSlash();
         }
 
         public override void AddRecipes()

@@ -16,6 +16,8 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.UI;
+using Terraria.UI.Chat;
 using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Core
@@ -49,7 +51,19 @@ namespace GoldLeaf.Core
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            GoldLeafPlayer glPlayer = Main.LocalPlayer.GetModPlayer<GoldLeafPlayer>();
+            switch (item.type) //TODO: make a system for this
+            {
+                case ItemID.RoyalGel:
+                    {
+                        TooltipLine tooltipLine = tooltips.Find(n => n.Name == "Tooltip0");
+                        int index = tooltips.IndexOf(tooltipLine);
+                        if (tooltipLine != null)
+                            tooltips.Insert(index + 1, new TooltipLine(Mod, "RoyalGel", Language.GetTextValue("Mods.GoldLeaf.Items.Vanilla.RoyalGel", tooltipLine)));
+                        break;
+                    }
+            }
+
+            GoldLeafPlayer glPlayer = Main.LocalPlayer.GetModPlayer<GoldLeafPlayer>(); //TODO: separate critical strike damage stuff into its own file
             float updatedCritMod = (2 + item.GetGlobalItem<GoldLeafItem>().critDamageMod) * Main.LocalPlayer.GetModPlayer<GoldLeafPlayer>().critDamageMult;
 
             if (item.DamageType.CountsAsClass(DamageClass.Melee)) updatedCritMod += glPlayer.meleeCritDamageMod;
@@ -68,7 +82,6 @@ namespace GoldLeaf.Core
 
                 if (critLine != null || damageLine != null)
                     tooltips.Insert(index + 1, new TooltipLine(Mod, "CritMult", Language.GetTextValue("Mods.GoldLeaf.Mechanics.CritMult", updatedCritMod)));
-                  //tooltips.Insert(index + 1, new TooltipLine(Mod, "CritMult", $"{updatedCritMod}x critical strike multiplier"));
             }
         }
 

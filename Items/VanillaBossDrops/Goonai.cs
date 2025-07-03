@@ -67,16 +67,6 @@ namespace GoldLeaf.Items.VanillaBossDrops
             ItemID.Sets.IsRangedSpecialistWeapon[Type] = true;
         }
 
-        public override bool ConsumeItem(Player player)
-        {
-            if (player.GetModPlayer<GoldLeafPlayer>().royalGel) 
-            {
-                return Main.rand.NextBool(6, 10);
-            }
-
-            return true;
-        }
-
         public override void ModifyWeaponCrit(Player player, ref float crit)
         {
             crit *= 0;
@@ -178,8 +168,14 @@ namespace GoldLeaf.Items.VanillaBossDrops
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
+            Player player = Main.player[Projectile.owner];
             if (hit.Crit)
             {
+                if (player.GetModPlayer<GoldLeafPlayer>().royalGel)
+                {
+                    player.GetItem(player.whoAmI, new Item(ItemType<Goonai>()), new GetItemSettings(false, true));
+                }
+
                 ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.SilverBulletSparkle,
                                         new ParticleOrchestraSettings { PositionInWorld = Projectile.Center },
                                         Projectile.owner);
