@@ -127,12 +127,12 @@ namespace GoldLeaf.Items.Blizzard
                 }
 
                 type = BuffType<SafetyBlanketBuff>();
-                timeToAdd = Math.Clamp(timeToAdd, TimeToTicks(3), TimeToTicks(16));
+                timeToAdd = (int)Math.Clamp(timeToAdd * 1.25f, TimeToTicks(3), TimeToTicks(16));
             }
             orig(self, type, timeToAdd, quiet, foodHack);
         }
     }
-
+    
     public class SafetyBlanketEffect : ModProjectile
     {
         private static Asset<Texture2D> glowTex;
@@ -199,7 +199,16 @@ namespace GoldLeaf.Items.Blizzard
             Texture2D tex = TextureAssets.Projectile[Projectile.type].Value;
             Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, color * Math.Clamp(Math.Abs((Projectile.velocity.Y)/2), 0, 1), Projectile.rotation, tex.Size() / 2, Projectile.scale * 1.25f, SpriteEffects.None, 0f);
             Main.spriteBatch.Draw(glowTex.Value, Projectile.Center - Main.screenPosition, null, color * Math.Clamp(Math.Abs((Projectile.velocity.Y)/2), 0, 1), Projectile.rotation, glowTex.Size() / 2, Math.Abs(Projectile.velocity.Y / 3), SpriteEffects.None, 0f);
-            Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, Color.White * ((float)(255 - Projectile.alpha)/255), Projectile.rotation, tex.Size() / 2, Projectile.scale, SpriteEffects.None);
+            Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, Color.White * Projectile.Opacity, Projectile.rotation, tex.Size() / 2, Projectile.scale, SpriteEffects.None);
+
+            float magnitude = Math.Clamp(Math.Abs(Projectile.velocity.Y / 2f) - 0.2f, 0, 1f);
+
+            for (int i = 4; i > 0; i -= 1)
+            {
+                Main.EntitySpriteDraw(tex, Projectile.Center + new Vector2(magnitude * 4f, 0) * i - Main.screenPosition, null, ColorHelper.AdditiveWhite() * magnitude * ((4 - i) / 4f), Projectile.rotation, tex.Size() / 2, Projectile.scale, SpriteEffects.None);
+                Main.EntitySpriteDraw(tex, Projectile.Center + new Vector2(magnitude * -4f, 0) * i - Main.screenPosition, null, ColorHelper.AdditiveWhite() * magnitude * ((4 - i) / 4f), Projectile.rotation, tex.Size() / 2, Projectile.scale, SpriteEffects.None);
+            }
+
             return false;
         }
     }

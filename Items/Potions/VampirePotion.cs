@@ -16,6 +16,7 @@ using GoldLeaf.Core;
 using Microsoft.Build.Execution;
 using Terraria.DataStructures;
 using GoldLeaf.Items.Grove.Toxin;
+using GoldLeaf.Core.CrossMod;
 
 namespace GoldLeaf.Items.Potions
 {
@@ -24,6 +25,7 @@ namespace GoldLeaf.Items.Potions
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 20;
+            Item.AddPotionVat(new Color(118, 18, 30), false);
         }
 
         public override void SetDefaults()

@@ -5,28 +5,32 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.ModLoader;
 using Terraria;
-using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
 namespace GoldLeaf.Core.CrossMod
 {
     public static class RedemptionHelper
     {
+        public static bool RedemptionLoaded(out Mod redemption)
+        {
+            return ModLoader.TryGetMod("Redemption", out redemption);
+        }
+
         /// <summary>
         /// Adds given list of elements, must be put in SetStaticDefaults
         /// </summary>
         public static void AddElements(this Entity entity, Element[] elements)
         {
-            if (!ModLoader.TryGetMod("Redemption", out var redemption))
-                return;
-
-            for (int i = 0; i < elements.Length; i++)
+            if (RedemptionLoaded(out Mod redemption))
             {
-                if (entity is Item item)
-                    redemption.Call("addElementItem", (int)elements[i], item.type);
-                if (entity is Projectile proj)
-                    redemption.Call("addElementProj", (int)elements[i], proj.type);
-                if (entity is NPC npc)
-                    redemption.Call("addElementNPC", (int)elements[i], npc.type);
+                for (int i = 0; i < elements.Length; i++)
+                {
+                    if (entity is Item item)
+                        redemption.Call("addElementItem", (int)elements[i], item.type);
+                    if (entity is Projectile proj)
+                        redemption.Call("addElementProj", (int)elements[i], proj.type);
+                    if (entity is NPC npc)
+                        redemption.Call("addElementNPC", (int)elements[i], npc.type);
+                }
             }
         }
         
@@ -36,15 +40,15 @@ namespace GoldLeaf.Core.CrossMod
         /// </summary>
         public static void SetElement(this Entity entity, Element element, int overrideType = 1)
         {
-            if (!ModLoader.TryGetMod("Redemption", out var redemption))
-                return;
-
-            if (entity is Item item)
-                redemption.Call("elementOverrideItem", item, (int)element, (sbyte)overrideType);
-            else if (entity is Projectile proj)
-                redemption.Call("elementOverrideProj", proj, (int)element, (sbyte)overrideType);
-            else if (entity is NPC npc)
-                redemption.Call("elementOverrideNPC", npc, (int)element, (sbyte)overrideType);
+            if (RedemptionLoaded(out Mod redemption))
+            {
+                if (entity is Item item)
+                    redemption.Call("elementOverrideItem", item, (int)element, (sbyte)overrideType);
+                else if (entity is Projectile proj)
+                    redemption.Call("elementOverrideProj", proj, (int)element, (sbyte)overrideType);
+                else if (entity is NPC npc)
+                    redemption.Call("elementOverrideNPC", npc, (int)element, (sbyte)overrideType);
+            }
         }
         
         /// <summary>
@@ -52,15 +56,16 @@ namespace GoldLeaf.Core.CrossMod
         /// </summary>
         public static bool HasElement(this Entity entity, Element element)
         {
-            if (!ModLoader.TryGetMod("Redemption", out var redemption))
+            if (RedemptionLoaded(out Mod redemption))
+            {
+                if (entity is Item item)
+                    return (bool)redemption.Call("hasElementItem", item, (int)element);
+                else if (entity is Projectile proj)
+                    return (bool)redemption.Call("hasElementProj", proj, (int)element);
+                else if (entity is NPC npc)
+                    return (bool)redemption.Call("hasElementNPC", npc, (int)element);
                 return false;
-
-            if (entity is Item item)
-                return (bool)redemption.Call("hasElementItem", item, (int)element);
-            else if (entity is Projectile proj)
-                return (bool)redemption.Call("hasElementProj", proj, (int)element);
-            else if (entity is NPC npc)
-                return (bool)redemption.Call("hasElementNPC", npc, (int)element);
+            }
             return false;
         }
         
@@ -69,15 +74,15 @@ namespace GoldLeaf.Core.CrossMod
         /// </summary>
         public static int GetFirstElement(Entity entity, bool ignoreExplosive = false)
         {
-            if (!ModLoader.TryGetMod("Redemption", out var redemption))
-                return 0;
-
-            if (entity is Item item)
-                return (int)redemption.Call("getFirstElementItem", item, ignoreExplosive);
-            else if (entity is NPC npc)
-                return (int)redemption.Call("getFirstElementNPC", npc, ignoreExplosive);
-            else if (entity is Projectile proj)
-                return (int)redemption.Call("getFirstElementProj", proj, ignoreExplosive);
+            if (RedemptionLoaded(out Mod redemption))
+            {
+                if (entity is Item item)
+                    return (int)redemption.Call("getFirstElementItem", item, ignoreExplosive);
+                else if (entity is NPC npc)
+                    return (int)redemption.Call("getFirstElementNPC", npc, ignoreExplosive);
+                else if (entity is Projectile proj)
+                    return (int)redemption.Call("getFirstElementProj", proj, ignoreExplosive);
+            }
             return 0;
         }
         
@@ -86,10 +91,8 @@ namespace GoldLeaf.Core.CrossMod
         /// </summary>
         public static void SetBluntSwing(this Item item)
         {
-            if (!ModLoader.TryGetMod("Redemption", out var redemption))
-                return;
-
-            redemption.Call("addItemToBluntSwing", item.type);
+            if (RedemptionLoaded(out Mod redemption))
+                redemption.Call("addItemToBluntSwing", item.type);
         }
         
         /// <summary>
@@ -98,10 +101,9 @@ namespace GoldLeaf.Core.CrossMod
         /// </summary>
         public static bool SetSlash(this Item item, bool applyBonus = true)
         {
-            if (!ModLoader.TryGetMod("Redemption", out var redemption))
-                return false;
-
-            return (bool)redemption.Call("setSlashBonus", item, applyBonus);
+            if (RedemptionLoaded(out Mod redemption))
+                return (bool)redemption.Call("setSlashBonus", item, applyBonus);
+            return false;
         }
         
         /// <summary>
@@ -110,13 +112,13 @@ namespace GoldLeaf.Core.CrossMod
         /// </summary>
         public static bool SetAxe(this Entity entity, bool applyBonus = true)
         {
-            if (!ModLoader.TryGetMod("Redemption", out var redemption))
-                return false;
-
-            if (entity is Item item)
-                return (bool)redemption.Call("setAxeBonus", item, applyBonus);
-            if (entity is Projectile proj)
-                return (bool)redemption.Call("setAxeProj", proj, applyBonus);
+            if (RedemptionLoaded(out Mod redemption))
+            {
+                if (entity is Item item)
+                    return (bool)redemption.Call("setAxeBonus", item, applyBonus);
+                if (entity is Projectile proj)
+                    return (bool)redemption.Call("setAxeProj", proj, applyBonus);
+            }
             return false;
         }
         
@@ -126,13 +128,13 @@ namespace GoldLeaf.Core.CrossMod
         /// </summary>
         public static bool SetHammer(this Entity entity, bool applyBonus = true)
         {
-            if (!ModLoader.TryGetMod("Redemption", out var redemption))
-                return false;
-
-            if (entity is Item item)
-                return (bool)redemption.Call("setHammerBonus", item, applyBonus);
-            if (entity is Projectile proj)
-                return (bool)redemption.Call("setHammerProj", proj, applyBonus);
+            if (RedemptionLoaded(out Mod redemption))
+            {
+                if (entity is Item item)
+                    return (bool)redemption.Call("setHammerBonus", item, applyBonus);
+                if (entity is Projectile proj)
+                    return (bool)redemption.Call("setHammerProj", proj, applyBonus);
+            }
             return false;
         }
         
@@ -142,10 +144,10 @@ namespace GoldLeaf.Core.CrossMod
         /// </summary>
         public static bool SetSpear(this Projectile proj, bool applyBonus = true)
         {
-            if (!ModLoader.TryGetMod("Redemption", out var redemption))
-                return false;
-
-            return (bool)redemption.Call("setSpearProj", proj, applyBonus);
+            if (RedemptionLoaded(out Mod redemption))
+                return (bool)redemption.Call("setSpearProj", proj, applyBonus);
+            
+            return false;
         }
         
         /// <summary>
@@ -154,10 +156,9 @@ namespace GoldLeaf.Core.CrossMod
         /// </summary>
         public static bool Decapitate(NPC target, ref int damageDone, ref bool crit, int chance = 200)
         {
-            if (!ModLoader.TryGetMod("Redemption", out var redemption))
-                return false;
-
-            return (bool)redemption.Call("decapitation", target, damageDone, crit, chance);
+            if (RedemptionLoaded(out Mod redemption))
+                return (bool)redemption.Call("decapitation", target, damageDone, crit, chance);
+            return false;
         }
 
         /// <summary>
@@ -166,10 +167,8 @@ namespace GoldLeaf.Core.CrossMod
         /// </summary>
         public static void AddNpcAttribute(int npcType, string attributeString)
         {
-            if (!ModLoader.TryGetMod("Redemption", out var redemption))
-                return;
-
-            redemption.Call("addNPCToElementTypeList", attributeString, npcType);
+            if (RedemptionLoaded(out Mod redemption))
+                redemption.Call("addNPCToElementTypeList", attributeString, npcType);
         }
 
         public enum Element : int

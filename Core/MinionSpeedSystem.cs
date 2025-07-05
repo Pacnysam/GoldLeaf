@@ -79,7 +79,7 @@ namespace GoldLeaf.Core
                 if (projectile.minion) 
                 {
                     minionSpeedCounter += player.GetModPlayer<MinionSpeedPlayer>().minionSpeed;
-                    projectile.position += projectile.velocity * player.GetModPlayer<MinionSpeedPlayer>().minionSpeed;
+                    //projectile.position += projectile.velocity * player.GetModPlayer<MinionSpeedPlayer>().minionSpeed;
 
                     for (; minionSpeedCounter >= 1; minionSpeedCounter--)
                     {
@@ -90,7 +90,7 @@ namespace GoldLeaf.Core
                 if (projectile.sentry)
                 {
                     sentrySpeedCounter += player.GetModPlayer<MinionSpeedPlayer>().sentrySpeed;
-                    projectile.position += projectile.velocity * player.GetModPlayer<MinionSpeedPlayer>().sentrySpeed;
+                    //projectile.position += projectile.velocity * player.GetModPlayer<MinionSpeedPlayer>().sentrySpeed;
 
                     for (; sentrySpeedCounter >= 1; sentrySpeedCounter--)
                     {

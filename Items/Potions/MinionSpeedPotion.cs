@@ -17,6 +17,7 @@ using GoldLeaf.Items.Blizzard;
 using System;
 using Terraria.ModLoader.IO;
 using System.IO;
+using GoldLeaf.Core.CrossMod;
 
 namespace GoldLeaf.Items.Potions
 {
@@ -25,6 +26,7 @@ namespace GoldLeaf.Items.Potions
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 20;
+            Item.AddPotionVat(new Color(0, 214, 189), false);
         }
 
         public override void SetDefaults()
@@ -55,7 +57,7 @@ namespace GoldLeaf.Items.Potions
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.GetModPlayer<MinionSpeedPlayer>().minionSpeed += .25f;
+            player.GetModPlayer<MinionSpeedPlayer>().minionSpeed += 0.2f;
         }
     }
 

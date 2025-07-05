@@ -20,10 +20,11 @@ namespace GoldLeaf.Effects.Dusts
             dust.customData = data;
             return dust;
         }
-        public static new void SpawnPerfect(LightDustData data, Vector2 position, Vector2 velocity, int alpha = 0, Color color = default, float scale = 1f)
+        public static new Dust SpawnPerfect(LightDustData data, Vector2 position, Vector2 velocity, int alpha = 0, Color color = default, float scale = 1f)
         {
             Dust dust = Dust.NewDustPerfect(position, DustType<TwinkleDust>(), velocity, alpha, color, scale);
             dust.customData = data;
+            return dust;
         }
 
         public override void OnSpawn(Dust dust)
@@ -38,9 +39,10 @@ namespace GoldLeaf.Effects.Dusts
             dust.customData ??= new LightDustData(0.925f);
         }
 
-        public override bool MidUpdate(Dust dust)
+        public override void SafeUpdate(Dust dust)
         {
-            return true;
+            if (dust.customData is LightDustData data)
+                data.rotationVelocity *= data.drag;
         }
 
         public override bool PreDraw(Dust dust)

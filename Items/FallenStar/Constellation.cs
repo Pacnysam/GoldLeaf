@@ -40,7 +40,7 @@ namespace GoldLeaf.Items.FallenStar
 
         public override void SetDefaults()
         {
-            Item.DefaultToWhip(ProjectileType<ConstellationP>(), 11, 1.2f, 3f, 45);
+            Item.DefaultToWhip(ProjectileType<ConstellationP>(), 14, 1.2f, 3f, 45);
 
             Item.rare = ItemRarityID.Blue;
             Item.value = Item.sellPrice(0, 0, 75, 0);
@@ -51,10 +51,10 @@ namespace GoldLeaf.Items.FallenStar
         {
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.FallenStar, 5);
-            recipe.AddIngredient(ItemID.SunplateBlock, 18);
+            recipe.AddIngredient(ItemID.SunplateBlock, 20);
             //recipe.AddRecipeGroup(RecipeGroupID.IronBar, 8);
-            recipe.AddTile(TileID.Anvils);
-            recipe.AddCondition(Condition.TimeNight);
+            recipe.AddTile(TileID.WorkBenches);
+            //recipe.AddCondition(Condition.TimeNight);
             recipe.Register();
 
             /*Recipe recipe2 = CreateRecipe();

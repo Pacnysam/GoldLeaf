@@ -45,7 +45,7 @@ MinionCritPotionBuff: {
 
 MinionSpeedPotionBuff: {
 	DisplayName: Productive
-	Description: 25% increased minion attack speed
+	Description: 20% increased minion attack speed
 }
 
 FinessePotionBuff: {

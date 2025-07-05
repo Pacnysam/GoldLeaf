@@ -18,7 +18,7 @@ namespace GoldLeaf.Core
         
         public static Color AuroraColor()
         {
-            float timer = Main.GlobalTimeWrappedHourly % 9;
+            float timer = (Main.GlobalTimeWrappedHourly * 3f) % 9;
             var auroraGreen = new Color(0, 255, 189);
             var auroraBlue = new Color(0, 164, 242);
             var auroraPurple = new Color(122, 63, 255);

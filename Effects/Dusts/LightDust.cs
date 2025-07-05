@@ -68,17 +68,6 @@ namespace GoldLeaf.Effects.Dusts
 
         }
 
-        public override bool MidUpdate(Dust dust)
-        {
-            if (dust.customData is LightDustData data)
-            {
-                dust.rotation += data.rotationVelocity;
-            }
-
-            SafeUpdate(dust);
-            return true;
-        }
-
         public override bool Update(Dust dust)
         {
             if (dust.customData is LightDustData data)
@@ -114,6 +103,8 @@ namespace GoldLeaf.Effects.Dusts
                     dust.alpha += 7 * (int)(MaxFadeIn - Math.Clamp(dust.fadeIn, 0, MaxFadeIn));
                 }
 
+                dust.rotation += data.rotationVelocity;
+
                 if (!dust.noLight)
                     Lighting.AddLight(dust.position, dust.color.ToVector3() * 0.3f * dust.scale);
 
@@ -121,6 +112,8 @@ namespace GoldLeaf.Effects.Dusts
                 {
                     dust.active = false;
                 }
+
+                SafeUpdate(dust);
             }
             return false;
         }

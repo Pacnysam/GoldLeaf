@@ -27,7 +27,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
         public override string Texture => "GoldLeaf/Items/Blizzard/Armor/FrostyMask";
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(manaMax);
 
-        private static readonly int manaMax = 80;
+        private static readonly int manaMax = 60;
 
         public override void Load()
         {
@@ -174,9 +174,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
     public class FrostyPlayer : ModPlayer 
     {
         public bool frostySet = false;
-        //public float frostyDamageBonus = 0.08f;
-        //public int frostyCooldown = 0;
-
+        
         public override void Load()
         {
             ControlsPlayer.DoubleTapPrimaryEvent += SnapFreeze;
@@ -191,27 +189,25 @@ namespace GoldLeaf.Items.Blizzard.Armor
             frostySet = false;
         }
 
-        /*public override void PostUpdateEquips()
-        {
-            if (frostySet && frostyCooldown > 0) frostyCooldown--;
-        }*/
-        
         private static void SnapFreeze(Player player) 
         {
             if (player.GetModPlayer<FrostyPlayer>().frostySet && !player.HasBuff(BuffType<SnapFreezeBuff>()))
             {
                 float num = 8000f;
                 int target = -1;
-                for (int i = 0; i < 200; i++)
+
+                foreach (NPC npc in Main.ActiveNPCs)
                 {
-                    float distanceCheck = Vector2.Distance(player.MountedCenter, Main.npc[i].Center);
-                    if (distanceCheck < num && distanceCheck < 900f && Vector2.Distance(Main.MouseWorld, Main.npc[i].Center) <= 200)
+                    int npcID = npc.whoAmI;
+
+                    float distanceCheck = Vector2.Distance(Main.MouseWorld, Main.npc[npcID].Center);
+                    if (distanceCheck < num && distanceCheck < 250f && Vector2.Distance(player.MountedCenter, Main.npc[npcID].Center) <= 1000 && !Main.npc[npcID].HasBuff<SnapFreezeBuff>() && IsTargetValid(Main.npc[npcID]) && Main.npc[npcID].lifeMax >= 25)
                     {
-                        target = i;
+                        target = npcID;
                         num = distanceCheck;
                     }
                 }
-                if (target != -1 && IsTargetValid(Main.npc[target])) 
+                if (target != -1) 
                 {
                     if (Main.netMode != NetmodeID.SinglePlayer)
                     {
@@ -221,9 +217,9 @@ namespace GoldLeaf.Items.Blizzard.Armor
                         packet.Send(-1, player.whoAmI);
                     }
 
-                    Main.npc[target].AddBuff(BuffType<SnapFreezeBuff>(), TimeToTicks(10));
+                    Main.npc[target].AddBuff(BuffType<SnapFreezeBuff>(), TimeToTicks(12));
 
-                    player.AddBuff(BuffType<SnapFreezeBuff>(), TimeToTicks(10));
+                    player.AddBuff(BuffType<SnapFreezeBuff>(), TimeToTicks(12));
 
                     float seed = Main.rand.NextFloat(0f, 8f);
 
@@ -261,7 +257,8 @@ namespace GoldLeaf.Items.Blizzard.Armor
                 if (Main.netMode != NetmodeID.Server)
                 {
                     SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/ColdChime") { Volume = 0.6f, PitchVariance = 0.2f });
-                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/IceSmash") { Volume = 1.15f, Pitch = 0.35f, PitchVariance = 0.2f });
+                    SoundEngine.PlaySound(SoundID.DeerclopsIceAttack with { Volume = 0.35f, PitchVariance = 0.2f });
+                    //SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/IceSmash") { Volume = 1.15f, Pitch = 0.35f, PitchVariance = 0.2f });
                 }
                 Player.ClearBuff(BuffType<SnapFreezeBuff>());
                 

@@ -14,6 +14,7 @@ using GoldLeaf.Tiles.Decor;
 using GoldLeaf.Core;
 using GoldLeaf.Items.Nightshade;
 using GoldLeaf.Items.Grove;
+using GoldLeaf.Core.CrossMod;
 
 namespace GoldLeaf.Items.Potions
 {
@@ -22,6 +23,7 @@ namespace GoldLeaf.Items.Potions
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 20;
+            Item.AddPotionVat(new Color(104, 111, 157));
         }
 
         public override void SetDefaults()

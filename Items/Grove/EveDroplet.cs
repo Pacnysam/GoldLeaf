@@ -301,8 +301,9 @@ namespace GoldLeaf.Items.Grove
                 bool didExplode = false;
                 if (npc.HasBuff(BuffID.OnFire))
                 {
-                    int explosion = Projectile.NewProjectile(npc.GetSource_Buff(npc.FindBuffIndex(BuffType<EveDropletBuff>())), npc.Center, Vector2.Zero, ProjectileType<AetherBurst>(), 30, 0.5f, -1, 65f, 0, 1f);
+                    int explosion = Projectile.NewProjectile(npc.GetSource_Buff(npc.FindBuffIndex(BuffType<EveDropletBuff>())), npc.Center, Vector2.Zero, ProjectileType<AetherBurst>(), 40, 0.5f, -1, 65f, 0, 1f);
                     Main.projectile[explosion].DamageType = hit.DamageType;
+                    Main.projectile[explosion].ArmorPenetration = 15;
                     Main.projectile[explosion].netUpdate = true;
 
                     CameraSystem.AddScreenshake(Main.LocalPlayer, 16, npc.Center);
@@ -330,8 +331,9 @@ namespace GoldLeaf.Items.Grove
                 }
                 if (npc.HasBuff(BuffID.OnFire3))
                 {
-                    int explosion = Projectile.NewProjectile(npc.GetSource_Buff(npc.FindBuffIndex(BuffType<EveDropletBuff>())), npc.Center, Vector2.Zero, ProjectileType<AetherBurst>(), 55, 0.5f, -1, 130f, 0, 1f);
+                    int explosion = Projectile.NewProjectile(npc.GetSource_Buff(npc.FindBuffIndex(BuffType<EveDropletBuff>())), npc.Center, Vector2.Zero, ProjectileType<AetherBurst>(), 70, 0.5f, -1, 130f, 0, 1f);
                     Main.projectile[explosion].DamageType = hit.DamageType;
+                    Main.projectile[explosion].ArmorPenetration = 25;
                     Main.projectile[explosion].netUpdate = true;
 
                     CameraSystem.AddScreenshake(Main.LocalPlayer, 24, npc.Center);

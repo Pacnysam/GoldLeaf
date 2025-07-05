@@ -20,12 +20,15 @@ float uSaturation;
 float4 uSourceRect;
 float2 uZoom;
 
-float4 PixelShaderFunction(float2 uv : TEXCOORD0) : COLOR0
+float4 PixelShaderFunction(float4 sampleColor : COLOR0, float2 uv : TEXCOORD0) : COLOR0
 {
+    uv = round(uv / (2 / uScreenResolution) + 0.5) * (2 / uScreenResolution);
+    uv = round(uv / (2 / uScreenResolution) - 0.5) * (2 / uScreenResolution);
     float4 color = tex2D(uImage0, uv);
+
     float brightness = (color.x + color.y + color.z) / 3.0;
     
-    if (brightness < 0.2225)
+    if (brightness < 0.2275)
         color.rgb = float3(8, 24, 32) / 255.0;
     else if (brightness < 0.475)
         color.rgb = float3(52, 104, 86) / 255.0;
@@ -33,7 +36,7 @@ float4 PixelShaderFunction(float2 uv : TEXCOORD0) : COLOR0
         color.rgb = float3(136, 192, 112) / 255.0;
     else
         color.rgb = float3(224, 248, 208) / 255.0;
-
+    
     return color;
 }
 

@@ -2,7 +2,7 @@ GoldLeafConditions: {
 	InSurface: On Surface
 	UsingGameboy: Playing Gameboy
 	HasClutterGlove: Has Clutter Glove
-	LearnedRecipe: Learned Recipe
+	LearnedRecipe: Discovered
 }
 
 Mechanics: {

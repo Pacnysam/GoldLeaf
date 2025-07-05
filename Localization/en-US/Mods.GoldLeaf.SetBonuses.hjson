@@ -1,8 +1,8 @@
 FrostySet:
 	'''
 	{0}% increased magic critical strike damage
-	Double Tap {1} to snap freeze enemies near the cursor
-	Snap frozen enemies die at 25% health, does not work on bosses
+	Double Tap {1} to snap freeze an enemy near the cursor
+	Snap frozen enemies die when struck below at 25% health
 	'''
 Echobark: Gains bonus defense when struck
 EchobarkDefense: "{0}[c/78BE78:(+{1})] defense"

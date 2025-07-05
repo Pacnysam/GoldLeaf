@@ -11,6 +11,7 @@ using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
 using GoldLeaf.Tiles.Decor;
+using GoldLeaf.Core.CrossMod;
 
 namespace GoldLeaf.Items.Potions
 {
@@ -19,6 +20,7 @@ namespace GoldLeaf.Items.Potions
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 20;
+            Item.AddPotionVat(new Color(244, 66, 172));
         }
 
         public override void SetDefaults()

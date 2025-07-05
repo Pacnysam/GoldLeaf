@@ -24,7 +24,7 @@ namespace GoldLeaf.Items.Nightshade
 	{
         public override void SetStaticDefaults()
         {
-            Item.AddElements([Element.Shadow]);
+            Item.AddElements([Element.Shadow, Element.Blood]);
         }
 
         public override void SetDefaults() 
@@ -97,7 +97,7 @@ namespace GoldLeaf.Items.Nightshade
 			ProjectileID.Sets.TrailCacheLength[Projectile.type] = 9;
 			ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 
-            Projectile.AddElements([Element.Shadow]);
+            Projectile.AddElements([Element.Shadow, Element.Blood]);
         }
 
 		public override void SetDefaults()
@@ -212,7 +212,7 @@ namespace GoldLeaf.Items.Nightshade
 			ProjectileID.Sets.TrailCacheLength[Projectile.type] = 12;
 			ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 
-            Projectile.AddElements([Element.Shadow]);
+            Projectile.AddElements([Element.Shadow, Element.Blood]);
         }
 
 		public override void SetDefaults()
