@@ -17,6 +17,8 @@ using GoldLeaf.Items.Blizzard;
 using GoldLeaf.Items.Blizzard.Armor;
 using System.IO;
 using System.Diagnostics.Metrics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
+using Newtonsoft.Json.Linq;
 
 
 namespace GoldLeaf.Core //most of this is snatched from starlight river and spirit, i (pacnysam) did not code most of this!
@@ -576,6 +578,8 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
 
     public static class DustHelper
     {
+        public static float Opacity(this Dust dust) => 1f - (float)dust.alpha / 255f;
+
         public static void DrawStar(Vector2 position, int dustType, float pointAmount = 5, float mainSize = 1, float dustDensity = 1, float dustSize = 1f, float pointDepthMult = 1f, float pointDepthMultOffset = 0.5f, bool noGravity = false, float randomAmount = 0, float rotationAmount = -1)
         {
             float rot;

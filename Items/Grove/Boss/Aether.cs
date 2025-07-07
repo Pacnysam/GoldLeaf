@@ -130,9 +130,8 @@ namespace GoldLeaf.Items.Grove.Boss
 
         public override void SetDefaults()
         {
-
-            Projectile.width = 14;
-            Projectile.height = 20;
+            Projectile.width = 12;
+            Projectile.height = 12;
             Projectile.friendly = true;
             Projectile.tileCollide = true;
             Projectile.penetrate = 4;
@@ -154,8 +153,6 @@ namespace GoldLeaf.Items.Grove.Boss
             Projectile.timeLeft = reader.ReadInt32();
         }
 
-        public override LocalizedText DisplayName => base.DisplayName.WithFormatArgs("Aether Flame");
-
         public override void PostDraw(Color lightColor)
         {
             if (Counter > THRESHHOLD) 
@@ -166,10 +163,10 @@ namespace GoldLeaf.Items.Grove.Boss
 
                 Texture2D tex = Request<Texture2D>("GoldLeaf/Textures/Masks/Mask1").Value;
                 
-                Main.spriteBatch.Draw(tex, Projectile.Center + new Vector2(0, -6) - Main.screenPosition, null, color * 0.5f, 0, tex.Size()/2, scale/5, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(tex, Projectile.Center + new Vector2(0, -6) - Main.screenPosition, null, color * 0.5f, 0, tex.Size()/2, scale/5f, SpriteEffects.None, 0f);
             }
         }
-
+        
         public override bool PreDraw(ref Color lightColor)
         {
             /*Texture2D tex = Request<Texture2D>(Texture).Value;
@@ -182,7 +179,7 @@ namespace GoldLeaf.Items.Grove.Boss
             }*/
             return false;
         }
-
+        
         public override void AI()
         {
             if (!Main.dedServ)
@@ -235,9 +232,7 @@ namespace GoldLeaf.Items.Grove.Boss
             if (Counter == THRESHHOLD)
             {
                 Projectile.penetrate += 5;
-
-                for (float k = 0; k < 6.28f; k += 0.2f)
-                    Dust.NewDustPerfect(Projectile.Center, DustType<AetherDust>(), Vector2.One.RotatedBy(k) * 2, Scale: 0.9f);
+                //for (float k = 0; k < 6.28f; k += 0.2f) Dust.NewDustPerfect(Projectile.position, DustType<AetherDust>(), Vector2.One.RotatedBy(k) * 2, Scale: 0.9f);
             }
 
             if (Counter >= THRESHHOLD)
@@ -250,7 +245,7 @@ namespace GoldLeaf.Items.Grove.Boss
                 }*/
 
                 Projectile.velocity += Vector2.Normalize(Main.MouseWorld - Projectile.Center) * 0.65f;
-                if (Projectile.velocity.Length() > (4f + (Counter * 0.005f))) Projectile.velocity = Vector2.Normalize(Projectile.velocity) * (4f + (Counter * 0.005f));
+                if (Projectile.velocity.Length() > (4f + (Counter * 0.0135f))) Projectile.velocity = Vector2.Normalize(Projectile.velocity) * (4f + (Counter * 0.0135f));
 
                 ShootCounter++;
                 if (ShootCounter >= 16 - (ShotsFired / 3))
@@ -289,7 +284,7 @@ namespace GoldLeaf.Items.Grove.Boss
 
                             ShotsFired++;
                             if (Main.myPlayer == Projectile.owner)
-                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y, perturbedSpeed.X * 0.3f, perturbedSpeed.Y * 0.3f, ProjectileType<AetherBeam>(), (int)(Projectile.damage * 0.75f), Projectile.knockBack * 0.35f, Projectile.owner, 0f, 0f);
+                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y, perturbedSpeed.X * 0.35f, perturbedSpeed.Y * 0.35f, ProjectileType<AetherBeam>(), (int)(Projectile.damage * 0.75f), Projectile.knockBack * 0.35f, Projectile.owner, 0f, 0f);
                         }
                     }
                 }
@@ -301,10 +296,12 @@ namespace GoldLeaf.Items.Grove.Boss
                 float y = (float)Math.Sin(GoldLeafWorld.rottime + (Counter * 0.03f) + k) * Counter / 64f;
                 Vector2 pos = (new Vector2(x, y)).RotatedBy(k / 12f * 6.28f);
 
-                Dust d = Dust.NewDustPerfect(Projectile.Center, DustType<AetherDust>(), pos * (0.3f + Counter * 0.0015f), 0, default, 1f + (Counter * 0.0015f));
+                Dust d = Dust.NewDustPerfect(Projectile.Center, DustType<AetherDust>(), pos * (0.3f + Counter * 0.00135f), 0, default, 1f + (Counter * 0.00135f));
+                d.position += d.velocity * 2f;
                 d.velocity += new Vector2(0, Counter * -0.0125f);
             }
         }
+
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             if (Counter >= THRESHHOLD / 2) return false; else return true;
@@ -318,11 +315,6 @@ namespace GoldLeaf.Items.Grove.Boss
 
             //target.AddBuff(BuffType<AetherFlameBuff>(), Helper.TimeToTicks(1f));
         }
-
-        /*public override void OnHitPlayer(Player target, Player.HurtInfo info)
-        {
-            target.AddBuff(BuffType<AetherFlameBuff>(), Helper.TimeToTicks(1.5f), false);
-        }*/
 
         public override void OnKill(int timeLeft)
         {
@@ -513,13 +505,13 @@ namespace GoldLeaf.Items.Grove.Boss
                 target.AddBuff(BuffType<AetherFlameBuff>(), Helper.TimeToTicks(3.5f), false);
         }*/
     }
-
+    
     public class AetherBeam : ModProjectile
     {
-        public override string Texture => "GoldLeaf/Effects/Dusts/AetherDust";
+        public override string Texture => "GoldLeaf/Textures/Shine";
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 7;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 3;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 
             Projectile.AddElements([Element.Fire, Element.Arcane, Element.Holy]);
@@ -532,45 +524,51 @@ namespace GoldLeaf.Items.Grove.Boss
             Projectile.ArmorPenetration = 4;
             Projectile.width = 8;
             Projectile.height = 8;
-            Projectile.extraUpdates = 4;
+            Projectile.extraUpdates = 5;
             Projectile.timeLeft = 160;
             Projectile.tileCollide = true;
             Projectile.ignoreWater = true;
 
             Projectile.DamageType = DamageClass.Magic;
         }
-        public override LocalizedText DisplayName => base.DisplayName.WithFormatArgs("Aether Beam");
-
+        
         public override void AI()
         {
-            Projectile.rotation = Projectile.velocity.ToRotation();
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+            Projectile.velocity *= 0.985f;
 
-            for (int i = 0; i < 3; i++)
+            Projectile.alpha = (int)Math.Clamp((160 - Projectile.timeLeft) * 2.25f, 0, 255);
+            Projectile.scale = Math.Clamp(Projectile.timeLeft * 0.1f, 0.25f, 1f);
+            
+            /*for (int i = 0; i < 3; i++)
             {
                 Dust.NewDustPerfect(Projectile.Center, DustType<AetherDust>(), Projectile.velocity * 0.4f, 0, Color.White, 0.6f);
-            }
+            }*/
         }
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D tex = Request<Texture2D>("GoldLeaf/Effects/Dusts/AetherDust").Value;
-            Vector2 drawOrigin = new(tex.Width * 0.5f, Projectile.height * 0.5f);
+            Texture2D tex = TextureAssets.Projectile[Type].Value;
+            //Vector2 drawOrigin = new(tex.Width * 0.5f, 24f);
+
+            Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, new Color(255, 119, 246) { A = 0 } * Projectile.Opacity, Projectile.rotation, tex.Size()/2f, new Vector2(1f, Math.Clamp(Projectile.velocity.Length() * 0.75f, 0.35f, 4f) * 0.5f), SpriteEffects.None);
 
             for (int k = 0; k < Projectile.oldPos.Length; k++)
             {
-                Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin;
-                Main.spriteBatch.Draw(tex, drawPos, null, Color.White * (1.0f - (0.05f * k)), Projectile.rotation + MathHelper.PiOver2, drawOrigin, Projectile.scale * 1.2f - (0.06f * k), SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(tex, Projectile.oldPos[k] + Projectile.Size / 2f - Main.screenPosition, null, new Color(255, 119, 246) { A = 0 } * (Projectile.Opacity - (0.3f * k)), Projectile.rotation, tex.Size() / 2f, new Vector2(1f, Math.Clamp(Projectile.velocity.Length() * 0.75f, 0.35f, 4f) * 0.5f), SpriteEffects.None);
+                //Main.spriteBatch.Draw(tex, drawPos, null, Color.White * (1.0f - (0.05f * k)), Projectile.rotation + MathHelper.PiOver2, drawOrigin, Projectile.scale * 1.2f - (0.06f * k), SpriteEffects.None, 0f);
             }
-            return true;
+            return false;
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             for (int i = 0; i < 3; i++)
             {
-                var dust = Dust.NewDustPerfect(Projectile.Center, DustType<AetherSmokeFast>(), Projectile.velocity * 0.1f + Main.rand.NextVector2Circular(1.5f, 1.5f));
+                var dust = Dust.NewDustPerfect(Projectile.Center, DustType<AetherSmoke>(), Projectile.velocity * 0.1f + Main.rand.NextVector2Circular(1.5f, 1.5f));
                 dust.scale = 0.45f * Projectile.scale;
                 dust.rotation = Main.rand.NextFloatDirection();
+                dust.alpha += Main.rand.Next(70, 90);
             }
 
             /*if (hit.Crit)
@@ -636,7 +634,7 @@ namespace GoldLeaf.Items.Grove.Boss
             //target.AddBuff(BuffType<AetherFlameBuff>(), Helper.TimeToTicks(1f));
         }
     }
-
+    
     public class AetherFlameBuff : ModBuff
     {
         public override string Texture => Helper.CoolBuffTex(base.Texture);
@@ -653,45 +651,29 @@ namespace GoldLeaf.Items.Grove.Boss
 
         public override void Update(Player player, ref int buffIndex)
         {
-            if (Main.rand.NextBool(3) && !player.dead)
-            {
-                Dust dust = Dust.NewDustDirect(player.position, player.width, player.height, DustType<AetherDust>(), 0f, Main.rand.NextFloat(-1.25f, -0.9f), 0, Color.White, Main.rand.NextFloat(0.6f, 0.85f));
-                dust.velocity.X *= 0.25f;
-
-                if (dust.velocity.Y > 0)
-                    dust.velocity.Y *= -1f;
-            }
-
             if (Main.rand.NextBool(8) && !player.dead)
             {
                 Dust smoke = Dust.NewDustDirect(player.position, player.width, player.height, DustType<AetherSmoke>(), 0f, Main.rand.NextFloat(-0.85f, -0.4f), 0, Color.White * Main.rand.NextFloat(0.2f, 0.3f), Main.rand.NextFloat(0.5f, 0.65f));
-                smoke.velocity.X *= 0.5f;
+                smoke.velocity.X *= 0.35f;
+                smoke.alpha = Main.rand.Next(60, 90);
 
                 if (smoke.velocity.Y > 0)
                     smoke.velocity.Y *= -1;
             }
 
             if (player.HasBuff(BuffID.OnFire))
-                player.DelBuff(player.FindBuffIndex(BuffID.OnFire));
+                player.ClearBuff(BuffID.OnFire);
             if (player.HasBuff(BuffID.OnFire3))
-                player.DelBuff(player.FindBuffIndex(BuffID.OnFire3));
+                player.ClearBuff(BuffID.OnFire3);
         }
 
         public override void Update(NPC npc, ref int buffIndex)
         {
-            if (Main.rand.NextBool(4)) 
-            {
-                Dust dust = Dust.NewDustDirect(npc.position, npc.width, npc.height, DustType<AetherDust>(), 0f, Main.rand.NextFloat(-1.25f, -0.9f), 0, Color.White, Main.rand.NextFloat(0.6f, 1.2f));
-                dust.velocity.X *= 0.25f;
-
-                if (dust.velocity.Y > 0)
-                    dust.velocity.Y *= -1;
-            }
-
             if (Main.rand.NextBool(8))
             {
                 Dust smoke = Dust.NewDustDirect(npc.position, npc.width, npc.height, DustType<AetherSmoke>(), 0f, Main.rand.NextFloat(-0.85f, -0.4f), 0, Color.White * Main.rand.NextFloat(0.2f, 0.3f), Main.rand.NextFloat(0.5f, 0.65f));
-                smoke.velocity.X *= 0.5f;
+                smoke.velocity.X *= 0.35f;
+                smoke.alpha = Main.rand.Next(60, 90);
 
                 if (smoke.velocity.Y > 0)
                     smoke.velocity.Y *= -1;
@@ -714,10 +696,25 @@ namespace GoldLeaf.Items.Grove.Boss
         {
             if (aetherFlareUpTime > 0)
             {
-                Dust.NewDust(npc.position, npc.width, npc.height, DustType<AetherDust>(), Main.rand.NextFloat(-0.125f, 0.125f), Main.rand.NextFloat(-1.25f, -0.9f), 0, Color.White, Main.rand.NextFloat(0.6f, 1.2f));
-                
-                if (Main.rand.NextBool())
-                    Dust.NewDust(npc.position, npc.width, npc.height, DustType<AetherSmoke>(), Main.rand.NextFloat(-0.2f, 0.2f), Main.rand.NextFloat(-1.25f, -0.6f), 0, Color.White * Main.rand.NextFloat(0.2f, 0.35f), Main.rand.NextFloat(0.5f, 0.65f));
+                Dust dust = Dust.NewDustDirect(npc.position, npc.width, npc.height, DustType<AetherSparkDust>(), Main.rand.NextFloat(-0.125f, 0.125f), Main.rand.NextFloat(-1.25f, -0.9f), 0, Color.White, Main.rand.NextFloat(0.75f, 1.2f));
+                dust.velocity.X *= 0.25f;
+
+                if (dust.velocity.Y > 0)
+                    dust.velocity.Y *= -1f;
+
+                if (Main.rand.NextBool(3))
+                { 
+                    Dust smoke = Dust.NewDustDirect(npc.position, npc.width, npc.height, DustType<AetherSmoke>(), Main.rand.NextFloat(-0.2f, 0.2f), Main.rand.NextFloat(-1.25f, -0.6f), 0, Color.White * Main.rand.NextFloat(0.125f, 0.2f), Main.rand.NextFloat(0.5f, 0.65f));
+                    smoke.alpha = Main.rand.Next(60, 90);
+                }
+            }
+            else if (npc.HasBuff<AetherFlameBuff>() && Main.rand.NextBool(4))
+            {
+                Dust dust = Dust.NewDustDirect(npc.position, npc.width, npc.height, DustType<AetherDust>(), 0f, Main.rand.NextFloat(-1.25f, -0.9f), 0, Color.White, Main.rand.NextFloat(0.6f, 1.2f));
+                dust.velocity.X *= 0.25f;
+
+                if (dust.velocity.Y > 0)
+                    dust.velocity.Y *= -1;
             }
             aetherFlareUpTime = Math.Clamp(aetherFlareUpTime -1, 0, 15);
         }
@@ -776,10 +773,25 @@ namespace GoldLeaf.Items.Grove.Boss
         {
             if (aetherFlareUpTime > 0)
             {
-                Dust.NewDust(Player.position, Player.width, Player.height, DustType<AetherDust>(), Main.rand.NextFloat(-0.125f, 0.125f), Main.rand.NextFloat(-1.25f, -0.9f), 0, Color.White, Main.rand.NextFloat(0.6f, 1.2f));
-                
-                if (Main.rand.NextBool())
-                    Dust.NewDust(Player.position, Player.width, Player.height, DustType<AetherSmoke>(), Main.rand.NextFloat(-0.2f, 0.2f), Main.rand.NextFloat(-1.25f, -0.6f), 0, Color.White * Main.rand.NextFloat(0.175f, 0.25f), Main.rand.NextFloat(0.5f, 0.65f));
+                Dust dust = Dust.NewDustDirect(Player.position, Player.width, Player.height, DustType<AetherSparkDust>(), Main.rand.NextFloat(-0.125f, 0.125f), Main.rand.NextFloat(-1.25f, -0.9f), 0, Color.White, Main.rand.NextFloat(0.75f, 1.2f));
+                dust.velocity.X *= 0.25f;
+
+                if (dust.velocity.Y > 0)
+                    dust.velocity.Y *= -1f;
+
+                if (Main.rand.NextBool(3))
+                {
+                    Dust smoke = Dust.NewDustDirect(Player.position, Player.width, Player.height, DustType<AetherSmoke>(), Main.rand.NextFloat(-0.2f, 0.2f), Main.rand.NextFloat(-1.25f, -0.6f), 0, Color.White * Main.rand.NextFloat(0.175f, 0.25f), Main.rand.NextFloat(0.5f, 0.65f));
+                    smoke.alpha = Main.rand.Next(60, 90);
+                }
+            }
+            else if (Player.HasBuff<AetherFlameBuff>() && Main.rand.NextBool(3) && !Player.dead)
+            {
+                Dust dust = Dust.NewDustDirect(Player.position, Player.width, Player.height, DustType<AetherDust>(), 0f, Main.rand.NextFloat(-1.25f, -0.9f), 0, Color.White, Main.rand.NextFloat(0.6f, 0.85f));
+                dust.velocity.X *= 0.25f;
+
+                if (dust.velocity.Y > 0)
+                    dust.velocity.Y *= -1f;
             }
             aetherFlareUpTime = Math.Clamp(aetherFlareUpTime - 1, 0, 15);
         }

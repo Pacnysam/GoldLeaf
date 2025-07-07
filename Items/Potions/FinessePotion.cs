@@ -41,8 +41,8 @@ namespace GoldLeaf.Items.Potions
         {
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.BottledWater);
-            recipe.AddIngredient(ItemID.Blinkroot);
             recipe.AddIngredient(ItemID.NeonTetra);
+            recipe.AddIngredient(ItemID.Blinkroot);
             recipe.AddIngredient(ItemType<EveDroplet>());
             recipe.AddTile(TileID.Bottles);
             recipe.Register();

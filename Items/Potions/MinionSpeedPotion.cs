@@ -44,8 +44,8 @@ namespace GoldLeaf.Items.Potions
         {
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.BottledWater);
-            recipe.AddIngredient(ItemType<AuroraCluster>());
             recipe.AddIngredient(ItemID.Daybloom);
+            recipe.AddIngredient(ItemType<AuroraCluster>());
             recipe.AddTile(TileID.Bottles);
             recipe.Register();
         }

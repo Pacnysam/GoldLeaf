@@ -38,8 +38,8 @@ namespace GoldLeaf.Items.Potions
         {
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.BottledWater);
-            recipe.AddIngredient(ItemID.StoneBlock);
             recipe.AddIngredient(ItemID.Flounder);
+            recipe.AddIngredient(ItemID.StoneBlock);
             recipe.AddTile(TileID.Bottles);
             recipe.Register();
         }
