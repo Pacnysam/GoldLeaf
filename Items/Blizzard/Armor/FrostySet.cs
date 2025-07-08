@@ -217,7 +217,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
                         packet.Send(-1, player.whoAmI);
                     }
 
-                    Main.npc[target].AddBuff(BuffType<SnapFreezeBuff>(), TimeToTicks(12));
+                    Main.npc[target].AddBuff(BuffType<SnapFreezeBuff>(), TimeToTicks(10));
 
                     player.AddBuff(BuffType<SnapFreezeBuff>(), TimeToTicks(12));
 

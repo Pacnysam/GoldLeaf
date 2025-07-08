@@ -40,10 +40,11 @@ namespace GoldLeaf.Effects.Dusts
             dust.customData = data;
             return dust;
         }
-        public static void SpawnPerfect(LightDustData data, Vector2 position, Vector2 velocity, int alpha = 0, Color color = default, float scale = 1f)
+        public static Dust SpawnPerfect(LightDustData data, Vector2 position, Vector2 velocity, int alpha = 0, Color color = default, float scale = 1f)
         {
             Dust dust = Dust.NewDustPerfect(position, DustType<LightDust>(), velocity, alpha, color, scale);
             dust.customData = data;
+            return dust;
         }
 
         public virtual float MaxFadeIn => 3f;

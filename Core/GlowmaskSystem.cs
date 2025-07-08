@@ -37,7 +37,13 @@ namespace GoldLeaf.Core
         public override void PostDrawInWorld(Item item, SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
             if (ItemSets.Glowmask[item.type].Item3)
-                spriteBatch.Draw(ItemSets.Glowmask[item.type].Item1.Value, item.Center - Main.screenPosition, null, ItemSets.Glowmask[item.type].Item2, rotation, ItemSets.Glowmask[item.type].Item1.Size()/2, scale, SpriteEffects.None, 0f);
+            {
+                Main.GetItemDrawFrame(item.type, out Texture2D tex, out Rectangle frame);
+                Vector2 origin = frame.Size() / 2;
+                Vector2 drawPos = item.Bottom - Main.screenPosition - new Vector2(0, origin.Y);
+
+                spriteBatch.Draw(ItemSets.Glowmask[item.type].Item1.Value, drawPos, frame, ItemSets.Glowmask[item.type].Item2, rotation, origin, scale, SpriteEffects.None, 0f);
+            }
         }
     }
 

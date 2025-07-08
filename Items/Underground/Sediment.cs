@@ -84,11 +84,7 @@ namespace GoldLeaf.Items.Underground
             }
             return base.CanUseItem(player);
         }
-
-        public override bool ConsumeItem(Player player)
-        {
-            return false;
-        }
+        public override bool ConsumeItem(Player player) => false;
 
         public override void RightClick(Player player)
         {
@@ -282,12 +278,10 @@ namespace GoldLeaf.Items.Underground
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {
             Texture2D texture = TextureAssets.Item[Item.type].Value;
-            Rectangle frame = new(0, texture.Height / (int)Gem.Count * gem, texture.Width, texture.Height / (int)Gem.Count - 2);
+            Rectangle frame = texture.Frame(1, (int)Gem.Count, 0, gem);
 
-            Vector2 position = new(Item.position.X - Main.screenPosition.X + Item.width / 2, Item.position.Y - Main.screenPosition.Y + Item.height / 2);
-
-            spriteBatch.Draw(texture, position, frame, Item.GetAlpha(lightColor), rotation, frame.Size() / 2, scale, SpriteEffects.None, 0f);
-            return true;
+            spriteBatch.Draw(texture, Item.Center - Main.screenPosition, frame, Item.GetAlpha(lightColor), rotation, frame.Size() / 2f, scale, SpriteEffects.None, 0f);
+            return false;
         }
     }
     

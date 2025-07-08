@@ -41,7 +41,7 @@ namespace GoldLeaf.Items.FishWeapons
         }
         public override void SetStaticDefaults()
         {
-            ItemSets.Glowmask[Type] = (glowTex, Color.White, false);
+            ItemSets.Glowmask[Type] = (glowTex, Color.White, true);
             Item.AddElements([Element.Arcane, Element.Holy, Element.Earth]);
         }
 

@@ -584,3 +584,8 @@ EchobarkSword: {
 	DisplayName: Echobark Sword
 	Tooltip: ""
 }
+
+SunstoneStaff: {
+	DisplayName: Splitter
+	Tooltip: ""
+}
