@@ -40,6 +40,7 @@ namespace GoldLeaf.Items.Sandstorm
             Item.damage = 16;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 7;
+            Item.ArmorPenetration = 8;
 
             Item.shootSpeed = 3.75f;
             Item.knockBack = 1.75f;
@@ -128,10 +129,12 @@ namespace GoldLeaf.Items.Sandstorm
     {
         private static Asset<Texture2D> glowTex;
         private static Asset<Texture2D> shineTex;
+        private static Asset<Texture2D> bloomTex;
         public override void Load()
         {
             glowTex = Request<Texture2D>(Texture + "Glow");
             shineTex = Request<Texture2D>("GoldLeaf/Textures/Shine");
+            bloomTex = Request<Texture2D>("GoldLeaf/Textures/Masks/Mask1");
         }
         public override void SetStaticDefaults()
         {
@@ -204,6 +207,8 @@ namespace GoldLeaf.Items.Sandstorm
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D tex = TextureAssets.Projectile[Type].Value;
+
+            Main.EntitySpriteDraw(bloomTex.Value, Projectile.Center - Main.screenPosition, null, new Color(52, 229, 66) { A = 0 } * Projectile.Opacity * 0.45f, 0f, bloomTex.Size() / 2f, new Vector2(1f, Math.Clamp(Projectile.velocity.Length() * 0.25f, 0.5f, 1f)) * (1.35f + (float)(Math.Sin(GoldLeafWorld.rottime * 5.25f) * 0.1f)) * Projectile.scale * 0.25f, SpriteEffects.None);
 
             Main.EntitySpriteDraw(shineTex.Value, Projectile.Center - Main.screenPosition, null, Color.Black * Projectile.Opacity * 0.25f, Projectile.rotation, (shineTex.Size() / 2f) + new Vector2(0, -8), new Vector2(1f, Math.Clamp(Projectile.velocity.Length() * 0.425f, 0.65f, 3.25f)) * Projectile.scale * 1.125f, SpriteEffects.None);
             Main.EntitySpriteDraw(shineTex.Value, Projectile.Center - Main.screenPosition, null, new Color(222, 141, 7) { A = 100 } * Projectile.Opacity * 0.65f, Projectile.rotation, shineTex.Size() / 2f, new Vector2(1f, Math.Clamp(Projectile.velocity.Length() * 0.425f, 0.65f, 3.25f)) * Projectile.scale * 0.725f, SpriteEffects.None);

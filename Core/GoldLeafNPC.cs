@@ -20,6 +20,8 @@ using GoldLeaf.Items.Grove;
 using GoldLeaf.Items.Dyes.HairDye;
 using Terraria.ModLoader.IO;
 using GoldLeaf.Items.Granite;
+using Terraria.DataStructures;
+using GoldLeaf.Items.Misc;
 
 namespace GoldLeaf.Core
 {
@@ -116,6 +118,13 @@ namespace GoldLeaf.Core
         }
 
         public static bool CanBeStunned(NPC npc) => (!npc.boss && npc.aiStyle != NPCAIStyleID.Worm/* && npc.knockBackResist != 0f*/);
+
+        public override void OnSpawn(NPC npc, IEntitySource source)
+        {
+            /*if (npc.type == NPCID.GoldenSlime && !Main.remixWorld && Main.slimeRain)
+                npc.ai[1] = Utils.SelectRandom(Main.rand, [ItemID.HermesBoots, ItemID.BandofRegeneration, ItemID.MagicMirror, ItemID.CloudinaBottle, 
+                    ItemID.ShinyRedBalloon, ItemID.Aglet, ItemID.AnkletoftheWind, ItemID.LuckyHorseshoe]);*/
+        }
 
         public override bool CanHitPlayer(NPC npc, Player target, ref int cooldownSlot)
         {

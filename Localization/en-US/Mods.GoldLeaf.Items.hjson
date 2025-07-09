@@ -589,3 +589,8 @@ SunstoneStaff: {
 	DisplayName: Splitter
 	Tooltip: ""
 }
+
+RoyalCanister: {
+	DisplayName: Royal Canister
+	Tooltip: ""
+}
