@@ -17,6 +17,7 @@ using GoldLeaf.Items.Blizzard;
 using GoldLeaf.Items.Accessories;
 using GoldLeaf.Items.Blizzard.Armor;
 using GoldLeaf.Items.Armor;
+using GoldLeaf.Items.Ocean;
 
 namespace GoldLeaf.Core
 {
@@ -41,6 +42,9 @@ namespace GoldLeaf.Core
     {
         public static bool[] summonSpeedImmune = ProjectileID.Sets.Factory.CreateNamedSet("SummonSpeedImmune")
             .RegisterBoolSet(false, ProjectileID.Spazmamini, ProjectileID.DeadlySphere);
+
+        public static bool[] sentryCanDetonaterExplode = ProjectileID.Sets.Factory.CreateNamedSet("sentryCanDetonaterExplode")
+            .RegisterBoolSet(true, ProjectileID.DD2LightningAuraT1, ProjectileID.DD2LightningAuraT2, ProjectileID.DD2LightningAuraT3, ProjectileType<JellyfishSentry>());
     }
     public static class BuffSets
     {

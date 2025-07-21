@@ -101,9 +101,14 @@ namespace GoldLeaf.Core
                     }
                 case NPCID.ArmsDealer:
                     {
-                        shop.Add(ItemID.TissueSample, GoldLeafConditions.HasClutterGlove);
-                        shop.Add(ItemID.ShadowScale, GoldLeafConditions.HasClutterGlove);
+                        //shop.Add(ItemID.TissueSample, GoldLeafConditions.HasClutterGlove);
+                        //shop.Add(ItemID.ShadowScale, GoldLeafConditions.HasClutterGlove);
                         //shop.Add(ItemType<EveDroplet>(), GoldLeafConditions.HasClutterGlove, GoldLeafConditions.InSurface);
+                        break;
+                    }
+                case NPCID.Demolitionist:
+                    {
+                        shop.Add(ItemType<SentryDetonator>());
                         break;
                     }
             }

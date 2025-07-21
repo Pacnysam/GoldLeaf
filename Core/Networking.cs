@@ -31,7 +31,7 @@ namespace GoldLeaf
             ControlsPlayer,
             DoubleTapPacket,
             QuetzalRiftDetonate,
-            OnHitNPCSync,
+            SentryDetonate,
         }
 
         public override void HandlePacket(BinaryReader reader, int whoAmI)
@@ -137,11 +137,21 @@ namespace GoldLeaf
                     (Main.projectile[quetzalProjWhoAmI].ModProjectile as QuetzalRift).Detonate();
 
                     break;
-                case MessageType.OnHitNPCSync:
+                case MessageType.SentryDetonate:
                     
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        
+                        ModPacket packet = Instance.GetPacket();
+                        packet.Write((byte)MessageType.SentryDetonate);
+                        packet.Write((byte)player);
+                        packet.Send(-1, player);
+                    }
+                    else 
+                    {
+                        SoundEngine.PlaySound(SoundID.Item62 with { Volume = 0.75f }, Main.player[player].position);
+
+                        CameraSystem.QuickScreenShake(Main.player[player].MountedCenter, null, 20, 7.5f, 24, 1000);
+                        CameraSystem.QuickScreenShake(Main.player[player].MountedCenter, (0f).ToRotationVector2(), 12.5f, 12f, 18, 1000);
                     }
                     break;
                 default:

@@ -594,3 +594,8 @@ RoyalCanister: {
 	DisplayName: Royal Canister
 	Tooltip: ""
 }
+
+SentryDetonator: {
+	DisplayName: Sentry Detonator
+	Tooltip: Destroys all active sentries
+}
