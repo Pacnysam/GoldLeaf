@@ -44,7 +44,7 @@ namespace GoldLeaf.Items.Hell
 
         public override void SetDefaults()
 		{
-			Item.damage = 26;
+			Item.damage = 28;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 22;
 			Item.height = 40;
@@ -160,8 +160,8 @@ namespace GoldLeaf.Items.Hell
             SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Projectile.Center);
             SoundEngine.PlaySound(SoundID.Item74);
 
-            //CameraSystem.AddScreenshake(Main.LocalPlayer, 10, Projectile.Center);
-            CameraSystem.QuickScreenShake(Projectile.Center, null, 28, 5.5f, 15, 1000);
+            CameraSystem.QuickScreenShake(Projectile.Center, null, 20, 5.5f, 28, 1000);
+            CameraSystem.QuickScreenShake(Projectile.Center, (0f).ToRotationVector2(), 10, 10f, 22, 1000);
 
             if (Main.myPlayer == Projectile.owner)
             {
@@ -181,7 +181,7 @@ namespace GoldLeaf.Items.Hell
             }
             for (int j = 0; j < 15; j++)
             {
-                var dust = Dust.NewDustDirect(Projectile.Center - new Vector2(16, 16), 0, 0, DustType<HotSmoke>());
+                var dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustType<HotSmoke>());
                 dust.velocity = Main.rand.NextVector2Circular(3.2f, 3.2f);
                 dust.velocity.Y -= Main.rand.NextFloat(1.5f, 3f);
                 dust.scale = Main.rand.NextFloat(0.4f, 0.7f);

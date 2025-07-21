@@ -466,7 +466,7 @@ SunstoneHairDye: {
 
 AuroraGlassItem: {
 	DisplayName: Aurora Glass
-	Tooltip: Reflects projectiles
+	Tooltip: ""
 }
 
 AuroraGlassWallItem: {

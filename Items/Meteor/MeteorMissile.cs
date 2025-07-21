@@ -162,7 +162,7 @@ namespace GoldLeaf.Items.Meteor
 
             for (int j = 0; j < 10; j++)
             {
-                var dust = Dust.NewDustDirect(Projectile.Center - new Vector2(16, 16), 0, 0, DustType<HotSmoke>());
+                var dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustType<HotSmoke>());
                 dust.velocity = Main.rand.NextVector2Circular(1.8f, 1.8f);
                 dust.scale = Main.rand.NextFloat(0.35f, 0.65f);
                 dust.alpha = 35 + Main.rand.Next(50);

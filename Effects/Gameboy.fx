@@ -22,8 +22,8 @@ float2 uZoom;
 
 float4 PixelShaderFunction(float4 sampleColor : COLOR0, float2 uv : TEXCOORD0) : COLOR0
 {
-    uv = round(uv / (2 / uScreenResolution) + 0.5) * (2 / uScreenResolution);
-    uv = round(uv / (2 / uScreenResolution) - 0.5) * (2 / uScreenResolution);
+    uv = round(uv / (2 / uScreenResolution)) * (2 / uScreenResolution);
+    
     float4 color = tex2D(uImage0, uv);
 
     float brightness = (color.x + color.y + color.z) / 3.0;

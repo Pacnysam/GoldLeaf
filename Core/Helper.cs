@@ -502,7 +502,7 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
         public static void ReduceBuffTime(this Player player, int buffType, int timeChange) 
         {
             int buffTime = player.buffTime[player.FindBuffIndex(buffType)] - timeChange;
-            player.ClearBuff(BuffType<SnapFreezeBuff>());
+            player.ClearBuff(buffType);
             if (buffTime > 2) player.AddBuff(buffType, buffTime);
         }
 

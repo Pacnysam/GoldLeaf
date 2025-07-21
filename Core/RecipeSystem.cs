@@ -83,7 +83,7 @@ namespace GoldLeaf.Core
             RecipeGroup.RegisterGroup("GoldLeaf:SilverBars", BaseGroup(ItemID.SilverBar, [ItemID.SilverBar, ItemID.TungstenBar]));
             RecipeGroup.RegisterGroup("GoldLeaf:GoldBars", BaseGroup(ItemID.GoldBar, [ItemID.GoldBar, ItemID.PlatinumBar]));
 
-            RecipeGroup.RegisterGroup("GoldLeaf:EvilBar", BaseGroup(Language.GetTextValue("Mods.GoldLeaf.RecipeGroups.Or", Language.GetTextValue("ItemName." + ItemID.DemoniteBar), Language.GetTextValue("ItemName." + ItemID.CrimtaneBar)), [ItemID.DemoniteBar, ItemID.CrimtaneBar], false));
+            RecipeGroup.RegisterGroup("GoldLeaf:EvilBar", BaseGroup(Language.GetTextValue("Mods.GoldLeaf.RecipeGroups.Or", Language.GetTextValue("ItemName.DemoniteBar"), Language.GetTextValue("ItemName.CrimtaneBar")), [ItemID.DemoniteBar, ItemID.CrimtaneBar], false));
 
             RecipeGroup.RegisterGroup("GoldLeaf:CobaltBars", BaseGroup(ItemID.CobaltBar, [ItemID.CobaltBar, ItemID.PalladiumBar]));
             RecipeGroup.RegisterGroup("GoldLeaf:MythrilBars", BaseGroup(ItemID.MythrilBar, [ItemID.MythrilBar, ItemID.OrichalcumBar]));

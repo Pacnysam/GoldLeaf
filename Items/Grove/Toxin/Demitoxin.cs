@@ -24,6 +24,9 @@ namespace GoldLeaf.Items.Grove.Toxin
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 25;
+
+            ItemID.Sets.ItemNoGravity[Item.type] = true;
+            ItemID.Sets.ShimmerTransformToItem[Item.type] = ItemType<EveDroplet>();
         }
 
         public override void SetDefaults()
@@ -32,10 +35,6 @@ namespace GoldLeaf.Items.Grove.Toxin
 			Item.height = 30;
             Item.maxStack = Item.CommonMaxStack;
             Item.rare = ItemRarityID.LightRed;
-
-            ItemID.Sets.ItemNoGravity[Item.type] = true;
-            //ItemID.Sets.ItemIconPulse[Item.type] = true;
-            ItemID.Sets.ShimmerTransformToItem[Item.type] = ItemType<EveDroplet>();
         }
 
         public override void PostUpdate()

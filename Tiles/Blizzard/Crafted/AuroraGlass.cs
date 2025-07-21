@@ -141,7 +141,7 @@ namespace GoldLeaf.Tiles.Blizzard.Crafted
         }
     }
 
-    public class AuroraGlassProjectile : GlobalProjectile 
+    /*public class AuroraGlassProjectile : GlobalProjectile 
     {
         public override bool InstancePerEntity => true;
 
@@ -196,5 +196,5 @@ namespace GoldLeaf.Tiles.Blizzard.Crafted
                 //Dust dust = Dust.NewDustPerfect(hitPoint, DustID.GemTopaz, spinningpoint.RotatedBy((float)Math.PI / 4f * Main.rand.NextFloatDirection()) * 0.6f * Main.rand.NextFloat(), 100, Color.Yellow, 1.0f);
             }
         }
-    }
+    }*/
 }

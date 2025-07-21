@@ -81,13 +81,13 @@ namespace GoldLeaf.Core
                     #endregion potions
 
                     #region heat flask
-                    if (tile.TileFrameX % 36 == 0 && hellPot && Main.rand.NextBool(20)) //5% drop chance checks for hell pots
+                    if (tile.TileFrameX % 36 == 0 && hellPot && Main.rand.NextBool(40)) //2.5% drop chance checks for hell pots
                     {
-                        Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, ItemType<HeatFlask>(), Main.rand.Next(25, 35));
+                        Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, ItemType<HeatFlask>(), Main.rand.Next(15, 25));
                     }
-                    else if (tile.TileFrameX % 36 == 0 && j > Helper.LavaLayer && j < Main.UnderworldLayer && Main.rand.NextBool(50)) //2% drop chance checks for any pots in lava layer
+                    else if (tile.TileFrameX % 36 == 0 && (!dungeonPot && !templePot && !pyramidPot && !spiderPot) && j > Helper.LavaLayer && j < Main.UnderworldLayer && Main.rand.NextBool(50)) //2% drop chance checks for specific pots in lava layer
                     {
-                        Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, ItemType<HeatFlask>(), Main.rand.Next(25, 35));
+                        Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, ItemType<HeatFlask>(), Main.rand.Next(15, 25));
                     }
                     #endregion heat flask
                     break;

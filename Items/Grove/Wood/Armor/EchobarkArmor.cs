@@ -160,7 +160,7 @@ namespace GoldLeaf.Items.Grove.Wood.Armor
                 if (Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkArmor && Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkDefense > 0)
                 {
                     int updatedDefense = item.defense + Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkDefense;
-                    string text = updatedDefense + "(+" + Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkDefense + ")" + Language.GetTextValue("LegacyTooltip.25");
+                    string text = updatedDefense + " (+" + Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkDefense + ")" + Language.GetTextValue("LegacyTooltip.25");
 
                     tooltips.ElementAt(tooltips.IndexOf(tipLine)).Text = text;
                 }

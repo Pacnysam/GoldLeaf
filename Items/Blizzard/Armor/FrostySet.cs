@@ -219,7 +219,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
 
                     Main.npc[target].AddBuff(BuffType<SnapFreezeBuff>(), TimeToTicks(10));
 
-                    player.AddBuff(BuffType<SnapFreezeBuff>(), TimeToTicks(12));
+                    player.AddBuff(BuffType<SnapFreezeBuff>(), TimeToTicks(15));
 
                     float seed = Main.rand.NextFloat(0f, 8f);
 
@@ -246,8 +246,8 @@ namespace GoldLeaf.Items.Blizzard.Armor
         {
             if (target.HasBuff(BuffType<SnapFreezeBuff>()))
             {
-                modifiers.ArmorPenetration += 5;
-                modifiers.ScalingBonusDamage += 0.25f;
+                modifiers.ArmorPenetration += 10;
+                //modifiers.ScalingBonusDamage += 0.25f;
             }
             if (target.HasBuff(BuffType<SnapFreezeBuff>()) && (target.life) <= target.lifeMax / 4 && !target.boss)
             {
@@ -256,11 +256,13 @@ namespace GoldLeaf.Items.Blizzard.Armor
 
                 if (Main.netMode != NetmodeID.Server)
                 {
-                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/ColdChime") { Volume = 0.6f, PitchVariance = 0.2f });
-                    SoundEngine.PlaySound(SoundID.DeerclopsIceAttack with { Volume = 0.35f, PitchVariance = 0.2f });
+                    //SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/ColdChime") { Volume = 0.3f, PitchVariance = 0.2f });
+                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Freeze") { PitchVariance = 0.2f });
+                    //SoundEngine.PlaySound(SoundID.DeerclopsIceAttack with { Volume = 0.35f, PitchVariance = 0.2f });
                     //SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/IceSmash") { Volume = 1.15f, Pitch = 0.35f, PitchVariance = 0.2f });
                 }
-                Player.ClearBuff(BuffType<SnapFreezeBuff>());
+                //Player.ClearBuff(BuffType<SnapFreezeBuff>());
+                Player.ReduceBuffTime(BuffType<SnapFreezeBuff>(), TimeToTicks(8));
                 
                 int i = Item.NewItem(Player.GetSource_Loot(), target.Center, ItemType<StarLarge>(), 1, true, 0, true);
                 Main.item[i].playerIndexTheItemIsReservedFor = Player.whoAmI;
@@ -272,39 +274,6 @@ namespace GoldLeaf.Items.Blizzard.Armor
                 modifiers.SetInstantKill();
             }
         }
-
-        /*public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-        {
-            if (!target.active)
-            {
-                ReduceBuffTime(Player, BuffType<SnapFreezeBuff>(), TimeToTicks(3));
-            }
-        }*/
-
-        /*public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo) //wtf
-        {
-            Player player = drawInfo.drawPlayer;
-
-            //base.ModifyDrawInfo(ref drawInfo);
-
-            Texture2D tex = Request<Texture2D>("GoldLeaf/Items/Blizzard/Armor/FrostyMask_Head").Value;
-
-            var data2 = new DrawData(
-                    tex,
-                    drawInfo.Position,
-                    null,
-                    new Color(255, 255, 255, 0),
-                    0f,
-                    tex.Size() / 2,
-                    1,
-                    SpriteEffects.None,
-                    0
-                )
-            {
-                shader = drawInfo.cHead
-            };
-            drawInfo.DrawDataCache.Add(data2);
-        }*/
     }
     
     public class SnapFreezeBuff : ModBuff

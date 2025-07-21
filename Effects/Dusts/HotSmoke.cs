@@ -16,8 +16,9 @@ namespace GoldLeaf.Effects.Dusts
         public override void OnSpawn(Dust dust)
         {
             dust.noGravity = true;
-            dust.scale *= Main.rand.NextFloat(0.8f, 2f);
+            dust.scale *= Main.rand.NextFloat(0.8f, 1.6f);
             dust.frame = new Rectangle(0, Main.rand.Next(3) * 36, 34, 36);
+            dust.position -= new Vector2(17f, 18f) * dust.scale;
         }
 
         public override Color? GetAlpha(Dust dust, Color lightColor)

@@ -950,7 +950,7 @@ namespace GoldLeaf.Items.Underground
             d.noGravity = true;
         }
     }
-
+    
     public class AmberStun : ModBuff
     {
         public override string Texture => CoolBuffTex(base.Texture);
@@ -982,8 +982,7 @@ namespace GoldLeaf.Items.Underground
             if (Main.rand.NextBool(20))
             {
                 ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.AshTreeShake,
-                    new ParticleOrchestraSettings { PositionInWorld = npc.Center },
-                    npc.whoAmI);
+                    new ParticleOrchestraSettings { PositionInWorld = npc.Center });
             }
         }
     }

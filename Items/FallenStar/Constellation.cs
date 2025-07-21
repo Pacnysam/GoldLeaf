@@ -40,7 +40,7 @@ namespace GoldLeaf.Items.FallenStar
 
         public override void SetDefaults()
         {
-            Item.DefaultToWhip(ProjectileType<ConstellationP>(), 14, 1.2f, 3f, 45);
+            Item.DefaultToWhip(ProjectileType<ConstellationP>(), 13, 1.5f, 3f, 40);
 
             Item.rare = ItemRarityID.Blue;
             Item.value = Item.sellPrice(0, 0, 75, 0);
@@ -186,7 +186,7 @@ namespace GoldLeaf.Items.FallenStar
             }
             else
             {
-                Projectile.damage = (int)(Projectile.damage * 0.7f + player.GetModPlayer<ConstellationPlayer>().extraSegments * 0.05f);
+                Projectile.damage = (int)(Projectile.damage * 0.75f);
                 DustHelper.DrawStar(target.Center, DustID.FireworkFountain_Blue, 5, target.scale * 1.4f, 1f, 0.7f, 0.85f, 0.5f, true, 0, -1);
             }
         }

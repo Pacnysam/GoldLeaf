@@ -38,6 +38,24 @@ namespace GoldLeaf.Items.Accessories
             player.GetModPlayer<ToxicPositivePlayer>().toxicPositivity = true;
             player.GetModPlayer<ToxicPositivePlayer>().toxicPositiveItem = Item;
         }
+
+        public override void Load()
+        {
+            FirstStrikePlayer.OnFirstStrike += ToxicFirstStrike;
+        }
+        public override void Unload()
+        {
+            FirstStrikePlayer.OnFirstStrike -= ToxicFirstStrike;
+        }
+        private void ToxicFirstStrike(Player player, NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (player.GetModPlayer<ToxicPositivePlayer>().toxicPositivity && !target.buffImmune[BuffType<ToxicPositivityBuff>()])
+            {
+                Projectile.NewProjectile(player.GetSource_OnHit(target), target.position, Vector2.Zero, ProjectileType<ToxicPositivityEffect>(), 0, 0, player.whoAmI);
+                target.AddBuff(BuffType<ToxicPositivityBuff>(), TimeToTicks(1) + TimeToTicks(player.CountBuffs() * 0.5f));
+                SoundEngine.PlaySound(SoundID.Zombie60, target.Center);
+            }
+        }
     }
     
     public class ToxicPositivityBuff : ModBuff
@@ -98,25 +116,6 @@ namespace GoldLeaf.Items.Accessories
             toxicPositivity = false;
             toxicPositiveItem = null;
             toxicPositive = false;
-        }
-
-        public override void Load()
-        {
-            FirstStrikePlayer.OnFirstStrike += ToxicFirstStrike;
-        }
-        public override void Unload()
-        {
-            FirstStrikePlayer.OnFirstStrike -= ToxicFirstStrike;
-        }
-
-        private void ToxicFirstStrike(Player player, NPC target, NPC.HitInfo hit, int damageDone)
-        {
-            if (player.GetModPlayer<ToxicPositivePlayer>().toxicPositivity && !target.buffImmune[BuffType<ToxicPositivityBuff>()])
-            {
-                Projectile.NewProjectile(player.GetSource_OnHit(target), target.position, Vector2.Zero, ProjectileType<ToxicPositivityEffect>(), 0, 0, player.whoAmI);
-                target.AddBuff(BuffType<ToxicPositivityBuff>(), TimeToTicks(Math.Clamp(player.CountBuffs(), 1, 30)));
-                SoundEngine.PlaySound(SoundID.Zombie60, target.Center);
-            }
         }
 
         /*public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

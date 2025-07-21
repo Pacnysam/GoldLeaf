@@ -170,10 +170,12 @@ namespace GoldLeaf.Items.Blizzard
         public override bool? CanCutTiles() => false;
         public override bool MinionContactDamage() => false;
 
-        private bool IsFrozen(Entity otherEntity, int currentTarget)
+        private bool NotFrozen(Entity otherEntity, int currentTarget)
         {
-            NPC npc = otherEntity as NPC;
-            return npc.HasBuff(BuffID.Frozen);
+            if (otherEntity is not NPC)
+                return false;
+
+            return !(otherEntity as NPC).HasBuff(BuffID.Frozen);
         }
 
         public override void AI()
@@ -271,9 +273,9 @@ namespace GoldLeaf.Items.Blizzard
             #region targeting
             int attackTarget = -1;
 
-            //Projectile.Minion_FindTargetInRange(targetingRange, ref attackTarget, false, IsFrozen);
-            //if (attackTarget == -1)
-                Projectile.Minion_FindTargetInRange(targetingRange, ref attackTarget, false); //was gonna make it prioritize unfrozen enemies but i cant figure this out
+            Projectile.Minion_FindTargetInRange(targetingRange, ref attackTarget, false, NotFrozen);
+            if (attackTarget == -1)
+                Projectile.Minion_FindTargetInRange(targetingRange, ref attackTarget, false);
             if (attackTarget != -1)
             {
                 target = Main.npc[attackTarget];
