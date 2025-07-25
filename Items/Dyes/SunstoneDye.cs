@@ -22,7 +22,7 @@ namespace GoldLeaf.Items.Dyes
         private static Asset<Texture2D> noiseTex;
         public override void Load()
         {
-            noiseTex = Request<Texture2D>("GoldLeaf/Textures/Noise/Manifold");
+            noiseTex = Request<Texture2D>("GoldLeaf/Textures/Noise/Voronoi");
         }
         public override void SetStaticDefaults()
         {
@@ -33,7 +33,7 @@ namespace GoldLeaf.Items.Dyes
                 GameShaders.Armor.BindShader(
                     Item.type,
                     arouraDyeShaderData
-                ).UseImage(noiseTex).UseColor(255f/255, 185f/255, 67f/255).UseSecondaryColor(30f/255, 222f/255, 139f/255);
+                ).UseImage(noiseTex).UseColor(255f/255, 185f/255, 67f/255).UseSecondaryColor(92f/255, 212f/255, 108f/255);
             }
 
             Item.ResearchUnlockCount = 3;

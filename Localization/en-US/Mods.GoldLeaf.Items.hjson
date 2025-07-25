@@ -425,6 +425,7 @@ Avalanche: {
 	Tooltip:
 		'''
 		Consecutive hits increase firerate and critical strike chance
+		Can use snowballs as ammo
 		50% chance to save ammo
 		'''
 	HighScore:

@@ -87,6 +87,8 @@ namespace GoldLeaf
                         packet.Write((byte)player);
                         packet.Send(-1, player);
                     }
+                    else
+                        SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Reflect") { Volume = 0.9f }, Main.player[player].Center);
 
                     float seed = Main.rand.NextFloat(0f, 8f);
 
@@ -97,9 +99,6 @@ namespace GoldLeaf
                         dust.noLight = true;
                         dust.customData = Main.player[player];
                     }
-
-                    if (Main.netMode != NetmodeID.Server)
-                        SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Reflect") { Volume = 0.9f }, Main.player[player].Center);
                     break;
                 case MessageType.ControlsPlayer:
                     ControlsPlayer controlsPlayer = Main.player[player].GetModPlayer<ControlsPlayer>();
@@ -125,6 +124,7 @@ namespace GoldLeaf
                     break;
                 case MessageType.QuetzalRiftDetonate:
                     int quetzalProjWhoAmI = reader.ReadByte();
+                    Projectile quetzalRift = Main.projectile[quetzalProjWhoAmI];
 
                     if (Main.netMode == NetmodeID.Server)
                     {
@@ -134,8 +134,10 @@ namespace GoldLeaf
                         packet.Write((byte)quetzalProjWhoAmI);
                         packet.Send(-1, player);
                     }
-                    (Main.projectile[quetzalProjWhoAmI].ModProjectile as QuetzalRift).Detonate();
-
+                    if (quetzalRift.ModProjectile is QuetzalRift)
+                    {
+                        (quetzalRift.ModProjectile as QuetzalRift).Detonate();
+                    }
                     break;
                 case MessageType.SentryDetonate:
                     

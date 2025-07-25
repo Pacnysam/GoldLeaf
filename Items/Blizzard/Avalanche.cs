@@ -44,6 +44,14 @@ namespace GoldLeaf.Items.Blizzard
         public bool newPeak = false;
         //public bool hitPrev = false;
 
+        public override bool? CanChooseAmmo(Item ammo, Player player)
+        {
+            if (ammo.type == ItemID.Snowball)
+                return true;
+
+            return base.CanChooseAmmo(ammo, player);
+        }
+
         public override void SetDefaults()
         {
             Item.CloneDefaults(ItemID.FlintlockPistol);
@@ -127,7 +135,7 @@ namespace GoldLeaf.Items.Blizzard
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             //Dust.NewDustPerfect(position, DustType<MuzzleFlash>(), velocity);
-
+            
             Projectile proj = Projectile.NewProjectileDirect(source, position, velocity.RotatedBy(MathHelper.ToRadians(Main.rand.NextFloat(-1.6f, 1.6f))), type, damage, knockback);
             proj.GetGlobalProjectile<AvalancheProjectile>().shotFromAvalanche = true;
             proj.GetGlobalProjectile<AvalancheProjectile>().avalancheInstance = Item;
@@ -169,7 +177,7 @@ namespace GoldLeaf.Items.Blizzard
                 Language.GetTextValue("Mods.GoldLeaf.Items.Avalanche.HighScore", consecutiveHits, Main.LocalPlayer.GetModPlayer<AvalanchePlayer>().avalancheHighScore)
             ];
 
-            int index = tooltips.IndexOf(tooltips.Find(n => n.Name == "Tooltip1"));
+            int index = tooltips.IndexOf(tooltips.Find(n => n.Name == "Tooltip2"));
             for (int i = 0; i < text.Length; i++)
             {
                 if (text[i] != string.Empty)

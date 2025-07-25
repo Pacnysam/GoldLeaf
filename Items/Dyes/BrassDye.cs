@@ -26,7 +26,7 @@ namespace GoldLeaf.Items.Dyes
             {
                 GameShaders.Armor.BindShader(
                     Item.type,
-                    new ArmorShaderData(Request<Effect>("GoldLeaf/Effects/BasicColorDye"), "BasicColorPass").UseColor(255/255f, 191/255f, 123/255f) 
+                    new ArmorShaderData(Request<Effect>("GoldLeaf/Effects/BasicColorDye"), "BasicColorPass").UseColor(255/255f, 198/255f, 123/255f) 
                 );
             }
             Item.ResearchUnlockCount = 3;

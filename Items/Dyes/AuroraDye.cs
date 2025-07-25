@@ -22,7 +22,7 @@ namespace GoldLeaf.Items.Dyes
         private static Asset<Texture2D> noiseTex;
         public override void Load()
         {
-            noiseTex = Request<Texture2D>("GoldLeaf/Textures/Noise/wnoise");
+            noiseTex = Request<Texture2D>("GoldLeaf/Textures/Noise/SwirlNoiseBig");
         }
 
         public override void SetStaticDefaults()

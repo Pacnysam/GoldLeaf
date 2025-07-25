@@ -15,11 +15,23 @@ using GoldLeaf.Effects.Dusts;
 using Terraria.DataStructures;
 using GoldLeaf.Core.CrossMod;
 using static GoldLeaf.Core.CrossMod.RedemptionHelper;
+using ReLogic.Content;
 
 namespace GoldLeaf.Items.Meteor
 {
 	public class MeteorMissile : ModItem
 	{
+        private static Asset<Texture2D> glowTex;
+        public override void Load()
+        {
+            glowTex = Request<Texture2D>(Texture + "Glow");
+        }
+
+        public override void SetStaticDefaults()
+        {
+            ItemSets.Glowmask[Type] = (glowTex, Color.White, true);
+        }
+
         public override void SetDefaults()
 		{
             Item.width = 30;
