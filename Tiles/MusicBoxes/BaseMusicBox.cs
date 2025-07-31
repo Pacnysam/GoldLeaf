@@ -10,23 +10,26 @@ using Terraria.GameContent.ObjectInteractions;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.Drawing;
 using Terraria.Utilities;
+using System;
 
 namespace GoldLeaf.Tiles.MusicBoxes
 {
-    public abstract class BaseMusicBox(int item) : ModTile
-	{
+    public abstract class BaseMusicBox(int item, bool tall = false) : ModTile
+    {
         public int item = item;
+        public bool tall = tall;
 
-		public override void SetStaticDefaults()
-		{
-			Main.tileFrameImportant[Type] = true;
-			Main.tileObsidianKill[Type] = true;
-			TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
-			TileObjectData.newTile.Origin = new Point16(0, 1);
-			TileObjectData.newTile.LavaDeath = false;
-            TileObjectData.newTile.CoordinateHeights = [16, 18];
+        public override void SetStaticDefaults()
+        {
+            Main.tileFrameImportant[Type] = true;
+            Main.tileObsidianKill[Type] = true;
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
+            TileObjectData.newTile.Origin = new Point16(0, 1);
+            TileObjectData.newTile.LavaDeath = false;
+            TileObjectData.newTile.DrawYOffset = tall ? 0 : 2;
+            TileObjectData.newTile.CoordinateHeights = tall ? [16, 18] : [16, 16];
             TileObjectData.addTile(Type);
-			
+
             TileID.Sets.DisableSmartCursor[Type] = true;
             TileID.Sets.HasOutlines[Type] = true;
 

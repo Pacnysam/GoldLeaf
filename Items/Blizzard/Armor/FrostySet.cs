@@ -98,20 +98,21 @@ namespace GoldLeaf.Items.Blizzard.Armor
         }
     }
 
-    [AutoloadEquip(EquipType.Body, EquipType.Waist)]
+    [AutoloadEquip(EquipType.Body)]
     public class FrostyRobe : ModItem
     {
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(/*manaMax, */magicDamage * 100);
 
         //private static readonly int manaMax = 40;
         private static readonly float magicDamage = 0.12f;
-        private static readonly int bonusAggro = -250;
+        private static readonly int bonusAggro = -300;
 
         public override void Load()
         {
             if (Main.netMode != NetmodeID.Server)
             {
                 EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Legs}", EquipType.Legs, this);
+                EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Waist}", EquipType.Waist, this, "FrostyBelt");
                 //frontEquip = EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Waist}", EquipType.Front, this); //TODO draw this manually
             }
         }
@@ -125,8 +126,14 @@ namespace GoldLeaf.Items.Blizzard.Armor
 
         public override void SetStaticDefaults()
         {
+            if (!Main.dedServ)
+                ItemSets.BodyExtra[Item.type] = (Request<Texture2D>(EquipLoader.GetEquipTexture(EquipType.Waist, Item.waistSlot).Texture), default);
+
             ArmorIDs.Body.Sets.showsShouldersWhileJumping[Item.bodySlot] = true;
             ArmorIDs.Body.Sets.HidesHands[Item.bodySlot] = false;
+            //ArmorIDs.Waist.Sets.IsABelt[Item.bodySlot] = true;
+            //ArmorIDs.Waist.Sets.UsesTorsoFraming[Item.bodySlot] = true;
+
         }
 
         public override void UpdateEquip(Player player)
@@ -148,6 +155,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
             //Item.vanity = true;
 
             Item.bodySlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Body);
+            Item.waistSlot = EquipLoader.GetEquipSlot(Mod, "FrostyBelt", EquipType.Waist);
         }
 
         /*public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor)

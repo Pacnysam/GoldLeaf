@@ -19,6 +19,6 @@ namespace GoldLeaf.Tiles.MusicBoxes
 
     internal class UndergroveMusicBoxT : BaseMusicBox
 	{
-        public UndergroveMusicBoxT() : base(ItemType<UndergroveMusicBox>()) { }
+        public UndergroveMusicBoxT() : base(ItemType<UndergroveMusicBox>(), true) { }
     }
 }

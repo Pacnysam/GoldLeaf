@@ -68,7 +68,8 @@ namespace GoldLeaf.Core
 
         public override void OnHurt(Player.HurtInfo info)
         {
-            overhealth -= info.Damage;
+            if (overhealth > 0)
+                overhealth -= info.Damage;
         }
 
         public static void AddOverhealth(Player player, int amount, int time) 

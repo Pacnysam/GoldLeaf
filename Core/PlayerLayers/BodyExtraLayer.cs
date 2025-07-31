@@ -11,39 +11,54 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
+using Terraria.ID;
 
 namespace GoldLeaf.Core.PlayerLayers
 {
-    /*public class BodyExtraLayer : PlayerDrawLayer
+    public class BodyExtraLayer : PlayerDrawLayer
     {
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Torso);
+        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
+        {
+            Player player = drawInfo.drawPlayer;
+
+            return (ItemSets.BodyExtra[player.armor[1].type].Item1 != null && player.armor[11].type == ItemID.None) || ItemSets.BodyExtra[player.armor[11].type].Item1 != null;
+        }
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player player = drawInfo.drawPlayer;
-            if (player.active && !player.outOfRange && false)
+
+            if ((ItemSets.BodyExtra[player.armor[1].type].Item1 != null && player.armor[11].type == ItemID.None) || ItemSets.BodyExtra[player.armor[11].type].Item1 != null)
             {
-                Texture2D texture = TextureAssets.Item[player.inventory[player.selectedItem].type].Value;
-                Vector2 offset = new(texture.Width / 2, 0);
-                Vector2 itemLocation = player.itemLocation + new Vector2(0, texture.Height * 0.5f);
-
-                Vector2 origin = new(-8, texture.Height / 4 / 2);
-                if (player.direction == -1)
-                    origin = new Vector2(texture.Width + 8, texture.Height / 4 / 2);
-
-                SpriteEffects effect = player.direction == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-
-                var drawPos = new Vector2((int)(itemLocation.X + offset.X), (int)(itemLocation.Y + offset.Y)) - Main.screenPosition;
-                var source = new Rectangle(0, texture.Height / 4, texture.Width, texture.Height / 4);
-                var drawData = new DrawData(texture, drawPos, source, player.HeldItem.GetAlpha(Color.White), player.itemRotation, origin, player.HeldItem.scale, effect, 0);
-                drawInfo.DrawDataCache.Add(drawData);
-
-                if (player.inventory[player.selectedItem].color != default)
+                Texture2D tex;
+                Color color;
+                if (player.armor[11].type == ItemID.None)
                 {
-                    drawData = new DrawData(texture, drawPos, source, player.HeldItem.GetColor(Color.White), player.itemRotation, origin, player.HeldItem.scale, effect, 0);
-                    drawInfo.DrawDataCache.Add(drawData);
+                    tex = ItemSets.BodyExtra[player.armor[1].type].Item1.Value;
+                    color = (ItemSets.BodyExtra[player.armor[1].type].Item2 == default) ? drawInfo.colorArmorBody : ItemSets.BodyExtra[player.armor[1].type].Item2;
                 }
+                else
+                { 
+                    tex = ItemSets.BodyExtra[player.armor[11].type].Item1.Value;
+                    color = (ItemSets.BodyExtra[player.armor[11].type].Item2 == default) ? drawInfo.colorArmorBody : ItemSets.BodyExtra[player.armor[11].type].Item2;
+                }
+
+                int frame = player.bodyFrame.Y / player.bodyFrame.Height;
+                int height = tex.Height / 20;
+
+                Vector2 vector = new(-drawInfo.drawPlayer.bodyFrame.Width / 2 + drawInfo.drawPlayer.width / 2, drawInfo.drawPlayer.height - drawInfo.drawPlayer.bodyFrame.Height + 4);
+                Vector2 position = (drawInfo.Position - Main.screenPosition + vector).Floor() + drawInfo.drawPlayer.bodyPosition + drawInfo.bodyVect;
+
+                drawInfo.DrawDataCache.Add(new DrawData(tex, position, new Rectangle(0, frame * height, tex.Width, height),
+                    color,
+                    player.bodyRotation,
+                    drawInfo.bodyVect,
+                    1f, drawInfo.playerEffect, 0)
+                {
+                    shader = drawInfo.cBody
+                });
             }
         }
-    }*/
+    }
 }

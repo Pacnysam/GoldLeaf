@@ -28,16 +28,12 @@ namespace GoldLeaf.Core
             .Description("Bool automatically draws an in world glowmask")
             .RegisterCustomSet<(Asset<Texture2D>, Color, bool)>((null, Color.White, false));
 
-        public static bool[] FaceMaskLayer = ItemID.Sets.Factory.CreateNamedSet("FaceMaskLayer")
-            .Description("Draws helmet on face mask layer")
-            .RegisterBoolSet(false);
-
         public static bool[] FaceMask = ItemID.Sets.Factory.CreateBoolSet(false);
-
-        /*public static Asset<Texture2D>[] FaceMaskLayer = ItemID.Sets.Factory.CreateNamedSet("FaceMaskLayer")
-            .Description("Draws helmet on face mask layer")
-            .RegisterCustomSet<Asset<Texture2D>>(null);*/
+        public static (Asset<Texture2D>, Color)[] BodyExtra = ItemID.Sets.Factory.CreateNamedSet("BodyExtraLayer")
+            .Description("Additional layer that draws over body, is formatted like head, leg sheets")
+            .RegisterCustomSet<(Asset<Texture2D>, Color)>((null, default));
     }
+
     public static class ProjectileSets
     {
         public static bool[] summonSpeedImmune = ProjectileID.Sets.Factory.CreateNamedSet("SummonSpeedImmune")
@@ -57,6 +53,15 @@ namespace GoldLeaf.Core
     }
     public static class ArmorSets
     {
-        
+        public static bool[] FaceMaskLayer = ArmorIDs.Head.Sets.Factory.CreateNamedSet("FaceMaskLayer")
+            .Description("Draws helmet on face mask layer")
+            .RegisterBoolSet(false);
+        public static bool[] BodyBeltLayer = ArmorIDs.Body.Sets.Factory.CreateNamedSet("BodyBeltLayer")
+            .Description("Draws belt layer over body, is under front arm")
+            .RegisterBoolSet(false);
+        /*public static Asset<Texture2D>[] BodyBeltLayer = ArmorIDs.Body.Sets.Factory.CreateNamedSet("BodyBeltLayer")
+            .Description("Draws belt layer over body, is under front arm")
+            .RegisterCustomSet<Asset<Texture2D>>(null);*/
+
     }
 }

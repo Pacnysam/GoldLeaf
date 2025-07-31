@@ -20,6 +20,6 @@ namespace GoldLeaf.Tiles.MusicBoxes
 
     internal class GroveBossMusicBoxT : BaseMusicBox
 	{
-        public GroveBossMusicBoxT() : base(ItemType<GroveBossMusicBox>()) { }
+        public GroveBossMusicBoxT() : base(ItemType<GroveBossMusicBox>(), true) { }
     }
 }

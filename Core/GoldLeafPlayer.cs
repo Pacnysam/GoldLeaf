@@ -48,6 +48,7 @@ namespace GoldLeaf.Core
 
         #region minor variables
         public bool royalGel = false;
+        public bool hasDoneHurtSound = false;
 
         #endregion minor variables
 
@@ -108,6 +109,7 @@ namespace GoldLeaf.Core
 
             #region minor variables
             royalGel = false;
+            hasDoneHurtSound = false;
             #endregion minor variables
         }
 

@@ -20,7 +20,7 @@ ToxicPositivityBuff: {
 
 ArcticWraithBuff: {
 	DisplayName: Rimeflora Wraith
-	Description: The ghost will freeze your enemies
+	Description: The ghost chills with you
 }
 
 SentryPotionBuff: {

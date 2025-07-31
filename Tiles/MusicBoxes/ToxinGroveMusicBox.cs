@@ -19,6 +19,6 @@ namespace GoldLeaf.Tiles.MusicBoxes
 
     internal class ToxinGroveMusicBoxT : BaseMusicBox
 	{
-        public ToxinGroveMusicBoxT() : base(ItemType<ToxinGroveMusicBox>()) { }
+        public ToxinGroveMusicBoxT() : base(ItemType<ToxinGroveMusicBox>(), true) { }
     }
 }

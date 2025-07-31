@@ -69,17 +69,19 @@ namespace GoldLeaf.Items.Vanity
             {
                 if (!axed)
                 {
-                    for (int k = 0; k < 24; k++)
+                    if (!Main.dedServ && Main.LocalPlayer == Player)
                     {
-                        Dust.NewDustPerfect(new Vector2(Player.Center.X, Player.Top.Y + 22 + Main.rand.NextFloat(-1f, 2f)), DustID.Blood, new Vector2(Main.rand.NextFloat(-3, 3), Main.rand.NextFloat(-1, -3)), Scale: Main.rand.NextFloat(0.8f, 1.2f));
+                        for (int k = 0; k < 24; k++)
+                        {
+                            Dust.NewDustPerfect(new Vector2(Player.Center.X, Player.Top.Y + 22 + Main.rand.NextFloat(-1f, 2f)), DustID.Blood, new Vector2(Main.rand.NextFloat(-3, 3), Main.rand.NextFloat(-1, -3)), Scale: Main.rand.NextFloat(0.8f, 1.2f));
+                        }
+
+                        CameraSystem.QuickScreenShake(Player.MountedCenter, (0f).ToRotationVector2(), 18, 7.5f, 24);
+                        //CameraSystem.AddScreenshake(Player, 12);
+                        SoundEngine.PlaySound(new("GoldLeaf/Sounds/SE/HollowKnight/MawlekExplode") { Volume = 1f, Pitch = 0.2f, PitchVariance = 0.4f }, Player.Center);
+                        SoundEngine.PlaySound(new("GoldLeaf/Sounds/SE/DeadCells/Crit") { Volume = 0.65f, Pitch = -0.2f, PitchVariance = 0.6f }, Player.Center);
                     }
 
-                    CameraSystem.AddScreenshake(Player, 12);
-                    SoundStyle sound1 = new("GoldLeaf/Sounds/SE/HollowKnight/MawlekExplode") { Volume = 1f, Pitch = 0.2f, PitchVariance = 0.4f };
-                    SoundStyle sound2 = new("GoldLeaf/Sounds/SE/DeadCells/Crit") { Volume = 0.65f, Pitch = -0.2f, PitchVariance = 0.6f };
-                    SoundEngine.PlaySound(sound1, Player.Center);
-                    SoundEngine.PlaySound(sound2, Player.Center);
-                    
                     //Gore.NewGorePerfect(null, new Vector2(Player.Center.X, Player.Top.Y + 22), new Vector2(Player.Center.X, Player.Top.Y + 22));
                     axed = true;
                 }
@@ -90,16 +92,15 @@ namespace GoldLeaf.Items.Vanity
             }
         }
 
-        public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
-        {
-            
-        }
-
         public override void HideDrawLayers(PlayerDrawSet drawInfo)
         {
             if (axed)
             {
-                drawInfo.hideEntirePlayer = true;
+                PlayerDrawLayers.Head.Hide();
+                PlayerDrawLayers.FaceAcc.Hide();
+                PlayerDrawLayers.HairBack.Hide();
+                PlayerDrawLayers.HeadBack.Hide();
+                PlayerDrawLayers.LeinforsHairShampoo.Hide();
             }
         }
     }
