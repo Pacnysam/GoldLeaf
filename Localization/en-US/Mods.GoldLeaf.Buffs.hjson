@@ -45,12 +45,12 @@ MinionCritPotionBuff: {
 
 MinionSpeedPotionBuff: {
 	DisplayName: Productive
-	Description: 20% increased minion attack speed
+	Description: "{$CommonItemTooltip.PercentIncreasedMinionSpeed}"
 }
 
 FinessePotionBuff: {
 	DisplayName: Finesse
-	Description: 15% increased item speed
+	Description: "{$CommonItemTooltip.PercentIncreasedItemSpeed}"
 }
 
 VigorPotionBuff: {

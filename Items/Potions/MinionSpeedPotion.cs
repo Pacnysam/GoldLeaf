@@ -23,6 +23,8 @@ namespace GoldLeaf.Items.Potions
 {
     public class MinionSpeedPotion : ModItem
     {
+        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(MinionSpeedPotionBuff.MinionSpeed);
+
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 20;
@@ -53,95 +55,13 @@ namespace GoldLeaf.Items.Potions
 
     public class MinionSpeedPotionBuff : ModBuff
     {
+        public override LocalizedText Description => base.Description.WithFormatArgs(MinionSpeed);
         public override string Texture => CoolBuffTex(base.Texture);
+        public static readonly float MinionSpeed = 20f;
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.GetModPlayer<MinionSpeedPlayer>().minionSpeed += 0.2f;
+            player.GetModPlayer<MinionSpeedPlayer>().minionSpeed += MinionSpeed * 0.01f;
         }
     }
-
-    /*public class MinionSpeedPotionProjectile : GlobalProjectile
-    {
-        public override bool InstancePerEntity => true;
-
-        private int minionSpeedTimer;
-        private bool minionIsFaster;
-
-        public override void Load()
-        {
-            //On_Projectile.Update
-        }
-
-        public override bool PreAI(Projectile projectile)
-        {
-            Player player = Main.player[projectile.owner];
-            if (player != null && player.HasBuff(BuffType<MinionSpeedPotionBuff>()) && projectile.minion)
-            {
-                int projType = projectile.type;
-
-                if (projectile.aiStyle > 0 && projectile.ModProjectile != null)
-                    projectile.type = projectile.ModProjectile.AIType;
-
-                projectile.VanillaAI();
-
-                if (projectile.aiStyle > 0 && projectile.ModProjectile != null)
-                    projectile.type = projType;
-            }
-            ProjectileLoader.AI(projectile);
-            return true;
-        }
-
-        public override void PostAI(Projectile projectile)
-        {
-            Player player = Main.player[projectile.owner];
-
-            if (player != null && player.HasBuff(BuffType<MinionSpeedPotionBuff>()) && projectile.minion)
-            {
-                minionSpeedTimer++;
-                projectile.extraUpdates++;
-                minionIsFaster = true;
-            }
-
-            if (player != null && !player.HasBuff(BuffType<MinionSpeedPotionBuff>()) && projectile.minion && minionIsFaster) 
-            {
-                if (projectile.extraUpdates > 1) projectile.extraUpdates--;
-                minionIsFaster = false;
-                minionSpeedTimer = 0;
-            }
-
-            if (player != null && player.HasBuff(BuffType<MinionSpeedPotionBuff>()) && projectile.minion)
-            {
-                minionSpeedTimer++;
-
-                //projectile.extraUpdates = (int)(projectile.extraUpdates * 1.25f);
-
-                if (minionSpeedTimer == 3)
-                { 
-                    //projectile.extraUpdates *= 2;
-                    projectile.extraUpdates++;
-                    minionIsFaster = true;
-                }
-                if (minionSpeedTimer == 4)
-                {
-                    //projectile.extraUpdates /= 2;
-                    if (projectile.extraUpdates > 0) projectile.extraUpdates--;
-                    minionSpeedTimer = 0;
-                    minionIsFaster = false;
-                }
-            }
-        }
-
-        public override void SendExtraAI(Projectile projectile, BitWriter bitWriter, BinaryWriter binaryWriter)
-        {
-            bitWriter.WriteBit(minionIsFaster);
-            binaryWriter.Write(minionSpeedTimer);
-        }
-
-        public override void ReceiveExtraAI(Projectile projectile, BitReader bitReader, BinaryReader binaryReader)
-        {
-            minionIsFaster = bitReader.ReadBit();
-            minionSpeedTimer = binaryReader.ReadInt32();
-        }
-    }*/
 }

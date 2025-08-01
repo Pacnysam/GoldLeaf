@@ -1,6 +1,6 @@
 FrostySet:
 	'''
-	{0}% increased magic critical strike damage
+	{$CommonItemTooltip.PercentIncreasedMagicCritDamage}
 	Double Tap {1} to snap freeze an enemy near the cursor
 	Snap frozen enemies die when struck below at 25% health
 	'''

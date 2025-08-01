@@ -45,7 +45,10 @@ namespace GoldLeaf.Core
     public static class BuffSets
     {
         public static bool[] Cooldown = BuffID.Sets.Factory.CreateNamedSet("Cooldown")
-            .RegisterBoolSet(false, BuffID.PotionSickness, BuffID.ManaSickness, BuffID.ChaosState, BuffType<SnapFreezeBuff>(), BuffType<SafetyBlanketBuff>());
+            .RegisterBoolSet(false, BuffID.PotionSickness, BuffID.ManaSickness, BuffID.ChaosState, BuffID.BrainOfConfusionBuff, BuffType<SnapFreezeBuff>(), BuffType<SafetyBlanketBuff>());
+
+        public static bool[] Cosmetic = BuffID.Sets.Factory.CreateNamedSet("Cosmetic")
+            .RegisterBoolSet(false, BuffID.Slimed, BuffID.GelBalloonBuff, BuffID.Lovestruck, BuffID.Stinky, BuffID.Wet);
 
         public static bool[] IsRemovable = BuffID.Sets.Factory.CreateNamedSet("IsRemovable")
             .Description("Can be removed by safety blanket and similar methods")

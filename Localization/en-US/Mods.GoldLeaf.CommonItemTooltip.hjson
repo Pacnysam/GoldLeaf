@@ -1,0 +1,17 @@
+PercentSummonTagDamage: "{0}% summon tag damage"
+CriticalDamageMultiplier: "{0}x critical strike multiplier"
+VoiceChanger: Changes your voice
+PercentIncreasedCritDamage: "{0}% increased critical strike damage"
+PercentIncreasedMeleeCritDamage: "{0}% increased melee critical strike damage"
+PercentIncreasedRangedCritDamage: "{0}% increased ranged critical strike damage"
+PercentIncreasedMagicCritDamage: "{0}% increased magic critical strike damage"
+PercentIncreasedItemSpeed: "{0}% increased item speed"
+IncreasesItemSpeedByPercent: Increases item speed by {0}%
+PercentIncreasedSummonSpeed: "{0}% increased summon speed"
+PercentIncreasedMinionSpeed: "{0}% increased minion speed"
+PercentIncreasedSentrySpeed: "{0}% increased sentry speed"
+IncreasesSummonSpeedByPercent: Increases summon speed by {0}%
+IncreasesMinionSpeedByPercent: Increases minion speed by {0}%
+IncreasesSentrySpeedByPercent: Increases sentry speed by {0}%
+BuffCanBeCleansed: Can be cleansed
+BuffCanNotBeCleansed: Can not be cleansed

@@ -1,16 +1,6 @@
 GameplayConfig: {
 	DisplayName: Gameplay Config
 
-	ClassGimmicks: {
-		Label: Life and Mana Pickup Changes
-		Tooltip: Weaker life and mana pickups are dropped on melee and magic critical strikes respectively. Nerfs normal mana stars.
-	}
-
-	OreStaffReworks: {
-		Label: Gem Staff Reworks
-		Tooltip: Reworks gem staves.
-	}
-
 	BuffChanges: {
 		Tooltip: Modifies the functionality of several buffs.
 		Label: Buff Changes
@@ -31,7 +21,7 @@ VisualConfig: {
 	}
 
 	CoolBuffs: {
-		Label: Coolbuffs Support
+		Label: Cool Buffs Support
 		Tooltip: Changes buff textures to support the Cool Buffs resource pack.
 	}
 }

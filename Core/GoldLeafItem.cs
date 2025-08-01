@@ -81,7 +81,7 @@ namespace GoldLeaf.Core
                     index = tooltips.IndexOf(damageLine);
 
                 if (critLine != null || damageLine != null)
-                    tooltips.Insert(index + 1, new TooltipLine(Mod, "CritMult", Language.GetTextValue("Mods.GoldLeaf.Mechanics.CritMult", updatedCritMod)));
+                    tooltips.Insert(index + 1, new TooltipLine(Mod, "CritMult", Language.GetTextValue("Mods.GoldLeaf.CommonItemTooltip.CriticalDamageMultiplier", updatedCritMod)));
             }
         }
 

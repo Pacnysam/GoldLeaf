@@ -39,7 +39,7 @@ Aether: {
 
 GraniteVoice: {
 	DisplayName: Granite Voice Modulator
-	Tooltip: Changes your voice
+	Tooltip: "{$CommonItemTooltip.VoiceChanger}"
 }
 
 MeteorMissile: {
@@ -252,7 +252,7 @@ Goonai: {
 
 SentryPotion: {
 	DisplayName: Reinforcement Potion
-	Tooltip: Increases your max number of sentries by 1
+	Tooltip: "{$CommonItemTooltip.IncreasesMaxSentriesBy}"
 }
 
 JumpBoostPotion: {
@@ -274,14 +274,14 @@ MinionSpeedPotion: {
 	DisplayName: Productivity Potion
 	Tooltip:
 		'''
-		Minions move and attack faster
+		{$CommonItemTooltip.IncreasesMinionSpeedByPercent}
 		'Does not cure ADHD'
 		'''
 }
 
 FinessePotion: {
 	DisplayName: Finesse Potion
-	Tooltip: Increases item speed by 15%
+	Tooltip: "{$CommonItemTooltip.IncreasesItemSpeedByPercent}"
 }
 
 VigorPotion: {
@@ -498,16 +498,6 @@ AnxietyNecklace: {
 		'''
 }
 
-ClutchRodPlaceable: {
-	Tooltip: ""
-	DisplayName: Placeable Clutch Rod
-}
-
-OxeyeDaisyPlaceable: {
-	Tooltip: ""
-	DisplayName: Placeable Oxeye Daisy
-}
-
 ChampionsCloak: {
 	DisplayName: Champion's Cape
 	Tooltip: ""
@@ -557,7 +547,7 @@ OgreVoice: {
 	DisplayName: Ogrephone
 	Tooltip:
 		'''
-		Changes your voice
+		{$CommonItemTooltip.VoiceChanger}
 		'Does this mod add any drops to ogre?'
 		'''
 }

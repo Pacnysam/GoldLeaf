@@ -20,6 +20,8 @@ namespace GoldLeaf.Items.Potions
 {
     public class FinessePotion : ModItem
     {
+        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(FinessePotionBuff.ItemSpeed);
+
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 20;
@@ -51,11 +53,13 @@ namespace GoldLeaf.Items.Potions
 
     public class FinessePotionBuff : ModBuff
     {
+        public override LocalizedText Description => base.Description.WithFormatArgs(ItemSpeed);
         public override string Texture => CoolBuffTex(base.Texture);
+        public static readonly float ItemSpeed = 15f;
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.GetModPlayer<GoldLeafPlayer>().itemSpeed *= 1f - (0.15f);
+            player.GetModPlayer<GoldLeafPlayer>().itemSpeed *= 1f - (ItemSpeed * 0.01f);
         }
     }
 }

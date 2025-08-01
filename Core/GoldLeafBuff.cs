@@ -16,6 +16,7 @@ using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
 using GoldLeaf.Items.VanillaBossDrops;
 using GoldLeaf.Tiles.Decor;
+using GoldLeaf.Items.Blizzard;
 
 namespace GoldLeaf.Core
 {
@@ -74,6 +75,14 @@ namespace GoldLeaf.Core
                     }
             }
             #endregion
+
+            if (Main.LocalPlayer.GetModPlayer<SafetyBlanketPlayer>().safetyBlanket && Main.debuff[type] && !BuffSets.Cosmetic[type] && type != BuffType<SafetyBlanketBuff>())
+            {
+                if (IsValidDebuff(type, Main.LocalPlayer.buffTime[Main.LocalPlayer.FindBuffIndex(type)] + 2))
+                    tip += "\n[c/78BE78:" + Language.GetTextValue("Mods.GoldLeaf.CommonItemTooltip.BuffCanBeCleansed") + "]";
+                else
+                    tip += "\n[c/BE7878:" + Language.GetTextValue("Mods.GoldLeaf.CommonItemTooltip.BuffCanNotBeCleansed") + "]";
+            }
         }
     }
 }
