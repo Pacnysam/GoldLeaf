@@ -181,7 +181,7 @@ Constellation: {
 	DisplayName: Constellation
 	Tooltip:
 		'''
-		{$CommonItemTooltip.SummonTagDamage}
+		{$CommonItemTooltip.PercentSummonTagDamage}
 		{$CommonItemTooltip.Whips}
 		Strike enemies to lengthen the whip, maximum length is increased at night
 		'''

@@ -69,7 +69,7 @@ namespace GoldLeaf.Items.Accessories
             player.moveSpeed += 1f;
             player.runAcceleration *= 2f;
             player.runSlowdown *= 2f;
-            player.GetModPlayer<MinionSpeedPlayer>().minionSpeed += Math.Clamp((player.buffTime[buffIndex] - TimeToTicks(2.5f)) * 0.002f, 0f, 0.5f);
+            player.GetModPlayer<MinionSpeedPlayer>().minionSpeed += Math.Clamp((player.buffTime[buffIndex] - TimeToTicks(3f)) * 0.00185f, 0f, 0.5f);
         }
     }
     

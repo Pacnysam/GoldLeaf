@@ -25,7 +25,7 @@ namespace GoldLeaf.Items.FallenStar
 {
     public class Constellation : ModItem
     {
-        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(ConstellationTag.TagDamage);
+        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(ConstellationTag.TagDamageMult);
 
         private static Asset<Texture2D> glowTex;
         public override void Load()
@@ -331,31 +331,25 @@ namespace GoldLeaf.Items.FallenStar
                 SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
         }
     }
-
+    
     public class ConstellationTag : ModBuff
     {
         public override string Texture => CoolBuffTex(base.Texture);
 
-        public static readonly int TagDamage = 3;
+        //public static readonly int TagDamage = 3;
+        public static readonly float TagDamageMult = 15;
+        //public static readonly int TagCritChance = 4; saving this for pappiliodiya
 
         public override void SetStaticDefaults()
         {
             BuffID.Sets.IsATagBuff[Type] = true;
         }
-    }
 
-    public class ConstellationDebuffNPC : GlobalNPC
-    {
-        public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
+        public override void Update(NPC npc, ref int buffIndex)
         {
-            if (projectile.npcProj || projectile.trap || !projectile.IsMinionOrSentryRelated)
-                return;
-
-            var projTagMultiplier = ProjectileID.Sets.SummonTagDamageMultiplier[projectile.type];
-            if (npc.HasBuff<ConstellationTag>())
-            {
-                modifiers.FlatBonusDamage += ConstellationTag.TagDamage * projTagMultiplier;
-            }
+            SummonTagNPC gNPC = npc.GetGlobalNPC<SummonTagNPC>();
+            //gNPC.tagDamage += TagDamage;
+            gNPC.tagDamageMult += TagDamageMult * 0.01f;
         }
     }
 }
