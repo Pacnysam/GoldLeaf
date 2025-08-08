@@ -20,7 +20,7 @@ using GoldLeaf.Tiles.Grove;
 
 namespace GoldLeaf.Items.Grove
 {
-    public class GroveHook : ModItem
+    public class GroveHook : ModItem //TODO: move to sunstone
     {
         private static Asset<Texture2D> glowTex;
         public override void Load()

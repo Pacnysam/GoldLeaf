@@ -23,7 +23,7 @@ using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
 namespace GoldLeaf.Items.VanillaBossDrops
 {
-    public abstract class ClutterGlove : ModItem //TODO fix like, ALL of this
+    public abstract class ClutterGlove : ModItem
     {
         public override void SetDefaults()
         {

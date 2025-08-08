@@ -59,7 +59,7 @@ namespace GoldLeaf.Items.Accessories
                 .Register();
         }
     }
-
+    
     public class AnxietyNecklaceBuff : ModBuff
     {
         public override string Texture => CoolBuffTex(base.Texture);
@@ -91,6 +91,9 @@ namespace GoldLeaf.Items.Accessories
                 anxietyIntensity -= 0.0125f;
 
             if (anxietyIntensity < 0.025f)
+                anxietyIntensity = 0f;
+
+            if (Player.dead)
                 anxietyIntensity = 0f;
         }
 
@@ -134,6 +137,10 @@ namespace GoldLeaf.Items.Accessories
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player player = drawInfo.drawPlayer;
+
+            if (player.dead || drawInfo.shadow != 0)
+                return;
+
             AnxietyNecklacePlayer anxiousPlayer = player.GetModPlayer<AnxietyNecklacePlayer>();
             float intensity = anxiousPlayer.anxietyIntensity;
 
@@ -155,7 +162,7 @@ namespace GoldLeaf.Items.Accessories
                 waveTex.Value,
                 player.MountedCenter - Main.screenPosition + new Vector2(player.width * (1.1f * MathHelper.Clamp(intensity * 3f, 0.35f, 1f)) * MathHelper.Clamp(intensity - 0.35f, 1f, 1.65f), 0) + (new Vector2(Main.rand.NextFloat(8f, 10f) * 3f).RotatedByRandom(MathHelper.TwoPi) * MathHelper.Clamp(intensity - 1.5f, 0f, 0.5f)),
                 null,
-                Color.Lerp(color1, color2, (float)Math.Cos(GoldLeafWorld.rottime * 4f) * 0.5f + 0.5f) * MathHelper.Clamp(intensity, 0f, 0.55f),
+                Color.Lerp(color1, color2, (float)Math.Cos(GoldLeafWorld.rottime * 4f) * 0.5f + 0.5f) * MathHelper.Clamp(intensity, 0f, 0.7f),
                 0f,
                 waveTex.Size() / 2,
                 (0.525f + MathHelper.Clamp((intensity - 1.65f) * 2, 0f, 0.35f) + ((float)Math.Cos(GoldLeafWorld.rottime * 4.5f * MathHelper.Clamp(intensity - 0.5f, 0.75f, 1.5f)) * 0.75f + 0.25f) * 0.125f) * MathHelper.Clamp(intensity * 4, 0, 1f),
@@ -166,7 +173,7 @@ namespace GoldLeaf.Items.Accessories
                 waveTex.Value,
                 player.MountedCenter - Main.screenPosition + new Vector2(player.width * (1.15f * MathHelper.Clamp(intensity * 3f, 0.35f, 1f)) * MathHelper.Clamp(intensity - 0.35f, 1f, 1.65f), 0) + (new Vector2(Main.rand.NextFloat(8f, 10f) * 3f).RotatedByRandom(MathHelper.TwoPi) * MathHelper.Clamp(intensity - 1.5f, 0f, 0.5f)),
                 null,
-                Color.Lerp(color1, color2, (float)Math.Sin(GoldLeafWorld.rottime * 4f) * 0.5f - 0.5f) * MathHelper.Clamp(intensity, 0f, 0.275f),
+                Color.Lerp(color1, color2, (float)Math.Sin(GoldLeafWorld.rottime * 4f) * 0.5f - 0.5f) * MathHelper.Clamp(intensity, 0f, 0.475f),
                 0f,
                 waveTex.Size() / 2,
                 (0.575f + MathHelper.Clamp((intensity - 1.65f) * 2, 0f, 0.35f) + ((float)Math.Cos(GoldLeafWorld.rottime * 4.5f * MathHelper.Clamp(intensity - 0.5f, 0.75f, 1.5f)) * 0.75f + 0.25f) * 0.15f) * MathHelper.Clamp(intensity * 4, 0, 1f),
@@ -188,7 +195,7 @@ namespace GoldLeaf.Items.Accessories
                 waveTex.Value,
                 player.MountedCenter - Main.screenPosition + new Vector2(player.width * (-1.1f * MathHelper.Clamp(intensity * 3f, 0.35f, 1f)) * MathHelper.Clamp(intensity - 0.35f, 1f, 1.65f), 0) + (new Vector2(Main.rand.NextFloat(8f, 10f) * 3f).RotatedByRandom(MathHelper.TwoPi) * MathHelper.Clamp(intensity - 1.5f, 0f, 0.5f)),
                 null,
-                Color.Lerp(color1, color2, (float)Math.Cos(GoldLeafWorld.rottime * 4f) * 0.5f + 0.5f) * MathHelper.Clamp(intensity, 0f, 0.55f),
+                Color.Lerp(color1, color2, (float)Math.Cos(GoldLeafWorld.rottime * 4f) * 0.5f + 0.5f) * MathHelper.Clamp(intensity, 0f, 0.7f),
                 0f,
                 waveTex.Size() / 2,
                 (0.525f + MathHelper.Clamp((intensity - 1.65f) * 2, 0f, 0.35f) + ((float)Math.Cos(GoldLeafWorld.rottime * 4.5f * MathHelper.Clamp(intensity - 0.5f, 0.75f, 1.5f)) * 0.75f + 0.25f) * 0.125f) * MathHelper.Clamp(intensity * 4, 0, 1f),
@@ -199,7 +206,7 @@ namespace GoldLeaf.Items.Accessories
                 waveTex.Value,
                 player.MountedCenter - Main.screenPosition + new Vector2(player.width * (-1.15f * MathHelper.Clamp(intensity * 3f, 0.35f, 1f)) * MathHelper.Clamp(intensity - 0.35f, 1f, 1.65f), 0) + (new Vector2(Main.rand.NextFloat(8f, 10f) * 3f).RotatedByRandom(MathHelper.TwoPi) * MathHelper.Clamp(intensity - 1.5f, 0f, 0.5f)),
                 null,
-                Color.Lerp(color1, color2, (float)Math.Sin(GoldLeafWorld.rottime * 4f) * 0.5f - 0.5f) * MathHelper.Clamp(intensity, 0f, 0.275f),
+                Color.Lerp(color1, color2, (float)Math.Sin(GoldLeafWorld.rottime * 4f) * 0.5f - 0.5f) * MathHelper.Clamp(intensity, 0f, 0.475f),
                 0f,
                 waveTex.Size() / 2,
                 0.575f + MathHelper.Clamp((intensity - 1.65f) * 2, 0f, 0.35f) + ((float)Math.Cos(GoldLeafWorld.rottime * 4.5f * MathHelper.Clamp(intensity - 0.5f, 0.75f, 1.5f)) * 0.75f + 0.25f) * 0.15f,

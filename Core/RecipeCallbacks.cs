@@ -20,7 +20,7 @@ using Terraria.Graphics.Shaders;
 
 namespace GoldLeaf.Core
 {
-    public static class RecipeCallbacks //ive tried reworking this like 4 times i give up
+    public static class RecipeCallbacks //TODO: remove all projectiles trom this
     {
         static readonly Player player = Main.LocalPlayer;
 

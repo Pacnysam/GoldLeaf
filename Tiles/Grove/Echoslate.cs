@@ -33,7 +33,7 @@ namespace GoldLeaf.Tiles.Grove
             RegisterItemDrop(ItemType<Echoslate>());
             AddMapEntry(new Color(118, 108, 98));
 
-            HitSound = SoundID.Tink with { Pitch = -0.65f };
+            HitSound = SoundID.Tink with { Pitch = -0.3f };
             MinPick = 45;
             MineResist = 1.5f;
             DustType = DustID.Stone;

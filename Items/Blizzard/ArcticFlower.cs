@@ -125,6 +125,8 @@ namespace GoldLeaf.Items.Blizzard
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
 
+            Projectile.manualDirectionChange = true;
+
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 10;
 
@@ -133,7 +135,6 @@ namespace GoldLeaf.Items.Blizzard
 
         private ref float State => ref Projectile.ai[0];
         private ref float AnimLoops => ref Projectile.ai[1];
-        private ref int Counter => ref Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
 
         private const int Idle = 0;
         private const int WindUp = 1;
@@ -425,10 +426,8 @@ namespace GoldLeaf.Items.Blizzard
         {
             Projectile.frameCounter = 0;
             Projectile.frame = 0;
-            Counter = 0;
             AnimLoops = 0;
             animReverse = false;
-            Counter = 0;
 
             Projectile.netUpdate = true;
 
