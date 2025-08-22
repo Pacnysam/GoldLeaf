@@ -22,6 +22,8 @@ float2 uZoom;
 
 float4 PixelShaderFunction(float4 sampleColor : COLOR0, float2 uv : TEXCOORD0) : COLOR0
 {
+    float4 originalColor = tex2D(uImage0, uv);
+    
     uv = round(uv / (2 / uScreenResolution)) * (2 / uScreenResolution);
     
     float4 color = tex2D(uImage0, uv);
@@ -37,7 +39,7 @@ float4 PixelShaderFunction(float4 sampleColor : COLOR0, float2 uv : TEXCOORD0) :
     else
         color.rgb = float3(224, 248, 208) / 255.0;
     
-    return color;
+    return lerp(originalColor, color, uOpacity);
 }
 
 technique Technique1

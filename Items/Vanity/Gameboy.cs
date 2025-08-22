@@ -16,6 +16,7 @@ using Terraria.Graphics.Effects;
 using GoldLeaf.Items.Accessories;
 using ReLogic.Content;
 using Terraria.Graphics.Shaders;
+using Steamworks;
 
 namespace GoldLeaf.Items.Vanity
 {
@@ -46,34 +47,58 @@ namespace GoldLeaf.Items.Vanity
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.GetModPlayer<GameboyPlayer>().gameboy = true;
-
-            Filters.Scene.Activate("Gameboy");
-            Filters.Scene["Gameboy"].Opacity = 1f;
         }
 
-        public override void UpdateVanity(Player player)
-        {
-            player.GetModPlayer<GameboyPlayer>().gameboy = true;
-
-            Filters.Scene.Activate("Gameboy");
-            Filters.Scene["Gameboy"].Opacity = 1f;
-        }
+        public override void UpdateVanity(Player player) => UpdateAccessory(player, false);
     }
 
     public class GameboyPlayer : ModPlayer
     {
         public bool gameboy = false;
+        public float gameboyOpacity = 0;
 
         public override void ResetEffects()
         {
-            if (Main.netMode != NetmodeID.Server && !gameboy)
-            {
-                Filters.Scene["Gameboy"].Opacity = 0f;
-                Filters.Scene["Gameboy"].Deactivate();
-            }
             gameboy = false;
         }
 
-        
+        public override void PostUpdateMiscEffects()
+        {
+            if (gameboy)
+                gameboyOpacity += 0.01f;
+            else
+                gameboyOpacity -= 0.05f;
+
+            gameboyOpacity = MathHelper.Clamp(gameboyOpacity, 0f, 1f);
+        }
+    }
+
+    public class GameboySystem : ModSystem
+    {
+        public override void PostUpdateEverything()
+        {
+            if (Main.dedServ)
+                return;
+
+            float opacity = Main.LocalPlayer.GetModPlayer<GameboyPlayer>().gameboyOpacity;
+
+            if (Main.LocalPlayer.GetModPlayer<GameboyPlayer>().gameboy)
+            {
+                if (!Filters.Scene["Gameboy"].IsActive())
+                {
+                    Filters.Scene.Activate("Gameboy");
+                }
+            }
+            else
+            {
+                if (Filters.Scene["Gameboy"].IsActive() && opacity <= 0)
+                {
+                    Filters.Scene.Deactivate("Gameboy");
+                }
+            }
+
+            Effect shader = Filters.Scene["Gameboy"].GetShader().Shader;
+            shader.Parameters["uOpacity"].SetValue(opacity);
+        }
     }
 }

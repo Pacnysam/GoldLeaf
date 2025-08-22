@@ -115,6 +115,8 @@ namespace GoldLeaf.Items.Grove.Boss
     
     public class AetherBolt : ModProjectile
     {
+        public override string Texture => Helper.EmptyTexString;
+
         const int THRESHHOLD = 60;
         ref float Counter => ref Projectile.ai[0];
         ref float ShootCounter => ref Projectile.ai[1];
@@ -153,33 +155,33 @@ namespace GoldLeaf.Items.Grove.Boss
             Projectile.timeLeft = reader.ReadInt32();
         }
 
-        public override void PostDraw(Color lightColor)
+        /*public override void PostDraw(Color lightColor)
         {
             if (Counter > THRESHHOLD) 
             {
                 //Color color = new Color(255 - (80 - cooldown * 3), 119 - (80 - cooldown * 3), 246 - (80 - cooldown * 3));
                 Color color = new(255, 119, 246) { A = 0 };
-                float scale = ((float)Counter / THRESHHOLD) + (float)Math.Sin(GoldLeafWorld.rottime * 3.5f /* ((float)Counter / THRESHHOLD)*/);
+                float scale = ((float)Counter / THRESHHOLD) + (float)Math.Sin(GoldLeafWorld.rottime * 3.5f);
 
                 Texture2D tex = Request<Texture2D>("GoldLeaf/Textures/Masks/Mask1").Value;
                 
                 Main.EntitySpriteDraw(tex, Projectile.Center + new Vector2(0, -6) - Main.screenPosition, null, color * 0.5f, 0, tex.Size()/2, scale/5f, SpriteEffects.None, 0f);
             }
-        }
-        
-        public override bool PreDraw(ref Color lightColor)
-        {
-            /*Texture2D tex = Request<Texture2D>(Texture).Value;
+        }*/
+
+        public override bool PreDraw(ref Color lightColor) => false;
+        /*{
+            Texture2D tex = Request<Texture2D>(Texture).Value;
 
             //Vector2 drawOrigin = new(tex.Width * 0.5f, Projectile.height * 0.5f);
             for (int k = 0; k < Projectile.oldPos.Length-1; k++)
             {
                 Vector2 drawPos = Projectile.oldPos[k+1] - Main.screenPosition + tex.Size()/2;
                 Main.spriteBatch.Draw(tex, drawPos, null, ColorHelper.AdditiveWhite() * (1f - (0.1f * k)), Projectile.rotation, tex.Size() / 2, Projectile.scale - (0.075f * k), SpriteEffects.None, 0f);
-            }*/
+            }
             return false;
-        }
-        
+        }*/
+
         public override void AI()
         {
             if (!Main.dedServ)
