@@ -30,6 +30,7 @@ namespace GoldLeaf
             SnapFreeze,
             ControlsPlayer,
             DoubleTapPacket,
+            QuetzalTeleport,
             QuetzalRiftDetonate,
             SentryDetonate,
         }
@@ -121,6 +122,33 @@ namespace GoldLeaf
                         packet.Send(-1, player);
                     }
                     Main.player[player].GetModPlayer<ControlsPlayer>().DoubleTap(Main.LocalPlayer, keyDir);
+                    break;
+                case MessageType.QuetzalTeleport:
+                    int quetzalTeleProjWhoAmI = reader.ReadByte();
+                    Projectile quetzalTeleRift = Main.projectile[quetzalTeleProjWhoAmI];
+
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        ModPacket packet = Instance.GetPacket();
+                        packet.Write((byte)MessageType.QuetzalTeleport);
+                        packet.Write((byte)player);
+                        packet.Write((byte)quetzalTeleProjWhoAmI);
+                        packet.Send(-1, player);
+                    }
+                    if (quetzalTeleRift.ModProjectile is QuetzalRift)
+                    {
+                        quetzalTeleRift.ai[0] = 1;
+                        quetzalTeleRift.timeLeft = 10;
+
+                        Vector2 vectorToCursor = quetzalTeleRift.Center - Main.player[player].Center;
+                        bool projDirection = quetzalTeleRift.Center.X < Main.player[player].Center.X;
+                        if (quetzalTeleRift.Center.X < Main.player[player].Center.X)
+                        {
+                            vectorToCursor = -vectorToCursor;
+                        }
+                        Main.player[player].direction = ((!projDirection) ? 1 : (-1));
+                        Main.player[player].itemRotation = vectorToCursor.ToRotation();
+                    }
                     break;
                 case MessageType.QuetzalRiftDetonate:
                     int quetzalProjWhoAmI = reader.ReadByte();
