@@ -29,10 +29,11 @@ using Terraria.GameContent;
 using Terraria.GameInput;
 
 using static GoldLeaf.GoldLeaf;
+using GoldLeaf.Items.Misc;
 
 namespace GoldLeaf.Items.FishWeapons
 {
-    public class Quetzalcoatl : ModItem
+    public class Quetzalcoatl : ModItem //TODO: rewrite this basically from scratch
 	{
         private static Asset<Texture2D> glowTex;
         public override void Load()
@@ -74,6 +75,44 @@ namespace GoldLeaf.Items.FishWeapons
 
         public override void HoldItem(Player player)
         {
+            bool foundValidProjectile = false;
+            if (Main.myPlayer == player.whoAmI && player.GetModPlayer<ControlsPlayer>().rightClick)
+            {
+                if (player.ownedProjectileCounts[ProjectileType<QuetzalOrb>()] > 0 || player.ownedProjectileCounts[ProjectileType<QuetzalRift>()] > 0)
+                {
+                    foreach (Projectile projectile in Main.ActiveProjectiles)
+                    {
+                        if (projectile.owner == player.whoAmI && projectile.type == ProjectileType<QuetzalRift>() && (projectile.ai[0] == 0 && projectile.ai[1] == 0) && projectile.Center.Distance(player.Center) < QuetzalRift.teleportRange)
+                        {
+                            foundValidProjectile = true;
+                            projectile.ai[0] = 1;
+                            projectile.timeLeft = 10;
+
+                            if (Main.netMode != NetmodeID.SinglePlayer)
+                            {
+                                ModPacket packet = Instance.GetPacket();
+                                packet.Write((byte)MessageType.QuetzalTeleport);
+                                packet.Write((byte)player.whoAmI);
+                                packet.Write((byte)projectile.whoAmI);
+                            }
+                            
+                            /*
+                            Vector2 vectorToCursor = projectile.Center - player.Center;
+                            bool projDirection = projectile.Center.X < player.Center.X;
+                            if (projectile.Center.X < player.Center.X)
+                            {
+                                vectorToCursor = -vectorToCursor;
+                            }
+                            player.direction = ((!projDirection) ? 1 : (-1));
+                            player.itemRotation = vectorToCursor.ToRotation();*/
+                        }
+                    }
+                }
+            }
+
+            if (foundValidProjectile == true)
+                SoundEngine.PlaySound(SoundID.NPCHit52 with { Volume = 1.35f }, player.Center);
+
             /*if (player.GetModPlayer<ControlsPlayer>().rightClick)
             {
                 if ((player.ownedProjectileCounts[ProjectileType<QuetzalOrb>()] > 0 || player.ownedProjectileCounts[ProjectileType<QuetzalRift>()] > 0) && !player.HasBuff(BuffType<QuetzalBuff>()))
@@ -118,7 +157,7 @@ namespace GoldLeaf.Items.FishWeapons
                 Item.useTime = Item.useAnimation = 52;
             }*/
 
-            if (Main.myPlayer == player.whoAmI && player.GetModPlayer<ControlsPlayer>().rightClick)
+            /*if (Main.myPlayer == player.whoAmI && player.GetModPlayer<ControlsPlayer>().rightClick)
             {
                 if (player.ownedProjectileCounts[ProjectileType<QuetzalOrb>()] > 0 || player.ownedProjectileCounts[ProjectileType<QuetzalRift>()] > 0)
                 {
@@ -145,57 +184,66 @@ namespace GoldLeaf.Items.FishWeapons
                         }
                     }
                 }
-            }
+            }*/
         }
 
         public override bool CanUseItem(Player player)
         {
-            if (player.altFunctionUse == 2 && (player.ownedProjectileCounts[ProjectileType<QuetzalOrb>()] > 0 || player.ownedProjectileCounts[ProjectileType<QuetzalRift>()] > 0 || player.HasBuff(BuffType<QuetzalBuff>())))
-                return false;
-
-            if (player.altFunctionUse == 2)
+            if (player.GetModPlayer<ControlsPlayer>().rightClick) //secondary fire
             {
-                Item.shoot = ProjectileType<QuetzalOrb>();
-                Item.shootSpeed = 28f;
-                Item.UseSound = (player.ownedProjectileCounts[ProjectileType<QuetzalOrb>()] > 0 || player.ownedProjectileCounts[ProjectileType<QuetzalRift>()] > 0) ? SoundID.NPCHit52 with { Volume = 1.35f } : new SoundStyle("GoldLeaf/Sounds/SE/Monolith/HolyLaser") { Volume = 0.35f, PitchVariance = 0.4f };
+                Item.autoReuse = false;
+                Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/Monolith/HolyLaser") { Volume = 0.35f, PitchVariance = 0.4f };
+                //Item.UseSound = (player.ownedProjectileCounts[ProjectileType<QuetzalOrb>()] > 0 || player.ownedProjectileCounts[ProjectileType<QuetzalRift>()] > 0) ? SoundID.NPCHit52 with { Volume = 1.35f } : new SoundStyle("GoldLeaf/Sounds/SE/Monolith/HolyLaser") { Volume = 0.35f, PitchVariance = 0.4f };
             }
-            else
+            else //primary fire
             {
-                Item.shoot = ProjectileType<QuetzalP>();
-                Item.shootSpeed = 15f;
+                Item.autoReuse = true;
                 Item.UseSound = SoundID.DD2_BetsyFireballShot with { Volume = 0.9f, Pitch = 0.2f, PitchVariance = 0.5f };
             }
+
+            if (player.GetModPlayer<ControlsPlayer>().rightClick && (player.ownedProjectileCounts[ProjectileType<QuetzalOrb>()] > 0 || player.ownedProjectileCounts[ProjectileType<QuetzalRift>()] > 0 || player.HasBuff(BuffType<QuetzalBuff>())))
+                return false;
+
             return true;
         }
 
         public override float UseTimeMultiplier(Player player)
         {
-            if (player.altFunctionUse != 2)
-                return 1f;
-            else
+            if (player.GetModPlayer<ControlsPlayer>().rightClick || player.altFunctionUse == 2)
                 return 0.35f;
+            else
+                return 1f;
         }
         public override float UseAnimationMultiplier(Player player)
         {
-            if (player.altFunctionUse != 2)
-                return 1f;
-            else
+            if (player.GetModPlayer<ControlsPlayer>().rightClick || player.altFunctionUse == 2)
                 return 0.35f;
+            else
+                return 1f;
         }
         public override void ModifyManaCost(Player player, ref float reduce, ref float mult)
         {
-            if (player.altFunctionUse != 2)
+            if (player.GetModPlayer<ControlsPlayer>().rightClick || player.altFunctionUse == 2)
+            {
+                if (player.ownedProjectileCounts[ProjectileType<QuetzalOrb>()] > 0 || player.ownedProjectileCounts[ProjectileType<QuetzalRift>()] > 0)
+                    mult = 0f;
+                else
+                    mult = 4f;
+            }
+            else
                 mult = 1f;
-            else if (player.altFunctionUse == 2 && (player.ownedProjectileCounts[ProjectileType<QuetzalOrb>()] > 0 || player.ownedProjectileCounts[ProjectileType<QuetzalRift>()] > 0))
-                mult = 0f;
-            else 
-                mult = 4f;
         }
 
         public override bool AltFunctionUse(Player player) => true;
         
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
+            if (player.GetModPlayer<ControlsPlayer>().rightClick || player.altFunctionUse == 2)
+            {
+                type = ProjectileType<QuetzalOrb>();
+                velocity *= 2f;
+            }
+
             Vector2 muzzleOffset = Vector2.Normalize(velocity) * (Item.height + 10);
 
             if (Collision.CanHit(position, 0, 0, position + muzzleOffset, 0, 0))
@@ -206,7 +254,7 @@ namespace GoldLeaf.Items.FishWeapons
 
         public override bool CanShoot(Player player)
         {
-            if (player.altFunctionUse == 2 && (player.ownedProjectileCounts[ProjectileType<QuetzalOrb>()] > 0 || player.ownedProjectileCounts[ProjectileType<QuetzalRift>()] > 0))
+            if (player.GetModPlayer<ControlsPlayer>().rightClick && (player.ownedProjectileCounts[ProjectileType<QuetzalOrb>()] > 0 || player.ownedProjectileCounts[ProjectileType<QuetzalRift>()] > 0))
             {
                 return false;
             }
@@ -232,7 +280,7 @@ namespace GoldLeaf.Items.FishWeapons
                 dust.noGravity = true;
             }
 
-            if (player.altFunctionUse == 2)
+            if (player.GetModPlayer<ControlsPlayer>().rightClick)
             {
                 Vector2 cursorDirection = Vector2.Normalize(position - Main.MouseWorld);
                 for (int k = 1; k <= 3; k++)
@@ -249,6 +297,7 @@ namespace GoldLeaf.Items.FishWeapons
             }
             return true;
         }
+
         /*public override bool? UseItem(Player player)
         {
             if (player.altFunctionUse == 2 && (player.ownedProjectileCounts[ProjectileType<QuetzalOrb>()] > 0 || player.ownedProjectileCounts[ProjectileType<QuetzalRift>()] > 0))
@@ -286,6 +335,7 @@ namespace GoldLeaf.Items.FishWeapons
             recipe.AddIngredient(ItemID.AmberStaff);
             recipe.AddIngredient(ItemID.LunarTabletFragment, 6);
             recipe.AddIngredient(ItemType<Demitoxin>(), 12);
+            //recipe.AddIngredient(ItemType<FallenSun>(), 3);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.Register();
         }
@@ -352,15 +402,26 @@ namespace GoldLeaf.Items.FishWeapons
                 int targetEnemy = -1;
                 int targetProjectile = -1;
 
-                for (int p = 0; p < 300; p++)
+                foreach (Projectile projectile in Main.ActiveProjectiles)
                 {
-                    float range = Vector2.Distance(Projectile.Center, Main.projectile[p].Center);
-                    if (range < targetDistance && range < homingRange && Main.projectile[p].active && Main.projectile[p].type == ProjectileType<QuetzalRift>() && Main.projectile[p].owner == player.whoAmI && Main.projectile[p].ai[0] == 0)
+                    float range = Vector2.Distance(Projectile.Center, projectile.Center);
+                    if (range < targetDistance && range < homingRange && projectile.type == ProjectileType<QuetzalRift>()
+                        && projectile.owner == player.whoAmI && projectile.ai[0] == 0)
                     {
-                        targetProjectile = p;
+                        targetProjectile = projectile.whoAmI;
                         targetDistance = range;
                     }
                 }
+                foreach (NPC npc in Main.ActiveNPCs)
+                {
+                    float range = Vector2.Distance(Projectile.Center, npc.Center);
+                    if (range < targetDistance && range < homingRange && npc.CanBeChasedBy(Projectile, false))
+                    {
+                        targetEnemy = npc.whoAmI;
+                        targetDistance = range;
+                    }
+                }
+
                 for (int i = 0; i < 200; i++)
                 {
                     float range = Vector2.Distance(Projectile.Center, Main.npc[i].Center);
@@ -370,7 +431,8 @@ namespace GoldLeaf.Items.FishWeapons
                         targetDistance = range;
                     }
                 }
-                if (targetProjectile != -1 && Collision.CanHit(Projectile.position, Projectile.width, Projectile.height, Main.projectile[targetProjectile].position, Main.projectile[targetProjectile].width, Main.projectile[targetProjectile].height))
+                if (targetProjectile != -1 && Collision.CanHit(Projectile.position, Projectile.width, Projectile.height, 
+                    Main.projectile[targetProjectile].position, Main.projectile[targetProjectile].width, Main.projectile[targetProjectile].height))
                 {
                     Projectile.velocity += Vector2.Normalize(Main.projectile[targetProjectile].Center - Projectile.Center) * 8f;
 
@@ -393,8 +455,8 @@ namespace GoldLeaf.Items.FishWeapons
                 }
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    Projectile.velocity.X += (float)Math.Sin(rottime * 8) * Math.Clamp(Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter * 0.1f, 0f, 1.25f) * -1;
-                    Projectile.velocity.Y += (float)Math.Sin(rottime * 8) * Math.Clamp(Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter * 0.1f, 0f, 1.25f);
+                    Projectile.velocity.X += (float)Math.Sin(rottime * 8) * Math.Clamp(Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter * 0.1f, 0f, 1.25f);
+                    Projectile.velocity.Y += (float)Math.Cos(rottime * 8) * Math.Clamp(Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter * 0.1f, 0f, 1.25f);
                 }
 
                 Dust dust = Dust.NewDustPerfect(Projectile.Center + new Vector2(Main.rand.NextFloat(-4, 4), Main.rand.NextFloat(-4, 4)), DustID.AmberBolt, Vector2.Zero, 0, Color.Orange, Main.rand.NextFloat(0.5f, 0.75f));
@@ -406,11 +468,10 @@ namespace GoldLeaf.Items.FishWeapons
                 {
                     Dust dust2 = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.AmberBolt, 0, 0, 0, Color.White, Main.rand.NextFloat(0.85f, 1.25f));
                     dust2.fadeIn = Main.rand.NextFloat(1.15f, 1.5f);
-                    dust.rotation = Main.rand.NextFloat(-18, 18);
+                    dust2.rotation = Main.rand.NextFloat(-18, 18);
                     dust2.noGravity = true;
                 }
             }
-
             Projectile.rotation = Projectile.velocity.ToRotation();
         }
 
@@ -461,20 +522,25 @@ namespace GoldLeaf.Items.FishWeapons
 
             Projectile.netUpdate = true;
 
-            SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode with { Volume = 1.2f }, Projectile.Center);
-            SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/MassAttack/SputterStar") { Volume = 0.175f, Pitch = -0.25f, PitchVariance = 0.4f }, Projectile.Center);
-
             if (target != null)
             {
                 target.AddBuff(BuffType<AmberStun>(), 20);
 
-                ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,
-                new ParticleOrchestraSettings { PositionInWorld = target.Center },
-                Projectile.owner);
+                if (!Main.dedServ)
+                    ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,
+                    new ParticleOrchestraSettings { PositionInWorld = target.Center },
+                    Projectile.owner);
             }
 
-            CameraSystem.QuickScreenShake(Projectile.Center, Projectile.velocity.SafeNormalize(Vector2.One), 40f, 5f, distance: 1500);
-            //CameraSystem.AddScreenshake(player, 20, Projectile.Center);
+            if (!Main.dedServ)
+            {
+                SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode with { Volume = 1.2f }, Projectile.Center);
+                SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/MassAttack/SputterStar") { Volume = 0.175f, Pitch = -0.25f, PitchVariance = 0.4f }, Projectile.Center);
+
+                CameraSystem.QuickScreenShake(Projectile.Center, Projectile.velocity.SafeNormalize(Vector2.One), 40f, 5f, distance: 1500);
+                //CameraSystem.AddScreenshake(player, 20, Projectile.Center);
+            }
+
             if (Projectile.owner == Main.myPlayer)
             {
                 for (float k = 0; k < 10; k++)
@@ -482,7 +548,6 @@ namespace GoldLeaf.Items.FishWeapons
                     Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(Main.rand.NextFloat(-7f, 7f), Main.rand.NextFloat(-10, 3)), ProjectileType<QuetzalShard>(), Projectile.damage / 2, 0, Projectile.owner, 0f, 0f);
                     proj.GetGlobalProjectile<GoldLeafProjectile>().gravity = Main.rand.NextFloat(0.1f, 0.3f);
                     proj.ai[2] = Main.rand.Next(30, 70) - Math.Abs(proj.velocity.Length());
-                    proj.netUpdate = true;
                 }
 
                 Projectile.extraUpdates = 0;
@@ -693,12 +758,8 @@ namespace GoldLeaf.Items.FishWeapons
             Projectile.netImportant = true;
         }
 
-        const float teleportRange = 1000f;
-
         public override bool? CanHitNPC(NPC target) => false;
         
-        private ref int Counter => ref Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
-
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -838,12 +899,10 @@ namespace GoldLeaf.Items.FishWeapons
             Projectile.DamageType = DamageClass.Magic;
         }
 
-        const float teleportRange = 800f;
+        public const float teleportRange = 800f;
         public float rottime = 0;
 
         public override bool? CanHitNPC(NPC target) => false;
-
-        private ref int Counter => ref Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
@@ -861,8 +920,6 @@ namespace GoldLeaf.Items.FishWeapons
 
         public override void AI()
         {
-            Projectile.netUpdate = true;
-
             if (Projectile.ai[1] == 1 && Projectile.ai[0] == 0)
             {
                 if (Main.netMode != NetmodeID.SinglePlayer)
@@ -896,6 +953,9 @@ namespace GoldLeaf.Items.FishWeapons
             Projectile.localAI[0] = MathHelper.Lerp(Projectile.localAI[0], 1f, 0.05f);
             Projectile.localAI[1] *= 0.9f;
 
+            rottime += (float)Math.PI / 60;
+            if (rottime >= Math.PI * 2) rottime = 0;
+
             if (!Main.dedServ)
                 Lighting.AddLight(Projectile.Center, (255 / 255) * 0.6f + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.3f), (114 / 255) * 0.6f + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.3f), (57 / 255) * 0.6f + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.3f));
         }
@@ -904,18 +964,17 @@ namespace GoldLeaf.Items.FishWeapons
         {
             Player player = Main.player[Projectile.owner];
 
-            //SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode with { Volume = 1.5f }, Projectile.Center);
-            SoundEngine.PlaySound(SoundID.DD2_KoboldExplosion with { PitchVariance = 0.6f, Pitch = 0.2f }, Projectile.Center);
-            SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/MassAttack/SputterStar") { Volume = 0.15f, Pitch = 0.4f, PitchVariance = 0.6f }, Projectile.Center);
-            SoundEngine.PlaySound(SoundID.Item67, Projectile.Center);
-
-            //CameraSystem.AddScreenshake(Main.LocalPlayer, 45, Projectile.Center);
-            
-            CameraSystem.QuickScreenShake(Projectile.Center, null, 20f, 5f, 90, 2000);
-            CameraSystem.QuickScreenShake(Projectile.Center, (0f).ToRotationVector2(), 20f, 8f, 100, 2000);
-
             if (!Main.dedServ)
+            {
+                SoundEngine.PlaySound(SoundID.DD2_KoboldExplosion with { PitchVariance = 0.6f, Pitch = 0.2f }, Projectile.Center);
+                SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/MassAttack/SputterStar") { Volume = 0.15f, Pitch = 0.4f, PitchVariance = 0.6f }, Projectile.Center);
+                SoundEngine.PlaySound(SoundID.Item67, Projectile.Center);
+
+                CameraSystem.QuickScreenShake(Projectile.Center, null, 20f, 5f, 90, 2000);
+                CameraSystem.QuickScreenShake(Projectile.Center, (0f).ToRotationVector2(), 20f, 8f, 100, 2000);
+
                 Lighting.AddLight(Projectile.Center, (255 / 255) * 2f, (114 / 255) * 2f, (57 / 255) * 2f);
+            }
 
             if (Projectile.owner == Main.myPlayer)
             {
@@ -928,13 +987,13 @@ namespace GoldLeaf.Items.FishWeapons
                     proj.netUpdate = true;
                 }
 
-                for (int f = 0; f < 200; f++)
+                foreach (NPC npc in Main.ActiveNPCs)
                 {
-                    float range = Vector2.Distance(Projectile.Center, Main.npc[f].Center);
-                    if (range < teleportRange && IsTargetValid(Main.npc[f]))
+                    float range = Vector2.Distance(Projectile.Center, npc.Center);
+                    if (range < teleportRange && (npc.IsValid() || NPCID.Sets.ProjectileNPC[npc.type]))
                     {
-                        Main.npc[f].AddBuff(BuffType<AmberStun>(), TimeToTicks(1f));
-                        Main.npc[f].SimpleStrikeNPC(Projectile.damage, 0, true, 0, DamageClass.Magic, true, Main.player[Projectile.owner].luck);
+                        npc.SimpleStrikeNPC(Projectile.damage, 0, true, 0, DamageClass.Magic, true, Main.player[Projectile.owner].luck);
+                        npc.AddBuff(BuffType<AmberStun>(), TimeToTicks(1f));
                     }
                 }
             }
@@ -963,31 +1022,33 @@ namespace GoldLeaf.Items.FishWeapons
 
                 player.velocity.Y -= 7.5f;
 
-                for (float k = 0; k < 6.28f; k += Main.rand.NextFloat(0.3f, 0.45f))
+                if (!Main.dedServ)
                 {
-                    Dust dust = Dust.NewDustPerfect(player.Center + new Vector2(6f).RotatedBy(k), DustID.AmberBolt, Vector2.One.RotatedBy(k) * Main.rand.NextFloat(0.9f, 1.35f), 0, Color.White);
-                    dust.fadeIn = Main.rand.NextFloat(0.95f, 1.45f);
-                    dust.rotation = Main.rand.NextFloat(-16, 16);
-                    dust.velocity.Y *= 1.5f;
-                    dust.noGravity = true;
-                }
-                for (float k = 0; k < 6.28f; k += Main.rand.NextFloat(0.18f, 0.24f))
-                {
-                    Dust dust = Dust.NewDustPerfect(player.Center + new Vector2(14.5f).RotatedBy(k), DustID.AmberBolt, Vector2.One.RotatedBy(k) * Main.rand.NextFloat(1.85f, 2.35f), 0, Color.White);
-                    dust.fadeIn = Main.rand.NextFloat(1.15f, 1.5f);
-                    dust.rotation = Main.rand.NextFloat(-22, 22);
-                    dust.velocity.Y *= 2f;
-                    dust.noGravity = true;
-                }
+                    for (float k = 0; k < 6.28f; k += Main.rand.NextFloat(0.3f, 0.45f))
+                    {
+                        Dust dust = Dust.NewDustPerfect(player.Center + new Vector2(6f).RotatedBy(k), DustID.AmberBolt, Vector2.One.RotatedBy(k) * Main.rand.NextFloat(0.9f, 1.35f), 0, Color.White);
+                        dust.fadeIn = Main.rand.NextFloat(0.95f, 1.45f);
+                        dust.rotation = Main.rand.NextFloat(-16, 16);
+                        dust.velocity.Y *= 1.5f;
+                        dust.noGravity = true;
+                    }
+                    for (float k = 0; k < 6.28f; k += Main.rand.NextFloat(0.18f, 0.24f))
+                    {
+                        Dust dust = Dust.NewDustPerfect(player.Center + new Vector2(14.5f).RotatedBy(k), DustID.AmberBolt, Vector2.One.RotatedBy(k) * Main.rand.NextFloat(1.85f, 2.35f), 0, Color.White);
+                        dust.fadeIn = Main.rand.NextFloat(1.15f, 1.5f);
+                        dust.rotation = Main.rand.NextFloat(-22, 22);
+                        dust.velocity.Y *= 2f;
+                        dust.noGravity = true;
+                    }
 
-                ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,
-                new ParticleOrchestraSettings { PositionInWorld = Projectile.Center },
-                Projectile.owner);
+                    ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,
+                        new ParticleOrchestraSettings { PositionInWorld = Projectile.Center }, Projectile.owner);
 
-                SoundEngine.PlaySound(SoundID.Item68, player.Center);
+                    SoundEngine.PlaySound(SoundID.Item68, player.Center);
+                }
 
                 if (Main.netMode != NetmodeID.SinglePlayer)
-                    NetMessage.SendData(MessageID.SyncPlayer, number: player.whoAmI);
+                    NetMessage.SendData(MessageID.SyncPlayer, ignoreClient: player.whoAmI, number: player.whoAmI);
             }
             else
             {
@@ -1016,15 +1077,6 @@ namespace GoldLeaf.Items.FishWeapons
             }
         }
 
-        public override void PostAI()
-        {
-            if (Projectile.owner == Main.myPlayer)
-            {
-                rottime += (float)Math.PI / 60;
-                if (rottime >= Math.PI * 2) rottime = 0;
-            }
-        }
-
         public override bool PreDraw(ref Color lightColor)
         {
             float opacity = 1f;
@@ -1033,7 +1085,7 @@ namespace GoldLeaf.Items.FishWeapons
 
             if (Main.myPlayer != Projectile.owner)
             {
-                opacity = 0.5f;
+                opacity = 0.3f;
             }
 
             float sizeMod = 1f;
@@ -1066,7 +1118,7 @@ namespace GoldLeaf.Items.FishWeapons
                         Color color1 = new(255, 239, 163) { A = 185 };
                         Color color2 = new(255, 114, 57) { A = 185 };
 
-                        Main.spriteBatch.Draw(texture, drawPos, rect, Color.Lerp(color1, color2, k / (Projectile.oldPos.Length + 2f)) * (0.6f - (k / 10f)) * Projectile.Opacity, Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
+                        Main.spriteBatch.Draw(texture, drawPos, rect, Color.Lerp(color1, color2, k / (Projectile.oldPos.Length + 2f)) * (0.6f - (k / 10f)) * Projectile.Opacity * opacity, Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
                     }
                 }
             }
@@ -1100,7 +1152,8 @@ namespace GoldLeaf.Items.FishWeapons
         public override void Update(Player player, ref int buffIndex)
         {
             player.moveSpeed += 0.7f;
-            player.runAcceleration += 0.35f;
+            player.runAcceleration += 0.1f;
+            player.runAcceleration *= 2f;
         }
     }
     

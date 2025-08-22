@@ -14,10 +14,11 @@ using GoldLeaf.Tiles.Decor;
 using GoldLeaf.Core;
 using GoldLeaf.Items.Grove;
 using GoldLeaf.Core.CrossMod;
+using GoldLeaf.Items.Misc;
 
 namespace GoldLeaf.Items.Potions
 {
-    public class MinionCritPotion : ModItem
+    public class MinionCritPotion : ModItem //i wanna rework this into a new, maybe not summon related potion eventually
     {
         public override void SetStaticDefaults()
         {
@@ -41,8 +42,7 @@ namespace GoldLeaf.Items.Potions
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.BottledWater);
             recipe.AddIngredient(ItemID.Waterleaf);
-            recipe.AddIngredient(ItemType<EveDroplet>());
-            recipe.AddIngredient(ItemID.Lens);
+            recipe.AddIngredient(ItemType<FallenMoon>());
             recipe.AddTile(TileID.Bottles);
             recipe.Register();
         }

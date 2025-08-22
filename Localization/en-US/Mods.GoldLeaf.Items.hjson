@@ -535,7 +535,16 @@ EchobarkBreastplate: {
 
 Lunar: {
 	DisplayName: Lunar
-	Tooltip: Consumes fallen stars to change moon phase at night
+	Tooltip: Consumes stranded lunes to change moon phase at night
+}
+
+FallenMoon: {
+	DisplayName: Stranded Lune
+	Tooltip:
+		'''
+		It's fallen from its home in the sky
+		Best to return it before the sunrise
+		'''
 }
 
 HeatFlask: {
@@ -556,6 +565,7 @@ Jellyfisher: {
 	DisplayName: Jellyfisher
 	Tooltip:
 		'''
+		{$CommonItemTooltip.Sentry}
 		Summons a jellyfish to shock nearby enemies
 		<right> to use as a normal fishing rod
 		'''
@@ -589,4 +599,9 @@ RoyalCanister: {
 SentryDetonator: {
 	DisplayName: Sentry Detonator
 	Tooltip: Destroys all active sentries
+}
+
+RuneTablet: {
+	DisplayName: Rune Tablet
+	Tooltip: ""
 }
