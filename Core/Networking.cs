@@ -10,13 +10,13 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using GoldLeaf.Core;
 using static GoldLeaf.Core.Helper;
-using GoldLeaf.Items.FallenStar;
 using GoldLeaf.Items.Blizzard.Armor;
 using GoldLeaf.Items.Blizzard;
 using GoldLeaf.Items.FishWeapons;
 using Terraria.Audio;
 using GoldLeaf.Effects.Dusts;
 using Microsoft.Xna.Framework;
+using GoldLeaf.Items.Sky;
 
 namespace GoldLeaf
 {

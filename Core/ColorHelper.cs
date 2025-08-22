@@ -89,6 +89,11 @@ namespace GoldLeaf.Core
                 return Color.Lerp(auroraBlue, auroraPurple, (timer - 6) / 2);
         }
 
+        public static Color MultiplyAlpha(this Color color, float alpha)
+        {
+            return new Color(color.R, color.G, color.B, (int)((color.A / 255f) * Math.Clamp(alpha, 0f, 1f) * 255));
+        }
+
         public static Color IndicatorColor()
         {
             return Color.White * (float)(0.2f + 0.8f * (1 + Math.Sin(GoldLeafWorld.rottime)) / 2f);

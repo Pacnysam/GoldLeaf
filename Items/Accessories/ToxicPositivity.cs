@@ -52,8 +52,8 @@ namespace GoldLeaf.Items.Accessories
             if (player.GetModPlayer<ToxicPositivePlayer>().toxicPositivity && !target.buffImmune[BuffType<ToxicPositivityBuff>()])
             {
                 Projectile.NewProjectile(player.GetSource_OnHit(target), target.position, Vector2.Zero, ProjectileType<ToxicPositivityEffect>(), 0, 0, player.whoAmI);
-                target.AddBuff(BuffType<ToxicPositivityBuff>(), TimeToTicks(1) + TimeToTicks(player.CountBuffs() * 0.5f));
-                SoundEngine.PlaySound(SoundID.Zombie60, target.Center);
+                target.AddBuff(BuffType<ToxicPositivityBuff>(), Math.Clamp(TimeToTicks(player.CountBuffs() * 0.5f), TimeToTicks(0.5f), TimeToTicks(10)));
+                SoundEngine.PlaySound(SoundID.Zombie60 with { Volume = 0.35f }, target.Center);
             }
         }
     }
@@ -74,14 +74,13 @@ namespace GoldLeaf.Items.Accessories
         public override void Update(NPC npc, ref int buffIndex)
         {
             npc.GetGlobalNPC<ToxicPositiveNPC>().toxicPositive = true;
-            npc.GetGlobalNPC<GoldLeafNPC>().defenseModFlat -= Math.Clamp(npc.buffTime[buffIndex] / 60, 1, 30);
+            npc.GetGlobalNPC<GoldLeafNPC>().defenseModFlat -= (int)Math.Clamp(npc.buffTime[buffIndex] / 60f, 1, 10);
         }
 
         public override void Update(Player player, ref int buffIndex)
         {
             player.GetModPlayer<ToxicPositivePlayer>().toxicPositive = true;
             player.statDefense -= 3;
-            player.DefenseEffectiveness *= 0.9f;
         }
     }
 
@@ -242,7 +241,7 @@ namespace GoldLeaf.Items.Accessories
                     npc.lifeRegen = 0;
                 }
 
-                npc.lifeRegen -= 2 * 20;
+                npc.lifeRegen -= 2 * 16;
                 if (damage < 10)
                 {
                     damage = 10;

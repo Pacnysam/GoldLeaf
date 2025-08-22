@@ -29,6 +29,7 @@ namespace GoldLeaf.Core
             .RegisterCustomSet<(Asset<Texture2D>, Color, bool)>((null, Color.White, false));
 
         public static bool[] FaceMask = ItemID.Sets.Factory.CreateBoolSet(false);
+
         public static (Asset<Texture2D>, Color)[] BodyExtra = ItemID.Sets.Factory.CreateNamedSet("BodyExtraLayer")
             .Description("Additional layer that draws over body, is formatted like head, leg sheets")
             .RegisterCustomSet<(Asset<Texture2D>, Color)>((null, default));
@@ -42,6 +43,13 @@ namespace GoldLeaf.Core
         public static bool[] sentryCanDetonaterExplode = ProjectileID.Sets.Factory.CreateNamedSet("sentryCanDetonaterExplode")
             .RegisterBoolSet(true, ProjectileID.DD2LightningAuraT1, ProjectileID.DD2LightningAuraT2, ProjectileID.DD2LightningAuraT3, ProjectileType<JellyfishSentry>());
     }
+
+    public static class NPCSets
+    {
+        public static bool[] bossServant = NPCID.Sets.Factory.CreateNamedSet("BossServant")
+            .RegisterBoolSet(false, NPCID.ServantofCthulhu, NPCID.Bee, NPCID.BeeSmall, NPCID.PlanterasHook, NPCID.PlanterasTentacle, NPCID.Sharkron, NPCID.Sharkron2);
+    }
+
     public static class BuffSets
     {
         public static bool[] Cooldown = BuffID.Sets.Factory.CreateNamedSet("Cooldown")
@@ -54,17 +62,14 @@ namespace GoldLeaf.Core
             .Description("Can be removed by safety blanket and similar methods")
             .RegisterBoolSet(true, BuffID.MoonLeech, BuffID.TheTongue, BuffID.Obstructed, BuffID.Horrified, BuffID.Hunger, BuffID.NeutralHunger, BuffID.Starving, BuffType<ToxicPositivityBuff>());
     }
+
     public static class ArmorSets
     {
-        public static bool[] FaceMaskLayer = ArmorIDs.Head.Sets.Factory.CreateNamedSet("FaceMaskLayer")
+        /*public static bool[] FaceMaskLayer = ArmorIDs.Head.Sets.Factory.CreateNamedSet("FaceMaskLayer")
             .Description("Draws helmet on face mask layer")
             .RegisterBoolSet(false);
         public static bool[] BodyBeltLayer = ArmorIDs.Body.Sets.Factory.CreateNamedSet("BodyBeltLayer")
             .Description("Draws belt layer over body, is under front arm")
-            .RegisterBoolSet(false);
-        /*public static Asset<Texture2D>[] BodyBeltLayer = ArmorIDs.Body.Sets.Factory.CreateNamedSet("BodyBeltLayer")
-            .Description("Draws belt layer over body, is under front arm")
-            .RegisterCustomSet<Asset<Texture2D>>(null);*/
-
+            .RegisterBoolSet(false);*/
     }
 }

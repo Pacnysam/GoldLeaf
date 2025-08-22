@@ -38,10 +38,9 @@ namespace GoldLeaf.Items.Sandstorm
             Item.value = Item.sellPrice(0, 1, 35, 0);
             Item.rare = ItemRarityID.Green;
 
-            Item.damage = 16;
+            Item.damage = 14;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 10;
-            Item.ArmorPenetration = 3;
 
             Item.shootSpeed = 3.75f;
             Item.knockBack = 1.75f;

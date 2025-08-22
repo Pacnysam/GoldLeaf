@@ -217,8 +217,12 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
                     player = Main.player[k];
             return player;
         }
-        
-        public static bool Toggle(this bool input) => input = !input;
+
+        public static float Opacity(this Gore gore) => 1f - gore.alpha / 255f;
+
+        public static bool Toggle(this bool input) => !input;
+        public static float RandomNegative(this float num) => Main.rand.NextBool() ? num : -num;
+        public static int RandomNegative(this int num) => Main.rand.NextBool() ? num : -num;
 
         public static void WritePoint16(this BinaryWriter writer, Point16 point) { writer.Write(point.X); writer.Write(point.Y); }
         public static Point16 ReadPoint16(this BinaryReader reader) => new(reader.ReadInt16(), reader.ReadInt16());
@@ -475,6 +479,16 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
                 item.playerIndexTheItemIsReservedFor = Main.myPlayer;
             }
             return item;
+        }
+
+        public static bool IsInRangeOfMe(Projectile projectile, NPC target, float maxDistance, out float myDistance)
+        {
+            myDistance = Vector2.Distance(target.Center, projectile.Center);
+
+            if (myDistance < maxDistance && !projectile.CanHitWithOwnBody(target))
+                myDistance = float.PositiveInfinity;
+
+            return myDistance <= maxDistance;
         }
 
         public static bool IsWeapon(this Item item) => item.type != ItemID.None && item.stack > 0 && item.useStyle > ItemUseStyleID.None && (item.damage > 0 || item.useAmmo > 0 && item.useAmmo != AmmoID.Solution);
