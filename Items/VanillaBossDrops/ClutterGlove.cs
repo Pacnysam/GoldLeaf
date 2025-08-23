@@ -263,13 +263,17 @@ namespace GoldLeaf.Items.VanillaBossDrops
         {
             SoundEngine.PlaySound(SoundID.DD2_LightningBugHurt, Projectile.Center);
 
-            target.SimpleStrikeNPC((int)(damageDone * 0.7), hit.HitDirection, hit.Crit, 0, DamageClass.Ranged);
-        }
+            NPC.HitInfo hitInfo = new()
+            {
+                Damage = (int)(damageDone * 0.7),
+                DamageType = DamageClass.Ranged,
+                Crit = hit.Crit,
+                Knockback = hit.Knockback,
+                HitDirection = hit.HitDirection,
+            };
 
-        /*public override void OnHitPlayer(Player target, Player.HurtInfo info)
-        {
-            target.Hurt(info.DamageSource, (int)(info.Damage * 0.7), info.HitDirection, true);
-        }*/
+            Main.player[Projectile.owner].StrikeNPCDirect(target, hitInfo);
+        }
 
         public override void OnKill(int timeLeft)
         {

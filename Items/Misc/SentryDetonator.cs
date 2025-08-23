@@ -38,6 +38,11 @@ namespace GoldLeaf.Items.Misc
             Item.height = 34;
         }
 
+        public override bool CanUseItem(Player player)
+        {
+            return !player.ZoneOldOneArmy;
+        }
+
         public override bool? UseItem(Player player)
         {
             int sentryKillCount = 0;

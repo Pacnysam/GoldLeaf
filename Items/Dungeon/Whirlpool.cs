@@ -88,7 +88,7 @@ namespace GoldLeaf.Items.Dungeon
 		{
 			Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.AquaScepter);
-            //recipe.AddIngredient(ItemType<>(Runestone), 3);
+            recipe.AddIngredient(ItemType<RuneTablet>(), 3);
 			recipe.AddIngredient(ItemID.Bone, 40);
 			//recipe.AddOnCraftCallback(RecipeCallbacks.RunestoneCraftEffect);
 			recipe.AddTile(TileID.Anvils);

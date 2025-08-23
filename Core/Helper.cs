@@ -117,6 +117,7 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
         public static float Counter(this NPC npc) => npc.GetGlobalNPC<GoldLeafNPC>().counter;
 
         public static bool Stunned(this Player player) => player.CCed || player.GetModPlayer<GoldLeafPlayer>().stunned;
+        public static bool CanBeStunned(this NPC npc) => (!npc.boss && !NPCID.Sets.ShouldBeCountedAsBoss[npc.type] && npc.aiStyle != NPCAIStyleID.Worm /* && npc.knockBackResist != 0f*/);
 
         public static bool ZoneGrove(this Player player) => player.GetModPlayer<GoldLeafPlayer>().ZoneGrove;
         public static bool ZoneForest(this Player Player)
@@ -219,6 +220,17 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
         }
 
         public static float Opacity(this Gore gore) => 1f - gore.alpha / 255f;
+
+        public readonly static BlendState
+            SubtractiveBlend = new()
+            {
+                ColorSourceBlend = Blend.SourceAlpha,
+                ColorDestinationBlend = Blend.One,
+                ColorBlendFunction = BlendFunction.ReverseSubtract,
+                AlphaSourceBlend = Blend.SourceAlpha,
+                AlphaDestinationBlend = Blend.One,
+                AlphaBlendFunction = BlendFunction.ReverseSubtract
+            };
 
         public static bool Toggle(this bool input) => !input;
         public static float RandomNegative(this float num) => Main.rand.NextBool() ? num : -num;

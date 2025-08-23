@@ -568,14 +568,6 @@ namespace GoldLeaf.Items.Ocean
         public override bool? CanDamage() => (State != Idle) && Projectile.Counter() >= 10;
         public override bool? CanHitNPC(NPC target) => (State != Idle) && !target.friendly && Projectile.Counter() >= 10;
         
-        /*public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
-        {
-            if (State == Swimming)
-            {
-                modifiers.SourceDamage *= 1.25f;
-            }
-        }*/
-
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
@@ -587,11 +579,11 @@ namespace GoldLeaf.Items.Ocean
             if (State != Swimming) 
             {
                 //dark bloom
-                Main.EntitySpriteDraw(darkBloomTex.Value, Projectile.Center + new Vector2(0, -4) - Main.screenPosition, null, Color.Black * Projectile.Opacity * Projectile.localAI[0] * 0.75f, 0, darkBloomTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(Rottime * 3) * 0.15f)) * 0.85f, SpriteEffects.None, 0f);
-                Main.EntitySpriteDraw(darkBloomTex.Value, Projectile.Center + new Vector2(0, -4) - Main.screenPosition, null, Color.Black * Projectile.Opacity * Projectile.localAI[0] * 0.75f, 0, darkBloomTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(Rottime * 3) * -0.15f)) * 0.85f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(darkBloomTex.Value, Projectile.Center + new Vector2(0, -4) - Main.screenPosition, null, Color.Black * Projectile.Opacity * Projectile.localAI[0] * 0.75f, 0, darkBloomTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(Rottime * 3) * 0.15f)) * 0.85f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(darkBloomTex.Value, Projectile.Center + new Vector2(0, -4) - Main.screenPosition, null, Color.Black * Projectile.Opacity * Projectile.localAI[0] * 0.75f, 0, darkBloomTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(Rottime * 3) * -0.15f)) * 0.85f, SpriteEffects.None, 0f);
                 //bloom
-                Main.EntitySpriteDraw(bloomTex.Value, Projectile.Center + new Vector2(0, -4) - Main.screenPosition, null, Color.Lerp(color2, color1, (float)(Math.Sin(Rottime * 8) / 2f) + 0.5f) with { A = 0 } * Projectile.Opacity * Projectile.localAI[0], 0, bloomTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(Rottime * 3) * 0.15f)) * 0.325f, SpriteEffects.None, 0f);
-                Main.EntitySpriteDraw(bloomTex.Value, Projectile.Center + new Vector2(0, -4) - Main.screenPosition, null, Color.Lerp(color2, color1, (float)(Math.Sin(Rottime * 8) / 2f) + 0.5f) with { A = 0 } * Projectile.Opacity * Projectile.localAI[0], 0, bloomTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(Rottime * 3) * -0.15f)) * 0.325f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(bloomTex.Value, Projectile.Center + new Vector2(0, -4) - Main.screenPosition, null, Color.Lerp(color2, color1, (float)(Math.Sin(Rottime * 8) / 2f) + 0.5f) with { A = 0 } * Projectile.Opacity * Projectile.localAI[0], 0, bloomTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(Rottime * 3) * 0.15f)) * 0.325f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(bloomTex.Value, Projectile.Center + new Vector2(0, -4) - Main.screenPosition, null, Color.Lerp(color2, color1, (float)(Math.Sin(Rottime * 8) / 2f) + 0.5f) with { A = 0 } * Projectile.Opacity * Projectile.localAI[0], 0, bloomTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(Rottime * 3) * -0.15f)) * 0.325f, SpriteEffects.None, 0f);
             }
 
             for (int k = 0; k < Projectile.oldPos.Length; k++)

@@ -524,7 +524,8 @@ namespace GoldLeaf.Items.FishWeapons
 
             if (target != null)
             {
-                target.AddBuff(BuffType<AmberStun>(), 20);
+                if (target.CanBeStunned())
+                    target.AddBuff(BuffType<AmberStun>(), 20);
 
                 if (!Main.dedServ)
                     ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,
@@ -992,8 +993,17 @@ namespace GoldLeaf.Items.FishWeapons
                     float range = Vector2.Distance(Projectile.Center, npc.Center);
                     if (range < teleportRange && (npc.IsValid() || NPCID.Sets.ProjectileNPC[npc.type]))
                     {
-                        npc.SimpleStrikeNPC(Projectile.damage, 0, true, 0, DamageClass.Magic, true, Main.player[Projectile.owner].luck);
-                        npc.AddBuff(BuffType<AmberStun>(), TimeToTicks(1f));
+                        NPC.HitInfo hitInfo = new()
+                        {
+                            Damage = Projectile.damage,
+                            DamageType = DamageClass.Magic,
+                            Crit = true
+                        };
+
+                        player.StrikeNPCDirect(npc, hitInfo);
+
+                        if (npc.CanBeStunned())
+                            npc.AddBuff(BuffType<AmberStun>(), TimeToTicks(1f));
                     }
                 }
             }

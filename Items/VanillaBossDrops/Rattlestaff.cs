@@ -23,6 +23,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
 {
     public class Rattlestaff : ModItem
     {
+        public override bool IsLoadingEnabled(Mod mod) => false;
         public override void SetDefaults() 
         {
             Item.damage = 10;

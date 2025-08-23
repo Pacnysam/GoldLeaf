@@ -47,7 +47,15 @@ namespace GoldLeaf.Core
     public static class NPCSets
     {
         public static bool[] bossServant = NPCID.Sets.Factory.CreateNamedSet("BossServant")
-            .RegisterBoolSet(false, NPCID.ServantofCthulhu, NPCID.Bee, NPCID.BeeSmall, NPCID.PlanterasHook, NPCID.PlanterasTentacle, NPCID.Sharkron, NPCID.Sharkron2);
+            .RegisterBoolSet(false, NPCID.ServantofCthulhu, NPCID.Bee, NPCID.BeeSmall, NPCID.Sharkron, NPCID.Sharkron2, NPCID.TheHungry, NPCID.TheHungryII, 
+            NPCID.CultistDragonHead, NPCID.CultistDragonBody1, NPCID.CultistDragonBody2, NPCID.CultistDragonBody3, NPCID.CultistDragonBody4, NPCID.CultistDragonTail,
+            NPCID.AncientCultistSquidhead, NPCID.AncientDoom, NPCID.CultistBossClone, NPCID.LeechHead, NPCID.LeechBody, NPCID.LeechTail, NPCID.Probe, 
+            NPCID.DD2SkeletonT1, NPCID.DD2SkeletonT3, NPCID.QueenSlimeMinionBlue, NPCID.QueenSlimeMinionPink, NPCID.QueenSlimeMinionPurple);
+        
+        public static bool[] ccImmune = NPCID.Sets.Factory.CreateNamedSet("CC Immune")
+            .RegisterBoolSet(false, NPCID.DD2DarkMageT1, NPCID.DD2DarkMageT3, NPCID.DD2OgreT2, NPCID.DD2OgreT3, NPCID.DD2Betsy, NPCID.PirateShip, NPCID.PirateShipCannon, 
+            NPCID.BloodNautilus, NPCID.Pumpking, NPCID.PumpkingBlade, NPCID.LunarTowerSolar, NPCID.LunarTowerVortex, NPCID.LunarTowerNebula, NPCID.LunarTowerStardust, 
+            NPCID.SkeletronHand, NPCID.DungeonGuardian);
     }
 
     public static class BuffSets

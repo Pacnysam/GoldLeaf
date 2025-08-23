@@ -567,10 +567,13 @@ namespace GoldLeaf.Items.Underground
                 target.immune[Projectile.owner] = 0;
                 Projectile.damage = 0;
             }
-            if (Gem == (int)Gems.Amber && empowered && GoldLeafNPC.CanBeStunned(target))
+            if (Gem == (int)Gems.Amber && empowered && target.CanBeStunned())
             {
                 empowered = false;
-                target.AddBuff(BuffType<AmberStun>(), 30);
+
+                if (target.CanBeStunned())
+                    target.AddBuff(BuffType<AmberStun>(), 30);
+                
                 SoundEngine.PlaySound(SoundID.Item150, Projectile.Center);
                 SoundEngine.PlaySound(SoundID.DD2_LightningBugZap, Projectile.Center);
                 ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.ChlorophyteLeafCrystalShot,

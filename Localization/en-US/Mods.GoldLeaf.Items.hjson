@@ -592,8 +592,8 @@ SunstoneStaff: {
 }
 
 RoyalCanister: {
-	DisplayName: Royal Canister
-	Tooltip: ""
+	DisplayName: Gel Canister
+	Tooltip: Summons a slime rain
 }
 
 SentryDetonator: {
@@ -604,4 +604,9 @@ SentryDetonator: {
 RuneTablet: {
 	DisplayName: Rune Tablet
 	Tooltip: ""
+}
+
+AcrylicTurretPaint: {
+	DisplayName: Acrylic Turret Paint
+	Tooltip: Applies dye to sentries
 }

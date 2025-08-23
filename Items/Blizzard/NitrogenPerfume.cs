@@ -76,7 +76,7 @@ namespace GoldLeaf.Items.Blizzard
 
         private void NitrogenPerfume(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (player.GetModPlayer<NitrogenPerfumePlayer>().nitrogenPerfume && GoldLeafNPC.CanBeStunned(target))
+            if (player.GetModPlayer<NitrogenPerfumePlayer>().nitrogenPerfume && target.CanBeStunned())
             {
                 target.GetGlobalNPC<FrostNPC>().defrostTimer = 160;
                 FrostNPC.AddFrost(target, 8);

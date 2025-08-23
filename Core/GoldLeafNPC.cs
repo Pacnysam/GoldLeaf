@@ -111,6 +111,16 @@ namespace GoldLeaf.Core
                         shop.Add(ItemType<SentryDetonator>());
                         break;
                     }
+                case NPCID.Painter:
+                    {
+                        shop.Add(ItemType<AcrylicTurretPaint>(), Condition.BestiaryFilledPercent(30));
+                        break;
+                    }
+                case NPCID.SkeletonMerchant:
+                    {
+                        shop.Add(ItemType<BeheadingAxe>(), Condition.BloodMoon);
+                        break;
+                    }
             }
         }
 
@@ -121,8 +131,6 @@ namespace GoldLeaf.Core
             modifiers.Defense.Flat += defenseModFlat;
             modifiers.DefenseEffectiveness *= defenseFactorMod;
         }
-
-        public static bool CanBeStunned(NPC npc) => (!npc.boss && npc.aiStyle != NPCAIStyleID.Worm/* && npc.knockBackResist != 0f*/);
 
         public override void OnSpawn(NPC npc, IEntitySource source)
         {
@@ -141,7 +149,7 @@ namespace GoldLeaf.Core
 
         public override bool PreAI(NPC npc)
         {
-            if (Main.netMode != NetmodeID.Server && stunned && !npc.boss && npc.aiStyle != NPCAIStyleID.Worm/* && npc.knockBackResist != 0f*/)
+            if (Main.netMode != NetmodeID.Server && stunned && npc.CanBeStunned())
             {
                 npc.velocity = Vector2.Zero;
                 npc.GetGlobalNPC<GoldLeafNPC>().movementSpeed *= 0f;
@@ -157,7 +165,7 @@ namespace GoldLeaf.Core
 
         public override void PostAI(NPC npc)
         {
-            if (Slowed && !npc.boss && npc.aiStyle != NPCAIStyleID.Worm/* && npc.knockBackResist != 0f*/)
+            if (Slowed && npc.CanBeStunned())
             {
                 npc.position -= npc.velocity * (1 - movementSpeed);
             }
@@ -170,7 +178,7 @@ namespace GoldLeaf.Core
                 case NPCID.VampireBat:
                 case NPCID.Vampire:
                     {
-                        npcLoot.Add(ItemDropRule.Common(ItemType<VampirePotion>(), 2));
+                        npcLoot.Add(ItemDropRule.Common(ItemType<VampirePotion>(), 5));
                         break;
                     }
                 case NPCID.GraniteGolem:

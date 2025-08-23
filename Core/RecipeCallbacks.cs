@@ -1,22 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria;
-using GoldLeaf.Items.Grove;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using GoldLeaf.Effects.Dusts;
-using Terraria.Localization;
-using static Terraria.ModLoader.ModContent;
-using static GoldLeaf.Core.Helper;
+﻿using GoldLeaf.Effects.Dusts;
 using GoldLeaf.Items.Blizzard;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
-using ReLogic.Content;
 using GoldLeaf.Items.Blizzard.Armor;
+using GoldLeaf.Items.Grove;
 using GoldLeaf.Items.Grove.Boss;
+using GoldLeaf.Items.Sky;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using System;
+using System.Collections.Generic;
+using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.Graphics.Shaders;
+using Terraria.ID;
+using Terraria.Localization;
+using Terraria.ModLoader;
+using static GoldLeaf.Core.Helper;
+using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Core
 {
@@ -66,7 +67,24 @@ namespace GoldLeaf.Core
             {
                 player.GetModPlayer<GoldLeafPlayer>().craftTimer = 15;
 
-                DustHelper.DrawStar(player.MountedCenter, DustID.FireworkFountain_Yellow, 5, 2.6f, 1f, 0.55f, 0.6f, 0.5f, true, 0, -1);
+                Gore gore = Gore.NewGoreDirect(null, player.Top, Vector2.Zero, GoreType<ConstellationGore>());
+                gore.rotation = MathHelper.ToRadians(Main.rand.NextFloat(380, 780)).RandomNegative();
+                gore.velocity.X *= 0.65f;
+                gore.velocity.Y = Main.rand.NextFloat(-8.5f, -6.5f);
+                gore.frame = 1;
+                gore.alpha -= Main.rand.Next(40, 70);
+
+                for (int i = 0; i < 5; i++)
+                {
+                    Gore gore2 = Gore.NewGoreDirect(null, player.Top, Vector2.Zero, GoreType<ConstellationGore>());
+                    gore2.rotation = MathHelper.ToRadians(Main.rand.NextFloat(420, 820)).RandomNegative();
+                    gore2.velocity.X *= 1.45f;
+                    gore2.velocity.Y = Main.rand.NextFloat(-4f, -1.5f);
+                    gore2.frame = 0;
+                    gore2.alpha += Main.rand.Next(-10, 15);
+                }
+
+                //DustHelper.DrawStar(player.MountedCenter, DustID.FireworkFountain_Yellow, 5, 2.6f, 1f, 0.55f, 0.6f, 0.5f, true, 0, -1);
                 SoundEngine.PlaySound(SoundID.Item4);
             }
         }

@@ -45,8 +45,8 @@ namespace GoldLeaf.Items.Blizzard
 
         public override void SetDefaults(NPC entity)
         {
-            entity.buffImmune[BuffID.Chilled] = !GoldLeafNPC.CanBeStunned(entity);
-            entity.buffImmune[BuffID.Frozen] = !GoldLeafNPC.CanBeStunned(entity);
+            entity.buffImmune[BuffID.Chilled] = !entity.CanBeStunned();
+            entity.buffImmune[BuffID.Frozen] = !entity.CanBeStunned();
         }
 
         public override void PostAI(NPC npc)
