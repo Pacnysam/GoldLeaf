@@ -26,7 +26,7 @@ namespace GoldLeaf.Items.Vanity
         {
             Item.CloneDefaults(ItemID.CritterShampoo);
 
-            Item.width = 34;
+            Item.width = 36;
             Item.height = 32;
         }
 
