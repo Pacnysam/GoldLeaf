@@ -14,7 +14,7 @@ using System.IO;
 using System.Threading;
 using Terraria.ID;
 
-namespace GoldLeaf.Core
+namespace GoldLeaf.Core.Mechanics
 {
     public class FirstStrikePlayer : ModPlayer
     {

@@ -17,6 +17,7 @@ using Terraria.Audio;
 using GoldLeaf.Effects.Dusts;
 using Microsoft.Xna.Framework;
 using GoldLeaf.Items.Sky;
+using GoldLeaf.Core.Helpers;
 
 namespace GoldLeaf
 {
@@ -24,6 +25,7 @@ namespace GoldLeaf
     {
         internal enum MessageType : byte
         {
+            SoundSync,
             OverhealthSync,
             ConstellationSync,
             FrostSync,
@@ -42,6 +44,21 @@ namespace GoldLeaf
 
             switch (msgType)
             {
+                case MessageType.SoundSync:
+                    string soundLocation = reader.ReadString();
+                    Vector2 soundPosition = reader.ReadVector2();
+                    float volume = reader.ReadSingle();
+                    float pitch = reader.ReadSingle();
+
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        SoundHelper.SendSound(soundLocation, soundPosition, volume, pitch);
+                    }
+                    else
+                    {
+                        SoundEngine.PlaySound(new SoundStyle(soundLocation) { Volume = volume, Pitch = pitch }, soundPosition);
+                    }
+                    break;
                 case MessageType.OverhealthSync:
                     OverhealthManager overhealthPlayer = Main.player[player].GetModPlayer<OverhealthManager>();
                     overhealthPlayer.ReceivePlayerSync(reader);

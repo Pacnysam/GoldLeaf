@@ -35,9 +35,10 @@ namespace GoldLeaf.Items.Vanity
             Texture2D tex = TextureAssets.Item[Item.type].Value;
             Vector2 origin = tex.Size() / 2;
             Vector2 drawPos = Item.Bottom - Main.screenPosition - new Vector2(0, origin.Y);
+            float brightness = Lighting.Brightness((int)Item.position.X / 16, (int)Item.position.Y / 16);
 
             spriteBatch.Draw(tex, drawPos, null, lightColor, rotation, origin, scale, SpriteEffects.None, 0f);
-            DrawData data = new(paintTex.Value, drawPos, null, Color.White, rotation, origin, scale, SpriteEffects.None, 0f);
+            DrawData data = new(paintTex.Value, drawPos, null, alphaColor, rotation, origin, scale, SpriteEffects.None, 0f);
 
             if (Main.LocalPlayer.GetModPlayer<TurretPaintPlayer>().cSentry > 0)
             {

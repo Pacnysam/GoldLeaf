@@ -44,7 +44,7 @@ Barren.DisplayName: Barren
 Fishless.DisplayName: Fishless
 Consequential.DisplayName: Consequential
 
-Priceless: {
-	DisplayName: Cursed
+Greedy: {
+	DisplayName: Greedy
 	Tooltip: This'll take a fortune to get off...
 }

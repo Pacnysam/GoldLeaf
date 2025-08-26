@@ -50,7 +50,7 @@ namespace GoldLeaf.Items.Ocean
             Item.autoReuse = false;
 
             Item.mana = 20;
-            Item.damage = 31;
+            Item.damage = 32;
             Item.fishingPole = 20;
             Item.sentry = true;
 

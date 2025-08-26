@@ -17,6 +17,7 @@ using Terraria.GameContent.Drawing;
 using Terraria.Graphics.Shaders;
 using Terraria.Localization;
 using GoldLeaf.Items.Blizzard;
+using GoldLeaf.Core.Mechanics;
 
 namespace GoldLeaf.Items.Accessories
 {

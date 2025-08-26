@@ -256,8 +256,8 @@ namespace GoldLeaf.Items.Sky
                         Main.EntitySpriteDraw(TextureAssets.Projectile[Type].Value, oldPos[k] - Main.screenPosition, frame, color1 with { A = 120 } * (0.55f - (0.05f * k)), oldRot[k], frame.Size() / 2f, scale * (1f - (0.035f * k)), flip);
                     }*/
 
-                    Vector2 forwardVector = list[^3].DirectionTo(list[^2]).SafeNormalize(Vector2.Zero);
-                    Main.EntitySpriteDraw(bloomTex.Value, pos + (forwardVector * 15.5f) - Main.screenPosition, null, color1 * 0.175f, rotation, bloomTex.Size() / 2, scale * 0.275f, SpriteEffects.None);
+                    Vector2 forwardVector = list[^2].DirectionTo(list[^1]).SafeNormalize(Vector2.Zero);
+                    Main.EntitySpriteDraw(bloomTex.Value, pos + (forwardVector * 12f) - Main.screenPosition, null, color1 * 0.175f, rotation, bloomTex.Size() / 2, scale * 0.275f, SpriteEffects.None);
                 }
                 Main.EntitySpriteDraw(TextureAssets.Projectile[Type].Value, pos - Main.screenPosition, frame, color, rotation, origin, scale, flip);
                 Main.EntitySpriteDraw(glowTex.Value, pos - Main.screenPosition, frame, glowColor * 0.85f, rotation, origin, scale, flip);

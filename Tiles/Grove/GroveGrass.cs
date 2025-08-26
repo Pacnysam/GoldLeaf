@@ -41,11 +41,6 @@ namespace GoldLeaf.Tiles.Grove
             ItemID.Sets.AlsoABuildingItem[Item.type] = true;
         }
 
-        /*public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
-        {
-            spriteBatch.Draw(TextureAssets.Item[Item.type].Value, Item.Center - Main.screenPosition, null, Color.White * 0.4f, rotation, TextureAssets.Item[Item.type].Value.Size() / 2, scale, SpriteEffects.None, 0f);
-        }*/
-
         public override void PostUpdate()
         {
             if (!Main.dedServ)
@@ -80,8 +75,6 @@ namespace GoldLeaf.Tiles.Grove
             glowTex = Request<Texture2D>(Texture + "Glow");
         }
 
-        private float glow = 0;
-
         public override void SetStaticDefaults()
         {
             Main.tileSolid[Type] = true;
@@ -108,20 +101,6 @@ namespace GoldLeaf.Tiles.Grove
             RegisterItemDrop(ItemID.MudBlock);
 
             DustType = DustType<AutumnGrass>();
-
-            //soundType = SoundID.Grass;
-            //soundStyle = 6;
-
-            /*//SoundType = SoundID.Tink;
-            //SoundStyle = 1;
-            Main.tileSolid[Type] = true;
-            Main.tileMergeDirt[Type] = true;
-            //Main.tileMerge[Type][TileType<GroveGrassT>()] = true;
-            //Main.tileMerge[Type][TileType<GroveBrickT>()] = true;
-            RegisterItemDrop(ItemType<Echoslate>());
-            AddMapEntry(new Color(118, 108, 98));
-            Main.tileBlockLight[Type] = true;
-            TileID.Sets.ChecksForMerge[Type] = true;*/
         }
 
         public override bool CanExplode(int i, int j)
@@ -173,37 +152,5 @@ namespace GoldLeaf.Tiles.Grove
                 }
             }
         }
-
-        /*public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-            Tile tile = Main.tile[i, j];
-            Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
-            if (Main.drawToScreen)
-            {
-                zero = Vector2.Zero;
-            }
-            int height = tile.TileFrameY == 36 ? 18 : 16;
-            //if (tile.Slope() == 0 && !tile.halfBrick())
-            {
-                Main.spriteBatch.Draw(Request<Texture2D>(Texture + "Glow").Value, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, height), Color.White * glow, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-            }
-
-            Tile tile = Main.tile[i, j];
-            Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
-            if (Main.drawToScreen) zero = Vector2.Zero;
-            if (GroveGrassDrawOffDir == 1)
-            {
-                if (GroveGrassDrawOffset >= 9) GroveGrassDrawOffDir = -1;
-                GroveGrassDrawOffset++;
-            }
-            if (GroveGrassDrawOffDir == -1)
-            {
-                if (GroveGrassDrawOffset <= 4) GroveGrassDrawOffDir = 1;
-                GroveGrassDrawOffset--;
-            }
-            int height = tile.TileFrameY == 36 ? 18 : 16;
-            Main.spriteBatch.Draw(Request<Texture2D>(Texture + "Glow").Value, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, height), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-            
-        }*/
     }
 }

@@ -31,11 +31,6 @@ namespace GoldLeaf.Core
                 return Color.Lerp(auroraPurple, auroraBlue, (timer - 4) / 2);
             else
                 return Color.Lerp(auroraBlue, auroraGreen, (timer - 6) / 2);
-
-            /*float sin = (1f + (float)Math.Sin(GoldLeafWorld.rottime) * 0.5f);
-            float cos = (1f + (float)Math.Cos(GoldLeafWorld.rottime) * 0.5f);
-
-            return new Color(80 * sin/255f, 190 * cos/255f, 220/255f);*/
         }
 
         public static Color AuroraColor(float Timer)

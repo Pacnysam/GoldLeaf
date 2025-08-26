@@ -19,6 +19,7 @@ using Terraria.Localization;
 using GoldLeaf.Items.Accessories;
 using ReLogic.Content;
 using GoldLeaf.Items.Blizzard.Armor;
+using GoldLeaf.Core.Mechanics;
 
 namespace GoldLeaf.Items.Blizzard
 {

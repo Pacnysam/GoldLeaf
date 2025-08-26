@@ -8,6 +8,7 @@ using GoldLeaf.Core;
 using ReLogic.Content;
 using Terraria.ID;
 using Terraria.GameContent;
+using GoldLeaf.Core.Helpers;
 
 namespace GoldLeaf.Effects.Dusts
 {
