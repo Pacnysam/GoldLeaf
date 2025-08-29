@@ -34,8 +34,8 @@ float4 AuroraDye(float4 sampleColor : COLOR0, float2 coords : TEXCOORD0) : COLOR
     
     float2 noiseCoords = (coords * uImageSize0 - uSourceRect.xy + (-uTime * 20.0f)) / (uImageSize1 * 0.75f);
     float2 noiseCoords2 = (coords * uImageSize0 - uSourceRect.xy + (uTime * 16.0f)) / (uImageSize1 * 0.625f);
-    float4 noise = tex2D(uImage1, noiseCoords);
-    float4 noise2 = tex2D(uImage1, noiseCoords2);
+    float4 noise = tex2D(uImage1, noiseCoords) * sampleColor.a;
+    float4 noise2 = tex2D(uImage1, noiseCoords2) * sampleColor.a;
     
     float luminosity = (color.r + color.g + color.b) / 2;
     float wave = sin(coords.x + uTime * 2.25f) * 0.5f + 0.5f;
@@ -45,7 +45,7 @@ float4 AuroraDye(float4 sampleColor : COLOR0, float2 coords : TEXCOORD0) : COLOR
     float noiseLuminosity = (noise.r + noise.g + noise.b) / 3;
     float noiseLuminosity2 = (noise2.r + noise2.g + noise2.b) / 3;
     
-    color.rgb = (luminosity) + (noise.rgb / 7) + (noise2.rgb / 7) + (clamp((sin(uTime * 2.5f) * 0.125f - 0.0675f), 0, 1) * 1.65f);
+    color.rgb = (luminosity) + (noise.rgb / 7) + (noise2.rgb / 7) + (clamp(sin(uTime * 2.5f) * 0.125f - 0.875f, 0, 1) * 1.45f);
     color.rgb *= (((wave * 0.75f) * uColor) + ((1 - wave * 0.75f) * uSecondaryColor)) * 1.15f;
     
     color.rb += noiseLuminosity * 0.25f;

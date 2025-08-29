@@ -15,11 +15,10 @@ namespace GoldLeaf.Tiles.MusicBoxes
         {
             Item.DefaultToMusicBox(Item.createTile = TileType<GroveBossMusicBoxT>());
         }
-
     }
 
     internal class GroveBossMusicBoxT : BaseMusicBox
 	{
-        public GroveBossMusicBoxT() : base(ItemType<GroveBossMusicBox>(), true) { }
+        public GroveBossMusicBoxT() : base(ItemType<GroveBossMusicBox>(), "Sounds/Music/GroveBoss", true) { }
     }
 }

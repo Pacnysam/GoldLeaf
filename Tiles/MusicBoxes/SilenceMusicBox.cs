@@ -20,12 +20,11 @@ namespace GoldLeaf.Tiles.MusicBoxes
 
     internal class SilenceMusicBoxT : BaseMusicBox
 	{
-        public SilenceMusicBoxT() : base(ItemType<SilenceMusicBox>(), true) { }
+        public SilenceMusicBoxT() : base(ItemType<SilenceMusicBox>(), "Sounds/Music/Silence", true) { }
 
         public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData)
         {
             return;
         }
-
     }
 }

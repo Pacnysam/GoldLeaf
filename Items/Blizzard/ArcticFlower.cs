@@ -501,21 +501,17 @@ namespace GoldLeaf.Items.Blizzard
                     Color color1 = new(0, 225, 241);
                     Color color2 = new(0, 38, 128);
 
-                    Main.spriteBatch.Draw(texture, drawPos, rect, Color.Lerp(color1, color2, k / (Projectile.oldPos.Length + 2f)) with { A = 0 } * (0.8f - (k / (Projectile.oldPos.Length + 4f))) * Projectile.localAI[0], Projectile.oldRot[k], rect.Size() / 2, Projectile.scale, oldEffects, 0f);
+                    Main.EntitySpriteDraw(texture, drawPos, rect, Color.Lerp(color1, color2, k / (Projectile.oldPos.Length + 2f)) with { A = 0 } * (0.8f - (k / (Projectile.oldPos.Length + 4f))) * Projectile.localAI[0], Projectile.oldRot[k], rect.Size() / 2, Projectile.scale, oldEffects, 0f);
                 }
-            }
-            else
-            {
-                //Projectile.oldPos = [];
             }
 
             Main.EntitySpriteDraw(texture, (Projectile.Center + offset) - Main.screenPosition, rect, Projectile.GetAlpha(lightColor), Projectile.rotation, rect.Size()/2, Projectile.scale, effects, 0f);
 
             float brightness = Lighting.Brightness((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16);
             if (brightness <= 0.3f)
-                Main.spriteBatch.Draw(trimTex.Value, (Projectile.Center + offset) - Main.screenPosition, rect, ColorHelper.AdditiveWhite() * (0.3f - brightness), Projectile.rotation, rect.Size()/2, Projectile.scale, effects, 0);
+                Main.EntitySpriteDraw(trimTex.Value, (Projectile.Center + offset) - Main.screenPosition, rect, ColorHelper.AdditiveWhite() * (0.3f - brightness), Projectile.rotation, rect.Size()/2, Projectile.scale, effects, 0);
             
-            Main.spriteBatch.Draw(glowTex.Value, (Projectile.Center + offset) - Main.screenPosition, rect, Color.White, Projectile.rotation, rect.Size()/2, Projectile.scale, effects, 0f);
+            Main.EntitySpriteDraw(glowTex.Value, (Projectile.Center + offset) - Main.screenPosition, rect, Color.White, Projectile.rotation, rect.Size()/2, Projectile.scale, effects, 0f);
 
             return false;
         }

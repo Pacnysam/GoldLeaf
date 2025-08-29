@@ -20,15 +20,25 @@ float uSaturation;
 float4 uSourceRect;
 float2 uZoom;
 
-float4 PixelShaderFunction(float4 sampleColor : COLOR0, float2 uv : TEXCOORD0) : COLOR0
+float4 GameboyShaderFunction(float4 sampleColor : COLOR0, float2 coords : TEXCOORD0) : COLOR0
 {
-    float4 originalColor = tex2D(uImage0, uv);
+    float4 originalColor = tex2D(uImage0, coords);
     
-    uv = round(uv / (2 / uScreenResolution)) * (2 / uScreenResolution);
+    float2 offset = (0.0f, 0.0f);
+    float pixelSize = 2.0f;
     
-    float4 color = tex2D(uImage0, uv);
-
-    float brightness = (color.x + color.y + color.z) / 3.0;
+    if (trunc((uScreenResolution.x * coords.x) % pixelSize) >= (pixelSize / 2.0f))
+    {
+        offset += float2(-(pixelSize / 2.0f), 0.0f);
+    }
+    if (trunc((uScreenResolution.y * coords.y) % pixelSize) >= (pixelSize / 2.0f))
+    {
+        offset += float2(0.0f, -(pixelSize / 2.0f));
+    }
+    
+    float4 color = tex2D(uImage0, coords.xy + (offset.xy / uScreenResolution.xy));
+    
+    float brightness = (color.r + color.g + color.b) / 3.0;
     
     if (brightness < 0.2275)
         color.rgb = float3(8, 24, 32) / 255.0;
@@ -46,6 +56,6 @@ technique Technique1
 {
     pass GameboyPass
     {
-        PixelShader = compile ps_2_0 PixelShaderFunction();
+        PixelShader = compile ps_2_0 GameboyShaderFunction();
     }
 }

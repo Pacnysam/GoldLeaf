@@ -221,17 +221,6 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
 
         public static float Opacity(this Gore gore) => 1f - gore.alpha / 255f;
 
-        public readonly static BlendState
-            SubtractiveBlend = new()
-            {
-                ColorSourceBlend = Blend.SourceAlpha,
-                ColorDestinationBlend = Blend.One,
-                ColorBlendFunction = BlendFunction.ReverseSubtract,
-                AlphaSourceBlend = Blend.SourceAlpha,
-                AlphaDestinationBlend = Blend.One,
-                AlphaBlendFunction = BlendFunction.ReverseSubtract
-            };
-
         public static bool Toggle(this bool input) => !input;
         public static float RandomNegative(this float num) => Main.rand.NextBool() ? num : -num;
         public static int RandomNegative(this int num) => Main.rand.NextBool() ? num : -num;
@@ -598,7 +587,7 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
             return time > 2 && Main.debuff[bufftype] && !Main.buffNoTimeDisplay[bufftype] && !Main.vanityPet[bufftype] && !vitalbuff;
         }
 
-        public static string CoolBuffTex(string input) => (Main.AssetSourceController.ActiveResourcePackList.EnabledPacks.Select(x => x.Name).Contains("Cool Buffs") ? input + "Cool" : input); //this works but im removing this once autoload them
+        public static string CoolBuffTex(string input) => (GetInstance<VisualConfig>().CoolBuffs/*Main.AssetSourceController.ActiveResourcePackList.EnabledPacks.Select(x => x.Name).Contains("Cool Buffs")*/ ? input + "Cool" : input); //this works but im removing this once autoload them
         //public static string RadcapTex(string input) => (GetInstance<GraphicsConfig>().CoolBuffs ? input + "Rad" : input);
     }
 }

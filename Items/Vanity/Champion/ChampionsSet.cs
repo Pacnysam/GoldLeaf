@@ -96,6 +96,19 @@ namespace GoldLeaf.Items.Vanity.Champion
 
             Item.vanity = true;
         }
+
+        public override void Load()
+        {
+            if (Main.netMode != NetmodeID.Server)
+            {
+                EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Legs}_Female", EquipType.Legs, this, Name + "_Female");
+            }
+        }
+
+        public override void SetMatch(bool male, ref int equipSlot, ref bool robes)
+        {
+            equipSlot = EquipLoader.GetEquipSlot(Mod, male? Name : Name + "_Female", EquipType.Legs);
+        }
     }
     
     public class ChampionSetPlayer : ModPlayer

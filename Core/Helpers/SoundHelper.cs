@@ -12,7 +12,7 @@ using static GoldLeaf.GoldLeaf;
 
 namespace GoldLeaf.Core.Helpers
 {
-    internal class SoundHelper
+    public static class SoundHelper
     {
         public static void SendSound(string soundLocation, Vector2 position, float volume = 1f, float pitch = 0f)
         {

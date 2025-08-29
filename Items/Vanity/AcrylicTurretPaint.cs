@@ -10,6 +10,7 @@ using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static GoldLeaf.Core.Helper;
+using static GoldLeaf.Core.Helpers.DrawHelper;
 using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Items.Vanity
@@ -35,21 +36,18 @@ namespace GoldLeaf.Items.Vanity
             Texture2D tex = TextureAssets.Item[Item.type].Value;
             Vector2 origin = tex.Size() / 2;
             Vector2 drawPos = Item.Bottom - Main.screenPosition - new Vector2(0, origin.Y);
-            float brightness = Lighting.Brightness((int)Item.position.X / 16, (int)Item.position.Y / 16);
 
             spriteBatch.Draw(tex, drawPos, null, lightColor, rotation, origin, scale, SpriteEffects.None, 0f);
             DrawData data = new(paintTex.Value, drawPos, null, alphaColor, rotation, origin, scale, SpriteEffects.None, 0f);
 
             if (Main.LocalPlayer.GetModPlayer<TurretPaintPlayer>().cSentry > 0)
             {
-                spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
-
+                spriteBatch.StartBlendState(BlendState.AlphaBlend, DrawContext.InWorld, SpriteSortMode.Immediate);
+                
                 GameShaders.Armor.GetShaderFromItemId(Main.LocalPlayer.GetModPlayer<TurretPaintPlayer>().dyeItem).Apply(Item, data);
                 data.Draw(spriteBatch);
 
-                spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
+                spriteBatch.ResetBlendState();
             }
             return false;
         }
@@ -63,12 +61,12 @@ namespace GoldLeaf.Items.Vanity
 
             if (Main.LocalPlayer.GetModPlayer<TurretPaintPlayer>().cSentry > 0)
             {
-                spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, default, default, null, Main.UIScaleMatrix); 
+                spriteBatch.StartBlendState(BlendState.AlphaBlend, DrawContext.UI, SpriteSortMode.Immediate);
+                
                 GameShaders.Armor.GetShaderFromItemId(Main.LocalPlayer.GetModPlayer<TurretPaintPlayer>().dyeItem).Apply(Item, data);
                 data.Draw(spriteBatch);
-                spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Deferred, default, SamplerState.LinearClamp, default, default, default, Main.UIScaleMatrix);
+                
+                spriteBatch.ResetBlendState(DrawContext.UI);
             }
             return false;
         }
@@ -76,6 +74,7 @@ namespace GoldLeaf.Items.Vanity
 
     public class TurretPaintPlayer : ModPlayer
     {
+        public bool TurretPaintOn => cSentry > 0;
         public bool turretPaint;
         public int dyeItem = 0;
         public int cSentry = 0;

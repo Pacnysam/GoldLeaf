@@ -25,17 +25,17 @@ float4 SunstoneDye(float4 sampleColor : COLOR0, float2 coords : TEXCOORD0) : COL
     
     float2 noiseCoords = (coords * uImageSize0 - uSourceRect.xy - (uTime * 4.85f)) / (uImageSize1 * 0.175f);
     float2 noiseCoords2 = (coords * uImageSize0 - uSourceRect.xy - (-uTime * 3.25f)) / (uImageSize1 * 0.135f);
-    float4 noise = tex2D(uImage1, noiseCoords);
-    float4 noise2 = tex2D(uImage1, noiseCoords2);
+    float4 noise = tex2D(uImage1, noiseCoords) * sampleColor.a;
+    float4 noise2 = tex2D(uImage1, noiseCoords2) * sampleColor.a;
     
     float luminosity = (color.r + color.g + color.b) / 3;
-    float wave = cos(coords.x + uTime * 1.95f) * 0.65f + 0.65f;
+    float wave = cos(coords.x + uTime * 1.95f) * 0.575f + 0.425f;
     
     float noiseLuminosity = (noise.r + noise.g + noise.b) / 3;
     float noiseLuminosity2 = (noise2.r + noise2.g + noise2.b) / 3;
     
-    color.rgb = (luminosity * 1.485f) + (noise.rgb * 0.135f) + (noise2.rgb * 0.135f);
-    color.rgb *= (((wave) * uColor) + ((1 - wave) * uSecondaryColor)) * 1.3f;
+    color.rgb = (luminosity * 1.35f) + (noise.rgb * 0.135f) + (noise2.rgb * 0.135f);
+    color.rgb *= ((wave * uColor) + ((1 - wave) * uSecondaryColor)) * 1.3f;
 
     color.r += noiseLuminosity * 0.1f;
     color.rg += noiseLuminosity * 0.275f;

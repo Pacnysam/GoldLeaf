@@ -115,7 +115,7 @@ ToxinGroveMusicBox: {
 	Tooltip: ""
 }
 
-UndergroveMusicBox: {
+GroveMusicBox: {
 	DisplayName: Music Box (Whispering Grove)
 	Tooltip: ""
 }

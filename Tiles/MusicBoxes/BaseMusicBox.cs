@@ -14,13 +14,16 @@ using System;
 
 namespace GoldLeaf.Tiles.MusicBoxes
 {
-    public abstract class BaseMusicBox(int item, bool tall = false) : ModTile
+    public abstract class BaseMusicBox(int item, string soundPath, bool tall = false) : ModTile
     {
         public int item = item;
         public bool tall = tall;
+        public string soundPath = soundPath;
 
         public override void SetStaticDefaults()
         {
+            MusicLoader.AddMusicBox(GoldLeaf.Instance, MusicLoader.GetMusicSlot(GoldLeaf.Instance, soundPath), item, Type);
+
             Main.tileFrameImportant[Type] = true;
             Main.tileObsidianKill[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);

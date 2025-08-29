@@ -1,26 +1,27 @@
-﻿using static Terraria.ModLoader.ModContent;
-using GoldLeaf.Core;
-using static GoldLeaf.Core.Helper;
+﻿using GoldLeaf.Core;
+using GoldLeaf.Effects.Dusts;
+using GoldLeaf.Items.Blizzard.Armor;
+using GoldLeaf.Items.Granite;
+using GoldLeaf.Items.Grove;
+using GoldLeaf.Tiles.Grove;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.Metrics;
+using System.Linq;
 using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.Graphics.Effects;
+using Terraria.Graphics.Renderers;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using GoldLeaf.Items.Grove;
-using System.Diagnostics.Metrics;
-using System;
-using GoldLeaf.Effects.Dusts;
-using Terraria.Graphics.Effects;
-using Terraria.DataStructures;
-using GoldLeaf.Tiles.Grove;
-using ReLogic.Content;
-using GoldLeaf.Items.Granite;
-using Terraria.Audio;
-using Terraria.Graphics.Shaders;
-using System.Collections.Generic;
-using Terraria.Graphics.Renderers;
-using System.Linq;
+using static GoldLeaf.Core.Helper;
+using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Items.Vanity.Watcher
 {
@@ -65,6 +66,13 @@ namespace GoldLeaf.Items.Vanity.Watcher
             robes = true;
 
             equipSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Legs);
+        }
+
+        public override void ArmorSetShadows(Player player) => player.armorEffectDrawOutlines = !player.HasBuff(BuffType<SnapFreezeBuff>());
+
+        public override bool IsVanitySet(int head, int body, int legs)
+        {
+            return head == ItemType<WatcherEyedrops>();
         }
 
         public override void SetStaticDefaults()
@@ -129,21 +137,21 @@ namespace GoldLeaf.Items.Vanity.Watcher
             }
         }
 
-        /*public override void Load()
+        public override void Load()
         {
             On_Main.DrawPlayers_AfterProjectiles += WatcherAfterImage;
         }
         public override void Unload()
         {
             On_Main.DrawPlayers_AfterProjectiles -= WatcherAfterImage;
-        }*/
+        }
 
         private void WatcherAfterImage(On_Main.orig_DrawPlayers_AfterProjectiles orig, Main self)
         {
             if (Main.dedServ || Main.spriteBatch == null || Main.gameMenu || Main.graphics.GraphicsDevice == null)
                 return;
-
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
             foreach (Player player in Main.player.Where(x => x.active && x != null))
             {
                 if (!player.dead && player.GetModPlayer<WatcherPlayer>().WatcherSet && !player.outOfRange)
@@ -153,16 +161,25 @@ namespace GoldLeaf.Items.Vanity.Watcher
                         Color color = Color.Lerp(new Color(145, 41, 184), new Color(47, 41, 76), i / (float)oldPosLength);
                         Vector2 offset = new(player.width / 2, player.height / 2);
 
-                        DrawData data = new(Request<Texture2D>("GoldLeaf/Textures/Glow0").Value, player.GetModPlayer<WatcherPlayer>().oldPos[i] - Main.screenPosition, null, color * (i / (float)oldPosLength) * (player.GetModPlayer<WatcherPlayer>().oldPos.Count / (float)oldPosLength), player.fullRotation, Request<Texture2D>("GoldLeaf/Textures/Flares/FlareSmall").Size() / 2, 1f, SpriteEffects.None, 0f);
-                        
                         if (player.dye[2].type != ItemID.None)
                         {
-                            data.color = Color.White * (i / (float)oldPosLength) * (player.GetModPlayer<WatcherPlayer>().oldPos.Count / (float)oldPosLength) * 0.5f;
+                            color = Color.White;
+                        }
+
+                        DrawData data = new(Request<Texture2D>("GoldLeaf/Textures/Flares/Flare0").Value, player.GetModPlayer<WatcherPlayer>().oldPos[i] - Main.screenPosition, null, color * MathHelper.Lerp(0f, 1f, (i / (float)oldPosLength) * (player.GetModPlayer<WatcherPlayer>().oldPos.Count / (float)oldPosLength)) * 0.725f, player.fullRotation, Request<Texture2D>("GoldLeaf/Textures/Flares/Flare0").Size() / 2, new Vector2(0.75f, 1f) * 0.45f, SpriteEffects.None, 0f);
+                        DrawData data2 = new(Request<Texture2D>("GoldLeaf/Textures/Glow0").Value, player.GetModPlayer<WatcherPlayer>().oldPos[i] - Main.screenPosition, null, color * MathHelper.Lerp(0.2f, 1f, (i / (float)oldPosLength) * (player.GetModPlayer<WatcherPlayer>().oldPos.Count / (float)oldPosLength)) * 0.35f, player.fullRotation, Request<Texture2D>("GoldLeaf/Textures/Glow0").Size() / 2, 0.85f, SpriteEffects.None, 0f);
+
+                        if (player.dye[2].type != ItemID.None)
+                        {
+                            //data.color = Color.White * (i / (float)oldPosLength) * (player.GetModPlayer<WatcherPlayer>().oldPos.Count / (float)oldPosLength) * 0.725f;
+                            //data2.color = Color.White * (i / (float)oldPosLength) * (player.GetModPlayer<WatcherPlayer>().oldPos.Count / (float)oldPosLength) * 0.35f;
                             //GameShaders.Armor.GetShaderFromItemId(player.dye[2].type).Apply(player, data);
                             GameShaders.Armor.GetSecondaryShader(player.dye[2].dye, player).Apply(player, data);
+                            GameShaders.Armor.GetSecondaryShader(player.dye[2].dye, player).Apply(player, data2);
                         }
 
                         data.Draw(Main.spriteBatch);
+                        data2.Draw(Main.spriteBatch);
 
                         //Main.spriteBatch.Draw(Request<Texture2D>("GoldLeaf/Textures/Flares/FlareSmall").Value, player.GetModPlayer<WatcherPlayer>().oldPos[i] - Main.screenPosition, null, color * (i / (float)oldPosLength) * (player.GetModPlayer<WatcherPlayer>().oldPos.Count / (float)oldPosLength), player.fullRotation, Request<Texture2D>("GoldLeaf/Textures/Flares/FlareSmall").Size()/2, 1f, SpriteEffects.None, 0f);
 
@@ -187,11 +204,19 @@ namespace GoldLeaf.Items.Vanity.Watcher
                 }
             }*/
             Main.spriteBatch.End();
-
             orig.Invoke(self);
         }
 
-        public override bool Shoot(Item item, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
+        {
+            /*if (drawInfo.drawPlayer.GetModPlayer<WatcherPlayer>().WatcherSet && drawInfo.shadow > 0) 
+            {
+                drawInfo.colorArmorBody = drawInfo.colorArmorHead = drawInfo.colorArmorLegs = drawInfo.colorBodySkin = drawInfo.colorDisplayDollSkin = drawInfo.colorElectricity =
+                drawInfo.colorEyes = drawInfo.colorEyeWhites = drawInfo.colorHead = new Color(145, 41, 184);
+            }*/
+        }
+
+        /*public override bool Shoot(Item item, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             if (watcherCloak && punchCooldown <= 0 && velocity.Length() >= 8f)
             {
@@ -202,7 +227,7 @@ namespace GoldLeaf.Items.Vanity.Watcher
                 punchCooldown = item.useTime / 2;
             }
             return base.Shoot(item, source, position, velocity, type, damage, knockback);
-        }
+        }*/
         public override void PostUpdateMiscEffects()
         {
             if (WatcherSet && dustCooldown <= 0 && Player.statMana > 0 && Player.velocity.Y == 0f && Player.grappling[0] == -1 && Math.Abs(Player.velocity.X) >= 3.2f)

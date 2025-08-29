@@ -90,6 +90,11 @@ namespace GoldLeaf.Items.Misc
                 }
             }
 
+            if (sentryKillCount > 0)
+            {
+                player.UpdateMaxTurrets();
+            }
+
             if (Main.LocalPlayer == player && !Main.dedServ)
             {
                 SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Monolith/BombClick") { Volume = 0.275f }, player.Center);

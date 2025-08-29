@@ -9,16 +9,16 @@ using Terraria.ObjectData;
 
 namespace GoldLeaf.Tiles.MusicBoxes
 {
-    public class UndergroveMusicBox : ModItem
+    public class GroveMusicBox : ModItem
     {
         public override void SetDefaults()
         {
-            Item.DefaultToMusicBox(Item.createTile = TileType<UndergroveMusicBoxT>());
+            Item.DefaultToMusicBox(Item.createTile = TileType<GroveMusicBoxT>());
         }
     }
 
-    internal class UndergroveMusicBoxT : BaseMusicBox
+    internal class GroveMusicBoxT : BaseMusicBox
 	{
-        public UndergroveMusicBoxT() : base(ItemType<UndergroveMusicBox>(), true) { }
+        public GroveMusicBoxT() : base(ItemType<GroveMusicBox>(), "Sounds/Music/WhisperingGrove", true) { }
     }
 }

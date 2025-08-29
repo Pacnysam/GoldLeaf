@@ -26,11 +26,11 @@ namespace GoldLeaf
 
         public override void Load()
         {
-            MusicLoader.AddMusicBox(this, MusicLoader.GetMusicSlot(this, "Sounds/Music/WhisperingGrove"), ItemType<UndergroveMusicBox>(), TileType<UndergroveMusicBoxT>());
-            MusicLoader.AddMusicBox(this, MusicLoader.GetMusicSlot(this, "Sounds/Music/Silence"), ItemType<SilenceMusicBox>(), TileType<SilenceMusicBoxT>());
-            MusicLoader.AddMusicBox(this, MusicLoader.GetMusicSlot(this, "Sounds/Music/ToxinGrove"), ItemType<ToxinGroveMusicBox>(), TileType<ToxinGroveMusicBoxT>());
-            MusicLoader.AddMusicBox(this, MusicLoader.GetMusicSlot(this, "Sounds/Music/GroveBoss"), ItemType<GroveBossMusicBox>(), TileType<GroveBossMusicBoxT>());
-            MusicLoader.AddMusicBox(this, MusicLoader.GetMusicSlot(this, "Sounds/Music/ToxinBoss"), ItemType<ToxinBossMusicBox>(), TileType<ToxinBossMusicBoxT>());
+            if (!Main.dedServ)
+            {
+                Filters.Scene["CrispPixelation"] = new Filter(new ScreenShaderData(Assets.Request<Effect>("Effects/CrispPixelation"), "CrispPixelationPass"), EffectPriority.VeryHigh);
+                GameShaders.Misc["LightPixelation"] = new MiscShaderData(this.Assets.Request<Effect>("Effects/LightPixelation"), "LightPixelationPass");
+            }
         }
     }
 }

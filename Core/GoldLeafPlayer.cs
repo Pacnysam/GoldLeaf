@@ -165,8 +165,8 @@ namespace GoldLeaf.Core
                     {
                         return 
                             [
-                            new Item(ItemType<BatPlushie>(), 9999),
-                            new Item(ItemType<RedPlushie>(), 9999),
+                            new Item(ItemType<BatPlushie>(), 99),
+                            new Item(ItemType<RedPlushie>(), 99),
                             new Item(ItemType<MadcapPainting>()), 
                             new Item(ItemType<WatcherEyedrops>()), 
                             new Item(ItemType<WatcherCloak>())
@@ -192,7 +192,7 @@ namespace GoldLeaf.Core
                 case "Gameboy":
                 case "Game Boy":
                     {
-                        return [new Item(ItemType<Gameboy>()), new Item(ItemType<RetroDye>(), 9999)];
+                        return [new Item(ItemType<Gameboy>()), new Item(ItemType<RetroDye>(), 99)];
                     }
             }
             return Enumerable.Empty<Item>();

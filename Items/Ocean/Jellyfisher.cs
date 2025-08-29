@@ -1,29 +1,33 @@
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using static Terraria.ModLoader.ModContent;
-using static GoldLeaf.Core.Helper;
 using GoldLeaf.Core;
-using GoldLeaf.Items.Grove;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.Audio;
-using Terraria.GameContent;
-using Terraria.DataStructures;
-using GoldLeaf.Effects.Dusts;
-using System;
-using ReLogic.Content;
-using GoldLeaf.Items.Grove.Boss;
-using System.IO;
-using GoldLeaf.Items.Blizzard;
-using GoldLeaf.Items.Nightshade;
 using GoldLeaf.Core.CrossMod;
-using static GoldLeaf.Core.CrossMod.RedemptionHelper;
-using Terraria.ModLoader.IO;
-using System.Net.Mail;
-using GoldLeaf.Prefixes;
+using GoldLeaf.Effects.Dusts;
+using GoldLeaf.Items.Blizzard;
 using GoldLeaf.Items.FishWeapons;
+using GoldLeaf.Items.Grove;
+using GoldLeaf.Items.Grove.Boss;
+using GoldLeaf.Items.Nightshade;
+using GoldLeaf.Items.Vanity;
+using GoldLeaf.Prefixes;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using System;
+using System.IO;
+using System.Net.Mail;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.Graphics.Shaders;
+using Terraria.ID;
 using Terraria.Localization;
+using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
+using static GoldLeaf.Core.CrossMod.RedemptionHelper;
+using static GoldLeaf.Core.Helper;
+using static GoldLeaf.Core.Helpers.DrawHelper;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Items.Ocean
 {
@@ -567,7 +571,29 @@ namespace GoldLeaf.Items.Ocean
 
         public override bool? CanDamage() => (State != Idle) && Projectile.Counter() >= 10;
         public override bool? CanHitNPC(NPC target) => (State != Idle) && !target.friendly && Projectile.Counter() >= 10;
-        
+
+        public override bool PreDrawExtras()
+        {
+            bool turretPaint = false; //Main.player[Projectile.owner].GetModPlayer<TurretPaintPlayer>().TurretPaintOn;
+            Texture2D glowTex = turretPaint ? darkBloomTex.Value : bloomTex.Value;
+            float size = turretPaint ? 0.8f : 0.325f;
+            float glopacity = turretPaint ? 0.65f : 1f;
+
+            Color color1 = new(63, 74, 255) { A = 80 };
+            Color color2 = new(197, 145, 255) { A = 160 };
+
+            if (State != Swimming) 
+            {
+                //dark bloom
+                Main.EntitySpriteDraw(darkBloomTex.Value, Projectile.Center + new Vector2(0, -4) - Main.screenPosition, null, Color.Black * Projectile.Opacity * Projectile.localAI[0] * 0.75f, 0, darkBloomTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(Rottime * 3) * 0.15f)) * 0.85f, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(darkBloomTex.Value, Projectile.Center + new Vector2(0, -4) - Main.screenPosition, null, Color.Black * Projectile.Opacity * Projectile.localAI[0] * 0.75f, 0, darkBloomTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(Rottime * 3) * -0.15f)) * 0.85f, SpriteEffects.None, 0f);
+
+                //bloom
+                Main.EntitySpriteDraw(glowTex, Projectile.Center + new Vector2(0, -4) - Main.screenPosition, null, Color.Lerp(color2, color1, (float)(Math.Sin(Rottime * 8) / 2f) + 0.5f) with { A = 0 } * Projectile.Opacity * Projectile.localAI[0] * glopacity, 0, glowTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(Rottime * 3) * 0.15f)) * size, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(glowTex, Projectile.Center + new Vector2(0, -4) - Main.screenPosition, null, Color.Lerp(color2, color1, (float)(Math.Sin(Rottime * 8) / 2f) + 0.5f) with { A = 0 } * Projectile.Opacity * Projectile.localAI[0] * glopacity, 0, glowTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(Rottime * 3) * -0.15f)) * size, SpriteEffects.None, 0f);
+            }
+            return true;
+        }
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
@@ -576,16 +602,8 @@ namespace GoldLeaf.Items.Ocean
             Color color1 = new(63, 74, 255) { A = 80 };
             Color color2 = new(197, 145, 255) { A = 160 };
 
-            if (State != Swimming) 
-            {
-                //dark bloom
-                Main.spriteBatch.Draw(darkBloomTex.Value, Projectile.Center + new Vector2(0, -4) - Main.screenPosition, null, Color.Black * Projectile.Opacity * Projectile.localAI[0] * 0.75f, 0, darkBloomTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(Rottime * 3) * 0.15f)) * 0.85f, SpriteEffects.None, 0f);
-                Main.spriteBatch.Draw(darkBloomTex.Value, Projectile.Center + new Vector2(0, -4) - Main.screenPosition, null, Color.Black * Projectile.Opacity * Projectile.localAI[0] * 0.75f, 0, darkBloomTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(Rottime * 3) * -0.15f)) * 0.85f, SpriteEffects.None, 0f);
-                //bloom
-                Main.spriteBatch.Draw(bloomTex.Value, Projectile.Center + new Vector2(0, -4) - Main.screenPosition, null, Color.Lerp(color2, color1, (float)(Math.Sin(Rottime * 8) / 2f) + 0.5f) with { A = 0 } * Projectile.Opacity * Projectile.localAI[0], 0, bloomTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(Rottime * 3) * 0.15f)) * 0.325f, SpriteEffects.None, 0f);
-                Main.spriteBatch.Draw(bloomTex.Value, Projectile.Center + new Vector2(0, -4) - Main.screenPosition, null, Color.Lerp(color2, color1, (float)(Math.Sin(Rottime * 8) / 2f) + 0.5f) with { A = 0 } * Projectile.Opacity * Projectile.localAI[0], 0, bloomTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(Rottime * 3) * -0.15f)) * 0.325f, SpriteEffects.None, 0f);
-            }
-
+            //Main.spriteBatch.StartBlendState(BlendState.AlphaBlend, DrawContext.InWorld, SpriteSortMode.Immediate);
+            
             for (int k = 0; k < Projectile.oldPos.Length; k++)
             {
                 Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + rect.Size() / 2 + new Vector2(0, 2);
@@ -597,6 +615,7 @@ namespace GoldLeaf.Items.Ocean
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, rect, ColorHelper.AdditiveWhite(160) * Projectile.Opacity, Projectile.rotation, rect.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, rect, ColorHelper.AdditiveWhite(0) * Projectile.Opacity * (float)Math.Sin(Rottime * 6) * 0.3f, Projectile.rotation, rect.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
 
+            //Main.spriteBatch.ResetBlendState();
             return false;
         }
         
