@@ -610,3 +610,8 @@ AcrylicTurretPaint: {
 	DisplayName: Acrylic Turret Paint
 	Tooltip: Applies dye to sentries
 }
+
+ForbiddenFruit: {
+	DisplayName: Forbidden Snakefruit
+	Tooltip: Grants a powerful lifesteal, but causes damage over time
+}

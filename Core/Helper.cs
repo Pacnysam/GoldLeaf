@@ -60,7 +60,7 @@ namespace GoldLeaf.Core //most of this is snatched from starlight river and spir
         public static Texture2D EmptyTex => Request<Texture2D>("GoldLeaf/Textures/Empty").Value;
 
         public static string SetBonusKey => Language.GetTextValue(Main.ReversedUpDownArmorSetBonuses ? "Key.UP" : "Key.DOWN");
-        public static string SetBonusSecondaryKey() => Language.GetTextValue(Main.ReversedUpDownArmorSetBonuses ? "Key.DOWN" : "Key.UP");
+        public static string SetBonusSecondaryKey => Language.GetTextValue(Main.ReversedUpDownArmorSetBonuses ? "Key.DOWN" : "Key.UP");
 
         public static float LerpFloat(float min, float max, float val)
         {

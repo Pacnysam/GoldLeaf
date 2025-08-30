@@ -546,7 +546,7 @@ namespace GoldLeaf.Items.FishWeapons
             {
                 for (float k = 0; k < 10; k++)
                 {
-                    Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(Main.rand.NextFloat(-7f, 7f), Main.rand.NextFloat(-10, 3)), ProjectileType<QuetzalShard>(), Projectile.damage / 2, 0, Projectile.owner, 0f, 0f);
+                    Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(Main.rand.NextFloat(-7f, 7f), Main.rand.NextFloat(-10, 3)), ProjectileType<QuetzalShard>(), (int)(Projectile.damage * 0.4f), 0, Projectile.owner, 0f, 0f);
                     proj.GetGlobalProjectile<GoldLeafProjectile>().gravity = Main.rand.NextFloat(0.1f, 0.3f);
                     proj.ai[2] = Main.rand.Next(30, 70) - Math.Abs(proj.velocity.Length());
                 }
@@ -995,7 +995,7 @@ namespace GoldLeaf.Items.FishWeapons
                     {
                         NPC.HitInfo hitInfo = new()
                         {
-                            Damage = Projectile.damage,
+                            Damage = (int)(Projectile.damage * 2f),
                             DamageType = DamageClass.Magic,
                             Crit = true
                         };
