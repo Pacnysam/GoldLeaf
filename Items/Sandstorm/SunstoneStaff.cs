@@ -1,21 +1,22 @@
-﻿using System;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using static GoldLeaf.Core.Helper;
-using Terraria.ID;
-using Terraria;
-using Microsoft.Xna.Framework;
-using GoldLeaf.Core;
+﻿using GoldLeaf.Core;
+using GoldLeaf.Core.CrossMod;
+using GoldLeaf.Effects.Dusts;
 using GoldLeaf.Items.Accessories;
-using Terraria.DataStructures;
-using Terraria.GameContent;
+using GoldLeaf.Prefixes;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using GoldLeaf.Core.CrossMod;
-using static GoldLeaf.Core.CrossMod.RedemptionHelper;
-using GoldLeaf.Effects.Dusts;
+using System;
+using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
+using Terraria.ID;
+using Terraria.ModLoader;
+using static GoldLeaf.Core.CrossMod.RedemptionHelper;
+using static GoldLeaf.Core.Helper;
+using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Items.Sandstorm
 {
@@ -33,6 +34,9 @@ namespace GoldLeaf.Items.Sandstorm
             Item.AddElements([Element.Arcane]);
         }
 
+        const int RANGE = 175;
+        const float RADIUSMULT = 0.75f;
+
         public override void SetDefaults()
         {
             Item.value = Item.sellPrice(0, 1, 35, 0);
@@ -41,30 +45,56 @@ namespace GoldLeaf.Items.Sandstorm
             Item.damage = 14;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 10;
+            Item.ArmorPenetration = 8;
 
             Item.shootSpeed = 3.75f;
             Item.knockBack = 1.75f;
 
             Item.useTime = 4;
-            Item.useAnimation = 10;
-            Item.reuseDelay = 12;
+            Item.useAnimation = 12;
+            Item.reuseDelay = 10;
 
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/Kirby/SuperStar/MirrorWave") { PitchVariance = 0.35f, Volume = 0.85f };
             Item.staff[Item.type] = true;
             Item.noMelee = true;
 
-            Item.shoot = ProjectileType<SunstoneStaffBeam>();
+            //Item.shoot = ProjectileType<SunstoneStaffBeam>();
+            Item.shoot = ProjectileType<SunstoneStaffBolt>();
 
-            Item.width = 36;
-            Item.height = 36;
+            Item.width = 30;
+            Item.height = 30;
+        }
+
+        public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
+        {
+            int distance = 0;
+            while (!WorldGen.SolidTile((int)(position.X / 16f), (int)(position.Y / 16f)) && distance++ < RANGE)
+            {
+                position += velocity;
+
+                if (position.Distance(Main.MouseWorld) <= 5)
+                {
+                    position = Main.MouseWorld;
+                    break;
+                }
+            }
+        }
+
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+            SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact with { Volume = 0.625f, PitchVariance = 0.4f }, position);
+            
+            Projectile proj = Projectile.NewProjectileDirect(source, position + Vector2.One.RotatedByRandom(MathHelper.TwoPi) * velocity.Length() * Main.rand.NextFloat(0f, 10.5f) * RADIUSMULT, Vector2.One.RotatedByRandom(MathHelper.TwoPi) * velocity.Length() * Main.rand.NextFloat(0.3f, 1f) * RADIUSMULT, type, damage, knockback, player.whoAmI, Main.rand.NextFloat(0.055f, 0.45f));
+            proj.ai[0] = Main.rand.NextFloat(0.055f, 0.45f);
+            proj.scale = Main.rand.NextFloat(0.65f, 1.2f);
+            return false;
         }
 
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.AmberStaff);
-            recipe.AddRecipeGroup("GoldLeaf:EvilBar", 9);
+            recipe.AddIngredient(ItemID.WandofFrosting);
             //recipe.AddIngredient(ItemType<Sunstone>(), 6);
             recipe.AddIngredient(ItemID.JungleSpores, 4);
             recipe.AddTile(TileID.Anvils);
@@ -72,65 +102,6 @@ namespace GoldLeaf.Items.Sandstorm
         }
     }
 
-    public class SunstoneStaffBeam : ModProjectile
-    {
-        public override string Texture => EmptyTexString;
-
-        public override void SetDefaults()
-        {
-            Projectile.friendly = true;
-            Projectile.width = 2;
-            Projectile.height = 2;
-            Projectile.timeLeft = 185;
-            Projectile.extraUpdates = 200;
-            Projectile.tileCollide = true;
-            Projectile.ignoreWater = true;
-
-            Projectile.DamageType = DamageClass.Magic;
-        }
-
-        public override void AI()
-        {
-            if (Projectile.Center.Distance(Main.MouseWorld) <= 10 && Main.myPlayer == Projectile.owner)
-            {
-                Projectile.position = Main.MouseWorld;
-                Projectile.netUpdate = true;
-                
-                Projectile.Kill();
-            }
-        }
-
-        public override bool? CanDamage() => false;
-        public override bool? CanHitNPC(NPC target) => false;
-
-        public override void OnKill(int timeLeft)
-        {
-            int repeats = Main.rand.Next(1, 2);
-
-            for (int i = 0; i < repeats; i++)
-            {
-                Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.position + Vector2.One.RotatedByRandom(MathHelper.TwoPi) * Projectile.velocity.Length() * Main.rand.NextFloat(0f, 10.5f), Vector2.One.RotatedByRandom(MathHelper.TwoPi) * Projectile.velocity.Length() * Main.rand.NextFloat(0.3f, 1f), ProjectileType<SunstoneStaffBolt>(), Projectile.damage, Projectile.knockBack, Projectile.owner, Main.rand.NextFloat(0.055f, 0.45f));
-                proj.scale = Main.rand.NextFloat(0.65f, 1.2f);
-
-                SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact with { Volume = 0.625f, PitchVariance = 0.4f }, proj.Center);
-
-                /*Dust dust = TwinkleDust.SpawnPerfect(new LightDust.LightDustData(Main.rand.NextFloat(0.875f, 0.9f), MathHelper.ToRadians(Main.rand.NextFloat(-16.5f, 16.5f))), proj.position, Vector2.Zero, 0, new Color(52, 229, 66) { A = 0 } * 0.8f, proj.scale * Main.rand.NextFloat(1.15f, 1.75f));
-                dust.fadeIn = Main.rand.NextFloat(-0.25f, 0.5f); dust.rotation = MathHelper.ToRadians(Main.rand.NextFloat(90));*/
-
-                /*ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.TerraBlade,
-                    new ParticleOrchestraSettings { PositionInWorld = proj.Center });*/
-
-                /*for (float k = 0; k < MathHelper.TwoPi; k += MathHelper.TwoPi / 30f)
-                {
-                    Dust dust = Dust.NewDustPerfect(proj.Center, DustID.GreenFairy, Vector2.One.RotatedBy(k) * proj.scale * 0.35f, 145, ColorHelper.AdditiveWhite() * 0.65f, 0.55f * proj.scale);
-                    //dust.noLight = true;
-                }*/
-            }
-        }
-
-        public override bool PreDraw(ref Color lightColor) => false;
-    }
-    
     public class SunstoneStaffBolt : ModProjectile
     {
         private static Asset<Texture2D> glowTex;
@@ -156,6 +127,8 @@ namespace GoldLeaf.Items.Sandstorm
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
             Projectile.extraUpdates = 1;
+            Projectile.scale = Main.rand.NextFloat(0.65f, 1.2f);
+            Projectile.ai[0] = Main.rand.NextFloat(0.055f, 0.45f);
 
             Projectile.DamageType = DamageClass.Magic;
 
@@ -168,7 +141,7 @@ namespace GoldLeaf.Items.Sandstorm
             if (!Main.dedServ && Main.myPlayer == Projectile.owner)
             {
                 ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.TerraBlade,
-                    new ParticleOrchestraSettings { PositionInWorld = Projectile.Center });
+                    new ParticleOrchestraSettings { PositionInWorld = Projectile.Center, MovementVector = Projectile.velocity.RotatedBy(MathHelper.PiOver2) });
             }
         }
 
@@ -219,7 +192,7 @@ namespace GoldLeaf.Items.Sandstorm
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            Projectile.damage = (int)(Projectile.damage * 0.6f);
+            Projectile.damage = (int)(Projectile.damage / 2f) + 1;
         }
 
         public override bool? CanHitNPC(NPC target)

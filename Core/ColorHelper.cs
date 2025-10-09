@@ -84,6 +84,8 @@ namespace GoldLeaf.Core
                 return Color.Lerp(auroraBlue, auroraPurple, (timer - 6) / 2);
         }
 
+        public static Color Lerp(this Color baseColor, Color targetColor, float amount) => Color.Lerp(baseColor, targetColor, amount);
+
         public static Color MultiplyAlpha(this Color color, float alpha)
         {
             return new Color(color.R, color.G, color.B, (int)((color.A / 255f) * Math.Clamp(alpha, 0f, 1f) * 255));

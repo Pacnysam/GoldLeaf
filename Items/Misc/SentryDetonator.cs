@@ -1,24 +1,25 @@
-﻿using System;
+﻿using GoldLeaf.Core;
+using GoldLeaf.Effects.Dusts;
+using GoldLeaf.Items.Accessories;
+using GoldLeaf.Items.VanillaBossDrops;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using Steamworks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using static GoldLeaf.Core.Helper;
-using GoldLeaf.Core;
-using GoldLeaf.Effects.Dusts;
-using Microsoft.Xna.Framework.Graphics;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
-using Terraria;
-using Microsoft.Xna.Framework;
-using GoldLeaf.Items.VanillaBossDrops;
-using GoldLeaf.Items.Accessories;
-using Terraria.DataStructures;
-using Steamworks;
-using Terraria.Audio;
+using Terraria.ModLoader;
+using static GoldLeaf.Core.Helper;
 using static GoldLeaf.GoldLeaf;
+using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Items.Misc
 {
@@ -78,8 +79,8 @@ namespace GoldLeaf.Items.Misc
             {
                 SoundEngine.PlaySound(SoundID.Item62 with { Volume = 0.75f }, player.position);
 
-                CameraSystem.QuickScreenShake(player.MountedCenter, null, 20, 7.5f, 24, 1000);
-                CameraSystem.QuickScreenShake(player.MountedCenter, (0f).ToRotationVector2(), 12.5f, 12f, 18, 1000);
+                CameraSystem.QuickScreenShake(player.MountedCenter, null, 6.5f, 7.5f);
+                CameraSystem.QuickScreenShake(player.MountedCenter, (0f).ToRotationVector2(), 12f, 12f);
 
                 if (Main.netMode != NetmodeID.SinglePlayer)
                 {
@@ -111,6 +112,15 @@ namespace GoldLeaf.Items.Misc
 
     public class SentryDetonatorExplosion : ModProjectile
     {
+        private static Asset<Texture2D> glowTex;
+        private static Asset<Texture2D> alphaBloom;
+        private static Asset<Texture2D> transparentBloom;
+        public override void Load()
+        {
+            glowTex = Request<Texture2D>("GoldLeaf/Textures/BoomGlow");
+            alphaBloom = Request<Texture2D>("GoldLeaf/Textures/GlowAlpha");
+            transparentBloom = Request<Texture2D>("GoldLeaf/Textures/Glow0");
+        }
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 7;
@@ -122,13 +132,14 @@ namespace GoldLeaf.Items.Misc
             Projectile.DamageType = DamageClass.Summon;
             Projectile.width = Projectile.height = 98;
             Projectile.tileCollide = false;
+            Projectile.timeLeft = 28;
         }
 
         public override bool? CanHitNPC(NPC target) => false;
 
         public override void AI()
         {
-            if (++Projectile.frameCounter >= 4)
+            if (++Projectile.frameCounter >= 3)
             {
                 if (Projectile.frame >= Main.projFrames[Projectile.type])
                     Projectile.Kill();
@@ -141,14 +152,19 @@ namespace GoldLeaf.Items.Misc
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
-
             Rectangle frame = texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame);
-            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, ColorHelper.AdditiveWhite(180) * Projectile.Opacity, Projectile.rotation, frame.Size()/2, Projectile.scale, SpriteEffects.None, 0f);
 
+            Main.EntitySpriteDraw(transparentBloom.Value, Projectile.Center - Main.screenPosition, null, Color.Black * 0.9f * (Projectile.timeLeft / 28f), 0, transparentBloom.Size() / 2, (Projectile.timeLeft / 20f * (Projectile.Counter() / 36f)) * 10f * Projectile.scale, SpriteEffects.None);
             for (int k = 1; k <= 3; k++)
             {
-                Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, ColorHelper.AdditiveWhite(0) * (0.5f - (k * 0.125f)) * Projectile.Opacity, Projectile.rotation, frame.Size() / 2, (1 + (k * 0.1f)) * Projectile.scale, SpriteEffects.None, 0f);
+                Rectangle frame2 = texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame - k);
+                Color colorgrad = new Color (255, 184, 40).Lerp(new(187, 37, 16), k / 3f) with { A = 0 };
+                Main.EntitySpriteDraw(glowTex.Value, Projectile.Center - Main.screenPosition, frame2, colorgrad * (0.5f - (k * 0.115f)) * Projectile.Opacity * 0.325f * (Projectile.timeLeft / 16f), Projectile.rotation, frame.Size() / 2, (1 + (k * (Projectile.timeLeft / 36f * (Projectile.Counter() / 20f)))) * Projectile.scale, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame2, colorgrad * (0.5f - (k * 0.115f)) * Projectile.Opacity * 0.45f * (Projectile.timeLeft / 16f), Projectile.rotation, frame.Size() / 2, (1 + (k * ((Projectile.timeLeft / 36f) * (Projectile.Counter() / 20f)))) * Projectile.scale, SpriteEffects.None, 0f);
             }
+            Main.EntitySpriteDraw(glowTex.Value, Projectile.Center - Main.screenPosition, frame, new Color(255, 105, 25) { A = 0 } * Projectile.Opacity * 0.45f, Projectile.rotation, frame.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, Color.White * Projectile.Opacity, Projectile.rotation, frame.Size()/2, Projectile.scale, SpriteEffects.None, 0f);
+            Main.EntitySpriteDraw(alphaBloom.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 173, 65) { A = 0 } * (Projectile.timeLeft / 16f) * 0.325f, 0, alphaBloom.Size() / 2, Projectile.timeLeft / 40f * 6f * Projectile.scale, SpriteEffects.None);
             return false;
         }
     }
