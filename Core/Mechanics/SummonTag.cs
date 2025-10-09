@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
 
-namespace GoldLeaf.Core
+namespace GoldLeaf.Core.Mechanics
 {
     public class SummonTagNPC : GlobalNPC
     {

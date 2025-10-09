@@ -23,6 +23,7 @@ using GoldLeaf.Core.CrossMod;
 using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 using Terraria.GameContent.Animations;
 using Terraria.ModLoader.IO;
+using GoldLeaf.Core.Mechanics;
 
 namespace GoldLeaf.Items.Sky
 {
@@ -51,11 +52,11 @@ namespace GoldLeaf.Items.Sky
             Item.autoReuse = true;
         }
 
-        /*public override float UseSpeedMultiplier(Player player) 
+        public override float UseSpeedMultiplier(Player player) 
             => MathHelper.Lerp(12/9f, 1f, (float)player.GetModPlayer<ConstellationPlayer>().extraSegments / 10);
         
         public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
-            => damage.Base -= MathHelper.Lerp(6, 0, (float)player.GetModPlayer<ConstellationPlayer>().extraSegments / 10);*/
+            => damage.Base -= MathHelper.Lerp(6, 0, (float)player.GetModPlayer<ConstellationPlayer>().extraSegments / 10);
 
         public override bool MeleePrefix() => true;
     }
@@ -159,7 +160,7 @@ namespace GoldLeaf.Items.Sky
                 }
 
                 //SoundEngine.PlaySound(SoundID.NPCDeath7 with { Volume = 0.675f }, player.Center);
-                SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/SuperStar/MirrorReflect") { PitchVariance = 0.2f, Volume = 0.7f }, player.Center);
+                SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/SuperStar/MirrorReflect") { Pitch = -0.5f + (player.GetModPlayer<ConstellationPlayer>().extraSegments * 0.05f), Volume = 0.7f }, player.Center);
             }
             else
             {
@@ -184,7 +185,7 @@ namespace GoldLeaf.Items.Sky
             }
 
             if (player.GetModPlayer<ConstellationPlayer>().extraSegments > 0)
-                player.AddBuff(BuffType<ConstellationTag>(), TimeToTicks(6));
+                player.AddBuff(BuffType<ConstellationTag>(), TimeToTicks(5));
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -297,6 +298,9 @@ namespace GoldLeaf.Items.Sky
             if (!Player.HasBuff(BuffType<ConstellationTag>()))
                 extraSegments = 0;
 
+            if (extraSegments > 0)
+                Player.whipRangeMultiplier += 0.065f * extraSegments;
+
             /*if (Player.HasBuff(BuffID.StarInBottle))
                 maxExtraSegments += 3;
             if (!Main.dayTime)
@@ -357,11 +361,14 @@ namespace GoldLeaf.Items.Sky
                 hasSetup = true;
 
                 Projectile.GetWhipSettings(projectile, out var timeToFlyOut, out var _, out var _);
-                
+
                 if (projectile.type == ProjectileType<ConstellationP>())
+                    projectile.WhipSettings.RangeMultiplier += 0.035f * segments;
+
+                /*if (projectile.type == ProjectileType<ConstellationP>())
                     projectile.WhipSettings.RangeMultiplier += 0.115f * segments;
                 else
-                    projectile.WhipSettings.RangeMultiplier += 0.0725f * segments;
+                    projectile.WhipSettings.RangeMultiplier += 0.0725f * segments;*/
             }
             return true;
         }
