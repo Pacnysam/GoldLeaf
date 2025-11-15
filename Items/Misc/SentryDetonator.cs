@@ -39,10 +39,10 @@ namespace GoldLeaf.Items.Misc
             Item.height = 34;
         }
 
-        public override bool CanUseItem(Player player)
+        /*public override bool CanUseItem(Player player)
         {
             return !player.ZoneOldOneArmy;
-        }
+        }*/
 
         public override bool? UseItem(Player player)
         {
@@ -70,6 +70,11 @@ namespace GoldLeaf.Items.Misc
 
                     if (Main.LocalPlayer == player && ProjectileSets.sentryCanDetonaterExplode[projectile.type])
                         Projectile.NewProjectile(projectile.GetSource_Death("SentryDetonator"), projectile.Center, Vector2.Zero, ProjectileType<SentryDetonatorExplosion>(), 0, 0, projectile.owner);
+
+                    if (ProjectileID.Sets.IsADD2Turret[projectile.type] && player.ZoneOldOneArmy)
+                    {
+                        player.GetItem(player.whoAmI, new Item(ItemID.DD2EnergyCrystal, 5), new GetItemSettings(false, true));
+                    }
 
                     sentryKillCount++;
                     projectile.Kill();

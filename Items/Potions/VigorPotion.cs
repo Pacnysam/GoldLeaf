@@ -49,7 +49,7 @@ namespace GoldLeaf.Items.Potions
         {
             Recipe recipe = CreateRecipe()
             .AddIngredient(ItemID.BottledWater)
-            //recipe.AddIngredient(ItemType<GroveFish>());
+            //recipe.AddIngredient(ItemType<Cradleflopper>());
             .AddIngredient(ItemID.Fireblossom)
             .AddTile(TileID.Bottles)
             .Register();

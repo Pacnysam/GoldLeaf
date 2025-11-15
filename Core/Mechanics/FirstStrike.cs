@@ -50,6 +50,11 @@ namespace GoldLeaf.Core.Mechanics
 
         public bool hasBeenStruck = false;
 
+        public override GlobalNPC Clone(NPC from, NPC to)
+        {
+            to.GetGlobalNPC(this).hasBeenStruck = from.GetGlobalNPC(this).hasBeenStruck;
+            return base.Clone(from, to);
+        }
 
         /*public override void OnHitByItem(NPC npc, Player player, Item item, NPC.HitInfo hit, int damageDone)
         {
@@ -68,13 +73,13 @@ namespace GoldLeaf.Core.Mechanics
             }
         }*/
 
-        /*public override void SendExtraAI(NPC npc, BitWriter bitWriter, BinaryWriter binaryWriter)
+        public override void SendExtraAI(NPC npc, BitWriter bitWriter, BinaryWriter binaryWriter)
         {
             binaryWriter.Write(hasBeenStruck);
         }
         public override void ReceiveExtraAI(NPC npc, BitReader bitReader, BinaryReader binaryReader)
         {
             hasBeenStruck = binaryReader.ReadBoolean();
-        }*/
+        }
     }
 }

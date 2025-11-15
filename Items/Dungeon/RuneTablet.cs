@@ -21,6 +21,8 @@ namespace GoldLeaf.Items.Dungeon
 {
     public class RuneTablet : ModItem
     {
+        public override bool IsLoadingEnabled(Mod mod) => false;
+
         private static Asset<Texture2D> glowTex;
         private static Asset<Texture2D> outlineTex;
         public override void Load()

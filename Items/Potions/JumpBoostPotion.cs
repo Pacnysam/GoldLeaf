@@ -38,7 +38,7 @@ namespace GoldLeaf.Items.Potions
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.BottledWater);
             recipe.AddIngredient(ItemID.PinkGel);
-            recipe.AddIngredient(ItemID.Cloud);
+            recipe.AddIngredient(ItemID.Blinkroot);
             recipe.AddTile(TileID.Bottles);
             recipe.Register();
         }

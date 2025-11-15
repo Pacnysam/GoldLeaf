@@ -15,6 +15,7 @@ using GoldLeaf.Core;
 using GoldLeaf.Items.Nightshade;
 using GoldLeaf.Items.Grove;
 using GoldLeaf.Core.CrossMod;
+using GoldLeaf.Items.Misc;
 
 namespace GoldLeaf.Items.Potions
 {
@@ -43,9 +44,9 @@ namespace GoldLeaf.Items.Potions
         {
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.BottledWater);
-            recipe.AddIngredient(ItemID.NeonTetra);
-            recipe.AddIngredient(ItemID.Blinkroot);
-            recipe.AddIngredient(ItemType<EveDroplet>());
+            recipe.AddIngredient(ItemType<FallenMoon>());
+            recipe.AddIngredient(ItemID.Moonglow);
+            recipe.AddIngredient(ItemID.Deathweed);
             recipe.AddTile(TileID.Bottles);
             recipe.Register();
         }

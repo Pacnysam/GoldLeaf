@@ -23,10 +23,10 @@ namespace GoldLeaf.Core
 
         public float critDamageMod = 0f;
 
-        public float gravity = 0f;
+        public float gravity = 0f; //TODO: remove this, very unnecessary
         public int gravityDelay = 0;
 
-        public int lifesteal;
+        public int lifesteal; //TODO: remove during vampire bat glowup
         public int lifestealMax;
 
         public int summonCritChance = 0;

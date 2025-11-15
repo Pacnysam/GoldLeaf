@@ -29,23 +29,11 @@ namespace GoldLeaf.Core
 
         public override void Update(int type, Player player, ref int buffIndex)
         {
-            if ((type == BuffID.OnFire || type == BuffID.OnFire3)) 
-            { 
-                player.statDefense -= 4; 
-            }
+
         }
 
         public override void Update(int type, NPC npc, ref int buffIndex)
         {
-            if ((type == BuffID.OnFire || type == BuffID.OnFire3))
-            {
-                npc.GetGlobalNPC<GoldLeafNPC>().defenseModFlat -= 4;
-            }
-            if (type == BuffID.CursedInferno)
-            {
-                //npc.GetGlobalNPC<GoldLeafNPC>().critDamageModFlat += 0.3f;
-                npc.GetGlobalNPC<GoldLeafNPC>().damageModFlat += 3;
-            }
             if (type == BuffID.Chilled)
             {
                 npc.GetGlobalNPC<GoldLeafNPC>().movementSpeed *= 0.5f;
@@ -59,7 +47,7 @@ namespace GoldLeaf.Core
 
         public override void ModifyBuffText(int type, ref string buffName, ref string tip, ref int rare)
         {
-            #region Vanilla Items
+            /*#region Vanilla Items
             switch (type)
             {
                 case BuffID.OnFire:
@@ -74,9 +62,9 @@ namespace GoldLeaf.Core
                         break;
                     }
             }
-            #endregion
+            #endregion*/
 
-            if (Main.LocalPlayer.GetModPlayer<SafetyBlanketPlayer>().safetyBlanket && Main.debuff[type] && !BuffSets.Cosmetic[type] && type != BuffType<SafetyBlanketBuff>())
+            if (Main.LocalPlayer.GetModPlayer<SafetyBlanketPlayer>().safetyBlanket && Main.debuff[type] && !BuffSets.Cosmetic[type] && !BuffSets.NoCleanseTooltip[type])
             {
                 if (IsValidDebuff(type, Main.LocalPlayer.buffTime[Main.LocalPlayer.FindBuffIndex(type)] + 2))
                     tip += "\n[c/78BE78:" + Language.GetTextValue("Mods.GoldLeaf.CommonItemTooltip.BuffCanBeCleansed") + "]";

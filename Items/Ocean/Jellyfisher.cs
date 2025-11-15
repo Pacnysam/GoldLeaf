@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Mail;
 using Terraria;
@@ -26,7 +27,6 @@ using Terraria.ModLoader.IO;
 using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 using static GoldLeaf.Core.Helper;
 using static GoldLeaf.Core.Helpers.DrawHelper;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Items.Ocean
@@ -54,7 +54,7 @@ namespace GoldLeaf.Items.Ocean
             Item.autoReuse = false;
 
             Item.mana = 20;
-            Item.damage = 32;
+            Item.damage = 26;
             Item.fishingPole = 20;
             Item.sentry = true;
 
@@ -84,7 +84,7 @@ namespace GoldLeaf.Items.Ocean
 
         public override bool CanUseItem(Player player)
         {
-            if (player.altFunctionUse != 2)
+            if (player.altFunctionUse == 2)
             {
                 for (int p = 0; p < 300; p++)
                 {
@@ -121,28 +121,23 @@ namespace GoldLeaf.Items.Ocean
             return base.CanUseItem(player);
         }
 
-        public override void HoldItem(Player player)
-        {
-            player.accFishingLine = true;
-        }
-
-        public override float UseTimeMultiplier(Player player) => (player.altFunctionUse == 2) ? 0.325f : 1f;
-        public override float UseAnimationMultiplier(Player player) => (player.altFunctionUse == 2) ? 0.325f : 1f;
+        public override float UseTimeMultiplier(Player player) => (player.altFunctionUse != 2) ? 0.425f : 1f;
+        public override float UseAnimationMultiplier(Player player) => (player.altFunctionUse != 2) ? 0.425f : 1f;
         
         public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
         {
-            if (player.altFunctionUse == 2)
+            if (player.altFunctionUse != 2)
                 damage.Base = 0;
         }
         public override void ModifyManaCost(Player player, ref float reduce, ref float mult)
         {
-            if (player.altFunctionUse == 2)
+            if (player.altFunctionUse != 2)
                 mult = 0;
         }
 
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
-            if (player.altFunctionUse != 2)
+            if (player.altFunctionUse == 2)
             {
                 velocity = Vector2.Zero;
                 position = Main.MouseWorld;
@@ -151,7 +146,7 @@ namespace GoldLeaf.Items.Ocean
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            if (player.altFunctionUse != 2)
+            if (player.altFunctionUse == 2)
             {
                 for (float k = 0; k < MathHelper.TwoPi; k += MathHelper.TwoPi / 40f)
                 {
@@ -165,12 +160,13 @@ namespace GoldLeaf.Items.Ocean
                 
                 player.UpdateMaxTurrets();
             }
-            return player.altFunctionUse == 2;
+            return player.altFunctionUse != 2;
         }
 
         public override bool? UseItem(Player player)
         {
-            Item.NetStateChanged();
+            Item.autoReuse = false;
+            //Item.NetStateChanged();
             return base.UseItem(player);
         }
 
@@ -197,7 +193,7 @@ namespace GoldLeaf.Items.Ocean
             recipe.Register();
         }
     }
-    // TODO: bobber doesnt show up to other players in mp, you can use primary fire while bobber exists on other screens
+
     public class JellyfishBobber : ModProjectile
     {
         private static Asset<Texture2D> bloomTex;
@@ -314,7 +310,7 @@ namespace GoldLeaf.Items.Ocean
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, blinkColor * Projectile.Opacity * (float)Math.Sin(GoldLeafWorld.rottime * 2f * blinkIntensity) * (0.3f * blinkIntensity), Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
         }
     }
-
+    
     public class JellyfishSentry : ModProjectile
     {
         private static Asset<Texture2D> bloomTex;
@@ -558,7 +554,7 @@ namespace GoldLeaf.Items.Ocean
                         enemyVector.Normalize();
                         enemyVector *= 9f;
 
-                        Projectile projectile = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, enemyVector, ProjectileID.ThunderStaffShot, Projectile.damage, Projectile.knockBack, Projectile.owner, target);
+                        Projectile projectile = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, enemyVector, ProjectileType<JellyfishLightning>(), Projectile.damage, Projectile.knockBack, Projectile.owner, target);
                         projectile.extraUpdates = 20;
                         projectile.DamageType = DamageClass.Summon;
                         projectile.netImportant = true;
@@ -621,6 +617,8 @@ namespace GoldLeaf.Items.Ocean
         
         public override void OnKill(int timeLeft)
         {
+            Projectile.TryGetOwner(out Player owner);
+
             for (int i = 0; i < 15; i++)
             {
                 Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.PortalBoltTrail, 0, 0, 0, new Color(197, 145, 255) { A = 80 }, Main.rand.NextFloat(0.65f, 0.9f));
@@ -631,6 +629,7 @@ namespace GoldLeaf.Items.Ocean
             {
                 Dust dust = TwinkleDust.Spawn(new LightDust.LightDustData(0.925f), Projectile.position, new Vector2(Projectile.width, Projectile.height), Vector2.Zero, Main.rand.Next(0, 15), new Color(197, 145, 255) { A = 0 } * Main.rand.NextFloat(0.5f, 0.85f), Main.rand.NextFloat(0.5f, 0.8f));
                 //Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustType<TwinkleDust>(), 0, 0, 0, new Color(197, 145, 255) { A = 120 }, Main.rand.NextFloat(0.75f, 1f));
+                dust.shader = GameShaders.Armor.GetShaderFromItemId(owner.GetModPlayer<TurretPaintPlayer>().dyeItem);
                 dust.fadeIn = Main.rand.NextFloat(1.9f, 2.75f);
                 dust.velocity *= Main.rand.NextFloat(0.85f, 1.35f);
                 dust.noGravity = true;
@@ -638,6 +637,99 @@ namespace GoldLeaf.Items.Ocean
 
             if (!Main.dedServ)
                 SoundEngine.PlaySound(SoundID.Item112, Projectile.Center);
+        }
+    }
+
+    public class JellyfishLightning : ModProjectile
+    {
+        public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.ThunderSpearShot;
+        public override void SetDefaults()
+        {
+            Projectile.width = Projectile.height = 4;
+            Projectile.penetrate = 3;
+            Projectile.timeLeft = 360;
+            Projectile.extraUpdates = 2;
+
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = -1;
+        }
+
+        private Vector2 SentryPos;
+        bool hasSetup = false;
+
+        List<NPC> hasHit = [];
+        NPC lastHit = null;
+        ref float Target => ref Projectile.ai[0];
+        NPC TargetNPC => Main.npc[(int)Target];
+        int homingRange = 450;
+
+        public override bool PreAI()
+        {
+            if (!hasSetup)
+            {
+                SentryPos = Projectile.position;
+                hasSetup = true;
+            }
+            return base.PreAI();
+        }
+
+        public override void AI()
+        {
+            Projectile.TryGetOwner(out Player player);
+
+            float targetDistance = 8000f;
+
+            if (TargetNPC == null || lastHit == TargetNPC)
+            {
+                foreach (NPC npc in Main.ActiveNPCs)
+                {
+                    float range = Vector2.Distance(Projectile.Center, npc.Center);
+                    if (range < targetDistance && range < homingRange && npc.CanBeChasedBy(Projectile, false) && npc != lastHit)
+                    {
+                        Target = npc.whoAmI;
+                        targetDistance = range;
+                    }
+                }
+                if (TargetNPC == null) 
+                {
+                    Projectile.Kill();
+                }
+            }
+            else if (Collision.CanHit(Projectile.position, Projectile.width, Projectile.height, TargetNPC.position, TargetNPC.width, TargetNPC.height))
+            {
+                Projectile.velocity = Vector2.Normalize(TargetNPC.Center - Projectile.Center) * 10f;
+            }
+
+            Projectile.rotation = Projectile.velocity.ToRotation();//.RotatedBy(-MathHelper.PiOver2).ToRotation();
+
+            //Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Electric);
+            //dust.velocity *= 0.25f; dust.velocity += Projectile.velocity * 0.75f;
+        }
+
+        public override bool? CanHitNPC(NPC target)
+        {
+            //return (TargetNPC == target && !hasHit.Contains(target));
+            return (TargetNPC == target && target != lastHit);
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            //hasHit.Add(target);
+            lastHit = target;
+            homingRange -= 50;
+            Projectile.damage = (int)(Projectile.damage * 0.65f);
+            Gore.NewGorePerfect(null, target.Center, Vector2.Zero, GoreID.LightningBunnySparks, 2f);
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
+            Rectangle frame = texture.Frame(1, 4, 0, (int)(WorldTimer * 3 % 4));
+
+            Vector2 StartPosition = (lastHit == null)? SentryPos : lastHit.Center;
+
+            Main.EntitySpriteDraw(texture, (Projectile.Center - new Vector2(0f, frame.Height / 2f)) - Main.screenPosition, frame, Color.White.Alpha(0), Projectile.rotation, new Vector2(0f, frame.Height / 2f), new Vector2(StartPosition.Distance(TargetNPC.Center) / frame.Width, 1f), SpriteEffects.None);
+            return false;
         }
     }
 

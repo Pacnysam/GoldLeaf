@@ -1,29 +1,30 @@
-﻿using static Terraria.ModLoader.ModContent;
-using GoldLeaf.Core;
-using static GoldLeaf.Core.Helper;
-using static GoldLeaf.Core.ColorHelper;
+﻿using GoldLeaf.Core;
+using GoldLeaf.Core.CrossMod;
+using GoldLeaf.Effects.Dusts;
+using GoldLeaf.Items.Grove;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.Metrics;
+using System.IO;
+using System.Linq;
+using System.Threading;
 using Terraria;
 using Terraria.Audio;
-using Terraria.GameContent;
-using Terraria.GameContent.Drawing;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.GameContent;
+using Terraria.GameContent.Drawing;
 using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.Localization;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
-using GoldLeaf.Items.Grove;
-using System.Diagnostics.Metrics;
-using System;
-using System.Threading;
-using GoldLeaf.Effects.Dusts;
-using System.IO;
+using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
-using System.Linq;
-using GoldLeaf.Core.CrossMod;
+using static GoldLeaf.Core.ColorHelper;
 using static GoldLeaf.Core.CrossMod.RedemptionHelper;
+using static GoldLeaf.Core.Helper;
+using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Items.Underground
 {
@@ -59,7 +60,7 @@ namespace GoldLeaf.Items.Underground
             Item.shoot = ProjectileType<SedimentP>();
             Item.shootSpeed = 8f;
 
-            Item.damage = 15;
+            Item.damage = 16;
             //Item.GetGlobalItem<GoldLeafItem>().throwingDamageType = DamageClass.Melee;
             Item.DamageType = DamageClass.Melee;
 
@@ -287,7 +288,7 @@ namespace GoldLeaf.Items.Underground
     
     public class SedimentP : ModProjectile
     {
-        private int counter;
+        ref int Counter => ref Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
 
         private enum Gems : int
         {
@@ -326,6 +327,11 @@ namespace GoldLeaf.Items.Underground
             rubyShotCounter = reader.ReadInt32();
         }
 
+        public static Asset<Texture2D> glowTex;
+        public override void Load()
+        {
+            glowTex = Request<Texture2D>("GoldLeaf/Items/Underground/SedimentGlow");
+        }
         public override string Texture => "GoldLeaf/Items/Underground/SedimentFull";
 
         public override void SetStaticDefaults()
@@ -355,7 +361,7 @@ namespace GoldLeaf.Items.Underground
 
         public override void OnSpawn(IEntitySource source)
         {
-            counter = Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
+            Counter = Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
 
             Projectile.netUpdate = true;
 
@@ -367,11 +373,9 @@ namespace GoldLeaf.Items.Underground
                 empowered = true;
         }
 
-
-        public override bool PreAI()
+        public override void AI()
         {
-            counter = Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
-            if (counter <= 1)
+            if (Counter <= 1)
             {
                 Projectile.netUpdate = true;
 
@@ -383,27 +387,20 @@ namespace GoldLeaf.Items.Underground
                     empowered = true;
             }
 
-            //counter = Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
-
-            //if (counter <= 1 && gem == (int)Gem.Ruby) empowered = false;
-
-            //gem = (int)Projectile.ai[2];
-            //Projectile.frame = (int)Projectile.ai[2];
-
             if (Gem == (int)Gems.None) empowered = false;
 
 
             if (empowered)
             {
-                if (Gem == (int)Gems.Amethyst && counter > 40)
+                if (Gem == (int)Gems.Amethyst && Counter > 40)
                 {
                     empowered = false;
                 }
-                if (Gem == (int)Gems.Emerald && counter > 42)
+                if (Gem == (int)Gems.Emerald && Counter > 42)
                 {
                     empowered = false;
                 }
-                if (Gem == (int)Gems.Ruby && empowered && counter > 1)
+                if (Gem == (int)Gems.Ruby && empowered && Counter > 1)
                 {
                     Projectile.velocity *= 0.825f + rubyCounter * 0.0005f;
                 }
@@ -435,11 +432,9 @@ namespace GoldLeaf.Items.Underground
                 if (Projectile.HasElement(Element.Arcane))
                     Projectile.SetElement(Element.Arcane, -1);
             }
-            return true;
-        }
 
-        public override void AI()
-        {
+            Projectile.localAI[0] = MathHelper.SmoothStep(Projectile.localAI[0], (empowered && Gem != (int)Gems.None) ? 1f : 0f, 0.25f);
+
             if (Gem == (int)Gems.Amethyst && empowered && Main.myPlayer == Projectile.owner)
             {
                 Projectile.velocity = Projectile.velocity.Length() * Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.MouseWorld) * Projectile.velocity.Length() * 0.5f, 0.3f).SafeNormalize(Vector2.Normalize(Projectile.velocity));
@@ -454,7 +449,7 @@ namespace GoldLeaf.Items.Underground
                 }
                 emeraldDropCounter--;
             }
-            if (Gem == (int)Gems.Ruby && empowered && counter > 1)
+            if (Gem == (int)Gems.Ruby && empowered && Counter > 1)
             {
                 rubyShotCounter--;
                 rubyCounter++;
@@ -622,37 +617,37 @@ namespace GoldLeaf.Items.Underground
                 //Dust dust = Dust.NewDustPerfect(hitPoint, DustID.GemTopaz, spinningpoint.RotatedBy((float)Math.PI / 4f * Main.rand.NextFloatDirection()) * 0.6f * Main.rand.NextFloat(), 100, Color.Yellow, 1.0f);
             }
         }
-
+        
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
-
+            
             Vector2 drawOrigin = new(texture.Width * 0.5f, Projectile.height * 0.5f);
+            Vector2 projDrawPos = Projectile.position - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
+            var effects = Projectile.direction == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
-            var effects = Projectile.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            if (empowered && Gem != (int)Gems.None)
+            if (Projectile.localAI[0] <= 0.95f) //basic afterimage
             {
-                //texture = Request<Texture2D>("GoldLeaf/Textures/Slash").Value;
-                texture = Request<Texture2D>("GoldLeaf/Items/Underground/SedimentGlow").Value;
-
-                for (int k = 0; k < Projectile.oldPos.Length; k++)
+                for (int k = 0; k < Projectile.oldPos.Length / 2f; k++)
                 {
                     Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                    Main.EntitySpriteDraw(texture, drawPos, null, GemColor((int)Gem) * (0.35f - k * 0.025f), Projectile.oldRot[k], drawOrigin, Projectile.scale * (1f - k * 0.075f) /* * 0.07f*/, SpriteEffects.None, 0f);
-                }
-            }
-            else
-            {
-                for (int k = 0; k < Projectile.oldPos.Length / 2; k++)
-                {
-                    Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                    Color color = Projectile.GetAlpha(lightColor) * (float)((float)(Projectile.oldPos.Length - k) / Projectile.oldPos.Length / 2);
+                    Color color = Projectile.GetAlpha(lightColor) * (float)(((float)(Projectile.oldPos.Length - k) / Projectile.oldPos.Length / 2) - 0.2f) * (1f - Projectile.localAI[0]);
 
                     Main.EntitySpriteDraw(texture, drawPos, new Microsoft.Xna.Framework.Rectangle?(texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), color, Projectile.oldRot[k], drawOrigin, Projectile.scale, effects, 0f);
                 }
             }
-            Vector2 projDrawPos = Projectile.position - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-            Main.EntitySpriteDraw(TextureAssets.Projectile[Projectile.type].Value, projDrawPos, new Microsoft.Xna.Framework.Rectangle?(TextureAssets.Projectile[Projectile.type].Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), lightColor, Projectile.rotation, drawOrigin, Projectile.scale, effects, 0);
+            if (Projectile.localAI[0] >= 0.05f) //empowered afterimage
+            {
+                for (int k = 0; k < Projectile.oldPos.Length; k++)
+                {
+                    Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
+                    Main.EntitySpriteDraw(glowTex.Value, drawPos, null, GemColor((int)Gem).MultiplyAlpha(0.8f - (k * 0.05f)) * (0.35f - k * 0.025f) * Projectile.localAI[0], Projectile.oldRot[k], drawOrigin, Projectile.scale * (1.15f - k * 0.075f), effects, 0f);
+                }
+                //surrounding glow
+                Main.EntitySpriteDraw(glowTex.Value, projDrawPos, null, GemColor((int)Gem).MultiplyAlpha(0.65f) * Projectile.localAI[0], Projectile.rotation, drawOrigin, Projectile.scale * 1.1f, effects, 0f);
+            }
+            //base sprite
+            Main.EntitySpriteDraw(texture, projDrawPos, new Microsoft.Xna.Framework.Rectangle?(texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), lightColor, Projectile.rotation, drawOrigin, Projectile.scale, effects, 0);
             return false;
         }
     }
@@ -695,6 +690,11 @@ namespace GoldLeaf.Items.Underground
             return true;
         }
 
+        public override void AI()
+        {
+            Projectile.localAI[0] = MathHelper.SmoothStep(Projectile.localAI[0], empowered? 1f : 0f, 0.25f);
+        }
+
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             if (empowered)
@@ -731,32 +731,32 @@ namespace GoldLeaf.Items.Underground
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
+            
+            Vector2 drawOrigin = new(texture.Width * 0.5f, Projectile.height * 0.5f);
+            Vector2 projDrawPos = Projectile.position - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
+            var effects = Projectile.direction == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
-            if (empowered)
+            if (Projectile.localAI[0] <= 0.95f) //basic afterimage
             {
-                //texture = Request<Texture2D>("GoldLeaf/Textures/Slash").Value;
-                texture = Request<Texture2D>("GoldLeaf/Items/Underground/SedimentGlow").Value;
+                for (int k = 0; k < Projectile.oldPos.Length / 2f; k++)
+                {
+                    Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
+                    Color color = Projectile.GetAlpha(lightColor) * (float)(((float)(Projectile.oldPos.Length - k) / Projectile.oldPos.Length / 2) - 0.2f) * (1f - Projectile.localAI[0]);
 
-                Vector2 drawOrigin = new(texture.Width * 0.5f/* * 0.07f*/, Projectile.height * 0.5f/* * 0.07f*/);
+                    Main.EntitySpriteDraw(texture, drawPos, new Microsoft.Xna.Framework.Rectangle?(texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), color, Projectile.oldRot[k], drawOrigin, Projectile.scale, effects, 0f);
+                }
+            }
+            if (Projectile.localAI[0] >= 0.05f) //empowered afterimage
+            {
                 for (int k = 0; k < Projectile.oldPos.Length; k++)
                 {
                     Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                    Main.spriteBatch.Draw(texture, drawPos, null, GemColor(2) * (0.35f - k * 0.025f), Projectile.oldRot[k], drawOrigin, Projectile.scale * (1f - k * 0.075f) /* * 0.07f*/, SpriteEffects.None, 0f);
+                    Main.EntitySpriteDraw(SedimentP.glowTex.Value, drawPos, null, GemColor(2).MultiplyAlpha(0.8f - (k * 0.05f)) * (0.35f - k * 0.025f) * Projectile.localAI[0], Projectile.oldRot[k], drawOrigin, Projectile.scale * (1f - k * 0.05f), effects, 0f);
                 }
             }
-            else
-            {
-                Vector2 drawOrigin = new(texture.Width * 0.5f, Projectile.height * 0.5f);
-                for (int k = 0; k < Projectile.oldPos.Length / 2; k++)
-                {
-                    var effects = Projectile.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-                    Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                    Color color = Projectile.GetAlpha(lightColor) * (float)((float)(Projectile.oldPos.Length - k) / Projectile.oldPos.Length / 2);
-
-                    Main.spriteBatch.Draw(texture, drawPos, new Microsoft.Xna.Framework.Rectangle?(texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), color, Projectile.oldRot[k], drawOrigin, Projectile.scale, effects, 0f);
-                }
-            }
-            return true;
+            //base sprite
+            Main.EntitySpriteDraw(texture, projDrawPos, new Microsoft.Xna.Framework.Rectangle?(texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), lightColor, Projectile.rotation, drawOrigin, Projectile.scale, effects, 0);
+            return false;
         }
     }
 
@@ -892,12 +892,24 @@ namespace GoldLeaf.Items.Underground
             Projectile.DamageType = DamageClass.Melee;
         }
 
+        public override void ModifyDamageHitbox(ref Rectangle hitbox)
+        {
+            hitbox.Inflate(12, 0);
+        }
+
         public override void OnKill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact, Projectile.Center);
 
-            for (float k = 0; k < 6.28f; k += 0.52f)
-                Dust.NewDustPerfect(Projectile.Center, DustType<LightDust>(), Vector2.One.RotatedBy(k) * 0.45f, 0, GemColor(4), 0.35f);
+            int dusts = Main.rand.Next(4, 7);
+            for (int k = 0; k < dusts; k++)
+            {
+                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.GemEmerald, Scale: Main.rand.NextFloat(0.35f, 0.75f));
+                dust.velocity *= 0.5f;
+                dust.velocity += Projectile.velocity.RotatedByRandom(MathHelper.ToRadians(30)) * Main.rand.NextFloat(0.5f, 1.25f);
+                dust.noGravity = true;
+                dust.fadeIn = 1.2f;
+            }
         }
 
         public override void AI()
@@ -913,8 +925,8 @@ namespace GoldLeaf.Items.Underground
 
             for (int k = 0; k < Projectile.oldPos.Length; k++)
             {
-                Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin/* + new Vector2(0f, Projectile.gfxOffY)*/;
-                Main.spriteBatch.Draw(tex, drawPos, null, Color.White * (1.0f - 0.15f * k), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+                Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin;
+                Main.spriteBatch.Draw(tex, drawPos, null, Color.White.Alpha(60 + (20 * k)) * (1.0f - 0.15f * k), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
             }
             return true;
         }

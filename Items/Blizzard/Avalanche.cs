@@ -84,7 +84,7 @@ namespace GoldLeaf.Items.Blizzard
 
         public override void ModifyWeaponCrit(Player player, ref float crit)
         {
-            crit = Math.Clamp(100 - Math.Clamp(consecutiveHits * 5, 0, 100), player.GetTotalCritChance(Item.DamageType), 100);
+            crit = Math.Clamp((int)(player.GetTotalCritChance(Item.DamageType) * 0.5f) + (consecutiveHits * 2), 0, 100);
         }
 
         public override float UseTimeMultiplier(Player player)
@@ -372,6 +372,20 @@ namespace GoldLeaf.Items.Blizzard
                 Main.EntitySpriteDraw(trailTex.Value, drawPos, null, lightColor * Projectile.Opacity * (0.7f - (k * 0.125f)), Projectile.oldRot[k], (trailTex.Size() / 2) - new Vector2(0, 26), Projectile.scale * 0.75f, SpriteEffects.None, 0f);
             }
             return true;
+        }
+
+        public override void OnKill(int timeLeft)
+        {
+            SoundEngine.PlaySound(SoundID.Item51, Projectile.Center);
+
+            for (float k = 0; k < MathHelper.TwoPi; k += MathHelper.TwoPi * Main.rand.NextFloat(0.005f, 0.15f))
+            {
+                Dust dust = Dust.NewDustPerfect(Projectile.Center, DustID.Snow, new Vector2(Main.rand.NextFloat(1.5f, 2.5f)).RotatedBy(k), Scale: Main.rand.NextFloat(0.45f, 1.15f));
+                dust.velocity += Projectile.velocity * 0.35f;
+                dust.fadeIn = Main.rand.NextFloat(0.45f, 1.25f);
+                dust.rotation = Main.rand.NextFloat(MathHelper.TwoPi);
+                dust.noGravity = true;
+            }
         }
     }
 

@@ -519,11 +519,16 @@ namespace GoldLeaf.Items.Blizzard
     
     public class ArcticWraithOrb : ModProjectile
     {
+        private static Asset<Texture2D> alphaBloom;
+        public override void Load()
+        {
+            alphaBloom = Request<Texture2D>("GoldLeaf/Textures/GlowAlpha");
+        }
+
         public override void SetStaticDefaults()
         {
-            //DisplayName.SetDefault("Eve Droplet");
             Main.projFrames[Projectile.type] = 8;
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 8;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 
             ProjectileID.Sets.MinionShot[Projectile.type] = true;
@@ -553,23 +558,26 @@ namespace GoldLeaf.Items.Blizzard
         public override bool? CanHitNPC(NPC target)
         {
             if (HasTarget && IsTargetValid(target))
-                return target == Main.npc[(int)Projectile.ai[0]];
+                return target == Target;
 
             return !target.friendly;
         }
 
-        bool HasTarget => (Main.npc[(int)Projectile.ai[0]].active && Main.npc[(int)Projectile.ai[0]].chaseable && Projectile.Distance(Main.npc[(int)Projectile.ai[0]].Center) <= 500) && Counter <= TimeToTicks(10);
+        bool HasTarget => (Target.active && Target.chaseable && Projectile.Center.Distance(Target.Center) <= 500) && Counter <= TimeToTicks(10);
+        NPC Target => Main.npc[(int)Projectile.ai[0]];
         private ref int Counter => ref Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
 
         public override void AI()
         {
-            NPC target = Main.npc[(int)Projectile.ai[0]];
+            //NPC target = Main.npc[(int)Projectile.ai[0]];
+
+            Projectile.Opacity = MathHelper.SmoothStep(Projectile.Opacity, 0, 0.125f);
 
             Projectile.tileCollide = !HasTarget;
 
-            if (HasTarget && IsTargetValid(target))
+            if (HasTarget && IsTargetValid(Target))
             {
-                Projectile.velocity += Vector2.Normalize(target.Center - Projectile.Center) * accelerationSpeed;
+                Projectile.velocity += Vector2.Normalize(Target.Center - Projectile.Center) * accelerationSpeed;
             }
 
             if (Projectile.velocity.Length() > maxSpeed) 
@@ -586,26 +594,32 @@ namespace GoldLeaf.Items.Blizzard
 
             if (Main.rand.NextBool(4))
             {
-                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustType<ArcticDust>());
-                dust.velocity = Vector2.Zero;
+                Dust dust = Dust.NewDustDirect(Projectile.position - Projectile.velocity, Projectile.width, Projectile.height, DustType<ArcticDust>());
+                //Dust dust = Dust.NewDustDirect(Projectile.position - Projectile.velocity, Projectile.width, Projectile.height, DustType<AetherSparkDust>(), newColor: Color.Aqua); this is cool but i should use this effect elsewhere
+                dust.velocity = Vector2.Zero + Projectile.velocity * 0.35f;
             }
         }
 
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
-            Rectangle? rect = new Rectangle?(texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame));
-
+            Rectangle rect = texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame);
+            
+            //trail
             for (int k = 0; k < Projectile.oldPos.Length; k++)
             {
                 Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + texture.Size() / 2;
                 Color color1 = new(0, 225, 241) { A = 185 };
                 Color color2 = new(0, 38, 128) { A = 185 };
 
-                Main.spriteBatch.Draw(texture, drawPos, rect, Color.Lerp(color1, color2, k / (Projectile.oldPos.Length + 2f)) /*with { A = 0 }*/ * (0.65f - (k / 10f)), Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(texture, drawPos, rect, Color.Lerp(color1, color2, k / (Projectile.oldPos.Length + 2f)) /*with { A = 0 }*/ * (0.65f - (k / 10f)), Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None);
             }
-
-            Main.EntitySpriteDraw(texture, Projectile.position - Main.screenPosition + texture.Size() / 2, rect, Color.White, Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None, 0);
+            //glow
+            Main.EntitySpriteDraw(alphaBloom.Value, Projectile.Center - Main.screenPosition, null, Color.DodgerBlue.Alpha(0) * MathHelper.Clamp(Projectile.Opacity, 0.4f, 0.85f), Projectile.rotation, alphaBloom.Size() / 2, Projectile.scale * MathHelper.Clamp(Projectile.Opacity * 1.25f, 0.65f, 0.8f), SpriteEffects.None);
+            //projectile
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, rect, Color.White, Projectile.rotation, rect.Size() / 2, Projectile.scale, SpriteEffects.None, 0);
+            //front glow
+            Main.EntitySpriteDraw(alphaBloom.Value, Projectile.Center - Main.screenPosition, null, Color.LightSkyBlue.Alpha(0) * MathHelper.Clamp(Projectile.Opacity - 0.25f, 0f, 0.55f), Projectile.rotation, alphaBloom.Size() / 2, Projectile.scale * MathHelper.Clamp(Projectile.Opacity * 1.75f, 0.5f, 0.75f), SpriteEffects.None);
             return false;
         }
 

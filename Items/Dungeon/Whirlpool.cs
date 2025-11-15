@@ -21,6 +21,8 @@ namespace GoldLeaf.Items.Dungeon
 {
 	public class Whirlpool : ModItem
 	{
+        public override bool IsLoadingEnabled(Mod mod) => false;
+
         private static Asset<Texture2D> glowTex;
         public override void Load()
         {

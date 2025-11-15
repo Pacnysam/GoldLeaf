@@ -1,14 +1,18 @@
 ﻿using GoldLeaf.Core;
 using GoldLeaf.Core.CrossMod;
+using GoldLeaf.Items.Grove.Wood.Armor;
 using GoldLeaf.Items.Potions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 using static GoldLeaf.Core.Helper;
@@ -34,13 +38,20 @@ namespace GoldLeaf.Items.Grove
 
         public override void SetDefaults()
         {
-            Item.DefaultToFood(22, 32, BuffID.WellFed2, TimeToTicks(5, 0));
-            Item.rare = ItemRarityID.Green;
+            Item.DefaultToFood(24, 32, 0, 0, animationTime: 10);
+            Item.potion = true;
+            Item.healLife = 125;
+            Item.rare = ItemRarityID.Orange;
         }
 
-        public override void OnConsumeItem(Player player) //TODO: change to its own buff and
+        public override void ModifyPotionDelay(Player player, ref int baseDelay)
         {
-            player.AddBuff(BuffType<VampirePotionBuff>(), TimeToTicks(5, 0));
+            baseDelay = TimeToTicks(20);
+        }
+
+        public override void GetHealLife(Player player, bool quickHeal, ref int healValue)
+        {
+            healValue = 0;
         }
 
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
@@ -49,12 +60,27 @@ namespace GoldLeaf.Items.Grove
             Color color = new(0, 189, 161) { A = 40 };
             float timer = Item.timeSinceItemSpawned * 0.15f;
 
-            spriteBatch.Draw(texture, Item.Center - Main.screenPosition, frame, color * (0.65f + (float)(-Math.Sin(timer) * 0.15f)), 
+            spriteBatch.Draw(texture, Item.Center - Main.screenPosition, frame, color * (0.65f + (float)(-Math.Sin(timer) * 0.15f)),
                 rotation, frame.Size() / 2, scale * (1.125f + (float)(Math.Sin(timer * 0.5f) * 0.15f)), SpriteEffects.None, 0f);
-            spriteBatch.Draw(texture, Item.Center - Main.screenPosition, frame, color * (0.65f + (float)(Math.Sin(timer * 0.5f) * 0.15f)), 
+            spriteBatch.Draw(texture, Item.Center - Main.screenPosition, frame, color * (0.65f + (float)(Math.Sin(timer * 0.5f) * 0.15f)),
                 rotation, frame.Size() / 2, scale * (1.125f + (float)(-Math.Sin(timer * 0.5f) * 0.15f)), SpriteEffects.None, 0f);
 
             return true;
+        }
+
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            TooltipLine tipLine = tooltips.Find(n => n.Name == "HealLife");
+            
+            if (tipLine != null)
+            {
+                tipLine.Text = Language.GetTextValue("Mods.GoldLeaf.Items.ForbiddenFruit.HealDesc");
+            }
+        }
+
+        public override void OnConsumeItem(Player player) //TODO: change to its own buff
+        {
+            player.AddBuff(BuffType<VampirePotionBuff>(), TimeToTicks(5));
         }
     }
 }

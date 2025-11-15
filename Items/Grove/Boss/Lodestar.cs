@@ -18,7 +18,7 @@ using System.Collections.Generic;
 
 namespace GoldLeaf.Items.Grove.Boss
 {
-	public class HeavenShard : ModItem
+	public class Lodestar : ModItem
 	{
         public override void SetStaticDefaults()
         {

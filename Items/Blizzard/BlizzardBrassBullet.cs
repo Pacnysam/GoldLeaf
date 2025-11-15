@@ -20,6 +20,7 @@ using GoldLeaf.Items.Accessories;
 using ReLogic.Content;
 using GoldLeaf.Core.CrossMod;
 using static GoldLeaf.Core.CrossMod.RedemptionHelper;
+using rail;
 
 namespace GoldLeaf.Items.Blizzard
 {
@@ -216,13 +217,16 @@ namespace GoldLeaf.Items.Blizzard
                     dust.customData = target.whoAmI;
                 }
             }
-            /*else 
+            else 
             {
-                for (int i = 0; i < Main.rand.Next(3, 7); i++)
+                for (int i = 0; i < 5; i++)
                 {
-                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<BlizzardBrassDust>());
+                    Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustType<BlizzardBrassDust>());
+                    dust.velocity = (dust.velocity * -0.65f) + (Projectile.velocity * 0.65f);
+                    dust.fadeIn = 1f;
+                    dust.noGravity = true;
                 }
-            }*/
+            }
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

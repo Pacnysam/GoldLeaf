@@ -13,6 +13,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 using static GoldLeaf.Core.Helper;
@@ -28,38 +29,39 @@ namespace GoldLeaf.Items.Sandstorm
             glowTex = Request<Texture2D>(Texture + "Glow");
         }
 
+        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(Item.ArmorPenetration);
+
+        const int RANGE = 175;
+        const float RADIUSMULT = 0.75f;
+
         public override void SetStaticDefaults()
         {
             ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite(175) * 0.65f, true);
             Item.AddElements([Element.Arcane]);
         }
-
-        const int RANGE = 175;
-        const float RADIUSMULT = 0.75f;
-
         public override void SetDefaults()
         {
             Item.value = Item.sellPrice(0, 1, 35, 0);
             Item.rare = ItemRarityID.Green;
 
-            Item.damage = 14;
+            Item.damage = 12;
             Item.DamageType = DamageClass.Magic;
-            Item.mana = 10;
-            Item.ArmorPenetration = 8;
+            Item.mana = 9;
+            Item.ArmorPenetration = 5;
 
             Item.shootSpeed = 3.75f;
-            Item.knockBack = 1.75f;
+            Item.knockBack = 0.5f;
 
             Item.useTime = 4;
             Item.useAnimation = 12;
             Item.reuseDelay = 10;
+            Item.autoReuse = true;
 
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/Kirby/SuperStar/MirrorWave") { PitchVariance = 0.35f, Volume = 0.85f };
             Item.staff[Item.type] = true;
             Item.noMelee = true;
 
-            //Item.shoot = ProjectileType<SunstoneStaffBeam>();
             Item.shoot = ProjectileType<SunstoneStaffBolt>();
 
             Item.width = 30;
@@ -192,7 +194,7 @@ namespace GoldLeaf.Items.Sandstorm
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            Projectile.damage = (int)(Projectile.damage / 2f) + 1;
+            Projectile.damage = (int)(Projectile.damage * 0.65f) + 1;
         }
 
         public override bool? CanHitNPC(NPC target)

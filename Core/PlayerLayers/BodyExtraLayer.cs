@@ -44,10 +44,11 @@ namespace GoldLeaf.Core.PlayerLayers
                     color = (ItemSets.BodyExtra[player.armor[11].type].Item2 == default) ? drawInfo.colorArmorBody : ItemSets.BodyExtra[player.armor[11].type].Item2;
                 }
 
-                int frame = player.bodyFrame.Y / player.bodyFrame.Height;
+                Rectangle playerFrame = ItemSets.BodyExtra[player.armor[1].type].Item3 ? player.legFrame : player.bodyFrame;
+                int frame = playerFrame.Y / playerFrame.Height;
                 int height = tex.Height / 20;
 
-                Vector2 vector = new(-drawInfo.drawPlayer.bodyFrame.Width / 2 + drawInfo.drawPlayer.width / 2, drawInfo.drawPlayer.height - drawInfo.drawPlayer.bodyFrame.Height + 4);
+                Vector2 vector = new(-playerFrame.Width / 2 + drawInfo.drawPlayer.width / 2, drawInfo.drawPlayer.height - playerFrame.Height + 4);
                 Vector2 position = (drawInfo.Position - Main.screenPosition + vector).Floor() + drawInfo.drawPlayer.bodyPosition + drawInfo.bodyVect;
 
                 drawInfo.DrawDataCache.Add(new DrawData(tex, position, new Rectangle(0, frame * height, tex.Width, height),

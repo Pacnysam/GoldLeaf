@@ -41,16 +41,17 @@ namespace GoldLeaf.Core.Helpers
                     //rasterizer = RasterizerState.CullCounterClockwise;
                     break;
             }
-            spriteBatch.Begin(sortMode, blendState ?? BlendState.AlphaBlend, sampler ?? Main.DefaultSamplerState, DepthStencilState.None, rasterizer ?? RasterizerState.CullNone, effect, viewMatrix);
+            spriteBatch.Begin(sortMode, blendState ?? BlendState.AlphaBlend, sampler ?? Main.DefaultSamplerState, DepthStencilState.None, rasterizer ?? Main.Rasterizer, effect, viewMatrix);
         }
 
-        public static void ResetBlendState(this SpriteBatch spriteBatch, DrawContext context = DrawContext.InWorld, bool end = true, bool immediate = false)
+        public static void ResetBlendState(this SpriteBatch spriteBatch, DrawContext context = DrawContext.InWorld, bool end = true)
         {
             if (end)
                 spriteBatch.End();
 
             SamplerState sampler = Main.DefaultSamplerState;
             Matrix viewMatrix = Main.GameViewMatrix.TransformationMatrix;
+            RasterizerState rasterizer = RasterizerState.CullNone;
 
             switch (context)
             {
@@ -64,7 +65,7 @@ namespace GoldLeaf.Core.Helpers
                     break;
             }
 
-            spriteBatch.Begin(immediate ? SpriteSortMode.Immediate : SpriteSortMode.Deferred, BlendState.AlphaBlend, sampler, DepthStencilState.None, RasterizerState.CullNone, null, viewMatrix);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, sampler, DepthStencilState.None, Main.Rasterizer, null, viewMatrix);
         }
 
         public readonly static BlendState

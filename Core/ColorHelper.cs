@@ -11,10 +11,9 @@ namespace GoldLeaf.Core
 {
     public static class ColorHelper
     {
-        public static Color AdditiveWhite(byte alpha = 0) => new(255, 255, 255) { A = alpha };
-
+        public static Color AdditiveWhite(int alpha = 0) => new(255, 255, 255) { A = (byte)alpha };
+        
         public static Color Prefix(bool good = true) => good? new(120, 190, 120) : new(190, 120, 120);
-        public static Color PrefixBad => new(190, 120, 120);
         
         public static Color AuroraColor()
         {
@@ -90,15 +89,8 @@ namespace GoldLeaf.Core
         {
             return new Color(color.R, color.G, color.B, (int)((color.A / 255f) * Math.Clamp(alpha, 0f, 1f) * 255));
         }
-
-        public static Color IndicatorColor()
-        {
-            return Color.White * (float)(0.2f + 0.8f * (1 + Math.Sin(GoldLeafWorld.rottime)) / 2f);
-        }
-        public static Color IndicatorColor(Color color)
-        {
-            return color * (float)(0.2f + 0.8f * (1 + Math.Sin(GoldLeafWorld.rottime)) / 2f);
-        }
+        public static Color Alpha(this Color color, int alpha = 0) => color with { A = (byte)Math.Clamp(alpha, 0, 255) };
+        public static Color AlphaFloat(this Color color, float alpha) => color with { A = (byte)(Math.Clamp(alpha, 0f, 1f) * 255) };
 
         public static Color GemColor(int gem)
         {

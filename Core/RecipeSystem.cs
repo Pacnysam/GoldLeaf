@@ -21,7 +21,7 @@ namespace GoldLeaf.Core
 {
     public class RecipeSystem : ModSystem
     {
-        public override void ClearWorld()
+        public override void PreWorldGen()
         {
             learnedRecipes.Clear();
         }
@@ -100,8 +100,6 @@ namespace GoldLeaf.Core
             if (!learnedRecipes.Contains(item.type))
             {
                 learnedRecipes.Add(item.type);
-                SoundEngine.PlaySound(SoundID.ResearchComplete);
-                CombatText.NewText(new Rectangle((int)Main.LocalPlayer.position.X, (int)Main.LocalPlayer.position.Y - 5, Main.LocalPlayer.width, Main.LocalPlayer.height), new(195, 10, 200), Language.GetTextValue("Mods.GoldLeaf.Mechanics.LearnRecipe", item.Name), true);
             }
         }
 

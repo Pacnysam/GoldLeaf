@@ -34,6 +34,9 @@ namespace GoldLeaf.Items.Grove.Boss
         {
             glowTex = Request<Texture2D>(Texture + "Glow");
         }
+
+        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(Item.ArmorPenetration);
+
         public override void SetStaticDefaults()
         {
             ItemSets.Glowmask[Type] = (glowTex, Color.White, false);
@@ -55,7 +58,7 @@ namespace GoldLeaf.Items.Grove.Boss
 			Item.knockBack = 6;
             Item.crit = -2;
             Item.damage = 19;
-            Item.ArmorPenetration = 4;
+            Item.ArmorPenetration = 8;
             //Item.UseSound = SoundID.DD2_EtherianPortalOpen;
             Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/RoR2/FireCast") { Volume = 0.85f };
             Item.shoot = ProjectileType<AetherBolt>();
@@ -137,7 +140,6 @@ namespace GoldLeaf.Items.Grove.Boss
             Projectile.friendly = true;
             Projectile.tileCollide = true;
             Projectile.penetrate = 4;
-            Projectile.ArmorPenetration = 4;
             Projectile.timeLeft = 190;
             Projectile.ignoreWater = false;
 
@@ -345,7 +347,7 @@ namespace GoldLeaf.Items.Grove.Boss
                 Projectile explosion = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ProjectileType<AetherBurst>(), (int)(Projectile.damage * 2f) + (int)(ShotsFired * 2.2), Projectile.knockBack, player.whoAmI);
                 explosion.ai[0] = explosionVolume;
                 if (Counter < THRESHHOLD) explosion.ai[1] = 12;
-                if (ShotsFired >= 20) explosion.ai[2] = 1;
+                if (ShotsFired >= 12) explosion.ai[2] = 1;
             }
         }
     }
@@ -377,7 +379,7 @@ namespace GoldLeaf.Items.Grove.Boss
             Projectile.timeLeft = 24;
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
-            Projectile.ArmorPenetration = 4;
+            Projectile.ArmorPenetration = 8;
             Projectile.ai[1] = 20;
 
             Projectile.extraUpdates = 1;
@@ -524,7 +526,7 @@ namespace GoldLeaf.Items.Grove.Boss
         {
             Projectile.friendly = true;
             //Projectile.penetrate = 1;
-            Projectile.ArmorPenetration = 4;
+            Projectile.ArmorPenetration = 8;
             Projectile.width = 8;
             Projectile.height = 8;
             Projectile.extraUpdates = 5;

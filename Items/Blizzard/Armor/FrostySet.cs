@@ -1,23 +1,25 @@
-﻿using static Terraria.ModLoader.ModContent;
-using GoldLeaf.Core;
-using static GoldLeaf.Core.Helper;
+﻿using GoldLeaf.Core;
+using GoldLeaf.Effects.Dusts;
+using GoldLeaf.Items.Dyes;
+using GoldLeaf.Items.Pickups;
+using GoldLeaf.Items.Vanity.Watcher;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.GameContent;
-using Terraria.ID;
-using Terraria.ModLoader;
-using System.Diagnostics.Metrics;
-using System;
-using GoldLeaf.Effects.Dusts;
-using Terraria.DataStructures;
 using ReLogic.Content;
-using Terraria.Localization;
+using System;
+using System.Diagnostics.Metrics;
+using Terraria;
 using Terraria.Audio;
-using Terraria.Graphics.Shaders;
-using GoldLeaf.Items.Pickups;
+using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.Graphics.Renderers;
+using Terraria.Graphics.Shaders;
+using Terraria.ID;
+using Terraria.Localization;
+using Terraria.ModLoader;
+using static GoldLeaf.Core.Helper;
 using static GoldLeaf.GoldLeaf;
+using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Items.Blizzard.Armor
 {
@@ -27,7 +29,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
         public override string Texture => "GoldLeaf/Items/Blizzard/Armor/FrostyMask";
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(manaMax);
 
-        private static readonly int manaMax = 60;
+        private static readonly int manaMax = 20;
 
         public override void Load()
         {
@@ -53,45 +55,35 @@ namespace GoldLeaf.Items.Blizzard.Armor
         public override void UpdateEquip(Player player)
         {
             player.statManaMax2 += manaMax;
+            player.aggro -= 400;
         }
 
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {
-            return body.type == ItemType<FrostyRobe>();
+            return body.type == ItemType<FrostyRobe>() && legs.type == ItemType<FrostyBoots>();
         }
-
-        /*public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor)
-        {
-            //color = ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 0.05f);
-            color = ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 0.05f) * (0.875f + (float)Math.Sin(GoldLeafWorld.rottime) * 0.125f);
-
-            Color glowColor = ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 0.05f); glowColor.A = 0;
-            glowMask = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
-            glowMaskColor = glowColor * (0.3f - (float)Math.Sin(GoldLeafWorld.rottime) * 0.125f);
-        }*/
 
         public override void UpdateArmorSet(Player player)
         {
-            player.setBonus = Language.GetTextValue("Mods.GoldLeaf.SetBonuses.FrostySet", 30, SetBonusKey);
-            player.GetModPlayer<GoldLeafPlayer>().magicCritDamageMod += 0.3f;
+            player.setBonus = Language.GetTextValue("Mods.GoldLeaf.SetBonuses.FrostySet", SetBonusKey);
             player.GetModPlayer<FrostyPlayer>().frostySet = true;
         }
 
         public override void SetDefaults()
         {
             Item.width = 22;
-            Item.height = 22;
+            Item.height = 24;
 
             Item.value = Item.sellPrice(0, 0, 80, 0);
             Item.rare = ItemRarityID.Blue;
 
-            Item.defense = 5;
+            Item.defense = 3;
         }
 
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemType<AuroraCluster>(), 16);
+            recipe.AddIngredient(ItemType<AuroraCluster>(), 12);
             recipe.AddTile(TileID.Anvils);
             recipe.AddOnCraftCallback(RecipeCallbacks.AuroraMajor);
             recipe.Register();
@@ -101,11 +93,10 @@ namespace GoldLeaf.Items.Blizzard.Armor
     [AutoloadEquip(EquipType.Body)]
     public class FrostyRobe : ModItem
     {
-        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(/*manaMax, */magicDamage * 100);
+        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(manaMax, magicDamage);
 
-        //private static readonly int manaMax = 40;
-        private static readonly float magicDamage = 0.12f;
-        private static readonly int bonusAggro = -300;
+        private static readonly int manaMax = 20;
+        private static readonly int magicDamage = 8;
 
         public override void Load()
         {
@@ -113,33 +104,26 @@ namespace GoldLeaf.Items.Blizzard.Armor
             {
                 EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Legs}", EquipType.Legs, this);
                 EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Waist}", EquipType.Waist, this, "FrostyBelt");
+                backSlot = EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Back}", EquipType.Back, this, "FrostyBack");
             }
         }
-
-        public override void SetMatch(bool male, ref int equipSlot, ref bool robes)
-        {
-            robes = true;
-
-            equipSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Legs);
-        }
+        public int backSlot = -1;
 
         public override void SetStaticDefaults()
         {
             if (!Main.dedServ)
-                ItemSets.BodyExtra[Item.type] = (Request<Texture2D>(EquipLoader.GetEquipTexture(EquipType.Waist, Item.waistSlot).Texture), default);
+                ItemSets.BodyExtra[Item.type] = (Request<Texture2D>(EquipLoader.GetEquipTexture(EquipType.Waist, Item.waistSlot).Texture), default, false);
 
             ArmorIDs.Body.Sets.showsShouldersWhileJumping[Item.bodySlot] = true;
             ArmorIDs.Body.Sets.HidesHands[Item.bodySlot] = false;
-            //ArmorIDs.Waist.Sets.IsABelt[Item.bodySlot] = true;
-            //ArmorIDs.Waist.Sets.UsesTorsoFraming[Item.bodySlot] = true;
-
+            ArmorIDs.Body.Sets.IncludedCapeBack[Item.bodySlot] = backSlot;
+            ArmorIDs.Body.Sets.IncludedCapeBackFemale[Item.bodySlot] = backSlot;
         }
 
         public override void UpdateEquip(Player player)
         {
-            //player.statManaMax2 += manaMax;
-            player.GetDamage(DamageClass.Magic) += magicDamage;
-            player.aggro += bonusAggro;
+            player.statManaMax2 += manaMax;
+            player.GetDamage(DamageClass.Magic) += magicDamage * 0.01f;
         }
 
         public override void SetDefaults()
@@ -150,50 +134,102 @@ namespace GoldLeaf.Items.Blizzard.Armor
             Item.value = Item.sellPrice(0, 0, 80, 0);
             Item.rare = ItemRarityID.Blue;
 
-            Item.defense = 5;
-            //Item.vanity = true;
+            Item.defense = 4;
 
             Item.bodySlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Body);
             Item.waistSlot = EquipLoader.GetEquipSlot(Mod, "FrostyBelt", EquipType.Waist);
         }
 
-        /*public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor)
-        {
-            //color = ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 0.05f);
-            //color = ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 0.05f) * (0.875f + (float)Math.Sin(GoldLeafWorld.rottime) * 0.125f);
-
-            Color glowColor = ColorHelper.AuroraColor(Main.GlobalTimeWrappedHourly * 0.05f); glowColor.A = 0;
-            glowMask = frontEquip;
-            glowMaskColor = glowColor;
-        }*/
-
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<FrostCloth>(), 8);
-            recipe.AddIngredient(ItemType<AuroraCluster>(), 12);
+            recipe.AddIngredient(ItemType<AuroraCluster>(), 10);
             recipe.AddTile(TileID.Loom);
             recipe.AddOnCraftCallback(RecipeCallbacks.AuroraMajor);
             recipe.Register();
         }
     }
-    
+
+    [AutoloadEquip(EquipType.Legs)]
+    public class FrostyBoots : ModItem
+    {
+        public override string Texture => "GoldLeaf/Items/Blizzard/Armor/FrostyBoots";
+        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(manaMax, critDamage);
+
+        private static readonly int manaMax = 20;
+        private static readonly int critDamage = 25;
+
+        public override void SetStaticDefaults()
+        {
+            ArmorIDs.Legs.Sets.HidesBottomSkin[Item.legSlot] = true;
+        }
+
+        public override void UpdateEquip(Player player)
+        {
+            player.statManaMax2 += manaMax;
+            player.GetModPlayer<GoldLeafPlayer>().magicCritDamageMod += critDamage * 0.01f;
+            player.GetModPlayer<FrostyPlayer>().frostyBoots = true;
+        }
+
+        public override void SetDefaults()
+        {
+            Item.width = 22;
+            Item.height = 22;
+
+            Item.value = Item.sellPrice(0, 0, 80, 0);
+            Item.rare = ItemRarityID.Blue;
+
+            Item.defense = 3;
+        }
+
+        public override void AddRecipes()
+        {
+            Recipe recipe = CreateRecipe();
+            recipe.AddIngredient(ItemType<AuroraCluster>(), 10);
+            recipe.AddTile(TileID.Anvils);
+            recipe.AddOnCraftCallback(RecipeCallbacks.AuroraMajor);
+            recipe.Register();
+        }
+    }
+
     public class FrostyPlayer : ModPlayer 
     {
+        public bool frostyBoots = false;
         public bool frostySet = false;
-        
-        public override void Load()
+        public int dustCooldown = 0;
+        public bool frostyBoot => Player.armor[2].type == ItemType<FrostyBoots>() && Player.armor[11].type == ItemID.None || Player.armor[12].type == ItemType<FrostyBoots>();
+
+        public override void PreUpdate()
         {
-            ControlsPlayer.DoubleTapPrimaryEvent += SnapFreeze;
-        }
-        public override void Unload()
-        {
-            ControlsPlayer.DoubleTapPrimaryEvent -= SnapFreeze;
+            if (frostyBoot && dustCooldown > 0) dustCooldown--;
         }
 
         public override void ResetEffects()
         {
             frostySet = false;
+        }
+
+        public override void Load() => ControlsPlayer.DoubleTapPrimaryEvent += SnapFreeze;
+        public override void Unload() => ControlsPlayer.DoubleTapPrimaryEvent -= SnapFreeze;
+
+        public override void PostUpdateMiscEffects()
+        {
+            if (frostyBoot && dustCooldown <= 0 && Player.statMana > 0 && Player.velocity.Y == 0f && Player.grappling[0] == -1 && Math.Abs(Player.velocity.X) >= 3.2f)
+            {
+                Vector2 position = (Player.velocity.X > 0)? Player.BottomLeft : Player.BottomRight;
+                float manaPercent = (float)Player.statMana / Player.statManaMax2;
+                float manaRatio = MathHelper.Clamp((float)Player.statManaMax2 / Player.statMana, 0f, 20f);
+
+                Dust dust = Dust.NewDustPerfect(position, DustType<TwinkleDust>(), new Vector2(0, Main.rand.NextFloat(-2f, -0.5f)), Main.rand.Next(0, 80), Color.White, Main.rand.NextFloat(0.85f, 1.25f) * (manaPercent * 0.5f + 0.5f));
+                dust.customData = new LightDust.LightDustData(Main.rand.NextFloat(0.9f, 0.935f), MathHelper.ToRadians(Main.rand.NextFloat(-4f, 4f)));
+                dust.velocity.Y -= Main.rand.NextFloat(0.25f, 1.45f);
+                dust.velocity.X += Main.rand.NextFloat(2.5f, 3f) * (Player.velocity.X < 0).ToDirectionInt();
+                dust.fadeIn = Main.rand.NextFloat(1.5f, 2.5f);
+                dust.shader = (Player.dye[2].dye != 0)? GameShaders.Armor.GetShaderFromItemId(Player.dye[2].type) : GameShaders.Armor.GetShaderFromItemId(ItemType<AuroraDye>());
+
+                dustCooldown = (int)(Main.rand.Next(1, 4) + manaRatio);
+            }
         }
 
         private static void SnapFreeze(Player player) 
@@ -253,10 +289,10 @@ namespace GoldLeaf.Items.Blizzard.Armor
         {
             if (target.HasBuff(BuffType<SnapFreezeBuff>()))
             {
-                modifiers.ArmorPenetration += 10;
+                modifiers.ArmorPenetration += 20;
                 //modifiers.ScalingBonusDamage += 0.25f;
             }
-            if (target.HasBuff(BuffType<SnapFreezeBuff>()) && (target.life) <= target.lifeMax / 4 && !target.boss)
+            if (target.HasBuff(BuffType<SnapFreezeBuff>()) && (target.life) <= target.lifeMax / 5 && !target.boss)
             {
                 Projectile.NewProjectileDirect(Player.GetSource_OnHit(target), target.Center, new Vector2(0, -8.5f), ProjectileType<SnapFreezeEffect>(), 0, 0, Player.whoAmI);
                 target.RequestBuffRemoval(BuffType<SnapFreezeBuff>());
@@ -449,31 +485,4 @@ namespace GoldLeaf.Items.Blizzard.Armor
             return false;
         }
     }
-
-    /*public class SnapFreezeBeam : ModProjectile 
-    {
-        public override string Texture => EmptyTexString;
-
-        public override void SetDefaults()
-        {
-            Projectile.CloneDefaults(ProjectileID.ShadowBeamFriendly);
-            Projectile.damage = 0;
-        }
-
-        public override void AI()
-        {
-            Dust.NewDustPerfect(Projectile.Center, DustType<ArcticDust>());
-        }
-
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-        {
-            //target.AddBuff(BuffType<SnapFreezeBuff>(), TimeToTicks(10));
-            Projectile.Kill();
-        }
-
-        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
-        {
-            return false;
-        }
-    }*/
 }

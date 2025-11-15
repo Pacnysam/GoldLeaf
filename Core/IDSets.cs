@@ -30,9 +30,9 @@ namespace GoldLeaf.Core
 
         public static bool[] FaceMask = ItemID.Sets.Factory.CreateBoolSet(false);
 
-        public static (Asset<Texture2D>, Color)[] BodyExtra = ItemID.Sets.Factory.CreateNamedSet("BodyExtraLayer")
-            .Description("Additional layer that draws over body, is formatted like head, leg sheets")
-            .RegisterCustomSet<(Asset<Texture2D>, Color)>((null, default));
+        public static (Asset<Texture2D>, Color, bool)[] BodyExtra = ItemID.Sets.Factory.CreateNamedSet("BodyExtraLayer")
+            .Description("Additional layer that draws over body, is formatted like head or leg sheets, boolean is to use leg frames")
+            .RegisterCustomSet<(Asset<Texture2D>, Color, bool)>((null, default, false));
     }
 
     public static class ProjectileSets
@@ -66,9 +66,13 @@ namespace GoldLeaf.Core
         public static bool[] Cosmetic = BuffID.Sets.Factory.CreateNamedSet("Cosmetic")
             .RegisterBoolSet(false, BuffID.Slimed, BuffID.GelBalloonBuff, BuffID.Lovestruck, BuffID.Stinky, BuffID.Wet);
 
+        public static bool[] NoCleanseTooltip = BuffID.Sets.Factory.CreateNamedSet("NoCleanseTooltip")
+            .Description("Does not display cleansable buff tooltip")
+            .RegisterBoolSet(false, BuffType<SafetyBlanketBuff>(), BuffID.StarInBottle);
+
         public static bool[] IsRemovable = BuffID.Sets.Factory.CreateNamedSet("IsRemovable")
             .Description("Can be removed by safety blanket and similar methods")
-            .RegisterBoolSet(true, BuffID.MoonLeech, BuffID.TheTongue, BuffID.Obstructed, BuffID.Horrified, BuffID.Hunger, BuffID.NeutralHunger, BuffID.Starving, BuffType<ToxicPositivityBuff>());
+            .RegisterBoolSet(true, BuffID.MoonLeech, BuffID.TheTongue, BuffID.Obstructed, BuffID.Horrified, BuffID.Hunger, BuffID.NeutralHunger, BuffID.Starving, BuffID.StarInBottle, BuffType<ToxicPositivityBuff>());
     }
 
     public static class ArmorSets

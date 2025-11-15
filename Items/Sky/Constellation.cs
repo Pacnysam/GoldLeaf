@@ -158,9 +158,6 @@ namespace GoldLeaf.Items.Sky
                     gore2.frame = 0;
                     gore2.alpha += Main.rand.Next(-10, 15);
                 }
-
-                //SoundEngine.PlaySound(SoundID.NPCDeath7 with { Volume = 0.675f }, player.Center);
-                SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/SuperStar/MirrorReflect") { Pitch = -0.5f + (player.GetModPlayer<ConstellationPlayer>().extraSegments * 0.05f), Volume = 0.7f }, player.Center);
             }
             else
             {
@@ -186,6 +183,8 @@ namespace GoldLeaf.Items.Sky
 
             if (player.GetModPlayer<ConstellationPlayer>().extraSegments > 0)
                 player.AddBuff(BuffType<ConstellationTag>(), TimeToTicks(5));
+
+            SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/SuperStar/MirrorReflect") { Pitch = -0.5f + (player.GetModPlayer<ConstellationPlayer>().extraSegments * 0.05f), Volume = 0.7f }, player.Center);
         }
 
         public override bool PreDraw(ref Color lightColor)

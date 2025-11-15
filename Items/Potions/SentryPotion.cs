@@ -32,8 +32,8 @@ namespace GoldLeaf.Items.Potions
         {
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.BottledWater);
+            //recipe.AddIngredient(ItemType<BronzeRivuline>());
             recipe.AddIngredient(ItemID.Shiverthorn);
-            recipe.AddIngredient(ItemID.Hive);
             recipe.AddTile(TileID.Bottles);
             recipe.Register();
         }

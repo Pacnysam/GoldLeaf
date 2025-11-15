@@ -47,7 +47,7 @@ namespace GoldLeaf.Tiles.Granite
             Main.tileLavaDeath[Type] = false;
             Main.tileNoAttach[Type] = true;
             Main.tileLighted[Type] = true;
-            Main.tileOreFinderPriority[Type] = 475;
+            Main.tileOreFinderPriority[Type] = 575;
             Main.tileShine2[Type] = true;
 
             TileObjectData.newTile.Origin = new Point16(0, 1);

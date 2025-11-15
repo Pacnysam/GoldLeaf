@@ -20,6 +20,7 @@ using System;
 using Terraria.GameContent.ObjectInteractions;
 using GoldLeaf.Items.Granite;
 using GoldLeaf.Tiles.Granite;
+using Terraria.Graphics.Light;
 
 namespace GoldLeaf.Items.Accessories
 {
@@ -64,28 +65,6 @@ namespace GoldLeaf.Items.Accessories
             player.GetModPlayer<OxeyePlayer>().cooldown--;
         }
     }
-
-    /*public class OxeyeDaisyPlaceable : ModItem
-    {
-        public override void SetDefaults()
-        {
-            Item.value = Item.sellPrice(0, 0, 30, 0);
-            Item.rare = ItemRarityID.White;
-
-            Item.width = 16;
-            Item.height = 28;
-
-            Item.DefaultToPlaceableTile(TileType<OxeyeDaisyT>());
-        }
-
-        public override void AddRecipes()
-        {
-            CreateRecipe()
-                .AddIngredient(ItemType<OxeyeDaisy>())
-                .AddCondition(Condition.InGraveyard)
-                .Register();
-        }
-    }*/
 
     public class OxeyePlayer : ModPlayer
 	{
@@ -208,7 +187,7 @@ namespace GoldLeaf.Items.Accessories
 
         public override void NearbyEffects(int i, int j, bool closer)
         {
-            if (closer && Main._shouldUseWindyDayMusic && Main.IsItDay() && Main.rand.NextBool(10) && !Main.gamePaused)
+            if (closer && Main._shouldUseWindyDayMusic && Main.IsItDay() && Main.rand.NextBool(10) && !Main.gamePaused && Lighting.Brightness(i, j) >= 0.3f)
             {
                 Dust dust = Dust.NewDustDirect(new Vector2(i * 16, (j - 1) * 16), 16, 16, DustType<LightDustFast>(), 0, 0, 0, new Color(231, 168, 16), Main.rand.NextFloat(0.35f, 0.5f));
                 dust.velocity = new Vector2(Main.windSpeedCurrent * 0.025f, Main.rand.NextFloat(-0.4f, -0.65f));
@@ -216,7 +195,7 @@ namespace GoldLeaf.Items.Accessories
                 /*if (Main.tile[i, j].WallType != 0)
                     dust.noLight = true;*/
             }
-            if (closer && Main._shouldUseWindyDayMusic && Main.IsItDay() && Main.rand.NextBool(45) && !Main.gamePaused)
+            if (closer && Main._shouldUseWindyDayMusic && Main.IsItDay() && Main.rand.NextBool(45) && !Main.gamePaused && Lighting.Brightness(i, j) >= 0.3f)
             {
                 Gore.NewGore(new EntitySource_TileUpdate(i, j), new Vector2(i * 16f, j * 16f), new Vector2(Main.windSpeedCurrent * 0.005f, Main.rand.NextFloat(-0.025f, -0.125f)), GoreType<OxeyePetal>(), 1f);
             }

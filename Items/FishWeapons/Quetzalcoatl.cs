@@ -422,7 +422,7 @@ namespace GoldLeaf.Items.FishWeapons
                     }
                 }
 
-                for (int i = 0; i < 200; i++)
+                /*for (int i = 0; i < 200; i++)
                 {
                     float range = Vector2.Distance(Projectile.Center, Main.npc[i].Center);
                     if (range < targetDistance && range < homingRange && Main.npc[i].active && Main.npc[i].CanBeChasedBy(Projectile, false))
@@ -430,7 +430,7 @@ namespace GoldLeaf.Items.FishWeapons
                         targetEnemy = i;
                         targetDistance = range;
                     }
-                }
+                }*/
                 if (targetProjectile != -1 && Collision.CanHit(Projectile.position, Projectile.width, Projectile.height, 
                     Main.projectile[targetProjectile].position, Main.projectile[targetProjectile].width, Main.projectile[targetProjectile].height))
                 {
