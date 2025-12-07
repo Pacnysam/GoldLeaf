@@ -14,11 +14,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.Audio;
 using ReLogic.Content;
-using GoldLeaf.Items.Grove.Boss;
 using Terraria.Graphics.Shaders;
 using Terraria.GameContent.Drawing;
 using GoldLeaf.Core.CrossMod;
 using static GoldLeaf.Core.CrossMod.RedemptionHelper;
+using GoldLeaf.Items.Grove.Boss.AetherComet;
 
 
 namespace GoldLeaf.Items.Grove

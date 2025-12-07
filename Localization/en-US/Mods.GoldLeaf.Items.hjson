@@ -347,7 +347,7 @@ FrostyRobe: {
 	Tooltip:
 		'''
 		{$CommonItemTooltip.IncreasesMaxManaBy}
-		{$CommonItemTooltip.PercentIncreasedMagicDamage@1}
+		{$CommonItemTooltip.FlatIncreasedMagicDamage@1}
 		'''
 }
 

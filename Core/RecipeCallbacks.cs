@@ -2,7 +2,7 @@
 using GoldLeaf.Items.Blizzard;
 using GoldLeaf.Items.Blizzard.Armor;
 using GoldLeaf.Items.Grove;
-using GoldLeaf.Items.Grove.Boss;
+using GoldLeaf.Items.Grove.Boss.AetherComet;
 using GoldLeaf.Items.Sky;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -68,7 +68,7 @@ namespace GoldLeaf.Core
                 player.GetModPlayer<GoldLeafPlayer>().craftTimer = 15;
 
                 Gore gore = Gore.NewGoreDirect(null, player.Top, Vector2.Zero, GoreType<ConstellationGore>());
-                gore.rotation = MathHelper.ToRadians(Main.rand.NextFloat(380, 780)).RandomNegative();
+                gore.rotation = MathHelper.ToRadians(Main.rand.NextFloat(380, 780)).RandNeg();
                 gore.velocity.X *= 0.65f;
                 gore.velocity.Y = Main.rand.NextFloat(-8.5f, -6.5f);
                 gore.frame = 1;
@@ -77,7 +77,7 @@ namespace GoldLeaf.Core
                 for (int i = 0; i < 5; i++)
                 {
                     Gore gore2 = Gore.NewGoreDirect(null, player.Top, Vector2.Zero, GoreType<ConstellationGore>());
-                    gore2.rotation = MathHelper.ToRadians(Main.rand.NextFloat(420, 820)).RandomNegative();
+                    gore2.rotation = MathHelper.ToRadians(Main.rand.NextFloat(420, 820)).RandNeg();
                     gore2.velocity.X *= 1.45f;
                     gore2.velocity.Y = Main.rand.NextFloat(-4f, -1.5f);
                     gore2.frame = 0;

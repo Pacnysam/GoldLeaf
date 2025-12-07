@@ -5,4 +5,7 @@
     <AssemblyName>GoldLeaf</AssemblyName>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Effects\Gores\" />
+  </ItemGroup>
 </Project>

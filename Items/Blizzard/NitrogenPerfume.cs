@@ -83,7 +83,7 @@ namespace GoldLeaf.Items.Blizzard
                 FrostNPC.AddFrost(target, 8);
                 target.GetGlobalNPC<FrostNPC>().frostVisualTime = 0;
 
-                //target.AddBuff(BuffID.Frozen, TimeToTicks(2.5f));
+                //target.AddBuff(BuffType<FreezeBuff>(), TimeToTicks(2.5f));
                 //SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Frost") { Pitch = 0.45f, PitchVariance = 0.6f, Volume = 0.85f }, target.Center);
 
                 /*int smokeCount = Main.rand.Next(50, 75);

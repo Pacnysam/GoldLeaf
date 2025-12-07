@@ -8,12 +8,6 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Localization;
-using GoldLeaf.Effects.Gores;
-using GoldLeaf.Items.Grove;
-using Terraria.GameContent.Drawing;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
-using System.Diagnostics.Metrics;
 using ReLogic.Content;
 using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
@@ -65,27 +59,6 @@ namespace GoldLeaf.Items.Dungeon
             return false;
         }
 
-        /*public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
-		{
-			Texture2D tex = glowTex.Value;
-			spriteBatch.Draw
-			(
-				tex,
-				new Vector2
-				(
-					Item.position.X - Main.screenPosition.X + Item.width * 0.5f,
-					Item.position.Y - Main.screenPosition.Y + Item.height - tex.Height * 0.5f
-				),
-				new Rectangle(0, 0, tex.Width, tex.Height),
-                ColorHelper.AdditiveWhite(),
-				rotation,
-				tex.Size() * 0.5f,
-				scale,
-				SpriteEffects.None,
-				0f
-			);
-        }*/
-		
 		public override void AddRecipes() 
 		{
 			Recipe recipe = CreateRecipe();
@@ -222,7 +195,7 @@ namespace GoldLeaf.Items.Dungeon
 
 		public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D tex = Request<Texture2D>("GoldLeaf/Textures/Vortex1").Value;
+            Texture2D tex = Request<Texture2D>("GoldLeaf/Textures/Vortex").Value;
             Texture2D tex2 = TextureAssets.Projectile[Projectile.type].Value;
             //Main.spriteBatch.Draw(glowTex, new Vector2(Projectile.position.X - Main.screenPosition.X + Projectile.width * 0.5f, Projectile.position.Y - Main.screenPosition.Y + Projectile.height - glowTex.Height * 0.5f + 2f), Color.White, );
 
@@ -306,7 +279,7 @@ namespace GoldLeaf.Items.Dungeon
 
     /*public class WhirlpoolGore : ModGore
     {
-        public override string Texture => "GoldLeaf/Textures/Vortex1";
+        public override string Texture => "GoldLeaf/Textures/Vortex";
 
         public override Color? GetAlpha(Gore gore, Color lightColor)
         {
@@ -341,7 +314,7 @@ namespace GoldLeaf.Items.Dungeon
 
     /*public class WhirlpoolBurst : ModProjectile
     {
-        public override string Texture => "GoldLeaf/Textures/Vortex1";
+        public override string Texture => "GoldLeaf/Textures/Vortex";
 
         public override void SetDefaults()
         {

@@ -4,8 +4,8 @@ using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.ModLoader;
-using GoldLeaf.Items.Grove.Boss;
 using Terraria.ID;
+using GoldLeaf.Items.Grove.Boss.AetherComet;
 
 namespace GoldLeaf.Effects.Dusts
 {

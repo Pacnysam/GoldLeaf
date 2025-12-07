@@ -106,3 +106,18 @@ QuetzalBuff: {
 	DisplayName: Serpentine Agility
 	Description: Movement speed and is increased
 }
+
+WaterPaladinBuff: {
+	DisplayName: Water Paladin
+	Description: An old friend in a new form!
+}
+
+ColdSlowBuff: {
+	DisplayName: Cold Slow Buff
+	Description: Mods.GoldLeaf.Buffs.ColdSlowBuff.Description
+}
+
+FreezeBuff: {
+	DisplayName: Freeze Buff
+	Description: Mods.GoldLeaf.Buffs.FreezeBuff.Description
+}

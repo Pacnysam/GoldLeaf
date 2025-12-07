@@ -359,7 +359,7 @@ namespace GoldLeaf.Items.Blizzard
             if (hit.Crit)
                 FrostNPC.AddFrost(target);
 
-            target.AddBuff(BuffID.Chilled, TimeToTicks(3.5f));
+            target.AddBuff(BuffType<ColdSlowBuff>(), TimeToTicks(3.5f));
         }
 
         public override bool PreDraw(ref Color lightColor)

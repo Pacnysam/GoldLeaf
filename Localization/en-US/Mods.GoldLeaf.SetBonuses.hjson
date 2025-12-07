@@ -1,8 +1,7 @@
 FrostySet:
 	'''
-	{$CommonItemTooltip.PercentIncreasedMagicCritDamage}
-	Double Tap {1} to snap freeze an enemy near the cursor
-	Snap frozen enemies die when struck below at 25% health
+	Double tap {0} to snap freeze an enemy near the cursor
+	Snap frozen enemies have reduced defense and shatter when struck below 20% health
 	'''
 Echobark: Gains bonus defense when struck
 EchobarkDefense: "{0}[c/78BE78:(+{1})] defense"

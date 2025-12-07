@@ -22,29 +22,6 @@ namespace GoldLeaf.Core
 {
     public class GoldLeafBuff : GlobalBuff
     {
-        public override void SetStaticDefaults()
-        {
-            Main.pvpBuff[BuffID.Chilled] = true;
-        }
-
-        public override void Update(int type, Player player, ref int buffIndex)
-        {
-
-        }
-
-        public override void Update(int type, NPC npc, ref int buffIndex)
-        {
-            if (type == BuffID.Chilled)
-            {
-                npc.GetGlobalNPC<GoldLeafNPC>().movementSpeed *= 0.5f;
-            }
-            if (type == BuffID.Frozen)
-            {
-                npc.GetGlobalNPC<GoldLeafNPC>().stunned = true;
-                npc.GetGlobalNPC<GoldLeafNPC>().movementSpeed *= 0f;
-            }
-        }
-
         public override void ModifyBuffText(int type, ref string buffName, ref string tip, ref int rare)
         {
             /*#region Vanilla Items

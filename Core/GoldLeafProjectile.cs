@@ -64,35 +64,7 @@ namespace GoldLeaf.Core
                 lifestealMax--;
                 player.Heal(lifesteal);
             }
-
-            if (projectile.type == ProjectileID.SnowBallFriendly)
-            {
-                target.AddBuff(BuffID.Chilled, Helper.TimeToTicks(3));
-            }
         }
-
-        /*public override void OnHitPlayer(Projectile projectile, Player target, Player.HurtInfo info)
-        {
-            if (projectile.type == ProjectileID.SnowBallFriendly || projectile.type == ProjectileID.SnowBallHostile)
-            {
-                target.AddBuff(BuffID.Chilled, 60, false);
-            }
-        }*/
-
-        /*public override void SetDefaults(Projectile entity)
-        {
-            if (entity.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType != DamageClass.Default)
-            {
-                if (GetInstance<MiscConfig>().ThrowerSupport)
-                {
-                    entity.DamageType = DamageClass.Throwing;
-                }
-                else
-                {
-                    entity.DamageType = entity.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType;
-                }
-            }
-        }*/
 
         public override void AI(Projectile projectile)
         {

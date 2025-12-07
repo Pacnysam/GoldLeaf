@@ -45,27 +45,31 @@ namespace GoldLeaf.Items.Blizzard
 
         public override void SetDefaults(NPC entity)
         {
-            entity.buffImmune[BuffID.Chilled] = !entity.CanBeStunned();
-            entity.buffImmune[BuffID.Frozen] = !entity.CanBeStunned();
+            entity.buffImmune[BuffType<ColdSlowBuff>()] = !entity.CanBeStunned();
+            entity.buffImmune[BuffType<FreezeBuff>()] = !entity.CanBeStunned();
         }
 
         public override void PostAI(NPC npc)
         {
             frozenNumeralSize = (frozenNumeralSize > 1f ? frozenNumeralSize * 0.9f : 1f);
 
-            if (frost >= 8 && !npc.buffImmune[BuffID.Frozen])
+            if (frost >= 8 && !npc.buffImmune[BuffType<FreezeBuff>()])
             {
                 //if (Main.netMode != NetmodeID.MultiplayerClient)
                     //npc.netUpdate = true;
 
-                npc.AddBuff(BuffID.Frozen, Math.Clamp(FREEZETIME - defrostTimer / 2, 30, FREEZETIME));
+                npc.AddBuff(BuffType<FreezeBuff>(), Math.Clamp(FREEZETIME - defrostTimer / 2, 30, FREEZETIME));
                 
                 if (Main.netMode != NetmodeID.Server) 
                 {
                     if (defrostTimer <= 180)
-                        SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Frost") { Volume = 1.15f, PitchVariance = 0.6f }, npc.Center);
+                    {
+                        SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/FrostFreeze") { Volume = 1.25f, PitchVariance = 0.4f }, npc.Center);
+                        SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Frost") { Volume = 0.7f, PitchVariance = 0.6f }, npc.Center);
+                    }
                     else
-                        SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Monolith/Chop") { Volume = 0.75f, PitchVariance = 0.4f }, npc.Center);
+                        SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Monolith/Chop") { Volume = 0.45f, PitchVariance = 0.4f }, npc.Center);
+                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Frost") { Volume = 0.7f, PitchVariance = 0.6f }, npc.Center);
                 }
 
                 defrostTimer = FREEZETIME * 2;
@@ -86,11 +90,11 @@ namespace GoldLeaf.Items.Blizzard
                     Dust dust = Dust.NewDustDirect(npc.Center, 0, 0, DustType<SnowCloud>());
                     dust.velocity = Main.rand.NextVector2Circular((npc.width / 5.5f), (npc.height / 6f)) * Main.rand.NextFloat(0.5f, 1f);
                     dust.scale = Main.rand.NextFloat(0.65f, 1.15f);
-                    dust.alpha = 80 + Main.rand.Next(60);
+                    dust.alpha = 40 + Main.rand.Next(80);
                     dust.rotation = Main.rand.NextFloat(-6.28f, 6.28f);
                 }
             }
-            else if (defrostTimer > 0 && !npc.HasBuff(BuffID.Frozen))
+            else if (defrostTimer > 0 && !npc.HasBuff(BuffType<FreezeBuff>()))
             {
                 defrostTimer--;
             }
@@ -104,7 +108,7 @@ namespace GoldLeaf.Items.Blizzard
 
         public static void AddFrost(NPC npc, int amount = 1)
         {
-            if (!npc.HasBuff(BuffID.Frozen) && !npc.buffImmune[BuffID.Frozen])
+            if (!npc.HasBuff(BuffType<FreezeBuff>()) && !npc.buffImmune[BuffType<FreezeBuff>()])
             {
                 npc.GetGlobalNPC<FrostNPC>().frost += amount;
                 
@@ -122,27 +126,86 @@ namespace GoldLeaf.Items.Blizzard
                     packet.Write((byte)npc.GetGlobalNPC<FrostNPC>().defrostTimer);
                     packet.Send();
                 }
-                //if (Main.netMode != NetmodeID.MultiplayerClient)
-                //npc.netUpdate = true;
             }
         }
 
         public override void DrawEffects(NPC npc, ref Color drawColor)
         {
-            if (npc.HasBuff(BuffID.Chilled)) drawColor = NPC.buffColor(drawColor, 79f / 255, 180f / 255, 1f, 1f);
-            if (npc.HasBuff(BuffID.Frozen)) drawColor = NPC.buffColor(drawColor, 30f / 255, 90f / 255, 192f / 255, 1f);
+            if (npc.HasBuff(BuffType<ColdSlowBuff>())) 
+            {
+                drawColor = NPC.buffColor(drawColor, 79f / 255, 180f / 255, 1f, 1f); 
+            }
+            if (npc.HasBuff(BuffType<FreezeBuff>()))
+            {
+                drawColor = NPC.buffColor(drawColor, 30f / 255, 90f / 255, 192f / 255, 1f);
+            }
         }
 
         public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            int frostAmount = ((!npc.HasBuff(BuffID.Frozen) && frost > 0) && frostVisualTime > -30 ? frost : 8);
+            int frostAmount = ((!npc.HasBuff(BuffType<FreezeBuff>()) && frost > 0) && frostVisualTime > -30 ? frost : 8);
             Rectangle rect = new(0, frostAmount * 16, 32, 16);
 
             float yOffset = npc.HasBuff(BuffType<SnapFreezeBuff>()) ? 6 : 0;
 
-            if ((!npc.HasBuff(BuffID.Frozen) && frost > 0) || frostVisualTime > -30)
+            if ((!npc.HasBuff(BuffType<FreezeBuff>()) && frost > 0) || frostVisualTime > -30)
             {
                 spriteBatch.Draw(numeralTex.Value, npc.Top + new Vector2(0, -16 + yOffset) - screenPos, rect, Color.White with { A = 160 } * MathHelper.Clamp(frost, 0.625f + (float)(Math.Sin(GoldLeafWorld.rottime) * 0.125f), 1f) * MathHelper.Clamp((frostVisualTime + 30) / 60f, 0f, 1f), 0, rect.Size() / 2, frozenNumeralSize + (float)-(Math.Sin(GoldLeafWorld.rottime) * 0.1f), SpriteEffects.None, 0f);
+            }
+        }
+    }
+
+    public class ColdSlowBuff : ModBuff
+    {
+        public override string Texture => "Terraria/Images/Buff_" + BuffID.Chilled;
+
+        public override void SetStaticDefaults()
+        {
+            Main.debuff[Type] = true;
+            Main.buffNoSave[Type] = true;
+
+            BuffID.Sets.CanBeRemovedByNetMessage[Type] = true;
+        }
+
+        public override void Update(NPC npc, ref int buffIndex)
+        {
+            npc.GetGlobalNPC<GoldLeafNPC>().movementSpeed *= 0.5f;
+
+            if (Main.rand.NextBool(8))
+            {
+                Dust dust = Dust.NewDustDirect(npc.Center, 0, 0, DustType<SnowCloud>());
+                dust.velocity = Main.rand.NextVector2Circular((npc.width / 4.5f), (npc.height / 5f)) * Main.rand.NextFloat(0.2f, 0.4f);
+                dust.scale = Main.rand.NextFloat(0.95f, 1.65f);
+                dust.alpha = 80 + Main.rand.Next(60);
+                dust.rotation = Main.rand.NextFloat(-6.28f, 6.28f);
+            }
+        }
+    }
+
+    public class FreezeBuff : ModBuff
+    {
+        public override string Texture => "Terraria/Images/Buff_" + BuffID.Frozen;
+
+        public override void SetStaticDefaults()
+        {
+            Main.debuff[Type] = true;
+            Main.buffNoSave[Type] = true;
+
+            BuffID.Sets.CanBeRemovedByNetMessage[Type] = true;
+        }
+
+        public override void Update(NPC npc, ref int buffIndex)
+        {
+            npc.GetGlobalNPC<GoldLeafNPC>().movementSpeed *= 0f;
+            npc.GetGlobalNPC<GoldLeafNPC>().stunned = true;
+
+            if (Main.rand.NextBool(3))
+            {
+                Dust dust = Dust.NewDustDirect(npc.Center, 0, 0, DustType<SnowCloud>());
+                dust.velocity = Main.rand.NextVector2Circular((npc.width / 4.5f), (npc.height / 5f)) * Main.rand.NextFloat(0.2f, 0.4f);
+                dust.scale = Main.rand.NextFloat(0.95f, 1.65f);
+                dust.alpha = 70 + Main.rand.Next(40);
+                dust.rotation = Main.rand.NextFloat(-6.28f, 6.28f);
             }
         }
     }

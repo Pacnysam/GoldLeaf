@@ -170,13 +170,13 @@ namespace GoldLeaf.Items.Blizzard
 
         public override bool? CanCutTiles() => false;
         public override bool MinionContactDamage() => false;
-
+        
         private bool NotFrozen(Entity otherEntity, int currentTarget)
         {
             if (otherEntity is not NPC)
                 return false;
 
-            return !(otherEntity as NPC).HasBuff(BuffID.Frozen);
+            return !(otherEntity as NPC).HasBuff(BuffType<FreezeBuff>());
         }
 
         public override void AI()

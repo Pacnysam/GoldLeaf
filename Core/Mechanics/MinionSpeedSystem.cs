@@ -11,7 +11,6 @@ using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
 using GoldLeaf.Tiles.Decor;
-using GoldLeaf.Core;
 using GoldLeaf.Items.Grove;
 using GoldLeaf.Items.Blizzard;
 using System;
@@ -21,28 +20,27 @@ using GoldLeaf.Items.Potions;
 using System.Collections.Generic;
 using GoldLeaf.Items.Blizzard.Armor;
 
-namespace GoldLeaf.Core
+namespace GoldLeaf.Core.Mechanics
 {
     public class MinionSpeedPlayer : ModPlayer 
     {
         public float summonSpeed = 0f;
+
         public float minionSpeed = 0f;
         public float sentrySpeed = 0f;
-        public float familiarSpeed = 0f;
 
         public override void PostUpdateMiscEffects()
         {
             minionSpeed += summonSpeed;
             sentrySpeed += summonSpeed;
-            familiarSpeed += summonSpeed;
         }
 
         public override void ResetEffects()
         {
+            summonSpeed = 0f;
+
             minionSpeed = 0f;
             sentrySpeed = 0f;
-            familiarSpeed = 0f;
-            summonSpeed = 0f;
         }
     }
 
@@ -98,20 +96,26 @@ namespace GoldLeaf.Core
                         projectile.extraUpdates++; extraUpdateCache++;
                     }
                 }
-                /*if (familiar)
-                {
-                    familiarSpeedCounter += player.GetModPlayer<MinionSpeedPlayer>().familiarSpeed;
-                    projectile.position += projectile.velocity * player.GetModPlayer<MinionSpeedPlayer>().familiarSpeed;
-
-                    for (; familiarSpeedCounter >= 1; familiarSpeedCounter--)
-                    {
-                        projectile.netUpdate = true;
-                        projectile.extraUpdates++; extraUpdateCache++;
-                    }
-                }*/
             }
 
             return true;
+        }
+
+        public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            projectile.TryGetOwner(out Player player);
+
+            if (player != null && ProjectileSets.summonSpeedImmune[projectile.type]) 
+            {
+                if (projectile.minion)
+                {
+                    hit.SourceDamage += (int)(hit.SourceDamage * player.GetModPlayer<MinionSpeedPlayer>().minionSpeed);
+                }
+                if (projectile.sentry)
+                {
+                    hit.SourceDamage += (int)(hit.SourceDamage * player.GetModPlayer<MinionSpeedPlayer>().sentrySpeed);
+                }
+            }
         }
     }
 }

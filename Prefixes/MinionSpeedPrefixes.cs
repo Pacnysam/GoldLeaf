@@ -10,7 +10,7 @@ using Terraria.Enums;
 using Terraria.Localization;
 using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
-using GoldLeaf.Core;
+using GoldLeaf.Core.Mechanics;
 
 namespace GoldLeaf.Prefixes
 {

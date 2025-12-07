@@ -11,13 +11,13 @@ using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
 using GoldLeaf.Tiles.Decor;
-using GoldLeaf.Core;
 using GoldLeaf.Items.Grove;
 using GoldLeaf.Items.Blizzard;
 using System;
 using Terraria.ModLoader.IO;
 using System.IO;
 using GoldLeaf.Core.CrossMod;
+using GoldLeaf.Core.Mechanics;
 
 namespace GoldLeaf.Items.Potions
 {

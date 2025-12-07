@@ -3,6 +3,7 @@ using GoldLeaf.Effects.Dusts;
 using GoldLeaf.Items.Blizzard.Armor;
 using GoldLeaf.Items.Granite;
 using GoldLeaf.Items.Grove;
+using GoldLeaf.Prefixes;
 using GoldLeaf.Tiles.Grove;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,10 +12,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Transactions;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.Graphics;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Renderers;
 using Terraria.Graphics.Shaders;
@@ -50,15 +54,41 @@ namespace GoldLeaf.Items.Vanity.Watcher
 
             Item.vanity = true;
         }
-    }
+        
+        public int glowSlot = -1;
+        public override void Load()
+        {
+            if (Main.netMode != NetmodeID.Server)
+                glowSlot = EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Head}Glow", EquipType.Head, this, "WatcherHeadGlow");
+        }
+        public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor)
+        {
+            //glowMask = EquipLoader.GetEquipSlot(Mod, "WatcherHeadGlow", EquipType.Head);
+            glowMaskColor = Color.White.Alpha(MathF.Sin(Main.GlobalTimeWrappedHourly) * 0.5f + 0.5f) * 0.35f;
+        }
+    } //TODO: Glowmasks
 
     [AutoloadEquip(EquipType.Body)]
     public class WatcherCloak : ModItem
     {
+        public int glowSlot = -1;
         public override void Load()
         {
             if (Main.netMode != NetmodeID.Server)
+            {
                 EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Legs}", EquipType.Legs, this);
+                glowSlot = EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Legs}Glow", EquipType.Legs, this, "WatcherLegsGlow");
+                //frontSlot = EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Front}", EquipType.Front, this, "WatcherFront");
+            }
+        }
+
+        public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor)
+        {
+            if (shadow == 0)
+            {
+                //glowMask = EquipLoader.GetEquipSlot(Mod, "WatcherLegsGlow", EquipType.Legs);
+                glowMaskColor = Color.White.Alpha(1f - (MathF.Sin(Main.GlobalTimeWrappedHourly) * 0.5f + 0.5f)) * 0.35f;
+            }
         }
 
         public override void SetMatch(bool male, ref int equipSlot, ref bool robes)
@@ -67,8 +97,6 @@ namespace GoldLeaf.Items.Vanity.Watcher
 
             equipSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Legs);
         }
-
-        public override void ArmorSetShadows(Player player) => player.armorEffectDrawOutlines = !player.HasBuff(BuffType<SnapFreezeBuff>());
 
         public override bool IsVanitySet(int head, int body, int legs)
         {
@@ -83,6 +111,8 @@ namespace GoldLeaf.Items.Vanity.Watcher
             ArmorIDs.Body.Sets.HidesHands[Item.bodySlot] = true;
             ArmorIDs.Body.Sets.DisableHandOnAndOffAccDraw[Item.bodySlot] = true;
             ArmorIDs.Body.Sets.DisableBeltAccDraw[Item.bodySlot] = true;
+
+            //ArmorIDs.Body.Sets.IncludeCapeFrontAndBack[Item.bodySlot] = new ArmorIDs.Body.Sets.IncludeCapeFrontAndBackInfo { backCape = glowSlot, frontCape = frontSlot };
         }
 
         public override void SetDefaults()
@@ -96,153 +126,86 @@ namespace GoldLeaf.Items.Vanity.Watcher
             Item.bodySlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Body);
             Item.vanity = true;
         }
-    }
-    
+    } //TODO: Glowmasks
+
     public class WatcherPlayer : ModPlayer
     {
-        public bool watcherDrops = false;
-        public bool watcherCloak = false;
-        public int punchCooldown = 0;
-        public int dustCooldown = 0;
-        public List<Vector2> oldPos = [];
-        public RenderTarget2D target;
-        public bool WatcherSet => watcherDrops && watcherCloak;
+        public bool WatcherDrops => Player.armor[0].type == ItemType<WatcherEyedrops>() && Player.armor[10].type == ItemID.None || Player.armor[10].type == ItemType<WatcherEyedrops>();
+        public bool WatcherCloak => Player.armor[1].type == ItemType<WatcherCloak>() && Player.armor[11].type == ItemID.None || Player.armor[11].type == ItemType<WatcherCloak>();
+        public bool WatcherSet => WatcherDrops && WatcherCloak;
 
-        const int oldPosLength = 15;
-        public void Load(Mod mod)
-        {
-            if (!Main.dedServ)
-            {
-                target = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
-            }
-        }
+        private float ShadowOpacity = 0f;
+        private Color CustomShadowColor = Color.White;
 
-        public override void ResetEffects()
-        {
-            watcherDrops = Player.armor[0].type == ItemType<WatcherEyedrops>() && Player.armor[10].type == ItemID.None || Player.armor[10].type == ItemType<WatcherEyedrops>();
-            watcherCloak = Player.armor[1].type == ItemType<WatcherCloak>() && Player.armor[11].type == ItemID.None || Player.armor[11].type == ItemType<WatcherCloak>();
-        }
-
-        public override void PreUpdate()
-        {
-            if (watcherCloak && punchCooldown > 0) punchCooldown--;
-            if (WatcherSet && dustCooldown > 0) dustCooldown--;
-            
-            if (Player.velocity.Length() > 0)
-                oldPos.Add(Player.Center);
-
-            if (oldPos.Count > oldPosLength || (oldPos.Count > 0 && Player.velocity.Length() <= 1))
-            {
-                oldPos.RemoveAt(0);
-            }
-        }
-
-        public override void Load()
-        {
-            On_Main.DrawPlayers_AfterProjectiles += WatcherAfterImage;
-        }
-        public override void Unload()
-        {
-            On_Main.DrawPlayers_AfterProjectiles -= WatcherAfterImage;
-        }
-
-        private void WatcherAfterImage(On_Main.orig_DrawPlayers_AfterProjectiles orig, Main self)
-        {
-            if (Main.dedServ || Main.spriteBatch == null || Main.gameMenu || Main.graphics.GraphicsDevice == null)
-                return;
-            
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
-            foreach (Player player in Main.player.Where(x => x.active && x != null))
-            {
-                if (!player.dead && player.GetModPlayer<WatcherPlayer>().WatcherSet && !player.outOfRange)
-                {
-                    for (int i = player.GetModPlayer<WatcherPlayer>().oldPos.Count - 1; i > 0; i--)
-                    {
-                        Color color = Color.Lerp(new Color(145, 41, 184), new Color(47, 41, 76), i / (float)oldPosLength);
-                        Vector2 offset = new(player.width / 2, player.height / 2);
-
-                        if (player.dye[2].type != ItemID.None)
-                        {
-                            color = Color.White;
-                        }
-
-                        DrawData data = new(Request<Texture2D>("GoldLeaf/Textures/Flares/Flare0").Value, player.GetModPlayer<WatcherPlayer>().oldPos[i] - Main.screenPosition, null, color * MathHelper.Lerp(0f, 1f, (i / (float)oldPosLength) * (player.GetModPlayer<WatcherPlayer>().oldPos.Count / (float)oldPosLength)) * 0.725f, player.fullRotation, Request<Texture2D>("GoldLeaf/Textures/Flares/Flare0").Size() / 2, new Vector2(0.75f, 1f) * 0.45f, SpriteEffects.None, 0f);
-                        DrawData data2 = new(Request<Texture2D>("GoldLeaf/Textures/Glow0").Value, player.GetModPlayer<WatcherPlayer>().oldPos[i] - Main.screenPosition, null, color * MathHelper.Lerp(0.2f, 1f, (i / (float)oldPosLength) * (player.GetModPlayer<WatcherPlayer>().oldPos.Count / (float)oldPosLength)) * 0.35f, player.fullRotation, Request<Texture2D>("GoldLeaf/Textures/Glow0").Size() / 2, 0.85f, SpriteEffects.None, 0f);
-
-                        if (player.dye[2].type != ItemID.None)
-                        {
-                            //data.color = Color.White * (i / (float)oldPosLength) * (player.GetModPlayer<WatcherPlayer>().oldPos.Count / (float)oldPosLength) * 0.725f;
-                            //data2.color = Color.White * (i / (float)oldPosLength) * (player.GetModPlayer<WatcherPlayer>().oldPos.Count / (float)oldPosLength) * 0.35f;
-                            //GameShaders.Armor.GetShaderFromItemId(player.dye[2].type).Apply(player, data);
-                            GameShaders.Armor.GetSecondaryShader(player.dye[2].dye, player).Apply(player, data);
-                            GameShaders.Armor.GetSecondaryShader(player.dye[2].dye, player).Apply(player, data2);
-                        }
-
-                        data.Draw(Main.spriteBatch);
-                        data2.Draw(Main.spriteBatch);
-
-                        //Main.spriteBatch.Draw(Request<Texture2D>("GoldLeaf/Textures/Flares/FlareSmall").Value, player.GetModPlayer<WatcherPlayer>().oldPos[i] - Main.screenPosition, null, color * (i / (float)oldPosLength) * (player.GetModPlayer<WatcherPlayer>().oldPos.Count / (float)oldPosLength), player.fullRotation, Request<Texture2D>("GoldLeaf/Textures/Flares/FlareSmall").Size()/2, 1f, SpriteEffects.None, 0f);
-
-                        //Main.spriteBatch.Draw(player.GetModPlayer<WatcherPlayer>().target, player.GetModPlayer<WatcherPlayer>().oldPos[i] - Main.screenPosition, player.Size.ToRectangle(), color, player.fullRotation, Vector2.Zero, 1f + (1f - Main.GameZoomTarget) * 0.5f, SpriteEffects.None, 0f);
-                    }
-                }
-            }
-
-            /*for (int k = 0; k < 255; k++)
-            {
-                Player player = Main.player[k];
-                //WatcherPlayer truthPlayer = player.GetModPlayer<WatcherPlayer>();
-
-                if (!Main.gameMenu && player.active && !player.dead && player.GetModPlayer<WatcherPlayer>().WatcherSet && !player.outOfRange)
-                {
-                    for (int i = player.GetModPlayer<WatcherPlayer>().oldPos.Count - 1; i > 0; i--)
-                    {
-                        Color color = Color.Lerp(new Color(186, 91, 232), new Color(47, 41, 76), i * 0.1f);
-                        
-                        Main.spriteBatch.Draw(player.GetModPlayer<WatcherPlayer>().target, player.GetModPlayer<WatcherPlayer>().oldPos[i] - Main.screenPosition, player.Size.ToRectangle(), color, player.fullRotation, Vector2.Zero, 1f + (1f - Main.GameZoomTarget) * 0.5f, SpriteEffects.None, 0f);
-                    }
-                }
-            }*/
-            Main.spriteBatch.End();
-            orig.Invoke(self);
-        }
-
-        public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
-        {
-            /*if (drawInfo.drawPlayer.GetModPlayer<WatcherPlayer>().WatcherSet && drawInfo.shadow > 0) 
-            {
-                drawInfo.colorArmorBody = drawInfo.colorArmorHead = drawInfo.colorArmorLegs = drawInfo.colorBodySkin = drawInfo.colorDisplayDollSkin = drawInfo.colorElectricity =
-                drawInfo.colorEyes = drawInfo.colorEyeWhites = drawInfo.colorHead = new Color(145, 41, 184);
-            }*/
-        }
-
-        /*public override bool Shoot(Item item, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-        {
-            if (watcherCloak && punchCooldown <= 0 && velocity.Length() >= 8f)
-            {
-                Vector2 vectorToCursor = Main.screenPosition + new Vector2(Main.mouseX, Main.mouseY);
-                Vector2 punchVelocity = Vector2.Normalize(vectorToCursor - Player.Center) * 7.5f;
-
-                Projectile.NewProjectile(source, new Vector2(Player.Center.X, Player.Center.Y + 6), punchVelocity, ProjectileType<WatcherPunch>(), 0, 0, Player.whoAmI, item.useTime);
-                punchCooldown = item.useTime / 2;
-            }
-            return base.Shoot(item, source, position, velocity, type, damage, knockback);
-        }*/
         public override void PostUpdateMiscEffects()
         {
-            if (WatcherSet && dustCooldown <= 0 && Player.statMana > 0 && Player.velocity.Y == 0f && Player.grappling[0] == -1 && Math.Abs(Player.velocity.X) >= 3.2f)
+            ShadowOpacity = MathHelper.Lerp(ShadowOpacity, (Player.velocity.Length() >= 1 && WatcherSet) ? 1f : 0f, 0.15f);
+        }
+
+        public override void DrawPlayer(Camera camera)
+        {
+            if (!WatcherSet)
+                return;
+
+            int skip = 2;
+            int totalShadows = Math.Min(Player.availableAdvancedShadowsCount, 18);
+            CustomShadowColor = new Color(255, 120, 235).Alpha(40) * 0.75f;
+
+            float num7 = Main.GlobalTimeWrappedHourly * 8f;
+            float globalTime = Main.GlobalTimeWrappedHourly;
+            globalTime %= 5f;
+            globalTime /= 2.5f;
+            if (globalTime >= 1f)
             {
-                Vector2 position; if (Player.velocity.X > 0) position = Player.BottomLeft; else position = Player.BottomRight;
-                float manaPercent = (float)Player.statMana / Player.statManaMax2;
-                float manaRatio = (float)Player.statManaMax2 / Player.statMana;
+                globalTime = 2f - globalTime;
+            }
+            globalTime = globalTime * 0.5f + 0.5f;
+            CustomShadowColor = new Color(255, 120, 235).Alpha(40) * 0.7f;
+            for (float k = 0f; k < 1f; k += 0.25f)
+            {
+                Main.PlayerRenderer.DrawPlayer(camera, Player, Player.position + new Vector2(0f, 2.5f /*3f + MathF.Sin(Main.GlobalTimeWrappedHourly * 10f) * 0.5f*/).RotatedBy((k + (num7 * -1.75f)) * ((float)Math.PI * 2f)) * globalTime, Player.fullRotation, Player.fullRotationOrigin, 1, 1f);
+            }
+            CustomShadowColor = Color.White;
 
-                Dust dust = Dust.NewDustPerfect(position, DustType<LightDust>(), new Vector2(0, Main.rand.NextFloat(-2f, -0.5f)), Main.rand.Next(0, 80), new Color(47, 41, 76) * manaPercent, Main.rand.NextFloat(1.75f, 2.5f));
-                dust.shader = GameShaders.Armor.GetSecondaryShader(Player.dye[2].dye, Player);
+            if (ShadowOpacity < 0.01)
+                return;
 
-                if (manaRatio > 20) manaRatio = 20;
-                dustCooldown = (int)(Main.rand.Next(1, 4) + manaRatio);
+            for (int i = totalShadows - totalShadows % skip; i > 0; i -= skip)
+            {
+                EntityShadowInfo advancedShadow = Player.GetAdvancedShadow(i);
+                float shadow = Utils.Remap((float)i / totalShadows, 0, 1, 0.5f, 1f, clamped: true);
+                CustomShadowColor = Color.Black * 0.1f * MathHelper.SmoothStep(0.95f, 0f, i / 28f) * ShadowOpacity;
+                Main.PlayerRenderer.DrawPlayer(camera, Player, advancedShadow.Position, advancedShadow.Rotation, advancedShadow.Origin, shadow);
+                CustomShadowColor = Color.Lerp(new Color(255, 120, 235), new Color(123, 59, 239), i / 14f).Alpha(40) * MathHelper.SmoothStep(0.95f, 0f, i / 28f) * ShadowOpacity;
+                Main.PlayerRenderer.DrawPlayer(camera, Player, advancedShadow.Position, advancedShadow.Rotation, advancedShadow.Origin, shadow);
+            }
+            CustomShadowColor = Color.White;
+        }
+
+        public override void TransformDrawData(ref PlayerDrawSet drawInfo)
+        {
+            Player player = drawInfo.drawPlayer;
+
+            if (CustomShadowColor == Color.White)
+                return;
+
+            for (int i = drawInfo.DrawDataCache.Count - 1; i >= 0; i--)
+            {
+                DrawData value = drawInfo.DrawDataCache[i];
+
+                value.color = CustomShadowColor;
+
+                if (player.dye[2].type != ItemID.None)
+                {
+                    if (!ItemID.Sets.NonColorfulDyeItems.Contains(player.dye[2].type))
+                        value.color = value.color.MultiplyRGBA(Color.White);
+                    
+                    value.shader = player.dye[2].dye;
+                }
+                drawInfo.DrawDataCache[i] = value;
             }
         }
+        
         public override void ModifyHurt(ref Player.HurtModifiers modifiers)
         {
             if (WatcherSet)
@@ -277,36 +240,12 @@ namespace GoldLeaf.Items.Vanity.Watcher
                 SoundEngine.PlaySound(SoundID.Item68, Player.position);
             }
         }
-    }
-
-    /*public class TruthPlayerLayer : PlayerDrawLayer
-    {
-        public override Position GetDefaultPosition() => PlayerDrawLayers.AfterLastVanillaLayer;
-
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.GetModPlayer<WatcherPlayer>().WatcherSet;
-        
-
-        protected override void Draw(ref PlayerDrawSet drawInfo)
-        {
-            Player player = drawInfo.drawPlayer;
-            WatcherPlayer truthPlayer = player.GetModPlayer<WatcherPlayer>();
-
-            if (!Main.gameMenu && player.active && !player.dead && truthPlayer.WatcherSet && !player.outOfRange)
-            {
-                for (int i = truthPlayer.oldPos.Count - 1; i > 0; i--)
-                {
-                    Color color = Color.Lerp(new Color(186, 91, 232), new Color(47, 41, 76), i * 0.1f);
-                    DrawData data = new(truthPlayer.target, truthPlayer.target.Size(), color);
-                    drawInfo.DrawDataCache.Add(data);
-                    //Main.spriteBatch.Draw(truthPlayer.target, truthPlayer.target.Size(), color);
-                    //Main.PlayerRenderer.DrawPlayer(Main.Camera, player, truthPlayer.oldPos[i]- Main.screenPosition, player.fullRotation, player.fullRotationOrigin);
-                }
-            }
-        }
-    }*/
+    } //TODO: movement and idle particles
 
     public class WatcherPunch : ModProjectile
     {
+        public override bool IsLoadingEnabled(Mod mod) => false;
+
         private static Asset<Texture2D> tex;
         private static Asset<Texture2D> glowTex;
 

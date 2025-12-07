@@ -12,7 +12,6 @@ using GoldLeaf.Core;
 using Terraria.Audio;
 using Microsoft.CodeAnalysis;
 using Terraria.GameContent.Drawing;
-using GoldLeaf.Items.Grove.Boss;
 using GoldLeaf.Tiles.Decor;
 using GoldLeaf.Items.Grove.Wood;
 using System.IO;
@@ -25,7 +24,7 @@ using System.Diagnostics.Metrics;
 using GoldLeaf.Core.CrossMod;
 using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
-namespace GoldLeaf.Items.Grove.Boss
+namespace GoldLeaf.Items.Grove.Boss.AetherComet
 {
     public class Aether : ModItem
     {
@@ -222,7 +221,7 @@ namespace GoldLeaf.Items.Grove.Boss
             {
                 vectorToCursor = -vectorToCursor;
             }
-            player.direction = ((!projDirection) ? 1 : (-1));
+            player.direction = !projDirection ? 1 : -1;
             player.itemRotation = vectorToCursor.ToRotation();
             player.itemTime = 15;
             player.itemAnimation = 15;
@@ -249,10 +248,10 @@ namespace GoldLeaf.Items.Grove.Boss
                 }*/
 
                 Projectile.velocity += Vector2.Normalize(Main.MouseWorld - Projectile.Center) * 0.65f;
-                if (Projectile.velocity.Length() > (4f + (Counter * 0.0135f))) Projectile.velocity = Vector2.Normalize(Projectile.velocity) * (4f + (Counter * 0.0135f));
+                if (Projectile.velocity.Length() > 4f + Counter * 0.0135f) Projectile.velocity = Vector2.Normalize(Projectile.velocity) * (4f + Counter * 0.0135f);
 
                 ShootCounter++;
-                if (ShootCounter >= 16 - (ShotsFired / 3))
+                if (ShootCounter >= 16 - ShotsFired / 3)
                 {
                     ShootCounter = 0;
                     float num = 8000f;
@@ -272,7 +271,7 @@ namespace GoldLeaf.Items.Grove.Boss
                         if (flag)
                         {
                             //SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/AetherBeam"), player.Center);
-                            SoundEngine.PlaySound(new("GoldLeaf/Sounds/SE/RoR2/WispDeath") { Volume = 0.45f, Pitch = -0.35f + (ShotsFired * 0.035f) }, Projectile.Center);
+                            SoundEngine.PlaySound(new("GoldLeaf/Sounds/SE/RoR2/WispDeath") { Volume = 0.45f, Pitch = -0.35f + ShotsFired * 0.035f }, Projectile.Center);
                             Vector2 value = Main.npc[num2].Center - Projectile.Center;
                             float num4 = 25f;
                             float num5 = (float)Math.Sqrt((double)(value.X * value.X + value.Y * value.Y));
@@ -281,7 +280,7 @@ namespace GoldLeaf.Items.Grove.Boss
                                 num5 = num4 / num5;
                             }
                             value *= num5;
-                            Projectile.timeLeft += (int)(11 - (ShotsFired / 3));
+                            Projectile.timeLeft += (int)(11 - ShotsFired / 3);
                             //Projectile.damage += 1 + cooldown/120;
 
                             Vector2 perturbedSpeed = value.RotatedByRandom(MathHelper.ToRadians(8f));
@@ -296,11 +295,11 @@ namespace GoldLeaf.Items.Grove.Boss
 
             for (int k = 0; k < 4; k++)
             {
-                float x = (float)Math.Cos(GoldLeafWorld.rottime + (Counter * 0.03f) + k) * Counter / 64f;
-                float y = (float)Math.Sin(GoldLeafWorld.rottime + (Counter * 0.03f) + k) * Counter / 64f;
-                Vector2 pos = (new Vector2(x, y)).RotatedBy(k / 12f * 6.28f);
+                float x = (float)Math.Cos(GoldLeafWorld.rottime + Counter * 0.03f + k) * Counter / 64f;
+                float y = (float)Math.Sin(GoldLeafWorld.rottime + Counter * 0.03f + k) * Counter / 64f;
+                Vector2 pos = new Vector2(x, y).RotatedBy(k / 12f * 6.28f);
 
-                Dust d = Dust.NewDustPerfect(Projectile.Center, DustType<AetherDust>(), pos * (0.3f + Counter * 0.00135f), 0, default, 1f + (Counter * 0.00135f));
+                Dust d = Dust.NewDustPerfect(Projectile.Center, DustType<AetherDust>(), pos * (0.3f + Counter * 0.00135f), 0, default, 1f + Counter * 0.00135f);
                 d.position += d.velocity * 2f;
                 d.velocity += new Vector2(0, Counter * -0.0125f);
             }
@@ -315,7 +314,7 @@ namespace GoldLeaf.Items.Grove.Boss
         {
             Player player = Main.player[Projectile.owner];
 
-            if (!player.channel && Counter <= (THRESHHOLD/2)) target.immune[Projectile.owner] = 0; else target.immune[Projectile.owner] = 15;
+            if (!player.channel && Counter <= THRESHHOLD/2) target.immune[Projectile.owner] = 0; else target.immune[Projectile.owner] = 15;
 
             //target.AddBuff(BuffType<AetherFlameBuff>(), Helper.TimeToTicks(1f));
         }
@@ -328,12 +327,12 @@ namespace GoldLeaf.Items.Grove.Boss
             SoundEngine.PlaySound(new("GoldLeaf/Sounds/SE/RoR2/Aftershock") { Pitch = 1.6f, Volume = 0.7f }, Projectile.Center);
 
             //CameraSystem.AddScreenshake(Main.LocalPlayer, 18 + ShotsFired, Projectile.Center);
-            CameraSystem.QuickScreenShake(Projectile.Center, null, 14.5f + (ShotsFired * 0.25f), 5.5f + (ShotsFired * 0.085f), 26 + (int)(ShotsFired * 1.15f), 1500);
-            CameraSystem.QuickScreenShake(Projectile.Center, 0f.ToRotationVector2(), 14.5f + (ShotsFired * 0.25f), 10f + (ShotsFired * 0.115f), 18 + (int)(ShotsFired * 0.85f), 1500);
+            CameraSystem.QuickScreenShake(Projectile.Center, null, 14.5f + ShotsFired * 0.25f, 5.5f + ShotsFired * 0.085f, 26 + (int)(ShotsFired * 1.15f), 1500);
+            CameraSystem.QuickScreenShake(Projectile.Center, 0f.ToRotationVector2(), 14.5f + ShotsFired * 0.25f, 10f + ShotsFired * 0.115f, 18 + (int)(ShotsFired * 0.85f), 1500);
             
-            float explosionVolume = (Counter >= THRESHHOLD) ? 110f : 30f + (Counter * 0.65f);
+            float explosionVolume = Counter >= THRESHHOLD ? 110f : 30f + Counter * 0.65f;
 
-            for (int j = 0; j < 10 + (explosionVolume / 8f); j++)
+            for (int j = 0; j < 10 + explosionVolume / 8f; j++)
             {
                 var dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustType<AetherSmoke>());
                 dust.velocity = Main.rand.NextVector2Circular(6.75f, 6.75f) * Math.Clamp(explosionVolume / 85f, 1f, 2f);
@@ -365,7 +364,7 @@ namespace GoldLeaf.Items.Grove.Boss
         }
         public override string Texture => Helper.EmptyTexString;
 
-        public float Radius => Helper.BezierEase(1 - (Projectile.timeLeft / 24f)) * Projectile.ai[0];
+        public float Radius => Helper.BezierEase(1 - Projectile.timeLeft / 24f) * Projectile.ai[0];
 
         public override void SetStaticDefaults()
         {
@@ -392,7 +391,7 @@ namespace GoldLeaf.Items.Grove.Boss
 
         public override void OnSpawn(IEntitySource source)
         {
-            for (int i = 0; i < 4 + (Projectile.ai[0]/40); i++)
+            for (int i = 0; i < 4 + Projectile.ai[0]/40; i++)
             {
                 if (Main.myPlayer == Projectile.owner)
                     Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Main.rand.NextFloat(6.28f).ToRotationVector2() * Main.rand.NextFloat(2, 3), ProjectileType<AetherEmber>(), 0, 0, Projectile.owner).scale = Main.rand.NextFloat(0.75f, 1.25f);
@@ -405,7 +404,7 @@ namespace GoldLeaf.Items.Grove.Boss
 
         public override bool PreAI()
         {
-            Projectile.extraUpdates = (Projectile.Counter() <= 8) ? 1 : 0;
+            Projectile.extraUpdates = Projectile.Counter() <= 8 ? 1 : 0;
             return true;
         }
 
@@ -437,7 +436,7 @@ namespace GoldLeaf.Items.Grove.Boss
                     Projectile.position.Y - Main.screenPosition.Y + Projectile.height * 0.5f
                 ),
                 null,
-                new Color(255, 119, 246) { A = 0 } * (1f - (Radius / Projectile.ai[0])),
+                new Color(255, 119, 246) { A = 0 } * (1f - Radius / Projectile.ai[0]),
                 0f,
                 ringTex.Size()/2f,
                 1.075f * ((Radius + 30)/110f),
@@ -455,7 +454,7 @@ namespace GoldLeaf.Items.Grove.Boss
                     Projectile.position.Y - Main.screenPosition.Y + Projectile.height * 0.5f
                 ),
                 null,
-                new Color(228, 139, 245) { A = 0 } * (1f - (Radius / Projectile.ai[0])) * 0.65f,
+                new Color(228, 139, 245) { A = 0 } * (1f - Radius / Projectile.ai[0]) * 0.65f,
                 0f,
                 coronaTex.Size() / 2f,
                 2f * ((Radius + 30) / 90f),
@@ -475,10 +474,10 @@ namespace GoldLeaf.Items.Grove.Boss
                         Projectile.position.Y - Main.screenPosition.Y + Projectile.height * 0.5f
                     ),
                     null,
-                    new Color(255, 231, 206) { A = 0 } * (1f - (Radius / (Projectile.ai[0] * 1.15f))) * 0.45f,
+                    new Color(255, 231, 206) { A = 0 } * (1f - Radius / (Projectile.ai[0] * 1.15f)) * 0.45f,
                     0f,
                     flareTex.Size() / 2f,
-                    2.25f - (1f * ((Radius + 30) / 110f)),
+                    2.25f - 1f * ((Radius + 30) / 110f),
                     //Projectile.scale * 0.1f + (((Radius * Projectile.ai[0]) + 30)/5500f),
                     SpriteEffects.None,
                     0f
@@ -560,7 +559,7 @@ namespace GoldLeaf.Items.Grove.Boss
 
             for (int k = 0; k < Projectile.oldPos.Length; k++)
             {
-                Main.EntitySpriteDraw(tex, Projectile.oldPos[k] + Projectile.Size / 2f - Main.screenPosition, null, new Color(255, 119, 246) { A = 0 } * (Projectile.Opacity - (0.3f * k)), Projectile.rotation, tex.Size() / 2f, new Vector2(1f, Math.Clamp(Projectile.velocity.Length() * 0.75f, 0.35f, 4f) * 0.5f), SpriteEffects.None);
+                Main.EntitySpriteDraw(tex, Projectile.oldPos[k] + Projectile.Size / 2f - Main.screenPosition, null, new Color(255, 119, 246) { A = 0 } * (Projectile.Opacity - 0.3f * k), Projectile.rotation, tex.Size() / 2f, new Vector2(1f, Math.Clamp(Projectile.velocity.Length() * 0.75f, 0.35f, 4f) * 0.5f), SpriteEffects.None);
                 //Main.spriteBatch.Draw(tex, drawPos, null, Color.White * (1.0f - (0.05f * k)), Projectile.rotation + MathHelper.PiOver2, drawOrigin, Projectile.scale * 1.2f - (0.06f * k), SpriteEffects.None, 0f);
             }
             return false;
@@ -854,7 +853,7 @@ namespace GoldLeaf.Items.Grove.Boss
 
         public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
         {
-            if ((Player.HasBuff(BuffType<AetherFlameBuff>())))
+            if (Player.HasBuff(BuffType<AetherFlameBuff>()))
             {
                 for (int j = 0; j < 15; j++)
                 {

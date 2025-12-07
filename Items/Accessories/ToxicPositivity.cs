@@ -149,7 +149,7 @@ namespace GoldLeaf.Items.Accessories
             {
                 genDust = false;
                 playSound = false;
-                damageSource = PlayerDeathReason.ByCustomReason(QuickDeathReason("ToxicPositivity", Player, 3));
+                damageSource = QuickDeathReason("ToxicPositivity", Player, 3);
             }
             return base.PreKill(damage, hitDirection, pvp, ref playSound, ref genDust, ref damageSource);
         }

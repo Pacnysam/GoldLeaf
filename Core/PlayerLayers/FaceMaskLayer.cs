@@ -11,7 +11,6 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
-using GoldLeaf.Items.Armor;
 using Terraria.ID;
 
 namespace GoldLeaf.Core.PlayerLayers

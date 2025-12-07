@@ -22,7 +22,7 @@ using static GoldLeaf.GoldLeaf;
 using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Items.Blizzard.Armor
-{
+{   //TODO: Rework set bonus
     [AutoloadEquip(EquipType.Head)]
     public class FrostyMask : ModItem
     {
@@ -96,7 +96,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(manaMax, magicDamage);
 
         private static readonly int manaMax = 20;
-        private static readonly int magicDamage = 8;
+        private static readonly int magicDamage = 3;
 
         public override void Load()
         {
@@ -123,7 +123,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
         public override void UpdateEquip(Player player)
         {
             player.statManaMax2 += manaMax;
-            player.GetDamage(DamageClass.Magic) += magicDamage * 0.01f;
+            player.GetDamage(DamageClass.Magic).Flat += magicDamage;
         }
 
         public override void SetDefaults()
@@ -134,7 +134,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
             Item.value = Item.sellPrice(0, 0, 80, 0);
             Item.rare = ItemRarityID.Blue;
 
-            Item.defense = 4;
+            Item.defense = 3;
 
             Item.bodySlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Body);
             Item.waistSlot = EquipLoader.GetEquipSlot(Mod, "FrostyBelt", EquipType.Waist);

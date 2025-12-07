@@ -219,14 +219,14 @@ namespace GoldLeaf.Items.Ocean
         public override void PostAI()
         {
             if (Projectile.ai[1] != 0 && Projectile.localAI[1] > 0f)
-                glowStrength = LerpFloat(glowStrength, 1f, 0.075f);
+                glowStrength = MathHelper.Lerp(glowStrength, 1f, 0.075f);
             else
-                glowStrength = LerpFloat(glowStrength, 0f, 0.035f);
+                glowStrength = MathHelper.Lerp(glowStrength, 0f, 0.035f);
 
             if (Projectile.localAI[1] < 0f)
-                evilGlowStrength = LerpFloat(evilGlowStrength, 1f, 0.075f);
+                evilGlowStrength = MathHelper.Lerp(evilGlowStrength, 1f, 0.075f);
             else
-                evilGlowStrength = LerpFloat(evilGlowStrength, 0f, 0.035f);
+                evilGlowStrength = MathHelper.Lerp(evilGlowStrength, 0f, 0.035f);
 
             Color dustColor = Color.Lerp(new Color(63, 74, 255) { A = 80 }, new Color(197, 145, 255) { A = 160 }, (float)(Math.Sin(GoldLeafWorld.rottime * 4f) / 2f) + 0.5f) with { A = 0 } * 0.325f;
             Color evilDustColor = Color.Lerp(new Color(255, 155, 142) { A = 0 }, new Color(222, 41, 52) { A = 0 }, (float)(Math.Sin(GoldLeafWorld.rottime * 4f) / 2f) + 0.5f) with { A = 0 } * 0.325f;
@@ -426,7 +426,7 @@ namespace GoldLeaf.Items.Ocean
             if (!Main.gamePaused)
                 Projectile.frameCounter++;
 
-            if (Projectile.frameCounter >= animationSpeed)
+            if (Projectile.frameCounter >= ((State == Attacking)? 14 - (Projectile.frame * 2) : 6))
             {
                 Projectile.frameCounter = 0;
                 Projectile.frame++;
@@ -537,7 +537,8 @@ namespace GoldLeaf.Items.Ocean
 
                     if (!Main.dedServ)
                     {
-                        SoundEngine.PlaySound(SoundID.DD2_LightningAuraZap with { Volume = 1.45f }, Projectile.Center);
+                        SoundEngine.PlaySound(SoundID.DD2_LightningAuraZap with { Volume = 0.95f }, Projectile.Center);
+                        SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/JellyfishLightning") { Volume = 0.85f, Pitch = -0.3f, PitchVariance = 0.4f }, Projectile.Center);
 
                         for (float k = 0; k < MathHelper.TwoPi; k += Main.rand.NextFloat(0.35f, 0.75f))
                         {

@@ -16,6 +16,7 @@ using ReLogic.Content;
 using Terraria.Localization;
 using GoldLeaf.Items.Vanity.Watcher;
 using Terraria.DataStructures;
+using GoldLeaf.Core.Mechanics;
 namespace GoldLeaf.Items.Accessories
 {
     [AutoloadEquip(EquipType.Neck)]
@@ -85,7 +86,7 @@ namespace GoldLeaf.Items.Accessories
 
         public override void PostUpdateMiscEffects()
         {
-            anxietyIntensity = LerpFloat(anxietyIntensity, 0f, 0.01f);
+            anxietyIntensity = MathHelper.Lerp(anxietyIntensity, 0f, 0.01f);
 
             if (anxietyIntensity > 0f && anxietyIntensity < 1f)
                 anxietyIntensity -= 0.0125f;

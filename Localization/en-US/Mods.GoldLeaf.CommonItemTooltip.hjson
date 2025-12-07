@@ -13,5 +13,10 @@ PercentIncreasedSentrySpeed: "{0}% increased sentry speed"
 IncreasesSummonSpeedByPercent: Increases summon speed by {0}%
 IncreasesMinionSpeedByPercent: Increases minion speed by {0}%
 IncreasesSentrySpeedByPercent: Increases sentry speed by {0}%
+IgnoresDefense: Ignores {0} {^0:point;points} of enemy Defense
 BuffCanBeCleansed: Can be cleansed
 BuffCanNotBeCleansed: Can not be cleansed
+FlatIncreasedMeleeDamage: Increases melee damage by {0}
+FlatIncreasedRangedDamage: Increases ranged damage by {0}
+FlatIncreasedMagicDamage: Increases magic damage by {0}
+FlatIncreasedSummonDamage: Increases summon damage by {0}

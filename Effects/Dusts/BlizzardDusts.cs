@@ -156,9 +156,9 @@ namespace GoldLeaf.Effects.Dusts
 
         public override Color? GetAlpha(Dust dust, Color lightColor)
         {
-            Color color = Color.Lerp(dust.color, new Color(121, 151, 203), 0.05f);
+            Color color = Color.Lerp(Color.White, Color.CornflowerBlue, 0.05f);
 
-            return Color.Lerp(color, lightColor, 0.45f) * (1f - (dust.alpha/255f)) * 0.5f;
+            return Color.Lerp(color * 0.75f, lightColor, 0.65f) * (1f - (dust.alpha/255f)) * 0.5f;
         }
 
         public override bool Update(Dust dust)
@@ -167,12 +167,12 @@ namespace GoldLeaf.Effects.Dusts
 
             if (dust.alpha > 120)
             {
-                dust.velocity *= 0.96f;
+                dust.velocity *= 0.925f;
                 dust.alpha += 4;
             }
             else
             {
-                dust.velocity *= 0.94f;
+                dust.velocity *= 0.935f;
                 dust.alpha += 6;
             }
 
