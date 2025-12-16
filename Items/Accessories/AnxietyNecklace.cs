@@ -93,9 +93,11 @@ namespace GoldLeaf.Items.Accessories
 
             if (anxietyIntensity < 0.025f)
                 anxietyIntensity = 0f;
+        }
 
-            if (Player.dead)
-                anxietyIntensity = 0f;
+        public override void UpdateDead()
+        {
+            anxietyIntensity = 0f;
         }
 
         public override void ModifyHurt(ref Player.HurtModifiers modifiers)
@@ -114,9 +116,8 @@ namespace GoldLeaf.Items.Accessories
                 {
                     //SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/MassAttack/EvilGrunt") { Pitch = 0.3f, PitchVariance = 0.4f, Volume = 0.6f }, Player.MountedCenter);
                     SoundEngine.PlaySound(SoundID.DD2_SkyDragonsFuryShot, Player.MountedCenter);
-                    Player.GetModPlayer<GoldLeafPlayer>().hasDoneHurtSound = true;
+                    //Player.GetModPlayer<GoldLeafPlayer>().hasDoneHurtSound = true;
                 }
-                //Player.GetModPlayer<GoldLeafPlayer>().hasDoneHurtSound = true;
 
                 anxietyIntensity = 2f;
                 Player.AddBuff(BuffType<AnxietyNecklaceBuff>(), TimeToTicks(8));

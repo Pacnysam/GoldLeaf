@@ -649,7 +649,7 @@ namespace GoldLeaf.Items.Ocean
             Projectile.width = Projectile.height = 4;
             Projectile.penetrate = 3;
             Projectile.timeLeft = 360;
-            Projectile.extraUpdates = 2;
+            //Projectile.extraUpdates = 2;
 
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = -1;

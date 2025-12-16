@@ -83,18 +83,18 @@ namespace GoldLeaf.Core
                     #region heat flask
                     if (tile.TileFrameX % 36 == 0 && hellPot && Main.rand.NextBool(40)) //2.5% drop chance checks for hell pots
                     {
-                        Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, ItemType<HeatFlask>(), Main.rand.Next(15, 25));
+                        Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, ItemType<HeatFlask>(), Main.rand.Next(10, 15));
                     }
                     else if (tile.TileFrameX % 36 == 0 && (!dungeonPot && !templePot && !pyramidPot && !spiderPot) && j > Helper.LavaLayer && j < Main.UnderworldLayer && Main.rand.NextBool(50)) //2% drop chance checks for specific pots in lava layer
                     {
-                        Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, ItemType<HeatFlask>(), Main.rand.Next(15, 25));
+                        Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, ItemType<HeatFlask>(), Main.rand.Next(10, 15));
                     }
                     #endregion heat flask
                     break;
                 /*case TileID.ShadowOrbs:
                     if (tile.TileFrameY == 0 && tile.TileFrameX % 36 == 0 && Main.rand.NextBool(4))
                     {
-                        int itemType = (tile.TileFrameX == 0) ? ItemType<Rattlestaff>() : ItemType<LostCreeper>(); //checks for orb or heart
+                        int itemType = (tile.TileFrameX == 0) ? ItemType<BlockheadStaff>() : ItemType<LostCreeper>(); //checks for orb or heart
                         Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, itemType);
                     }
                     break;*/

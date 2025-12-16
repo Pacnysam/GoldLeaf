@@ -26,7 +26,7 @@ using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
 namespace GoldLeaf.Items.Grove.Boss.AetherComet
 {
-    public class Aether : ModItem
+    public class AetherComet : ModItem
     {
         private static Asset<Texture2D> glowTex;
         public override void Load()
@@ -147,14 +147,14 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
             Projectile.DamageType = DamageClass.Magic;
         }
 
-        public override void SendExtraAI(BinaryWriter writer)
+        /*public override void SendExtraAI(BinaryWriter writer)
         {
             writer.Write(Projectile.timeLeft);
         }
         public override void ReceiveExtraAI(BinaryReader reader)
         {
             Projectile.timeLeft = reader.ReadInt32();
-        }
+        }*/
 
         /*public override void PostDraw(Color lightColor)
         {
@@ -360,7 +360,7 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
         {
             ringTex = Request<Texture2D>("GoldLeaf/Textures/Flares/wavering");
             coronaTex = Request<Texture2D>("GoldLeaf/Textures/Flares/aura");
-            flareTex = Request<Texture2D>("GoldLeaf/Textures/Flares/Flare4");
+            flareTex = Request<Texture2D>("GoldLeaf/Textures/Flare");
         }
         public override string Texture => Helper.EmptyTexString;
 
@@ -477,7 +477,7 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
                     new Color(255, 231, 206) { A = 0 } * (1f - Radius / (Projectile.ai[0] * 1.15f)) * 0.45f,
                     0f,
                     flareTex.Size() / 2f,
-                    2.25f - 1f * ((Radius + 30) / 110f),
+                    new Vector2(Math.Clamp(0.75f + (Projectile.Counter() * 0.05f), 0.75f, 2f), Math.Clamp(1.25f - (Projectile.Counter() * 0.1f), 0.5f, 1.25f)) * (2.25f - 1f * ((Radius + 30) / 110f)),
                     //Projectile.scale * 0.1f + (((Radius * Projectile.ai[0]) + 30)/5500f),
                     SpriteEffects.None,
                     0f

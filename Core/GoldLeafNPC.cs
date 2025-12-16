@@ -22,6 +22,7 @@ using Terraria.ModLoader.IO;
 using GoldLeaf.Items.Granite;
 using Terraria.DataStructures;
 using GoldLeaf.Items.Misc;
+using GoldLeaf.Items.Hell;
 
 namespace GoldLeaf.Core
 {
@@ -109,6 +110,8 @@ namespace GoldLeaf.Core
                 case NPCID.Demolitionist:
                     {
                         shop.Add(ItemType<SentryDetonator>());
+                        shop.Add(ItemType<HeatFlask>(), GoldLeafConditions.InLavaLayerHeight, Condition.PreHardmode);
+                        shop.Add(ItemType<HeatFlask>(), Condition.Hardmode);
                         break;
                     }
                 case NPCID.Painter:

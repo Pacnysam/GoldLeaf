@@ -120,7 +120,7 @@ namespace GoldLeaf.Effects.Dusts
         {
             Projectile.tileCollide = true;
             Projectile.friendly = true;
-            Projectile.aiStyle = 1;
+            Projectile.aiStyle = ProjAIStyleID.Arrow;
             Projectile.width = Projectile.height = 12;
             //ProjectileID.Sets.TrailCacheLength[Projectile.type] = 9;
             //ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
@@ -139,6 +139,7 @@ namespace GoldLeaf.Effects.Dusts
             if (Main.rand.NextBool(2))
             {
                 var dust = Dust.NewDustPerfect(Projectile.Center, DustType<HotSmokeFast>(), Main.rand.NextVector2Circular(1.5f, 1.5f));
+                dust.velocity += Projectile.velocity * 0.65f;
                 dust.scale = 0.65f * Projectile.scale;
                 dust.rotation = Main.rand.NextFloatDirection();
             }
@@ -161,5 +162,10 @@ namespace GoldLeaf.Effects.Dusts
             Projectile.damage--;
             target.AddBuff(BuffID.OnFire, Main.rand.Next(Helper.TimeToTicks(6f), Helper.TimeToTicks(8.5f)));
         }
+
+        /*public override bool PreDraw(ref Color lightColor)
+        {
+            return false;
+        }*/
     }
 }

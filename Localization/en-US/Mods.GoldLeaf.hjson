@@ -3,6 +3,7 @@ GoldLeafConditions: {
 	UsingGameboy: Playing Gameboy
 	HasClutterGlove: Has Clutter Glove
 	LearnedRecipe: Discovered
+	InLavaLayerHeight: In Lava Layer
 }
 
 Mechanics.LearnRecipe: Learned Recipe: {0}

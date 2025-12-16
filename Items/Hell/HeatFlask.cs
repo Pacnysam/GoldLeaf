@@ -38,16 +38,17 @@ namespace GoldLeaf.Items.Hell
         {
             Item.ResearchUnlockCount = 99;
             ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite(100), true);
-
             Item.AddElements([Element.Fire, Element.Explosive]);
+
+            ItemID.Sets.ToolTipDamageMultiplier[Type] = 2f;
         }
 
         public override void SetDefaults()
 		{
-			Item.damage = 28;
+			Item.damage = 16;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 22;
-			Item.height = 40;
+			Item.height = 38;
 			Item.useTime = 45;
 			Item.useAnimation = 45;
 			Item.maxStack = Item.CommonMaxStack;
@@ -56,27 +57,16 @@ namespace GoldLeaf.Items.Hell
 			Item.noUseGraphic = true;
 			Item.useStyle = ItemUseStyleID.Swing;
 			Item.knockBack = 3;
-            Item.value = Item.sellPrice(0, 0, 2, 75);
+            Item.value = Item.buyPrice(0, 0, 2, 75);
             Item.rare = ItemRarityID.Blue;
             Item.UseSound = SoundID.Item106;
 			Item.autoReuse = true;
-            Item.GetGlobalItem<GoldLeafItem>().critDamageMod = 0.25f;
 
             ItemID.Sets.IsRangedSpecialistWeapon[Type] = true;
 
             Item.shoot = ProjectileType<HeatFlaskP>();
-			Item.shootSpeed = 14.5f;
+			Item.shootSpeed = 18.5f;
 		}
-
-        /*public override void AddRecipes()
-        {
-            CreateRecipe(5)
-            .AddIngredient(ItemID.MolotovCocktail, 5)
-            .AddIngredient(ItemID.HellstoneBar)
-            .AddTile(TileID.Bottles)
-            //.AddCondition(Condition.NearLava)
-            .Register();
-        }*/
     }
     
 	public class HeatFlaskP : ModProjectile 
@@ -90,7 +80,7 @@ namespace GoldLeaf.Items.Hell
         }
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
 
             Projectile.AddElements([Element.Fire, Element.Explosive]);
@@ -98,7 +88,7 @@ namespace GoldLeaf.Items.Hell
 
         public override void SetDefaults()
         {
-            Projectile.aiStyle = 2;
+            Projectile.aiStyle = ProjAIStyleID.ThrownProjectile;
             Projectile.width = 16;
             Projectile.height = 28;
             Projectile.friendly = true;
@@ -125,8 +115,8 @@ namespace GoldLeaf.Items.Hell
             Projectile.ai[1]++;
             if (Projectile.ai[1] > Projectile.ai[2] && Projectile.Counter() <= Helper.TimeToTicks(5))
             {
-                Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.position, Vector2.Zero /*Main.rand.NextFloat(MathHelper.TwoPi).ToRotationVector2() * 1f*/, ProjectileID.MolotovFire + Main.rand.Next(2), (int)(Projectile.damage * 0.65f), Projectile.knockBack * 0.35f, Projectile.owner);
-                proj.timeLeft = Helper.TimeToTicks(3);
+                Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.position, Vector2.Zero /*Main.rand.NextFloat(MathHelper.TwoPi).ToRotationVector2() * 1f*/, ProjectileID.MolotovFire + Main.rand.Next(2), Projectile.damage, Projectile.knockBack * 0.35f, Projectile.owner);
+                proj.timeLeft = Helper.TimeToTicks(5);
                 proj.penetrate = 1;
                 proj.netUpdate = true;
 
@@ -136,19 +126,23 @@ namespace GoldLeaf.Items.Hell
             }
         }
 
+        public override bool? CanCutTiles() => true;
+
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
-
             Vector2 drawOrigin = new (texture.Width * 0.5f, Projectile.height * 0.5f);
+            
+            //flask
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.FlipVertically, 0f);
+            Main.EntitySpriteDraw(glowTex.Value, Projectile.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite(100), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.FlipVertically, 0f);
+            
+            //afterimage
             for (int k = 1; k < Projectile.oldPos.Length; k++)
             {
                 Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin;
-
-                Main.EntitySpriteDraw(texture, drawPos, null, Color.Orange with { A = 0 }, Projectile.oldRot[k], drawOrigin, Projectile.scale, SpriteEffects.FlipVertically, 0f);
+                Main.EntitySpriteDraw(glowTex.Value, drawPos, null, Color.Orange.Alpha() * (0.8f - (k / (Projectile.oldPos.Length + 4f))), Projectile.oldRot[k], drawOrigin, Projectile.scale, SpriteEffects.FlipVertically, 0f);
             }
-            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.FlipVertically, 0f);
-            Main.EntitySpriteDraw(glowTex.Value, Projectile.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite(100), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.FlipVertically, 0f);
             return false;
         }
 
@@ -165,29 +159,119 @@ namespace GoldLeaf.Items.Hell
 
             if (Main.myPlayer == Projectile.owner)
             {
-                for (int i = 0; i < 3; i++)
+                /*for (int i = 0; i < 3; i++)
                 {
                     Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_Death(), Projectile.Center, Main.rand.NextFloat(6.28f).ToRotationVector2() * Main.rand.NextFloat(3.6f, 4.2f), ProjectileType<Ember>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
                     proj.scale = Main.rand.NextFloat(1f, 1.35f);
                     proj.timeLeft = Main.rand.Next(69, 96);
                     proj.netUpdate = true;
-                }
-                Projectile burst = Projectile.NewProjectileDirect(Projectile.GetSource_Death(), Projectile.Center, Vector2.Zero, ProjectileID.InfernoFriendlyBlast, (int)(Projectile.damage * 1.25f), Projectile.knockBack, Projectile.owner);
-                burst.timeLeft = 15;
+                }*/
+                Projectile burst = Projectile.NewProjectileDirect(Projectile.GetSource_Death(), Projectile.Center, Vector2.Zero, ProjectileType<BasicExplosion>(), (int)(Projectile.damage * 3f), Projectile.knockBack, Projectile.owner);
                 burst.scale = 1.5f;
-                burst.usesLocalNPCImmunity = true;
-                burst.localNPCHitCooldown = -1;
+                burst.ai[1] = 5f;
+                //burst.usesLocalNPCImmunity = true;
+                //burst.localNPCHitCooldown = -1;
                 burst.netUpdate = true;
             }
-            for (int j = 0; j < 15; j++)
+            for (int j = 0; j < 25; j++)
             {
-                var dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustType<HotSmoke>());
-                dust.velocity = Main.rand.NextVector2Circular(3.2f, 3.2f);
-                dust.velocity.Y -= Main.rand.NextFloat(1.5f, 3f);
-                dust.scale = Main.rand.NextFloat(0.4f, 0.7f);
-                dust.alpha = 10 + Main.rand.Next(60);
+                var dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustID.FireworksRGB, 0, 0, 10 + Main.rand.Next(60), Color.Orange, Main.rand.NextFloat(0.5f, 0.8f));
+                dust.fadeIn = Main.rand.NextFloat(0.65f, 0.95f);
+                dust.velocity = Main.rand.NextVector2Circular(13.5f, 9.5f);
+                dust.velocity.Y -= 4f;
+                dust.noGravity = Main.rand.NextBool();
                 dust.rotation = Main.rand.NextFloat(6.28f);
             }
+        }
+    }
+
+    public class BasicExplosion : ModProjectile
+    {
+        private static Asset<Texture2D> glowTex;
+        private static Asset<Texture2D> alphaBloom;
+        private static Asset<Texture2D> transparentBloom;
+
+        public override string Texture => "GoldLeaf/Textures/Boom";
+        
+        public override void Load()
+        {
+            glowTex = Request<Texture2D>("GoldLeaf/Textures/BoomGlow");
+            alphaBloom = Request<Texture2D>("GoldLeaf/Textures/GlowAlpha");
+            transparentBloom = Request<Texture2D>("GoldLeaf/Textures/Glow0");
+        }
+
+        public override void SetStaticDefaults()
+        {
+            Main.projFrames[Projectile.type] = 7;
+            Projectile.AddElements([Element.Fire, Element.Explosive]);
+        }
+
+        public override void SetDefaults()
+        {
+            Projectile.DamageType = DamageClass.Ranged;
+            Projectile.friendly = true;
+            Projectile.penetrate = -1;
+
+            Projectile.width = Projectile.height = 98;
+
+            Projectile.tileCollide = false;
+            Projectile.timeLeft = 28;
+            Projectile.knockBack = 6.5f;
+            Projectile.ai[1] = 1.5f;
+        }
+
+        public override void AI()
+        {
+            if (++Projectile.frameCounter >= 3)
+            {
+                if (Projectile.frame >= Main.projFrames[Projectile.type])
+                    Projectile.Kill();
+
+                Projectile.frameCounter = 0;
+                Projectile.frame++;
+            }
+        }
+
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            modifiers.HitDirectionOverride = Math.Sign(target.Center.X - Projectile.Center.X);
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (Projectile.ai[0] > 0)
+                target.AddBuff(BuffID.OnFire, Helper.TimeToTicks(Projectile.ai[0]));
+            else if (Projectile.ai[1] > 0)
+                target.AddBuff(BuffID.OnFire3, Helper.TimeToTicks(Projectile.ai[1]));
+        }
+
+        public override void ModifyDamageHitbox(ref Rectangle hitbox) => hitbox.Inflate((int)(Projectile.Counter() * 1.5f), (int)(Projectile.Counter() * 1.5f));
+
+        public override bool? CanHitNPC(NPC target) => (Projectile.Counter() > 20) ? false : base.CanHitNPC(target);
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
+            Rectangle frame = texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame);
+
+            //dark bloom
+            Main.EntitySpriteDraw(transparentBloom.Value, Projectile.Center - Main.screenPosition, null, Color.Black * (Projectile.timeLeft / 28f), 0, transparentBloom.Size() / 2, (Projectile.timeLeft / 20f * (Projectile.Counter() / 36f)) * 10f * Projectile.scale, SpriteEffects.None);
+            for (int k = 1; k <= 3; k++)
+            {
+                Rectangle frame2 = texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame - k);
+                Color colorgrad = new Color(255, 184, 40).Lerp(new(187, 37, 16), k / 3f) with { A = 0 };
+
+                //afterimage
+                Main.EntitySpriteDraw(glowTex.Value, Projectile.Center - Main.screenPosition, frame2, colorgrad * (0.5f - (k * 0.115f)) * Projectile.Opacity * 0.325f * (Projectile.timeLeft / 16f), Projectile.rotation, frame.Size() / 2, (1 + (k * (Projectile.timeLeft / 36f * (Projectile.Counter() / 20f)))) * Projectile.scale, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame2, colorgrad * (0.5f - (k * 0.115f)) * Projectile.Opacity * 0.45f * (Projectile.timeLeft / 16f), Projectile.rotation, frame.Size() / 2, (1 + (k * ((Projectile.timeLeft / 36f) * (Projectile.Counter() / 20f)))) * Projectile.scale, SpriteEffects.None, 0f);
+            }
+            //explosion
+            Main.EntitySpriteDraw(glowTex.Value, Projectile.Center - Main.screenPosition, frame, new Color(255, 105, 25) { A = 0 } * Projectile.Opacity * 0.45f, Projectile.rotation, frame.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, Color.Orange * Projectile.Opacity, Projectile.rotation, frame.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
+            
+            //bloom
+            Main.EntitySpriteDraw(alphaBloom.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 173, 65) { A = 0 } * (Projectile.timeLeft / 16f) * 0.325f, 0, alphaBloom.Size() / 2, Projectile.timeLeft / 40f * 6f * Projectile.scale, SpriteEffects.None);
+            return false;
         }
     }
 }

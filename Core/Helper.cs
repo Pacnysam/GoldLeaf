@@ -67,6 +67,7 @@ namespace GoldLeaf.Core
             && npc.aiStyle != NPCAIStyleID.Worm && (npc.knockBackResist != 0f || NPCSets.ccSusceptibleException[npc.type]);
 
         public static bool ZoneGrove(this Player player) => player.GetModPlayer<GoldLeafPlayer>().ZoneGrove;
+        public static bool ZoneLava(this Player player) => player.position.Y / 16 >= Main.maxTilesY * 0.72f;
         public static bool ZoneForest(this Player Player)
         {
             return !Player.ZoneJungle

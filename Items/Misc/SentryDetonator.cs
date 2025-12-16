@@ -117,6 +117,8 @@ namespace GoldLeaf.Items.Misc
 
     public class SentryDetonatorExplosion : ModProjectile
     {
+        public override string Texture => "GoldLeaf/Textures/Boom";
+
         private static Asset<Texture2D> glowTex;
         private static Asset<Texture2D> alphaBloom;
         private static Asset<Texture2D> transparentBloom;
@@ -137,6 +139,7 @@ namespace GoldLeaf.Items.Misc
             Projectile.DamageType = DamageClass.Summon;
             Projectile.width = Projectile.height = 98;
             Projectile.tileCollide = false;
+            Projectile.friendly = true;
             Projectile.timeLeft = 28;
         }
 

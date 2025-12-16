@@ -13,10 +13,10 @@ namespace GoldLeaf.Core
 {
     public class GoldLeafConditions
     {
-        public static Condition InSurface = new("Mods.GoldLeaf.GoldLeafConditions.InSurface", () => !Main.LocalPlayer.ShoppingZone_BelowSurface);
-        public static Condition UsingGameboy = new("Mods.GoldLeaf.GoldLeafConditions.UsingGameboy", () => Main.LocalPlayer.GetModPlayer<GameboyPlayer>().gameboy);
-        public static Condition HasClutterGlove = new("Mods.GoldLeaf.GoldLeafConditions.HasClutterGlove", () => Main.LocalPlayer.HasItem(ItemType<ClutterGloveCorruption>()) || Main.LocalPlayer.HasItem(ItemType<ClutterGloveCrimson>()));
-
+        public static readonly Condition InSurface = new("Mods.GoldLeaf.GoldLeafConditions.InSurface", () => !Main.LocalPlayer.ShoppingZone_BelowSurface);
+        public static readonly Condition UsingGameboy = new("Mods.GoldLeaf.GoldLeafConditions.UsingGameboy", () => Main.LocalPlayer.GetModPlayer<GameboyPlayer>().gameboy);
+        public static readonly Condition HasClutterGlove = new("Mods.GoldLeaf.GoldLeafConditions.HasClutterGlove", () => Main.LocalPlayer.HasItem(ItemType<ClutterGloveCorruption>()) || Main.LocalPlayer.HasItem(ItemType<ClutterGloveCrimson>()));
+        public static readonly Condition InLavaLayerHeight = new("Mods.GoldLeaf.GoldLeafConditions.InLavaLayerHeight", () => Main.LocalPlayer.ZoneLava());
         public class IsDaytime : IItemDropRuleCondition, IProvideItemConditionDescription
         {
             public bool CanDrop(DropAttemptInfo info) => Main.dayTime;

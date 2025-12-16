@@ -7,7 +7,6 @@ AetherBolt.DisplayName: Aether's Comet
 AetherBurst.DisplayName: Aether's Comet
 AetherEmber.DisplayName: Aether Ember
 WhirlpoolP.DisplayName: Whirlpool
-WhirlpoolBurst.DisplayName: Whirlpool
 QuetzalP.DisplayName: Quetzalcoatl Bolt
 QuetzalShard.DisplayName: Quetzal Shard
 QuetzalOrb.DisplayName: Quetzal Rift
@@ -21,23 +20,18 @@ SedimentP.DisplayName: Sediment
 SedimentTopaz.DisplayName: Topaz Sickle
 SapphireBurst.DisplayName: Sapphire Light
 FallingEmerald.DisplayName: Emerald
-RubyBeam.DisplayName: Ruby Bolt
 BasicRubyBolt.DisplayName: Ruby Bolt
 GoonaiP.DisplayName: Goonai
 WatcherPunch.DisplayName: Watcher Punch
 ToxicPositivityEffect.DisplayName: Toxic Positivity
 ArcticWraith.DisplayName: Rimeflora Wraith
-ArcticWraithOrb.DisplayName: Rimeflora Globe
+ArcticWraithOrb.DisplayName: Frost Globe
 SafetyBlanketEffect.DisplayName: Safety Blanket
-SnapFreezeEffect.DisplayName: Snap Freeze
-SnapFreezeBeam.DisplayName: Snap Freeze
-AuroraCraftVisual.DisplayName: Aurora Craft Visual
-AuroraStarVisual.DisplayName: Aurora Star
-AuroraStar.DisplayName: Aurora Star
+SnapFreezeEffect.DisplayName: Snap Freeze Visual
+AuroraStar.DisplayName: Aurora Star Visual
 BlizzardBrassBulletP.DisplayName: Blizzard Brass Bullet
 LunarP.DisplayName: Lunar
 HeatFlaskP.DisplayName: Magmatic Mixture
-NitrogenPerfumeDustSpawner.DisplayName: Nitrogen Perfume
 WaterBoltGravity.DisplayName: Water Bolt
 JellyfishBobber.DisplayName: Jellyfish Bobber
 JellyfishSentry.DisplayName: Jellyfisher
@@ -46,3 +40,4 @@ SunstoneStaffBolt.DisplayName: Splittershard
 SentryDetonatorExplosion.DisplayName: Sentry Explosion
 AvalancheSnowball.DisplayName: Avalanche Snowball
 AvalancheSnowBurst.DisplayName: Avalanche Snow Burst
+BasicExplosion.DisplayName: Explosion

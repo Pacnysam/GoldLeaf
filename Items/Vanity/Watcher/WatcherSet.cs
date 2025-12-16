@@ -127,7 +127,7 @@ namespace GoldLeaf.Items.Vanity.Watcher
             Item.vanity = true;
         }
     } //TODO: Glowmasks
-
+    
     public class WatcherPlayer : ModPlayer
     {
         public bool WatcherDrops => Player.armor[0].type == ItemType<WatcherEyedrops>() && Player.armor[10].type == ItemID.None || Player.armor[10].type == ItemType<WatcherEyedrops>();
@@ -144,7 +144,7 @@ namespace GoldLeaf.Items.Vanity.Watcher
 
         public override void DrawPlayer(Camera camera)
         {
-            if (!WatcherSet)
+            if (!WatcherSet || Player.dead)
                 return;
 
             int skip = 2;

@@ -41,7 +41,6 @@ namespace GoldLeaf.Core
         public float meleeCritDamageMod = 0f;
         public float rangedCritDamageMod = 0f;
         public float magicCritDamageMod = 0f;
-        public float summonCritDamageMod = 0f;
         public float critDamageMult = 1f;
 
         public int summonCritChance = 0;
@@ -65,7 +64,6 @@ namespace GoldLeaf.Core
             if (item.DamageType.CountsAsClass(DamageClass.Melee)) modifiers.CritDamage += meleeCritDamageMod;
             if (item.DamageType.CountsAsClass(DamageClass.Ranged)) modifiers.CritDamage += rangedCritDamageMod;
             if (item.DamageType.CountsAsClass(DamageClass.Magic)) modifiers.CritDamage += magicCritDamageMod;
-            if (item.DamageType.CountsAsClass(DamageClass.Summon)) modifiers.CritDamage += summonCritDamageMod;
 
             modifiers.CritDamage += (item.GetGlobalItem<GoldLeafItem>().critDamageMod);
             modifiers.CritDamage *= critDamageMult;
@@ -81,7 +79,6 @@ namespace GoldLeaf.Core
             if (proj.DamageType.CountsAsClass(DamageClass.Melee)) modifiers.CritDamage += meleeCritDamageMod;
             if (proj.DamageType.CountsAsClass(DamageClass.Ranged)) modifiers.CritDamage += rangedCritDamageMod;
             if (proj.DamageType.CountsAsClass(DamageClass.Magic)) modifiers.CritDamage += magicCritDamageMod;
-            if (proj.DamageType.CountsAsClass(DamageClass.Summon)) modifiers.CritDamage += summonCritDamageMod;
 
             modifiers.CritDamage += (proj.GetGlobalProjectile<GoldLeafProjectile>().critDamageMod);
             modifiers.CritDamage *= critDamageMult;
@@ -102,7 +99,7 @@ namespace GoldLeaf.Core
 
             itemSpeed = 1;
             critDamageMult = 1f;
-            meleeCritDamageMod = rangedCritDamageMod = magicCritDamageMod = summonCritDamageMod = 0f;
+            meleeCritDamageMod = rangedCritDamageMod = magicCritDamageMod = 0f;
             summonCritChance = 0;
 
             stunned = false;

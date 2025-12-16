@@ -69,7 +69,6 @@ namespace GoldLeaf.Core
             if (item.DamageType.CountsAsClass(DamageClass.Melee)) updatedCritMod += glPlayer.meleeCritDamageMod;
             if (item.DamageType.CountsAsClass(DamageClass.Ranged)) updatedCritMod += glPlayer.rangedCritDamageMod;
             if (item.DamageType.CountsAsClass(DamageClass.Magic)) updatedCritMod += glPlayer.magicCritDamageMod;
-            if (item.DamageType.CountsAsClass(DamageClass.Summon)) updatedCritMod += glPlayer.summonCritDamageMod;
 
             if (updatedCritMod != 2 && updatedCritMod > 1 && Helper.IsWeapon(item))
             {
@@ -102,12 +101,12 @@ namespace GoldLeaf.Core
 
             switch (item.type)
             {
-                case ItemID.LavaCrate:
+                /*case ItemID.LavaCrate:
                 case ItemID.LavaCrateHard:
                     {
                         itemLoot.Add(ItemDropRule.Common(ItemType<HeatFlask>(), 4, 60, 75));
                         break;
-                    }
+                    }*/
             }
         }
 
