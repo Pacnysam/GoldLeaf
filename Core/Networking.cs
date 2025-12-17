@@ -60,13 +60,13 @@ namespace GoldLeaf
                     }
                     break;
                 case MessageType.OverhealthSync:
-                    OverhealthManager overhealthPlayer = Main.player[player].GetModPlayer<OverhealthManager>();
+                    /*OverhealthManager overhealthPlayer = Main.player[player].GetModPlayer<OverhealthManager>();
                     overhealthPlayer.ReceivePlayerSync(reader);
 
                     if (Main.netMode == NetmodeID.Server)
                     {
                         overhealthPlayer.SyncPlayer(-1, whoAmI, false);
-                    }
+                    }*/
                     break;
                 case MessageType.ConstellationSync:
                     

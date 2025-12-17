@@ -1,19 +1,20 @@
-﻿using Terraria;
-using static Terraria.ModLoader.ModContent;
-using Terraria.ModLoader;
-using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using GoldLeaf.Core;
+using GoldLeaf.Core.Mechanics;
+using GoldLeaf.Effects.Dusts;
+using GoldLeaf.Items.Nightshade;
+using GoldLeaf.Items.Pickups;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Diagnostics.Metrics;
+using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.Localization;
-using GoldLeaf.Core;
-using Terraria.Audio;
-using System.Diagnostics.Metrics;
-using GoldLeaf.Items.Pickups;
-using Terraria.GameContent.Drawing;
-using GoldLeaf.Items.Nightshade;
-using GoldLeaf.Effects.Dusts;
+using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Items
 {
@@ -41,27 +42,12 @@ namespace GoldLeaf.Items
         {
             if (player.altFunctionUse != 2)
             {
-                //player.GetModPlayer<GoldLeafPlayer>().ScreenMoveTime = temp;
-                //player.GetModPlayer<GoldLeafPlayer>().ScreenMoveHold = false;
-
-                player.GetModPlayer<CameraSystem>().ScreenMoveTarget = Main.screenPosition + new Vector2(Main.mouseX, Main.mouseY);
+                OverhealthManager.AddOverhealthPool(player, new VigorPool() { size = 5, timer = 60 });
             }
             else
             {
-                player.GetModPlayer<CameraSystem>().ScreenMoveTime = temp;
-                player.GetModPlayer<CameraSystem>().ScreenMoveHold = false;
-                player.GetModPlayer<CameraSystem>().ScreenMovePan = Main.screenPosition + new Vector2(Main.mouseX, Main.mouseY);
+                
             }
-
-            //Vector3 coords = Helper.ScreenCoord(new Vector3(Main.MouseScreen.X, Main.MouseScreen.Y, 0));
-            //Main.NewText("cursor coords: (" + coords.X + "," + coords.Y + ")");
-
-            /*ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, (ParticleOrchestraType)temp,
-                new ParticleOrchestraSettings { PositionInWorld = Main.MouseWorld },
-                Main.LocalPlayer.whoAmI);
-            */
-
-            //Gore.NewGorePerfect(Terraria.Entity.GetSource_None(), Main.MouseWorld, Vector2.Zero, GoreType<RingGoreRewrite>(), Scale: 0.7f + Main.rand.NextFloat(temp1, temp2) / 30f);
             return true;
         }
 

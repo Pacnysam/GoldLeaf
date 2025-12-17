@@ -62,7 +62,7 @@ namespace GoldLeaf.Items.Potions
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.GetModPlayer<OverhealthManager>().overhealthMax += VigorPotion.extraOverhealth;
+            //player.GetModPlayer<OverhealthManager>().overhealthMax += VigorPotion.extraOverhealth;
             player.GetModPlayer<PotionPlayer>().vigorPotion = true;
         }
     }

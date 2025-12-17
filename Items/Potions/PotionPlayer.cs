@@ -15,6 +15,7 @@ using GoldLeaf.Items.Nightshade;
 using GoldLeaf.Core;
 using Microsoft.Build.Execution;
 using Terraria.DataStructures;
+using GoldLeaf.Core.Mechanics;
 
 namespace GoldLeaf.Items.Potions
 {
@@ -72,7 +73,7 @@ namespace GoldLeaf.Items.Potions
 
             if (vigorPotion && hit.DamageType.CountsAsClass(DamageClass.Melee))
             {
-                OverhealthManager.AddOverhealth(Player, hit.Damage/10, TimeToTicks(5));
+                //OverhealthManager.AddOverhealth(Player, hit.Damage/10, TimeToTicks(5));
             }
         }
     }
