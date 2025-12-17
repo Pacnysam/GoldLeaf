@@ -1,12 +1,10 @@
 CritMultTooltip: "{0:+0;-#}% critical strike damage"
 MinionSpeedTooltip: "{0:+0;-#}% summon speed"
-FishingPowerAccessoryTooltip: "{0:+0;-#} fishing power"
-FishingRodPowerTooltip: "{0:+0;-#} fishing power"
-FishingRodBaitTooltip: "{0:+0;-#}% chance to gain bait"
+FishingRodBaitTooltip: "{0:+0;-#}% chance to save bait"
+ExtraBobbersTooltip: +{0} extra {^0:bobber;bobbers}
+UnbreakableLineTooltip: Line will never break
 FishingRodLineSnapTooltip: "{0:+0;-#}% chance for line to break"
 FishingRodSonarTooltip: Detects hooked fish
-FishFearMeTooltip: "'Women want me, fish fear me'"
-ConsequentialTooltip: "'Come have a seat, and let's fish for a while'"
 Vindictive.DisplayName: Vindictive
 Accurate.DisplayName: Accurate
 Pinpoint.DisplayName: Pinpoint
@@ -43,8 +41,6 @@ Steady.DisplayName: Steady
 Barren.DisplayName: Barren
 Fishless.DisplayName: Fishless
 Consequential.DisplayName: Consequential
-
-Greedy: {
-	DisplayName: Greedy
-	Tooltip: This'll take a fortune to get off...
-}
+Robust.DisplayName: Robust
+Indiscriminate.DisplayName: Indiscriminate
+Twin.DisplayName: Twin
