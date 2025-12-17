@@ -40,7 +40,7 @@ namespace GoldLeaf.Items.Hell
             ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite(100), true);
             Item.AddElements([Element.Fire, Element.Explosive]);
 
-            ItemID.Sets.ToolTipDamageMultiplier[Type] = 2f;
+            ItemID.Sets.ToolTipDamageMultiplier[Type] = 3f;
         }
 
         public override void SetDefaults()

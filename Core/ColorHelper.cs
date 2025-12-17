@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Terraria.ID;
 using Terraria;
-using Microsoft.Xna.Framework;
+using Terraria.ID;
 
 namespace GoldLeaf.Core
 {
@@ -39,6 +39,8 @@ namespace GoldLeaf.Core
             var auroraBlue = new Color(0, 164, 242);
             var auroraPurple = new Color(122, 63, 255);
 
+            //return Gradient(Timer / 8f, [auroraBlue, auroraPurple, auroraBlue, auroraGreen, auroraBlue]);
+
             if (timer < 2)
                 return Color.Lerp(auroraGreen, auroraBlue, timer / 2);
             else if (timer < 4)
@@ -65,6 +67,48 @@ namespace GoldLeaf.Core
             else
                 return Color.Lerp(auroraBlue, auroraPurple, (timer - 6) / 2);
         }
+
+        /*public struct ColorGradient()
+        {
+            public struct ColorPoint(Color color, float position)
+            {
+                public Color color = color;
+                public float position = position;
+            }
+            
+            private ColorPoint[] colorList { get; private set; }
+
+            public Color GetColor(float progress)
+            {
+                Array.Sort(colorList, (x, y) => x.position.CompareTo(y.position));
+                float adjustedProgress = Utils.Remap(progress, 0f, 1f, 0f, colorList.Length - 1);
+                
+                for (int i = 0; i < colorList.Length; i++) 
+                {
+                    float adjustedIndex = Utils.Remap(i, 0, colorList.Length - 1, 0f, 1f);
+
+                    if (i == colorList.Length - 1)
+                    {
+                        return Color.Lerp(colorList[i].color, colorList[0].color, adjustedIndex);
+                    }
+                    else if (progress >= colorList[i].position && progress < colorList[i + 1].position)
+                    {
+                        return Color.Lerp(colorList[i].color, colorList[i + 1].color, adjustedIndex);
+                    }
+                }
+                return colorList[0].color;
+            }
+        }*/
+
+        /*public static Color Gradient(float position, ReadOnlySpan<Color> colors, bool loop = true)
+        {
+            //if (loop) colors.Add(colors[0]);
+            
+            float adjustedPosition = Math.Clamp(position * colors.Length, 0, colors.Length);
+            int first = (int)adjustedPosition; int last = Math.Min((int)adjustedPosition + 1, colors.Length);
+            
+            return Color.Lerp(colors[first], colors[last], adjustedPosition % 1);
+        }*/
 
         public static Color AuroraAccentColor(float Timer)
         {
@@ -208,9 +252,9 @@ namespace GoldLeaf.Core
         }
 
         /// <summary>
-        /// Overhealth color (R:255,G:184,B:82,A:255).
+        /// Overhealth color (R:19,G:223,B:229,A:255).
         /// </summary>
-        public static Color Overhealth => new(239, 235, 122, 255);
+        public static Color Overhealth => new(19, 223, 229, 255);
         /// <summary>
         /// SlimeBlue color (R:0,G:80,B:255,A:125-175).
         /// </summary>

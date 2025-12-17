@@ -10,6 +10,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
+using GoldLeaf.Biomes;
 
 namespace GoldLeaf.NPCs.Night.Nightshade
 {
@@ -33,6 +34,8 @@ namespace GoldLeaf.NPCs.Night.Nightshade
             NPC.DeathSound = SoundID.Item68;
             NPC.color = Color.DeepSkyBlue;
             NPC.noGravity = true;
+
+            SpawnModBiomes = [GetInstance<WhisperingGroveSurface>().Type];
         }
         public override void AI()
         {
