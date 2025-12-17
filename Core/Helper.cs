@@ -91,7 +91,7 @@ namespace GoldLeaf.Core
         
         public static float Opacity(this Gore gore) => 1f - gore.alpha / 255f;
 
-        public static bool Toggle(this bool input) => !input;
+        public static bool Toggle(this ref bool input) => input = !input;
         public static float RandNeg(this float num) => Main.rand.NextBool() ? num : -num;
         public static int RandNeg(this int num) => Main.rand.NextBool() ? num : -num;
 
