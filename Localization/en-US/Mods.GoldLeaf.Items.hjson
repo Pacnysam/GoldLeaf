@@ -394,20 +394,6 @@ GroveBossMusicBox: {
 	DisplayName: Music Box (Fallen Swordsman)
 }
 
-BottledShimmer: {
-	DisplayName: Bottled Shimmer
-	Tooltip: ""
-}
-
-DragonSkull: {
-	DisplayName: Gold Dragon Skull
-	Tooltip:
-		'''
-		Converts all minion slots into sentry slots
-		{0}% increased sentry speed
-		'''
-}
-
 AuroraDye: {
 	DisplayName: Aurora Dye
 	Tooltip: ""
@@ -660,3 +646,5 @@ GrantPants: {
 	DisplayName: Devil Pants
 	Tooltip: ""
 }
+
+DragonSkull.DisplayName: Gold Dragon Skull

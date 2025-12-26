@@ -22,11 +22,14 @@ namespace GoldLeaf.Items.Grove
 {
     public class ForbiddenFruit : ModItem
     {
+        public LocalizedText HealDesc => this.GetLocalization(nameof(HealDesc));
+
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 5;
-
             Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));
+
+            _ = HealDesc;
 
             ItemID.Sets.IsFood[Type] = true;
             ItemID.Sets.FoodParticleColors[Item.type] = [
@@ -71,10 +74,10 @@ namespace GoldLeaf.Items.Grove
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             TooltipLine tipLine = tooltips.Find(n => n.Name == "HealLife");
-            
+
             if (tipLine != null)
             {
-                tipLine.Text = Language.GetTextValue("Mods.GoldLeaf.Items.ForbiddenFruit.HealDesc");
+                tipLine.Text = HealDesc.Value;
             }
         }
 

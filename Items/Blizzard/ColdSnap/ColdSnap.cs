@@ -20,10 +20,12 @@ using GoldLeaf.Items.Accessories;
 using ReLogic.Content;
 using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
-namespace GoldLeaf.Items.Blizzard
+namespace GoldLeaf.Items.Blizzard.ColdSnap
 {
-    public class GlacialScissors : ModItem
+    public class ColdSnap : ModItem
     {
+        public override bool IsLoadingEnabled(Mod mod) => false;
+
         private static Asset<Texture2D> glowTex;
         private static Asset<Texture2D> baseTex;
         public override void Load()
