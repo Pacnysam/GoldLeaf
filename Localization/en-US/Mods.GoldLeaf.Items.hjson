@@ -648,3 +648,8 @@ GrantPants: {
 }
 
 DragonSkull.DisplayName: Gold Dragon Skull
+
+Basanite: {
+	DisplayName: Basanite
+	Tooltip: ""
+}

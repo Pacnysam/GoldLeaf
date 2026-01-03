@@ -156,7 +156,7 @@ namespace GoldLeaf.Items.Accessories
 
         public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
         {
-            if ((toxicPositive || Player.poisoned || Player.venom) && Main.myPlayer == Player.whoAmI) 
+            if (toxicPositive && Main.LocalPlayer == Player) 
             {
                 SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/PoisonDeath"), Player.Center);
                 ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.GasTrap,

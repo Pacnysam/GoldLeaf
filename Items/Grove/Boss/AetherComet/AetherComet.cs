@@ -53,11 +53,11 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
 			Item.useAnimation = 10;
 			Item.useTime = 10;
             Item.reuseDelay = 25;
-			Item.shootSpeed = 6f;
+			Item.shootSpeed = 6.5f;
 			Item.knockBack = 6;
             Item.crit = -2;
-            Item.damage = 19;
-            Item.ArmorPenetration = 8;
+            Item.damage = 22;
+            Item.ArmorPenetration = 10;
             //Item.UseSound = SoundID.DD2_EtherianPortalOpen;
             Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/RoR2/FireCast") { Volume = 0.85f };
             Item.shoot = ProjectileType<AetherBolt>();
@@ -126,8 +126,8 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
 
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
-            ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+            //ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
+            //ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 
             Projectile.AddElements([Element.Fire, Element.Arcane, Element.Holy]);
         }
@@ -146,15 +146,6 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
 
             Projectile.DamageType = DamageClass.Magic;
         }
-
-        /*public override void SendExtraAI(BinaryWriter writer)
-        {
-            writer.Write(Projectile.timeLeft);
-        }
-        public override void ReceiveExtraAI(BinaryReader reader)
-        {
-            Projectile.timeLeft = reader.ReadInt32();
-        }*/
 
         /*public override void PostDraw(Color lightColor)
         {
@@ -194,27 +185,24 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
             if (!player.channel)
             {
                 Projectile.timeLeft -= 9;
-                if (Counter <= THRESHHOLD/2 && Main.myPlayer == Projectile.owner) 
+                if (Counter < THRESHHOLD && Main.myPlayer == Projectile.owner) 
                 {
-                    Projectile.velocity += Vector2.Normalize(Main.MouseWorld - Projectile.Center) * 0.1f;
+                    Projectile.velocity += Vector2.Normalize(Main.MouseWorld - Projectile.Center) * 0.3f;
                     //if (Projectile.velocity.Length() > 6) Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 6;
 
                     Projectile.penetrate = 1;
                 }
             }
-            /*if (Projectile.height <= 18)
-            {
-                Projectile.width++;
-                Projectile.height++;
-            }*/
             Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + 1.5f;
 
             Projectile.netUpdate = true;
 
-            if (Counter >= 25f && Counter < THRESHHOLD)
+            if (Counter >= 20f && Counter < THRESHHOLD)
             {
-                Projectile.velocity *= 0.97f;
+                Projectile.velocity *= 0.925f;
+                Projectile.velocity += Vector2.Normalize(Main.MouseWorld - Projectile.Center) * 0.15f;
             }
+
             Vector2 vectorToCursor = Projectile.Center - player.Center;
             bool projDirection = Projectile.Center.X < player.Center.X;
             if (Projectile.Center.X < player.Center.X)
@@ -226,29 +214,15 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
             player.itemTime = 15;
             player.itemAnimation = 15;
 
-            /*if (counter < THRESHHOLD && counter >= THRESHHOLD/2)
-            {
-                Projectile.velocity += Vector2.Normalize(Main.MouseWorld - Projectile.Center) * 0.1f;
-                if (Projectile.velocity.Length() > 4) Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 4;
-            }*/
-
             if (Counter == THRESHHOLD)
             {
                 Projectile.penetrate += 5;
-                //for (float k = 0; k < 6.28f; k += 0.2f) Dust.NewDustPerfect(Projectile.position, DustType<AetherDust>(), Vector2.One.RotatedBy(k) * 2, Scale: 0.9f);
             }
 
             if (Counter >= THRESHHOLD)
             {
-                /*if (Main.rand.NextBool(16) && Main.myPlayer == Projectile.owner) 
-                {
-                    int ember = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Main.rand.NextFloat(6.28f).ToRotationVector2() * Main.rand.NextFloat(2, 3), ProjectileType<AetherEmber>(), 0, 0, Projectile.owner);
-                    Main.projectile[ember].scale = Main.rand.NextFloat(0.45f, 0.75f);
-                    Main.projectile[ember].timeLeft /= 3;
-                }*/
-
-                Projectile.velocity += Vector2.Normalize(Main.MouseWorld - Projectile.Center) * 0.65f;
-                if (Projectile.velocity.Length() > 4f + Counter * 0.0135f) Projectile.velocity = Vector2.Normalize(Projectile.velocity) * (4f + Counter * 0.0135f);
+                Projectile.velocity += Vector2.Normalize(Main.MouseWorld - Projectile.Center) * 1.25f;
+                if (Projectile.velocity.Length() > 4.5f + Math.Min(Counter, 240) * 0.015f) Projectile.velocity = Vector2.Normalize(Projectile.velocity) * (4.5f + Math.Min(Counter, 240) * 0.015f);
 
                 ShootCounter++;
                 if (ShootCounter >= 16 - ShotsFired / 3)
@@ -270,7 +244,6 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
                         bool flag = Collision.CanHit(Projectile.position, Projectile.width, Projectile.height, Main.npc[num2].position, Main.npc[num2].width, Main.npc[num2].height) && player.CheckMana(3, true);
                         if (flag)
                         {
-                            //SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/AetherBeam"), player.Center);
                             SoundEngine.PlaySound(new("GoldLeaf/Sounds/SE/RoR2/WispDeath") { Volume = 0.45f, Pitch = -0.35f + ShotsFired * 0.035f }, Projectile.Center);
                             Vector2 value = Main.npc[num2].Center - Projectile.Center;
                             float num4 = 25f;
@@ -281,8 +254,7 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
                             }
                             value *= num5;
                             Projectile.timeLeft += (int)(11 - ShotsFired / 3);
-                            //Projectile.damage += 1 + cooldown/120;
-
+                            
                             Vector2 perturbedSpeed = value.RotatedByRandom(MathHelper.ToRadians(8f));
 
                             ShotsFired++;
@@ -295,13 +267,14 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
 
             for (int k = 0; k < 4; k++)
             {
-                float x = (float)Math.Cos(GoldLeafWorld.rottime + Counter * 0.03f + k) * Counter / 64f;
-                float y = (float)Math.Sin(GoldLeafWorld.rottime + Counter * 0.03f + k) * Counter / 64f;
+                float x = (float)Math.Cos(GoldLeafWorld.rottime + Math.Min(Counter, 180) * 0.03f + k) * Math.Min(Counter, 180) / 64f;
+                float y = (float)Math.Sin(GoldLeafWorld.rottime + Math.Min(Counter, 180) * 0.03f + k) * Math.Min(Counter, 180) / 64f;
                 Vector2 pos = new Vector2(x, y).RotatedBy(k / 12f * 6.28f);
 
-                Dust d = Dust.NewDustPerfect(Projectile.Center, DustType<AetherDust>(), pos * (0.3f + Counter * 0.00135f), 0, default, 1f + Counter * 0.00135f);
+                Dust d = Dust.NewDustPerfect(Projectile.Center, DustType<AetherSparkDust>(), pos * (0.45f + Math.Min(Counter, 180) * 0.00085f), 0, default, 1f + Math.Min(Counter, 180) * 0.00125f);
+                //d.velocity += new Vector2(0, Counter * -0.0125f);
                 d.position += d.velocity * 2f;
-                d.velocity += new Vector2(0, Counter * -0.0125f);
+                d.rotation = d.velocity.ToRotation();// + MathHelper.PiOver2;
             }
         }
 
@@ -313,10 +286,7 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
 	    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Player player = Main.player[Projectile.owner];
-
             if (!player.channel && Counter <= THRESHHOLD/2) target.immune[Projectile.owner] = 0; else target.immune[Projectile.owner] = 15;
-
-            //target.AddBuff(BuffType<AetherFlameBuff>(), Helper.TimeToTicks(1f));
         }
 
         public override void OnKill(int timeLeft)
@@ -324,7 +294,7 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
             Player player = Main.player[Projectile.owner];
             
             SoundEngine.PlaySound(new("GoldLeaf/Sounds/SE/RoR2/EngineerMine") { Volume = 0.7f }, Projectile.Center);
-            SoundEngine.PlaySound(new("GoldLeaf/Sounds/SE/RoR2/Aftershock") { Pitch = 1.6f, Volume = 0.7f }, Projectile.Center);
+            SoundEngine.PlaySound(new("GoldLeaf/Sounds/SE/RoR2/Aftershock") { Pitch = 1.15f, Volume = 0.7f }, Projectile.Center);
 
             //CameraSystem.AddScreenshake(Main.LocalPlayer, 18 + ShotsFired, Projectile.Center);
             CameraSystem.QuickScreenShake(Projectile.Center, null, 14.5f + ShotsFired * 0.25f, 5.5f + ShotsFired * 0.085f, 26 + (int)(ShotsFired * 1.15f), 1500);
@@ -477,7 +447,7 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
                     new Color(255, 231, 206) { A = 0 } * (1f - Radius / (Projectile.ai[0] * 1.15f)) * 0.45f,
                     0f,
                     flareTex.Size() / 2f,
-                    new Vector2(Math.Clamp(0.75f + (Projectile.Counter() * 0.05f), 0.75f, 2f), Math.Clamp(1.25f - (Projectile.Counter() * 0.1f), 0.5f, 1.25f)) * (2.25f - 1f * ((Radius + 30) / 110f)),
+                    new Vector2(Math.Clamp(0.65f + (Projectile.Counter() * 0.045f), 0.75f, 2f), Math.Clamp(1.35f - (Projectile.Counter() * 0.1f), 0.5f, 1.25f)) * (2.25f - 1f * ((Radius + 30) / 110f)),
                     //Projectile.scale * 0.1f + (((Radius * Projectile.ai[0]) + 30)/5500f),
                     SpriteEffects.None,
                     0f

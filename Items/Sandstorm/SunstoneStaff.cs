@@ -31,7 +31,7 @@ namespace GoldLeaf.Items.Sandstorm
 
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(Item.ArmorPenetration);
 
-        const int RANGE = 175;
+        const int RANGE = 150;
         const float RADIUSMULT = 0.75f;
 
         public override void SetStaticDefaults()
@@ -44,7 +44,7 @@ namespace GoldLeaf.Items.Sandstorm
             Item.value = Item.sellPrice(0, 1, 35, 0);
             Item.rare = ItemRarityID.Green;
 
-            Item.damage = 12;
+            Item.damage = 11;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 9;
             Item.ArmorPenetration = 5;

@@ -36,6 +36,15 @@ namespace GoldLeaf.Core
         /*public static (Asset<Texture2D>, Color, bool)[] ArmorLongCoat = ItemID.Sets.Factory.CreateNamedSet("ArmorLongCoat")
             .Description("ArmorLongCoat")
             .RegisterCustomSet<(Asset<Texture2D>, Color, bool)>((null, default, false));*/
+
+        public static bool[] isASword = ItemID.Sets.Factory.CreateNamedSet("isASword")
+            .Description("Enables unique interactions such as clashing, and unique prefixes.")
+            .RegisterBoolSet(false, ItemID.IronBroadsword, ItemID.IronShortsword, ItemID.Terragrim);
+
+        public static bool[] thrownFlail = ItemID.Sets.Factory.CreateNamedSet("thrownFlail")
+            .Description("Not used for launched flails like anchor or chain knife.")
+            .RegisterBoolSet(false, ItemID.BallOHurt, ItemID.BlueMoon, ItemID.Sunfury, ItemID.DaoofPow, ItemID.TheMeatball, ItemID.FlowerPow,
+            ItemID.Flairon, ItemID.DripplerFlail, ItemID.Mace, ItemID.FlamingMace);
     }
 
     public static class ProjectileSets
