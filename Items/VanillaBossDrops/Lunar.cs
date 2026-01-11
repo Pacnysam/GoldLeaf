@@ -111,8 +111,17 @@ namespace GoldLeaf.Items.VanillaBossDrops
             spriteBatch.Draw(glowTex.Value, position, frame, ColorHelper.AdditiveWhite(120) * 0.45f, rotation, frame.Size() / 2, scale, SpriteEffects.None, 0f);
             return false;
         }
+
+        /*public override void AddRecipes()
+		{
+			Recipe recipe = CreateRecipe()
+            .AddRecipeGroup("GoldLeaf:EvilYoyo")
+            .AddIngredient(ItemType<FallenMoon>())
+            .AddTile(TileID.Anvils)
+            .Register();
+        }*/
     }
-    
+
     public class LunarP : ModProjectile
     {
         private static Asset<Texture2D> glowTex;

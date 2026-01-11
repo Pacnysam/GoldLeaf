@@ -21,8 +21,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
                     {
                         LeadingConditionRule notExpertRule = new(new Conditions.NotExpert());
 
-                        notExpertRule.OnSuccess(ItemDropRule.Common(ItemID.SlimeStaff, 3));
-                        notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<Goonai>(), 2, 90, 110));
+                        notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<Goonai>(), 1, 30, 40));
                         npcLoot.Add(notExpertRule);
                         break;
                     }
@@ -55,21 +54,6 @@ namespace GoldLeaf.Items.VanillaBossDrops
                         npcLoot.Add(leadingConditionRule);
                         break;
                     }
-                case NPCID.SkeletronHead:
-                    {
-                        LeadingConditionRule notExpertRule = new(new Conditions.NotExpert());
-
-                        notExpertRule.OnSuccess(ItemDropRule.Common(ItemID.Bone, 1, 25, 40));
-                        npcLoot.Add(notExpertRule);
-                        break;
-                    }
-                /*case NPCID.HallowBoss:
-                    {
-                        LeadingConditionRule noDaylightRule = new(new GoldLeafConditions.IsNighttime());
-                        npcLoot.Add(noDaylightRule);
-                        noDaylightRule.OnSuccess(ItemDropRule.Common(ItemID.EmpressBlade, 20));
-                        break;
-                    }*/
             }
         }
     }
@@ -82,13 +66,12 @@ namespace GoldLeaf.Items.VanillaBossDrops
             {
                 case ItemID.KingSlimeBossBag:
                     {
-                        itemLoot.Add(ItemDropRule.Common(ItemID.SlimeStaff, 2));
-                        itemLoot.Add(ItemDropRule.Common(ItemType<Goonai>(), 2, 100, 120));
+                        itemLoot.Add(ItemDropRule.Common(ItemType<Goonai>(), 1, 45, 60));
                         break;
                     }
                 case ItemID.EyeOfCthulhuBossBag:
                     {
-                        itemLoot.Add(ItemDropRule.Common(ItemType<Lunar>(), 15));
+                        itemLoot.Add(ItemDropRule.Common(ItemType<Lunar>(), 10));
                         break;
                     }
                 case ItemID.EaterOfWorldsBossBag:
@@ -99,11 +82,6 @@ namespace GoldLeaf.Items.VanillaBossDrops
                 case ItemID.BrainOfCthulhuBossBag:
                     {
                         itemLoot.Add(ItemDropRule.Common(ItemType<ClutterGloveCrimson>(), 2));
-                        break;
-                    }
-                case ItemID.SkeletronBossBag:
-                    {
-                        itemLoot.Add(ItemDropRule.Common(ItemID.Bone, 1, 30, 45));
                         break;
                     }
             }

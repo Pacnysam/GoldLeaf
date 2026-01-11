@@ -1,20 +1,12 @@
 ﻿using Terraria;
 using static Terraria.ModLoader.ModContent;
 using Terraria.ModLoader;
-using GoldLeaf.Effects.Dusts;
 using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
-using GoldLeaf.Core;
 using Terraria.Audio;
-using Microsoft.CodeAnalysis;
-using static Terraria.Item;
-using GoldLeaf.Items.Grove;
-using GoldLeaf.Items.Nightshade;
-using static GoldLeaf.Core.GoldLeafPlayer;
 
 namespace GoldLeaf.Items.Pickups
 {
@@ -196,11 +188,7 @@ namespace GoldLeaf.Items.Pickups
 
         public override bool OnPickup(Player player)
         {
-            player.ManaEffect(160); player.statMana += 160;
-            /*if (GetInstance<GameplayConfig>().ClassGimmicks) 
-            { player.ManaEffect(120); player.statMana += 120; }
-            else 
-            { player.ManaEffect(200); player.statMana += 200; }*/
+            player.ManaEffect(200); player.statMana += 200;
 
             SoundEngine.PlaySound(SoundID.Grab, player.Center);
             return false;

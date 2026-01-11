@@ -77,7 +77,7 @@ namespace GoldLeaf.Items.Blizzard
 		{
 			Recipe recipe = CreateRecipe();
 			recipe.AddIngredient(ItemID.BorealWood, 12);
-			recipe.AddRecipeGroup("GoldLeaf:GoldBars", 6);
+			recipe.AddRecipeGroup("GoldLeaf:GoldBar", 6);
             recipe.AddIngredient(ItemType<AuroraCluster>(), 14);
             recipe.AddIngredient(ItemID.Shiverthorn, 4);
             recipe.AddOnCraftCallback(RecipeCallbacks.AuroraMajor);

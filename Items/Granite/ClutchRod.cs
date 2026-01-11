@@ -73,7 +73,7 @@ namespace GoldLeaf.Items.Granite
             CreateRecipe()
                 .AddRecipeGroup(RecipeGroupID.Wood, 15)
                 .AddIngredient(ItemID.Granite, 10)
-                .AddRecipeGroup("GoldLeaf:GoldBars", 2)
+                .AddRecipeGroup("GoldLeaf:GoldBar", 2)
                 .AddCondition(GoldLeafConditions.LearnedRecipe(Item.type))
                 .AddTile(TileID.Anvils)
                 .Register();

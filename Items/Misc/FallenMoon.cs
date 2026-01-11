@@ -58,7 +58,6 @@ namespace GoldLeaf.Items.Misc
 
         public override bool CanShoot(Player player) => false;
         public override Color? GetAlpha(Color lightColor) => Color.White;
-        public override bool ConsumeItem(Player player) => false;
         public override bool? CanBeChosenAsAmmo(Item weapon, Player player)
         {
             if (weapon.type == ItemType<Lunar>())

@@ -150,13 +150,16 @@ namespace GoldLeaf.Items.Hell
         {
             Player player = Main.player[Projectile.owner];
             
-            SoundEngine.PlaySound(SoundID.Shatter with { Pitch = -0.4f, PitchVariance = 0.4f, Volume = 0.65f }, Projectile.Center);
-            SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Projectile.Center);
-            SoundEngine.PlaySound(SoundID.Item74);
+            if (!Main.dedServ) 
+            {
+                SoundEngine.PlaySound(SoundID.Shatter with { Pitch = -0.4f, PitchVariance = 0.4f, Volume = 0.65f }, Projectile.Center);
+                SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Projectile.Center);
+                SoundEngine.PlaySound(SoundID.Item74);
 
-            CameraSystem.QuickScreenShake(Projectile.Center, null, 20, 5.5f, 28, 1000);
-            CameraSystem.QuickScreenShake(Projectile.Center, (0f).ToRotationVector2(), 10, 10f, 22, 1000);
-
+                CameraSystem.QuickScreenShake(Projectile.Center, null, 20, 5.5f, 28, 1000);
+                CameraSystem.QuickScreenShake(Projectile.Center, (0f).ToRotationVector2(), 10, 10f, 22, 1000);
+            }
+            
             if (Main.myPlayer == Projectile.owner)
             {
                 /*for (int i = 0; i < 3; i++)
