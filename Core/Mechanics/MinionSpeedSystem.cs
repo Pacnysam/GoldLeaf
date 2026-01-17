@@ -101,19 +101,19 @@ namespace GoldLeaf.Core.Mechanics
             return true;
         }
 
-        public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
+        public override void ModifyHitNPC(Projectile projectile, NPC target, ref NPC.HitModifiers modifiers)
         {
             projectile.TryGetOwner(out Player player);
 
-            if (player != null && ProjectileSets.summonSpeedImmune[projectile.type]) 
+            if (player != null && ProjectileSets.summonSpeedImmune[projectile.type])
             {
                 if (projectile.minion)
                 {
-                    hit.SourceDamage += (int)(hit.SourceDamage * player.GetModPlayer<MinionSpeedPlayer>().minionSpeed);
+                    modifiers.ScalingBonusDamage += player.GetModPlayer<MinionSpeedPlayer>().minionSpeed;
                 }
                 if (projectile.sentry)
                 {
-                    hit.SourceDamage += (int)(hit.SourceDamage * player.GetModPlayer<MinionSpeedPlayer>().sentrySpeed);
+                    modifiers.ScalingBonusDamage += player.GetModPlayer<MinionSpeedPlayer>().sentrySpeed;
                 }
             }
         }

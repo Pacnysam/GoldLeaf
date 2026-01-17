@@ -47,7 +47,7 @@ namespace GoldLeaf.Core
             ItemID.Flairon, ItemID.DripplerFlail, ItemID.Mace, ItemID.FlamingMace);
     }
 
-    public static class ProjectileSets
+    public static partial class ProjectileSets
     {
         public static bool[] summonSpeedImmune = ProjectileID.Sets.Factory.CreateNamedSet("SummonSpeedImmune")
             .Description("Some minions break when using Gold Leaf's summon speed system. Setting this to true will give these minions a damage bonus instead")
