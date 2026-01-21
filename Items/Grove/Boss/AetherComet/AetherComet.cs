@@ -115,6 +115,15 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
             Projectile.DamageType = DamageClass.Magic;
         }
 
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.Write(Projectile.timeLeft);
+        }
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            Projectile.timeLeft = reader.ReadInt32();
+        }
+
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;

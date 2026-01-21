@@ -1,22 +1,16 @@
 ﻿using GoldLeaf.Core;
 using GoldLeaf.Core.CrossMod;
 using GoldLeaf.Core.Mechanics;
-using GoldLeaf.Effects.Dusts;
-using GoldLeaf.Items.Grove;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Metrics;
 using System.IO;
-using System.Threading;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.Enums;
 using Terraria.GameContent;
-using Terraria.GameContent.Animations;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.Localization;
@@ -105,10 +99,11 @@ namespace GoldLeaf.Items.Sky
             }
 
             Projectile.GetWhipSettings(Projectile, out var timeToFlyOut, out var _, out var _);
-            Projectile.WhipSettings.Segments = 4 + (int)(Segments * 0.7f);
+            Projectile.WhipSettings.Segments = 4 + (int)(Segments * 0.6f);
 
             float flyTimer = Timer / timeToFlyOut;
-            if (Utils.GetLerpValue(0.3f, 0.8f, flyTimer, clamped: true) * Utils.GetLerpValue(0.9f, 0.7f, flyTimer, clamped: true) > 0.1f)
+
+            /*if (Utils.GetLerpValue(0.3f, 0.8f, flyTimer, clamped: true) * Utils.GetLerpValue(0.9f, 0.7f, flyTimer, clamped: true) > 0.1f)
             {
                 Projectile.WhipPointsForCollision.Clear();
                 Projectile.FillWhipControlPoints(Projectile, Projectile.WhipPointsForCollision);
@@ -120,22 +115,14 @@ namespace GoldLeaf.Items.Sky
                 {
                     Dust dust = Dust.NewDustDirect(rectangle.TopLeft(), rectangle.Width, rectangle.Height, DustID.PortalBoltTrail, 0f, 0f, 0, new Color(51, 156, 248).Alpha(160) * 0.65f, 0.7f);
                     dust.noGravity = true;
+                    dust.color = new ColorHelper.Gradient([(new Color(81, 166, 243).Alpha(), 0.45f), (new Color(255, 241, 83).Alpha(), 0.5f), (new Color(81, 166, 243).Alpha(), 0.55f)]).GetColor(flyTimer);
                     dust.rotation = tipRotation;//Main.rand.NextFloat(MathHelper.TwoPi);
-                    dust.scale = MathHelper.Lerp(0.95f, 1.35f, (float)player.GetModPlayer<ConstellationPlayer>().extraSegments / player.GetModPlayer<ConstellationPlayer>().maxExtraSegments) + Main.rand.NextFloat() * 0.185f;
+                    dust.scale = MathHelper.Lerp(0.95f, 1.35f, Segments / ConstellationPlayer.maxExtraSegments) + Main.rand.NextFloat() * 0.185f;
                     dust.fadeIn = 1.05f;
                     dust.shader = GameShaders.Armor.GetSecondaryShader(111, Main.LocalPlayer);
                     dust.velocity = (dust.velocity * Main.rand.NextFloat() * 0.55f) + (forwardVector.RotatedBy(MathHelper.PiOver4 * Math.Sign(Projectile.direction)) * 3f * flyTimer);
                 }
-
-                /*if (Timer % 4 == 1)
-                {
-                    Gore gore = Gore.NewGoreDirect(null, rectangle.Center(), Vector2.Zero, GoreType<ConstellationGore>());
-                    gore.rotation = MathHelper.ToRadians(Main.rand.NextFloat(200, 200)).RandNeg();
-                    gore.velocity = (gore.velocity * Main.rand.NextFloat() * 0.45f) + (forwardVector * 2.5f);
-                    gore.frame = 0;
-                    gore.alpha += Main.rand.Next(-10, 15);
-                }*/
-            }
+            }*/
 
             if (Timer == (int)(timeToFlyOut / 2f))
             {
@@ -153,7 +140,7 @@ namespace GoldLeaf.Items.Sky
             target.AddBuff(BuffType<ConstellationTag>(), TimeToTicks(5));
             player.MinionAttackTargetNPC = target.whoAmI;
 
-            if (player.GetModPlayer<ConstellationPlayer>().extraSegments < player.GetModPlayer<ConstellationPlayer>().maxExtraSegments && target.IsValid())
+            if (player.GetModPlayer<ConstellationPlayer>().extraSegments < ConstellationPlayer.maxExtraSegments && target.IsValid())
             {
                 player.GetModPlayer<ConstellationPlayer>().extraSegments++;
 
@@ -226,17 +213,17 @@ namespace GoldLeaf.Items.Sky
                     float flyTimer = Timer / timeToFlyOut;
                     scale = MathHelper.Lerp(0.5f, 1.5f, Utils.GetLerpValue(0.1f, 0.7f, flyTimer, true) * Utils.GetLerpValue(0.9f, 0.7f, flyTimer, true));
                 }
-                else if (i > 10) //far segment
+                else if (i > 9) //far segment
                 {
                     frame.Y = 50;
                     frame.Height = 18;
                 }
-                else if (i > 7) //mid segment
+                else if (i > 6) //mid segment
                 {
                     frame.Y = 36;
                     frame.Height = 14;
                 }
-                else if (i > 4) //first segment
+                else if (i > 3) //first segment
                 {
                     frame.Y = 26;
                     frame.Height = 10;
@@ -291,20 +278,12 @@ namespace GoldLeaf.Items.Sky
     public class ConstellationPlayer : ModPlayer
     {
         public int extraSegments = 0;
-        public int maxExtraSegments = 10;
+        public const int maxExtraSegments = 12;
         //public int segmentTimer = 60;
-
-        public override void ResetEffects()
-        {
-            maxExtraSegments = 16; //maxExtraSegments = 10;
-        }
 
         public override void PreUpdate()
         {
-            //if (segmentTimer <= 0) extraSegments = 0;
             if (extraSegments > maxExtraSegments) extraSegments = maxExtraSegments;
-
-            //segmentTimer--;
         }
 
         public override void PostUpdateBuffs()
@@ -313,12 +292,7 @@ namespace GoldLeaf.Items.Sky
                 extraSegments = 0;
 
             if (extraSegments > 0)
-                Player.whipRangeMultiplier += 0.065f * extraSegments;
-
-            /*if (Player.HasBuff(BuffID.StarInBottle))
-                maxExtraSegments += 3;
-            if (!Main.dayTime)
-                maxExtraSegments += 3;*/
+                Player.whipRangeMultiplier += 0.0725f * extraSegments;
         }
 
         public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
@@ -327,29 +301,23 @@ namespace GoldLeaf.Items.Sky
             packet.Write((byte)GoldLeaf.MessageType.ConstellationSync);
             packet.Write((byte)Player.whoAmI);
             packet.Write((byte)extraSegments);
-            packet.Write((byte)maxExtraSegments);
-            //packet.Write((byte)segmentTimer);
             packet.Send(toWho, fromWho);
         }
         public void ReceivePlayerSync(BinaryReader reader)
         {
             extraSegments = reader.ReadByte();
-            maxExtraSegments = reader.ReadByte();
-            //segmentTimer = reader.ReadByte();
         }
 
         public override void CopyClientState(ModPlayer targetCopy)
         {
             ConstellationPlayer clone = (ConstellationPlayer)targetCopy;
             clone.extraSegments = extraSegments;
-            clone.maxExtraSegments = maxExtraSegments;
-            //clone.segmentTimer = segmentTimer;
         }
         public override void SendClientChanges(ModPlayer clientPlayer)
         {
             ConstellationPlayer clone = (ConstellationPlayer)clientPlayer;
 
-            if (extraSegments != clone.extraSegments || maxExtraSegments != clone.maxExtraSegments /*|| segmentTimer != clone.segmentTimer*/)
+            if (extraSegments != clone.extraSegments)
                 SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
         }
     }
@@ -401,7 +369,7 @@ namespace GoldLeaf.Items.Sky
     {
         public override string Texture => CoolBuffTex(base.Texture);
 
-        public static readonly float TagDamageMult = 25;
+        public static readonly float TagDamageMult = 15;
 
         public override void SetStaticDefaults()
         {

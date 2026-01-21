@@ -162,19 +162,8 @@ namespace GoldLeaf.Items.Hell
             
             if (Main.myPlayer == Projectile.owner)
             {
-                /*for (int i = 0; i < 3; i++)
-                {
-                    Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_Death(), Projectile.Center, Main.rand.NextFloat(6.28f).ToRotationVector2() * Main.rand.NextFloat(3.6f, 4.2f), ProjectileType<Ember>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
-                    proj.scale = Main.rand.NextFloat(1f, 1.35f);
-                    proj.timeLeft = Main.rand.Next(69, 96);
-                    proj.netUpdate = true;
-                }*/
-                Projectile burst = Projectile.NewProjectileDirect(Projectile.GetSource_Death(), Projectile.Center, Vector2.Zero, ProjectileType<BasicExplosion>(), (int)(Projectile.damage * 3f), Projectile.knockBack, Projectile.owner);
+                Projectile burst = Projectile.NewProjectileDirect(Projectile.GetSource_Death(), Projectile.Center, Vector2.Zero, ProjectileType<BasicExplosion>(), (int)(Projectile.damage * 3f), Projectile.knockBack, Projectile.owner, 0, 5f);
                 burst.scale = 1.5f;
-                burst.ai[1] = 5f;
-                //burst.usesLocalNPCImmunity = true;
-                //burst.localNPCHitCooldown = -1;
-                burst.netUpdate = true;
             }
             for (int j = 0; j < 25; j++)
             {
@@ -187,7 +176,7 @@ namespace GoldLeaf.Items.Hell
             }
         }
     }
-
+    
     public class BasicExplosion : ModProjectile
     {
         private static Asset<Texture2D> glowTex;
