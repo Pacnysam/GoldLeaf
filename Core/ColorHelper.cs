@@ -43,6 +43,16 @@ namespace GoldLeaf.Core
             }
         }
 
+        public static Gradient QuickGradient(List<Color> colors)
+        {
+            List<(Color, float)> colorPoints = [];
+            for (int i = 0; i <= colors.Count - 1; i++)
+            {
+                colorPoints.Add(new(colors[i], Utils.Remap(i, 0f, colors.Count - 1, 0f, 1f)));
+            }
+            return new Gradient(colorPoints);
+        }
+
         public static Color AuroraColor(float Timer = default)
         {
             if (Timer == default) Timer = Main.GlobalTimeWrappedHourly * 3f;
@@ -51,7 +61,7 @@ namespace GoldLeaf.Core
             var auroraBlue = new Color(0, 164, 242);
             var auroraPurple = new Color(122, 63, 255);
 
-            return new Gradient([(auroraGreen, 0f), (auroraBlue, 0.25f), (auroraPurple, 0.5f), (auroraBlue, 0.75f), (auroraGreen, 1f)]).GetColor(Timer/8f % 1);
+            return QuickGradient([auroraGreen, auroraBlue, auroraPurple, auroraBlue, auroraGreen]).GetColor(Timer / 8f % 1);
         }
         public static Color AuroraAccentColor(float Timer = default)
         {
@@ -61,7 +71,7 @@ namespace GoldLeaf.Core
             var auroraBlue = new Color(0, 164, 242);
             var auroraPurple = new Color(122, 63, 255);
 
-            return new Gradient([(auroraPurple, 0f), (auroraBlue, 0.25f), (auroraGreen, 0.5f), (auroraBlue, 0.75f), (auroraPurple, 1f)]).GetColor(Timer / 8f % 1);
+            return QuickGradient([auroraPurple, auroraBlue, auroraGreen, auroraBlue, auroraPurple]).GetColor(Timer / 8f % 1);
         }
 
         public static Color Lerp(this Color baseColor, Color targetColor, float amount) => Color.Lerp(baseColor, targetColor, amount);
