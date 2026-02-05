@@ -1,21 +1,23 @@
+using GoldLeaf.Core;
+using GoldLeaf.Effects.Dusts;
+using GoldLeaf.Items.Grove;
+using GoldLeaf.Items.Grove.Boss;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using System;
+using System.IO;
 using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using static Terraria.ModLoader.ModContent;
-using static GoldLeaf.Core.Helper;
+using static GoldLeaf.Core.ColorHelper;
 using static GoldLeaf.Core.CrossMod.RedemptionHelper;
-using GoldLeaf.Core;
-using GoldLeaf.Items.Grove;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.Audio;
-using Terraria.GameContent;
-using Terraria.DataStructures;
-using GoldLeaf.Effects.Dusts;
-using System;
-using ReLogic.Content;
-using GoldLeaf.Items.Grove.Boss;
-using System.IO;
+using static GoldLeaf.Core.Helper;
+using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Items.Blizzard
 {
@@ -37,7 +39,6 @@ namespace GoldLeaf.Items.Blizzard
 			Item.DamageType = DamageClass.Summon;
             Item.shoot = ProjectileType<ArcticWraith>();
             Item.buffType = BuffType<ArcticWraithBuff>();
-            Item.mana = 10;
 			Item.width = 30;
             Item.knockBack = 6.5f;
 			Item.height = 36;
@@ -142,15 +143,15 @@ namespace GoldLeaf.Items.Blizzard
         private const int Turning = 3;
         //private const int Spawning = 4;
 
-        const int teleportRange = 1600;
-        const int targetingRange = 800;
-        const float attackingRange = 400;
+        private static readonly int teleportRange = 1600;
+        private static readonly int targetingRange = 800;
+        private static readonly float attackingRange = 400;
 
-        const float speed = 12f;
-        const float inertia = 50f;
-        const float shootSpeed = 6.75f;
+        private static readonly float speed = 12f;
+        private static readonly float inertia = 50f;
+        private static readonly float shootSpeed = 6.75f;
 
-        const int animationSpeed = 6;
+        private static readonly int animationSpeed = 6;
 
         bool animReverse = false;
         bool hasTarget = false;
@@ -400,7 +401,7 @@ namespace GoldLeaf.Items.Blizzard
                 {
                     Projectile.direction = Projectile.spriteDirection = player.direction;
                     //if (Projectile.Center.Distance(player.MountedCenter) <= 100)
-                        Projectile.position.X = Vector2.Lerp(Projectile.position, idlePosition - (Projectile.Size/2), 0.1f).X;
+                        Projectile.position.X = Vector2.SmoothStep(Projectile.position, idlePosition - (Projectile.Size/2), 0.125f).X;
                 }
 
                 Projectile.direction = Projectile.spriteDirection = (Projectile.Center.X > player.Center.X) ? -1 : 1;
@@ -408,17 +409,31 @@ namespace GoldLeaf.Items.Blizzard
             Projectile.position.Y += 0.3f * (float)Math.Sin(GoldLeafWorld.rottime + (Projectile.minionPos * 1.25f));
             Projectile.rotation = Projectile.velocity.X * 0.03f;
             #endregion behavior
+
+            #region misc visuals
+            if (!Main.dedServ && Projectile.velocity.Length() >= 4f && Main.rand.NextBool(4) && hasTarget && State != Recoil)
+            {
+                Vector2 position = (Projectile.velocity.X > 0) ? Projectile.TopLeft : Projectile.position;//Projectile.position + new Vector2((Projectile.velocity.X > 0) ? 12f : -12f, 0);
+                Vector2 velocity = Projectile.velocity;
+                velocity.Normalize();
+                velocity *= Main.rand.NextFloat(-2.25f, -0.85f);
+
+                Dust dust = Dust.NewDustDirect(position + new Vector2(0, 4), Projectile.width, Projectile.height - 8, DustType<ArcticDust>(), Alpha: 60);
+                dust.frame = new Rectangle(0, 10 * Main.rand.Next(1, 3), 10, 10);
+                dust.velocity = velocity;
+            }
+            #endregion misc visuals
         }
 
         public override void PostAI()
         {
             if (hasTarget)
             {
-                Projectile.localAI[0] = MathHelper.Lerp(Projectile.localAI[0], 1f, 0.1f);
+                Projectile.localAI[0] = MathHelper.SmoothStep(Projectile.localAI[0], 1f, 0.125f);
             }
             else
             {
-                Projectile.localAI[0] = MathHelper.Lerp(Projectile.localAI[0], 0f, 0.15f);
+                Projectile.localAI[0] = MathHelper.SmoothStep(Projectile.localAI[0], 0f, 0.15f);
             }
         }
 
@@ -491,26 +506,34 @@ namespace GoldLeaf.Items.Blizzard
 
             Rectangle rect = new((texture.Width / 4) * (int)State, texture.Height / Main.projFrames[Projectile.type] * Projectile.frame, 
                 (texture.Width / 4), texture.Height / Main.projFrames[Projectile.type]);
-
-            if (hasTarget)
+            
+            //trail
+            if (Projectile.localAI[0] >= 0.05f)
             {
                 for (int k = 0; k < Projectile.oldPos.Length; k++)
                 {
                     var oldEffects = (Projectile.oldSpriteDirection[k] == -1) ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-                    Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + rect.Size()/2 + new Vector2(0, 2);
-                    Color color1 = new(0, 225, 241);
-                    Color color2 = new(0, 38, 128);
+                    Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + rect.Size()/2 + new Vector2(0, 2f + (k));
+                    Color color1 = new Color(0, 205, 241).Alpha();
+                    Color color2 = new Color(0, 38, 128).Alpha();
+                    Color finalColor = new Gradient([(color1, 0f), (color2, 1f)]).GetColor(k / (Projectile.oldPos.Length + 2f));
 
-                    Main.EntitySpriteDraw(texture, drawPos, rect, Color.Lerp(color1, color2, k / (Projectile.oldPos.Length + 2f)) with { A = 0 } * (0.8f - (k / (Projectile.oldPos.Length + 4f))) * Projectile.localAI[0], Projectile.oldRot[k], rect.Size() / 2, Projectile.scale, oldEffects, 0f);
+                    Main.EntitySpriteDraw(texture, drawPos, rect, finalColor * (0.8f - (k / (Projectile.oldPos.Length + 4f))) * Projectile.localAI[0], Projectile.oldRot[k], rect.Size() / 2, Projectile.scale * (1.15f - (0.1f * k)), oldEffects, 0f);
                 }
             }
-
+            //aura
+            float time = Main.GlobalTimeWrappedHourly * 0.15f;
+            for (float k = 0f; k < 1f; k += 1 / 3f)
+            {
+                Main.EntitySpriteDraw(texture, Projectile.Center + new Vector2(0f, 2f).RotatedBy((k + (time * -1.75f)) * ((float)Math.PI * 2f)) - Main.screenPosition, rect, new Color(97, 235, 251).Alpha() * 0.35f, Projectile.rotation, rect.Size() / 2, Projectile.scale, effects, 0f);
+            }
+            //minion
             Main.EntitySpriteDraw(texture, (Projectile.Center + offset) - Main.screenPosition, rect, Projectile.GetAlpha(lightColor), Projectile.rotation, rect.Size()/2, Projectile.scale, effects, 0f);
-
+            //metal trim
             float brightness = Lighting.Brightness((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16);
             if (brightness <= 0.3f)
-                Main.EntitySpriteDraw(trimTex.Value, (Projectile.Center + offset) - Main.screenPosition, rect, ColorHelper.AdditiveWhite() * (0.3f - brightness), Projectile.rotation, rect.Size()/2, Projectile.scale, effects, 0);
-            
+                Main.EntitySpriteDraw(trimTex.Value, (Projectile.Center + offset) - Main.screenPosition, rect, Color.White.Alpha() * (0.3f - brightness), Projectile.rotation, rect.Size()/2, Projectile.scale, effects, 0);
+            //glow
             Main.EntitySpriteDraw(glowTex.Value, (Projectile.Center + offset) - Main.screenPosition, rect, Color.White, Projectile.rotation, rect.Size()/2, Projectile.scale, effects, 0f);
 
             return false;
@@ -522,13 +545,13 @@ namespace GoldLeaf.Items.Blizzard
         private static Asset<Texture2D> alphaBloom;
         public override void Load()
         {
-            alphaBloom = Request<Texture2D>("GoldLeaf/Textures/GlowAlpha");
+            alphaBloom = Request<Texture2D>("GoldLeaf/Textures/Glow");
         }
 
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 8;
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 8;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 
             ProjectileID.Sets.MinionShot[Projectile.type] = true;
@@ -546,14 +569,15 @@ namespace GoldLeaf.Items.Blizzard
             Projectile.tileCollide = false;
             Projectile.timeLeft = TimeToTicks(15);
             Projectile.extraUpdates = 1;
+            Projectile.localAI[0] = 1f;
 
             Projectile.DamageType = DamageClass.Summon;
 
             Projectile.GetGlobalProjectile<GoldLeafProjectile>().critDamageMod = -0.5f;
         }
 
-        const float accelerationSpeed = 0.7f;
-        const float maxSpeed = 7.25f;
+        private static readonly float accelerationSpeed = 0.7f;
+        private static readonly float maxSpeed = 7.25f;
 
         public override bool? CanHitNPC(NPC target)
         {
@@ -602,24 +626,32 @@ namespace GoldLeaf.Items.Blizzard
 
         public override bool PreDraw(ref Color lightColor)
         {
+            Projectile.localAI[0] = MathHelper.SmoothStep(Projectile.localAI[0], 0, 0.15f);
+
             Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
+            Texture2D flare = Request<Texture2D>("GoldLeaf/Textures/Flares/FlareSmall").Value;
             Rectangle rect = texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame);
             
             //trail
-            for (int k = 0; k < Projectile.oldPos.Length; k++)
+            for (int k = Projectile.oldPos.Length - 1; k >= 0; k--)
             {
-                Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + texture.Size() / 2;
-                Color color1 = new(0, 225, 241) { A = 185 };
-                Color color2 = new(0, 38, 128) { A = 185 };
+                Vector2 drawOrigin = new(rect.Width * 0.5f, rect.Height * 0.5f);
+                Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin;
+                
+                Color color1 = Color.CornflowerBlue.Alpha(145);
+                Color color2 = new Color(0, 38, 148).Alpha(145);
+                Color finalColor = new Gradient([(color1, 0f), (color2, 1f)]).GetColor(k / (Projectile.oldPos.Length + 2f));
 
-                Main.EntitySpriteDraw(texture, drawPos, rect, Color.Lerp(color1, color2, k / (Projectile.oldPos.Length + 2f)) /*with { A = 0 }*/ * (0.65f - (k / 10f)), Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None);
+                Main.EntitySpriteDraw(texture, drawPos, rect, finalColor * (0.85f - (k / 10f)), Projectile.rotation, drawOrigin, Projectile.scale * (1f - (0.065f * k)), SpriteEffects.None);
             }
             //glow
-            Main.EntitySpriteDraw(alphaBloom.Value, Projectile.Center - Main.screenPosition, null, Color.DodgerBlue.Alpha(0) * MathHelper.Clamp(Projectile.Opacity, 0.4f, 0.85f), Projectile.rotation, alphaBloom.Size() / 2, Projectile.scale * MathHelper.Clamp(Projectile.Opacity * 1.25f, 0.65f, 0.8f), SpriteEffects.None);
+            Main.EntitySpriteDraw(alphaBloom.Value, Projectile.Center - Main.screenPosition, null, Color.RoyalBlue.Alpha(180) * MathHelper.Clamp(Projectile.Opacity - 0.45f, 0.4f, 0.85f), Projectile.rotation, alphaBloom.Size() / 2, Projectile.scale * MathHelper.Clamp(Projectile.localAI[0] * 1.5f, 0.65f, 0.95f) * 1.05f, SpriteEffects.None);
             //projectile
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, rect, Color.White, Projectile.rotation, rect.Size() / 2, Projectile.scale, SpriteEffects.None, 0);
+            //flare
+            Main.EntitySpriteDraw(flare, Projectile.Center - Main.screenPosition, null, Color.LightSkyBlue.Alpha() * MathHelper.Clamp(Projectile.localAI[0] - 0.25f, 0f, 0.85f), Projectile.rotation + (Main.GlobalTimeWrappedHourly * 12f % MathHelper.TwoPi), flare.Size() / 2, Projectile.scale * MathHelper.Clamp((Projectile.localAI[0] - 0.1f) * 2f, 0f, 1.75f), SpriteEffects.None);
             //front glow
-            Main.EntitySpriteDraw(alphaBloom.Value, Projectile.Center - Main.screenPosition, null, Color.LightSkyBlue.Alpha(0) * MathHelper.Clamp(Projectile.Opacity - 0.25f, 0f, 0.55f), Projectile.rotation, alphaBloom.Size() / 2, Projectile.scale * MathHelper.Clamp(Projectile.Opacity * 1.75f, 0.5f, 0.75f), SpriteEffects.None);
+            Main.EntitySpriteDraw(alphaBloom.Value, Projectile.Center - Main.screenPosition, null, Color.LightSkyBlue.Alpha() * MathHelper.Clamp(Projectile.Opacity - 0.25f, 0f, 0.6f), Projectile.rotation, alphaBloom.Size() / 2, Projectile.scale * MathHelper.Clamp(Projectile.localAI[0] * 1.75f, 0.5f, 1.1f), SpriteEffects.None);
             return false;
         }
 

@@ -4,8 +4,8 @@ NightshadeHeist: {
 }
 
 ConstellationTag: {
-	DisplayName: Constellated
-	Description: Whip range is increased
+	DisplayName: Star stacks
+	Description: Whip range and tag damage is increased by {0}
 }
 
 AmberStun: {

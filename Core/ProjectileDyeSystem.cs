@@ -46,7 +46,7 @@ namespace GoldLeaf.Core
                     DyeGroup.Pet => owner.cPet,
                     DyeGroup.LightPet => owner.cLight,
                     DyeGroup.Grapple => owner.cGrapple,
-                    //DyeGroup.Special => owner.cMinecart, TODO: implement item or ui to activate this
+                    //DyeGroup.Special => owner.cMinecart, //TODO: implement item or ui to activate this
                     _ => 0,
                 };
             }

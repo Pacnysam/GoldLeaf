@@ -43,13 +43,14 @@ namespace GoldLeaf.Core
             }
         }
 
-        public static Gradient QuickGradient(List<Color> colors)
+        public static Gradient QuickGradient(List<Color> colors, bool loop = true)
         {
             List<(Color, float)> colorPoints = [];
             for (int i = 0; i <= colors.Count - 1; i++)
             {
-                colorPoints.Add(new(colors[i], Utils.Remap(i, 0f, colors.Count - 1, 0f, 1f)));
+                colorPoints.Add(new(colors[i], Utils.Remap(i, 0f, loop? colors.Count : colors.Count - 1, 0f, 1f)));
             }
+            if (loop) colorPoints.Add(new(colors[0], 1f));
             return new Gradient(colorPoints);
         }
 
@@ -194,6 +195,14 @@ namespace GoldLeaf.Core
             }
             return Color.White;
         }
+
+        public static Gradient PrideFlag(bool loop = true) => QuickGradient([new Color(228, 3, 3), new Color(255, 140, 0), new Color(255, 237, 0), new Color(0, 138, 38), new Color(0, 76, 255), new Color(115, 41, 130)], loop);
+        public static Gradient LesbianFlag(bool loop = true) => QuickGradient([new Color(214, 44, 0), new Color(255, 153, 86), Color.LightYellow, new Color(211, 98, 164), new Color(164, 1, 98)], loop);
+        public static Gradient GayFlag(bool loop = true) => QuickGradient([new Color(27, 136, 107), new Color(144, 218, 181), Color.White, new Color(119, 165, 214), new Color(64, 37, 116)], loop);
+        public static Gradient BiFlag(bool loop = true) => new(!loop? [(new Color(214, 2, 112), 0.35f), (new Color(155, 79, 150), 0.5f), (new Color(0, 56, 168), 0.65f)] : 
+            [(new Color(107, 29, 140), 0f), (new Color(214, 2, 112), 0.1f), (new Color(214, 2, 112), 0.35f), (new Color(155, 79, 150), 0.5f), (new Color(0, 56, 168), 0.65f), (new Color(0, 56, 168), 0.9f), (new Color(107, 29, 140), 1f)]);
+        public static Gradient TransFlag(bool loop = true) => QuickGradient([new Color(89, 206, 249), new Color(244, 170, 183), Color.White, new Color(244, 170, 183), new Color(89, 206, 249)], loop);
+        public static Gradient AceFlag(bool loop = true) => QuickGradient([new Color(30, 30, 30), new Color(160, 160, 160), Color.White, new Color(154, 7, 121)], loop);
 
         /// <summary>
         /// Overhealth color (R:19,G:223,B:229,A:255).

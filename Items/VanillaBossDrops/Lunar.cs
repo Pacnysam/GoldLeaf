@@ -81,7 +81,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
         }
 
         public override bool NeedsAmmo(Player player) => false;
-        public override bool? CanChooseAmmo(Item ammo, Player player) => ammo.type == ItemType<FallenMoon>();
+        public override bool? CanChooseAmmo(Item ammo, Player player) => ammo.type == ItemID.FallenStar;//ItemType<FallenMoon>();
         public override bool CanConsumeAmmo(Item ammo, Player player) => false;
 
         public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
@@ -112,14 +112,14 @@ namespace GoldLeaf.Items.VanillaBossDrops
             return false;
         }
 
-        /*public override void AddRecipes()
+        public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe()
             .AddRecipeGroup("GoldLeaf:EvilYoyo")
             .AddIngredient(ItemType<FallenMoon>())
-            .AddTile(TileID.Anvils)
+            .AddTile(TileID.Anvils)//.AddTile(TileType<MagicFountain>()) //TODO: implement this
             .Register();
-        }*/
+        }
     }
 
     public class LunarP : ModProjectile
@@ -166,7 +166,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
         {
             Player player = Main.player[Projectile.owner];
 
-            if (!Main.dayTime && (player.ZoneOverworldHeight || player.ZoneSkyHeight) && player.channel && player.HasItem(ItemType<FallenMoon>())) 
+            if (!Main.dayTime && (player.ZoneOverworldHeight || player.ZoneSkyHeight) && player.channel && player.HasItem(ItemID.FallenStar)) 
             {
                 MoonTimer++;
                 
@@ -175,7 +175,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
                     MoonTimer = 0;
                     //SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/StarSlot") { Variants = [1, 2, 3] }, Projectile.Center);
                     SoundEngine.PlaySound(SoundID.NPCDeath7, Projectile.Center);
-                    player.ConsumeItem(ItemType<FallenMoon>());
+                    player.ConsumeItem(ItemID.FallenStar);
                     Projectile.localAI[2] = 3f;
 
                     if (Main.netMode != NetmodeID.MultiplayerClient)

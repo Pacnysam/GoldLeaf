@@ -111,10 +111,7 @@ namespace GoldLeaf.Tiles.Grove
 
         public override void RandomUpdate(int i, int j)
         {
-            WorldGen.SpreadGrass(i+1, j, TileID.Mud, TileType<GroveGrassT>(), true); //bruh this sucks i needa redo this later on god
-            WorldGen.SpreadGrass(i-1, j, TileID.Mud, TileType<GroveGrassT>(), true);
-            WorldGen.SpreadGrass(i, j+1, TileID.Mud, TileType<GroveGrassT>(), true);
-            WorldGen.SpreadGrass(i, j-1, TileID.Mud, TileType<GroveGrassT>(), true);
+            //TODO: this
         }
 
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
