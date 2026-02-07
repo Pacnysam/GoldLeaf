@@ -36,7 +36,7 @@ namespace GoldLeaf.Effects.Dusts
             dust.frame = new Rectangle(0, 0, 10, 10);
             dust.velocity *= 1.75f;
 
-            dust.position += new Vector2(5, 5);
+            //dust.position += new Vector2(5, 5);
         }
 
         public override bool Update(Dust dust)

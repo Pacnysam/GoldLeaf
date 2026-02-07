@@ -31,7 +31,7 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
 
         public override void SetStaticDefaults()
         {
-            ItemSets.Glowmask[Type] = (glowTex, Color.White.Alpha(160), true);
+            ItemSets.Glowmask[Type] = (glowTex, Color.White.Alpha(120), true);
             Item.AddElements([Element.Fire, Element.Arcane, Element.Holy]);
         }
 
@@ -132,7 +132,7 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
             for (int k = 1; k < Projectile.oldPos.Length - 1; k++)
             {
                 Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + texture.Size()/2;
-                Color color = new Color(196, 43, 255) * ((float)(Projectile.oldPos.Length - k) / Projectile.oldPos.Length);
+                Color color = new Color(196, 43, 255).Alpha(145) * ((float)(Projectile.oldPos.Length - k) / Projectile.oldPos.Length);
                 float scale = Projectile.scale * Math.Min(Counter * 0.0025f, 1.5f);
 
                 Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, texture.Size() / 2, scale, SpriteEffects.None);
@@ -168,7 +168,7 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
 
                     for (float k = 0; k < Math.PI * 2; k += Main.rand.NextFloat(0.1f, 0.24f))
                     {
-                        Dust dust = Dust.NewDustPerfect(Projectile.Center + new Vector2(0, Main.rand.NextFloat(10, 15)).RotatedBy(k), DustType<AetherDust>(), Vector2.One.RotatedBy(k) * 3f, 0, Color.White, Main.rand.NextFloat(0.75f, 1.05f));
+                        Dust dust = Dust.NewDustPerfect(Projectile.Center + new Vector2(0, Main.rand.NextFloat(10, 15)).RotatedBy(k), DustType<AetherDust>(), Vector2.One.RotatedBy(k) * 3f, 0, default, Main.rand.NextFloat(0.75f, 1.05f));
                         dust.velocity *= -0.25f;
                         dust.noGravity = true;
                         dust.shader = Projectile.GetDyeShader();
@@ -681,7 +681,7 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
             }
             else if (npc.HasBuff<AetherFlameBuff>() && Main.rand.NextBool(4))
             {
-                Dust dust = Dust.NewDustDirect(npc.position, npc.width, npc.height, DustType<AetherDust>(), 0f, Main.rand.NextFloat(-1.25f, -0.9f), 0, Color.White, Main.rand.NextFloat(0.6f, 1.2f));
+                Dust dust = Dust.NewDustDirect(npc.position, npc.width, npc.height, DustType<AetherDust>(), 0f, Main.rand.NextFloat(-1.25f, -0.9f), 0, Color.White.Alpha(20), Main.rand.NextFloat(0.6f, 1.2f));
                 dust.velocity.X *= 0.25f;
 
                 if (dust.velocity.Y > 0)
@@ -760,7 +760,7 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
             }
             else if (Player.HasBuff<AetherFlameBuff>() && Main.rand.NextBool(3) && !Player.dead)
             {
-                Dust dust = Dust.NewDustDirect(Player.position, Player.width, Player.height, DustType<AetherDust>(), 0f, Main.rand.NextFloat(-1.25f, -0.9f), 0, Color.White, Main.rand.NextFloat(0.6f, 0.85f));
+                Dust dust = Dust.NewDustDirect(Player.position, Player.width, Player.height, DustType<AetherDust>(), 0f, Main.rand.NextFloat(-1.25f, -0.9f), 0, Color.White.Alpha(20), Main.rand.NextFloat(0.6f, 0.85f));
                 dust.velocity.X *= 0.25f;
 
                 if (dust.velocity.Y > 0)

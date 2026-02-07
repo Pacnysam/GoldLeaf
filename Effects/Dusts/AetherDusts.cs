@@ -55,6 +55,7 @@ namespace GoldLeaf.Effects.Dusts
             dust.scale *= 3;
             dust.velocity *= 1.8f;
             dust.alpha = -90;
+            if (dust.color == default) dust.color = Color.White.Alpha(120);
         }
 
         public override bool MidUpdate(Dust dust)
@@ -80,12 +81,9 @@ namespace GoldLeaf.Effects.Dusts
             return false;
         }
 
-        public override Color? GetAlpha(Dust dust, Color lightColor)
-            => new Color(255, 255, 255, 0);
-
         public override bool PreDraw(Dust dust)
         {
-            Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, null, ColorHelper.AdditiveWhite() * dust.Opacity(), dust.rotation, Texture2D.Size() / 2f, new Vector2(1f, Math.Clamp(dust.velocity.Length() * 1.25f, 0.2f, 1.15f)) * dust.scale, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, null, dust.color * dust.Opacity(), dust.rotation, Texture2D.Size() / 2f, new Vector2(1f, Math.Clamp(dust.velocity.Length() * 1.25f, 0.2f, 1.15f)) * dust.scale, SpriteEffects.None, 0f);
             return false;
         }
     }
@@ -99,6 +97,7 @@ namespace GoldLeaf.Effects.Dusts
             dust.noGravity = false;
             dust.noLight = false;
             dust.velocity *= 1.8f;
+            if (dust.color == default) dust.color = new Color(255, 119, 246).Alpha(40);//Main.DiscoColor.Alpha(40);
         }
 
         public override bool Update(Dust dust)
@@ -121,7 +120,7 @@ namespace GoldLeaf.Effects.Dusts
 
         public override bool PreDraw(Dust dust)
         {
-            Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, null, new Color(255, 119, 246) { A = 0 } * dust.Opacity(), dust.rotation, Texture2D.Size() / 2f, new Vector2(1f, Math.Clamp(dust.velocity.Length() * 1.35f, 0.45f, 3.5f) * 0.75f) * dust.scale, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, null, dust.color * dust.Opacity(), dust.rotation, Texture2D.Size() / 2f, new Vector2(1f, Math.Clamp(dust.velocity.Length() * 1.35f, 0.45f, 3.5f) * 0.75f) * dust.scale, SpriteEffects.None, 0f);
             return false;
         }
     }

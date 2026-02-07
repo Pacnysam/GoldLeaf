@@ -145,10 +145,10 @@ namespace GoldLeaf.Items.Blizzard
 
         private static readonly int teleportRange = 1600;
         private static readonly int targetingRange = 800;
-        private static readonly float attackingRange = 400;
+        private static readonly float attackingRange = 450;
 
         private static readonly float speed = 12f;
-        private static readonly float inertia = 50f;
+        private static readonly float inertia = 25f;
         private static readonly float shootSpeed = 6.75f;
 
         private static readonly int animationSpeed = 6;
@@ -411,7 +411,7 @@ namespace GoldLeaf.Items.Blizzard
             #endregion behavior
 
             #region misc visuals
-            if (!Main.dedServ && Projectile.velocity.Length() >= 4f && Main.rand.NextBool(4) && hasTarget && State != Recoil)
+            if (!Main.dedServ && Projectile.velocity.Length() >= 4f && Main.rand.NextBool(3) && hasTarget && State != Recoil)
             {
                 Vector2 position = (Projectile.velocity.X > 0) ? Projectile.TopLeft : Projectile.position;//Projectile.position + new Vector2((Projectile.velocity.X > 0) ? 12f : -12f, 0);
                 Vector2 velocity = Projectile.velocity;
@@ -587,14 +587,12 @@ namespace GoldLeaf.Items.Blizzard
             return !target.friendly;
         }
 
-        bool HasTarget => (Target.active && Target.chaseable && Projectile.Center.Distance(Target.Center) <= 500) && Counter <= TimeToTicks(10);
+        bool HasTarget => (Target.CanBeChasedBy(Projectile) && Projectile.Center.Distance(Target.Center) <= 550) && Counter <= TimeToTicks(10);
         NPC Target => Main.npc[(int)Projectile.ai[0]];
         private ref int Counter => ref Projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
 
         public override void AI()
         {
-            //NPC target = Main.npc[(int)Projectile.ai[0]];
-
             Projectile.Opacity = MathHelper.SmoothStep(Projectile.Opacity, 0, 0.125f);
 
             Projectile.tileCollide = !HasTarget;
@@ -614,13 +612,15 @@ namespace GoldLeaf.Items.Blizzard
             }
 
             if (!Main.dedServ)
-                Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), (0 / 255f) * 0.6f, (164 / 255f) * 0.6f, (242 / 255f) * 0.6f);
-
-            if (Main.rand.NextBool(4))
             {
-                Dust dust = Dust.NewDustDirect(Projectile.position - Projectile.velocity, Projectile.width, Projectile.height, DustType<ArcticDust>());
-                //Dust dust = Dust.NewDustDirect(Projectile.position - Projectile.velocity, Projectile.width, Projectile.height, DustType<AetherSparkDust>(), newColor: Color.Aqua); this is cool but i should use this effect elsewhere
-                dust.velocity = Vector2.Zero + Projectile.velocity * 0.35f;
+                Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), (0 / 255f) * 0.6f, (164 / 255f) * 0.6f, (242 / 255f) * 0.6f);
+                
+                if (Main.rand.NextBool(4))
+                {
+                    Dust dust = Dust.NewDustDirect(Projectile.position - Projectile.velocity, Projectile.width, Projectile.height, DustType<ArcticDust>());
+                    dust.velocity = Projectile.velocity * 0.35f;
+                    dust.frame = new Rectangle(0, 10 * Main.rand.Next(0, 2), 10, 10);
+                }
             }
         }
 
@@ -652,7 +652,7 @@ namespace GoldLeaf.Items.Blizzard
             Main.EntitySpriteDraw(flare, Projectile.Center - Main.screenPosition, null, Color.LightSkyBlue.Alpha() * MathHelper.Clamp(Projectile.localAI[0] - 0.25f, 0f, 0.85f), Projectile.rotation + (Main.GlobalTimeWrappedHourly * 12f % MathHelper.TwoPi), flare.Size() / 2, Projectile.scale * MathHelper.Clamp((Projectile.localAI[0] - 0.1f) * 2f, 0f, 1.75f), SpriteEffects.None);
             //front glow
             Main.EntitySpriteDraw(alphaBloom.Value, Projectile.Center - Main.screenPosition, null, Color.LightSkyBlue.Alpha() * MathHelper.Clamp(Projectile.Opacity - 0.25f, 0f, 0.6f), Projectile.rotation, alphaBloom.Size() / 2, Projectile.scale * MathHelper.Clamp(Projectile.localAI[0] * 1.75f, 0.5f, 1.1f), SpriteEffects.None);
-            return false;
+            return true;
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
