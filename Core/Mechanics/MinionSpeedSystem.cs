@@ -64,7 +64,7 @@ namespace GoldLeaf.Core.Mechanics
                     //projectile.netUpdate = true;
                     if (projectile.extraUpdates > 0)
                     {
-                        //projectile.position -= projectile.velocity;
+                        projectile.position -= projectile.velocity;
                         projectile.extraUpdates--;
                     }
                 }

@@ -594,7 +594,7 @@ AcrylicTurretPaint: {
 }
 
 ForbiddenFruit: {
-	DisplayName: Forbidden Snakefruit
+	DisplayName: Vampire Fruit
 	Tooltip: ""
 	HealDesc:
 		'''

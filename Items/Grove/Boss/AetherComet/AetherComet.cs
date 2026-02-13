@@ -50,7 +50,7 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
 			Item.knockBack = 6;
             Item.crit = -4;
             Item.damage = 24;
-            Item.ArmorPenetration = 5;
+            Item.ArmorPenetration = 10;
             //Item.UseSound = SoundID.DD2_EtherianPortalOpen;
             Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/RoR2/FireCast") { Volume = 0.85f };
             Item.shoot = ProjectileType<AetherBolt>();
@@ -330,7 +330,7 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
 
             if (Main.myPlayer == Projectile.owner) 
             {
-                Projectile explosion = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ProjectileType<AetherBurst>(), (int)(Projectile.damage * 2f) + (int)(ShotsFired * 2.2), Projectile.knockBack, player.whoAmI);
+                Projectile explosion = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ProjectileType<AetherBurst>(), (int)(Projectile.damage * 2.5f) + (int)(ShotsFired * 2.2), Projectile.knockBack, player.whoAmI);
                 explosion.ai[0] = explosionVolume;
                 if (Counter < THRESHHOLD) explosion.ai[1] = 12;
                 if (ShotsFired >= 12) explosion.ai[2] = 1;
@@ -667,7 +667,7 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
         {
             if (aetherFlareUpTime > 0)
             {
-                Dust dust = Dust.NewDustDirect(npc.position, npc.width, npc.height, DustType<AetherSparkDust>(), Main.rand.NextFloat(-0.125f, 0.125f), Main.rand.NextFloat(-1.25f, -0.9f), 0, Color.White, Main.rand.NextFloat(0.75f, 1.2f));
+                Dust dust = Dust.NewDustDirect(npc.position, npc.width, npc.height, DustType<AetherSparkDust>(), Main.rand.NextFloat(-0.125f, 0.125f), Main.rand.NextFloat(-1.25f, -0.9f), 0, default, Main.rand.NextFloat(0.75f, 1.2f));
                 dust.velocity.X *= 0.25f;
 
                 if (dust.velocity.Y > 0)
@@ -746,7 +746,7 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
         {
             if (aetherFlareUpTime > 0)
             {
-                Dust dust = Dust.NewDustDirect(Player.position, Player.width, Player.height, DustType<AetherSparkDust>(), Main.rand.NextFloat(-0.125f, 0.125f), Main.rand.NextFloat(-1.25f, -0.9f), 0, Color.White, Main.rand.NextFloat(0.75f, 1.2f));
+                Dust dust = Dust.NewDustDirect(Player.position, Player.width, Player.height, DustType<AetherSparkDust>(), Main.rand.NextFloat(-0.125f, 0.125f), Main.rand.NextFloat(-1.25f, -0.9f), 0, default, Main.rand.NextFloat(0.75f, 1.2f));
                 dust.velocity.X *= 0.25f;
 
                 if (dust.velocity.Y > 0)

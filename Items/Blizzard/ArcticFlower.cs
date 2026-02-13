@@ -144,7 +144,7 @@ namespace GoldLeaf.Items.Blizzard
         //private const int Spawning = 4;
 
         private static readonly int teleportRange = 1600;
-        private static readonly int targetingRange = 800;
+        private static readonly int targetingRange = 750;
         private static readonly float attackingRange = 450;
 
         private static readonly float speed = 12f;
