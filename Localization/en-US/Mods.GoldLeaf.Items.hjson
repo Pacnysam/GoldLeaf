@@ -210,7 +210,7 @@ Sediment: {
 
 HiveCarcass: {
 	DisplayName: Hive Carcass
-	Tooltip: Fills healing potions with honey
+	Tooltip: Hearts are dipped in honey
 }
 
 GroveHook: {

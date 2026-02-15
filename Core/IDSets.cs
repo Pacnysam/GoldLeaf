@@ -1,22 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Terraria;
-using static Terraria.ModLoader.ModContent;
-using Terraria.ModLoader;
-using Terraria.ID;
-using Microsoft.Xna.Framework.Graphics;
+﻿using GoldLeaf.Core;
 using GoldLeaf.Effects.Dusts;
-using GoldLeaf.Tiles.Grove;
-using Terraria.DataStructures;
-using Terraria.Audio;
-using GoldLeaf.Core;
-using ReLogic.Content;
-using static GoldLeaf.Core.Helper;
 using GoldLeaf.Items.Blizzard;
-using GoldLeaf.Items.Accessories;
 using GoldLeaf.Items.Blizzard.Armor;
+using GoldLeaf.Items.Jungle.ToxicPositivity;
 using GoldLeaf.Items.Ocean;
+using GoldLeaf.Items.Pickups;
+using GoldLeaf.Tiles.Grove;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using System;
+using System.Collections.Generic;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
+using static GoldLeaf.Core.Helper;
+using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Core
 {
@@ -36,6 +37,9 @@ namespace GoldLeaf.Core
         /*public static (Asset<Texture2D>, Color, bool)[] ArmorLongCoat = ItemID.Sets.Factory.CreateNamedSet("ArmorLongCoat")
             .Description("ArmorLongCoat")
             .RegisterCustomSet<(Asset<Texture2D>, Color, bool)>((null, default, false));*/
+
+        public static bool[] HeartPickup = ItemID.Sets.Factory.CreateNamedSet("HeartPickup")
+            .RegisterBoolSet(false, ItemID.Heart, ItemID.CandyApple, ItemID.CandyCane, ItemType<HeartTiny>(), ItemType<HeartLarge>());
 
         public static bool[] isASword = ItemID.Sets.Factory.CreateNamedSet("isASword")
             .Description("Enables unique interactions such as clashing, and unique prefixes.")

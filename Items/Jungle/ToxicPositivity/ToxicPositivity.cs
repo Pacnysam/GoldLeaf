@@ -19,7 +19,7 @@ using Terraria.Localization;
 using GoldLeaf.Items.Blizzard;
 using GoldLeaf.Core.Mechanics;
 
-namespace GoldLeaf.Items.Accessories
+namespace GoldLeaf.Items.Jungle.ToxicPositivity
 {
 	public class ToxicPositivity : ModItem
 	{

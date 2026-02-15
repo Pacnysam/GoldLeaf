@@ -14,9 +14,9 @@ using Terraria.ID;
 using Terraria;
 using Microsoft.Xna.Framework;
 using GoldLeaf.Items.VanillaBossDrops;
-using GoldLeaf.Items.Accessories;
 using Terraria.DataStructures;
 using GoldLeaf.Items.Potions;
+using GoldLeaf.Items.Jungle.ToxicPositivity;
 
 namespace GoldLeaf.Items.Misc
 {

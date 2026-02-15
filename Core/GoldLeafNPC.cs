@@ -8,7 +8,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
-using GoldLeaf.Items.Accessories;
 using GoldLeaf.Items.Vanity;
 using GoldLeaf.Items.Dyes;
 using Terraria.GameContent.ItemDropRules;
@@ -23,6 +22,7 @@ using GoldLeaf.Items.Granite;
 using Terraria.DataStructures;
 using GoldLeaf.Items.Misc;
 using GoldLeaf.Items.Hell;
+using GoldLeaf.Items.Jungle.ToxicPositivity;
 
 namespace GoldLeaf.Core
 {
