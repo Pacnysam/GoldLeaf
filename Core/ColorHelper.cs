@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
 
@@ -14,125 +12,72 @@ namespace GoldLeaf.Core
         public static Color AdditiveWhite(int alpha = 0) => new(255, 255, 255) { A = (byte)alpha };
         
         public static Color Prefix(bool good = true) => good? new(120, 190, 120) : new(190, 120, 120);
-        
-        public static Color AuroraColor()
+
+        public readonly struct Gradient(List<(Color, float)> points)
         {
-            float timer = (Main.GlobalTimeWrappedHourly * 3f) % 9;
-            var auroraGreen = new Color(0, 255, 189);
-            var auroraBlue = new Color(0, 164, 242);
-            var auroraPurple = new Color(122, 63, 255);
-
-            if (timer < 2)
-                return Color.Lerp(auroraGreen, auroraBlue, timer / 2);
-            else if (timer < 4)
-                return Color.Lerp(auroraBlue, auroraPurple, (timer - 2) / 2);
-            else if (timer < 6)
-                return Color.Lerp(auroraPurple, auroraBlue, (timer - 4) / 2);
-            else
-                return Color.Lerp(auroraBlue, auroraGreen, (timer - 6) / 2);
-        }
-
-        public static Color AuroraColor(float Timer)
-        {
-            float timer = Timer % 9;
-            var auroraGreen = new Color(0, 255, 189);
-            var auroraBlue = new Color(0, 164, 242);
-            var auroraPurple = new Color(122, 63, 255);
-
-            //return Gradient(Timer / 8f, [auroraBlue, auroraPurple, auroraBlue, auroraGreen, auroraBlue]);
-
-            if (timer < 2)
-                return Color.Lerp(auroraGreen, auroraBlue, timer / 2);
-            else if (timer < 4)
-                return Color.Lerp(auroraBlue, auroraPurple, (timer - 2) / 2);
-            else if (timer < 6)
-                return Color.Lerp(auroraPurple, auroraBlue, (timer - 4) / 2);
-            else
-                return Color.Lerp(auroraBlue, auroraGreen, (timer - 6) / 2);
-        }
-
-        public static Color AuroraAccentColor()
-        {
-            float timer = Main.GlobalTimeWrappedHourly % 9;
-            var auroraGreen = new Color(0, 255, 189);
-            var auroraBlue = new Color(0, 164, 242);
-            var auroraPurple = new Color(122, 63, 255);
-
-            if (timer < 2)
-                return Color.Lerp(auroraPurple, auroraBlue, timer / 2);
-            else if (timer < 4)
-                return Color.Lerp(auroraBlue, auroraGreen, (timer - 2) / 2);
-            else if (timer < 6)
-                return Color.Lerp(auroraGreen, auroraBlue, (timer - 4) / 2);
-            else
-                return Color.Lerp(auroraBlue, auroraPurple, (timer - 6) / 2);
-        }
-
-        /*public struct ColorGradient()
-        {
-            public struct ColorPoint(Color color, float position)
+            private struct ColorPoint(Color color, float position)
             {
                 public Color color = color;
                 public float position = position;
             }
-            
-            private ColorPoint[] colorList { get; private set; }
 
-            public Color GetColor(float progress)
+            public Color GetColor(float position)
             {
-                Array.Sort(colorList, (x, y) => x.position.CompareTo(y.position));
-                float adjustedProgress = Utils.Remap(progress, 0f, 1f, 0f, colorList.Length - 1);
-                
-                for (int i = 0; i < colorList.Length; i++) 
-                {
-                    float adjustedIndex = Utils.Remap(i, 0, colorList.Length - 1, 0f, 1f);
+                List<(Color, float)> colorPoints = [.. points.OrderBy(point => point.Item2)];
 
-                    if (i == colorList.Length - 1)
+                if (colorPoints.First().Item2 > 0f) colorPoints.Insert(0, (colorPoints.First().Item1, 0f));
+                if (colorPoints.Last().Item2 < 1f) colorPoints.Add(new(colorPoints.Last().Item1, 1f));
+
+                for (int i = 0; i < colorPoints.Count - 1; i++)
+                {
+                    ColorPoint color = new(colorPoints.ElementAt(i).Item1, colorPoints.ElementAt(i).Item2);
+                    ColorPoint nextColor = new(colorPoints.ElementAt(i + 1).Item1, colorPoints.ElementAt(i + 1).Item2);
+
+                    if (nextColor.position > position)
                     {
-                        return Color.Lerp(colorList[i].color, colorList[0].color, adjustedIndex);
-                    }
-                    else if (progress >= colorList[i].position && progress < colorList[i + 1].position)
-                    {
-                        return Color.Lerp(colorList[i].color, colorList[i + 1].color, adjustedIndex);
+                        float pos = Utils.Remap(position, color.position, nextColor.position, 0f, 1f);
+                        return color.color.Lerp(nextColor.color, pos);
                     }
                 }
-                return colorList[0].color;
+                return colorPoints.Last().Item1;
             }
-        }*/
+        }
 
-        /*public static Color Gradient(float position, ReadOnlySpan<Color> colors, bool loop = true)
+        public static Gradient QuickGradient(List<Color> colors, bool loop = true)
         {
-            //if (loop) colors.Add(colors[0]);
-            
-            float adjustedPosition = Math.Clamp(position * colors.Length, 0, colors.Length);
-            int first = (int)adjustedPosition; int last = Math.Min((int)adjustedPosition + 1, colors.Length);
-            
-            return Color.Lerp(colors[first], colors[last], adjustedPosition % 1);
-        }*/
+            List<(Color, float)> colorPoints = [];
+            for (int i = 0; i <= colors.Count - 1; i++)
+            {
+                colorPoints.Add(new(colors[i], Utils.Remap(i, 0f, loop? colors.Count : colors.Count - 1, 0f, 1f)));
+            }
+            if (loop) colorPoints.Add(new(colors[0], 1f));
+            return new Gradient(colorPoints);
+        }
 
-        public static Color AuroraAccentColor(float Timer)
+        public static Color AuroraColor(float Timer = default)
         {
-            float timer = Timer % 9;
+            if (Timer == default) Timer = Main.GlobalTimeWrappedHourly * 3f;
+            
             var auroraGreen = new Color(0, 255, 189);
             var auroraBlue = new Color(0, 164, 242);
             var auroraPurple = new Color(122, 63, 255);
 
-            if (timer < 2)
-                return Color.Lerp(auroraPurple, auroraBlue, timer / 2);
-            else if (timer < 4)
-                return Color.Lerp(auroraBlue, auroraGreen, (timer - 2) / 2);
-            else if (timer < 6)
-                return Color.Lerp(auroraGreen, auroraBlue, (timer - 4) / 2);
-            else
-                return Color.Lerp(auroraBlue, auroraPurple, (timer - 6) / 2);
+            return QuickGradient([auroraGreen, auroraBlue, auroraPurple, auroraBlue, auroraGreen]).GetColor(Timer / 8f % 1);
+        }
+        public static Color AuroraAccentColor(float Timer = default)
+        {
+            if (Timer == default) Timer = Main.GlobalTimeWrappedHourly * 3f;
+
+            var auroraGreen = new Color(0, 255, 189);
+            var auroraBlue = new Color(0, 164, 242);
+            var auroraPurple = new Color(122, 63, 255);
+
+            return QuickGradient([auroraPurple, auroraBlue, auroraGreen, auroraBlue, auroraPurple]).GetColor(Timer / 8f % 1);
         }
 
         public static Color Lerp(this Color baseColor, Color targetColor, float amount) => Color.Lerp(baseColor, targetColor, amount);
 
-        public static Color MultiplyAlpha(this Color color, float alpha)
-        {
-            return new Color(color.R, color.G, color.B, (int)((color.A / 255f) * Math.Clamp(alpha, 0f, 1f) * 255));
-        }
+        public static Color MultiplyAlpha(this Color color, float alpha) => new Color(color.R, color.G, color.B, (int)((color.A / 255f) * Math.Clamp(alpha, 0f, 1f) * 255));
         public static Color Alpha(this Color color, int alpha = 0) => color with { A = (byte)Math.Clamp(alpha, 0, 255) };
         public static Color Alpha(this Color color, float alpha) => color with { A = (byte)(Math.Clamp(alpha, 0f, 1f) * 255) };
 
@@ -250,6 +195,14 @@ namespace GoldLeaf.Core
             }
             return Color.White;
         }
+
+        public static Gradient PrideFlag(bool loop = true) => QuickGradient([new Color(228, 3, 3), new Color(255, 140, 0), new Color(255, 237, 0), new Color(0, 138, 38), new Color(0, 76, 255), new Color(115, 41, 130)], loop);
+        public static Gradient LesbianFlag(bool loop = true) => QuickGradient([new Color(214, 44, 0), new Color(255, 153, 86), Color.LightYellow, new Color(211, 98, 164), new Color(164, 1, 98)], loop);
+        public static Gradient GayFlag(bool loop = true) => QuickGradient([new Color(27, 136, 107), new Color(144, 218, 181), Color.White, new Color(119, 165, 214), new Color(64, 37, 116)], loop);
+        public static Gradient BiFlag(bool loop = true) => new(!loop? [(new Color(214, 2, 112), 0.35f), (new Color(155, 79, 150), 0.5f), (new Color(0, 56, 168), 0.65f)] : 
+            [(new Color(107, 29, 140), 0f), (new Color(214, 2, 112), 0.1f), (new Color(214, 2, 112), 0.35f), (new Color(155, 79, 150), 0.5f), (new Color(0, 56, 168), 0.65f), (new Color(0, 56, 168), 0.9f), (new Color(107, 29, 140), 1f)]);
+        public static Gradient TransFlag(bool loop = true) => QuickGradient([new Color(89, 206, 249), new Color(244, 170, 183), Color.White, new Color(244, 170, 183), new Color(89, 206, 249)], loop);
+        public static Gradient AceFlag(bool loop = true) => QuickGradient([new Color(30, 30, 30), new Color(160, 160, 160), Color.White, new Color(154, 7, 121)], loop);
 
         /// <summary>
         /// Overhealth color (R:19,G:223,B:229,A:255).

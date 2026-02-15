@@ -172,12 +172,11 @@ Echobark: {
 }
 
 Constellation: {
-	DisplayName: Constellation
+	DisplayName: Starstacker
 	Tooltip:
 		'''
-		{$CommonItemTooltip.PercentSummonTagDamage}
 		{$CommonItemTooltip.Whips}
-		Strike enemies to increase whip range
+		Strike enemies to increase range and tag damage of whips
 		'''
 }
 
@@ -211,7 +210,7 @@ Sediment: {
 
 HiveCarcass: {
 	DisplayName: Hive Carcass
-	Tooltip: Fills healing potions with honey
+	Tooltip: Hearts are dipped in honey
 }
 
 GroveHook: {
@@ -394,20 +393,6 @@ GroveBossMusicBox: {
 	DisplayName: Music Box (Fallen Swordsman)
 }
 
-BottledShimmer: {
-	DisplayName: Bottled Shimmer
-	Tooltip: ""
-}
-
-DragonSkull: {
-	DisplayName: Gold Dragon Skull
-	Tooltip:
-		'''
-		Converts all minion slots into sentry slots
-		{0}% increased sentry speed
-		'''
-}
-
 AuroraDye: {
 	DisplayName: Aurora Dye
 	Tooltip: ""
@@ -533,7 +518,7 @@ EchobarkBreastplate: {
 
 Lunar: {
 	DisplayName: Lunar
-	Tooltip: Consumes stranded lunes to change moon phase at night
+	Tooltip: Consumes fallen stars to change moon phase at night
 }
 
 FallenMoon: {
@@ -564,7 +549,8 @@ Jellyfisher: {
 	Tooltip:
 		'''
 		{$CommonItemTooltip.Sentry}
-		<right> to summons a jellyfish, shocking nearby enemies
+		<right> to transform into a fishing rod
+		<right> to transform into a sentry
 		'''
 }
 
@@ -609,7 +595,7 @@ AcrylicTurretPaint: {
 }
 
 ForbiddenFruit: {
-	DisplayName: Forbidden Snakefruit
+	DisplayName: Vampire Fruit
 	Tooltip: ""
 	HealDesc:
 		'''
@@ -658,5 +644,12 @@ GrantMask: {
 
 GrantPants: {
 	DisplayName: Devil Pants
+	Tooltip: ""
+}
+
+DragonSkull.DisplayName: Gold Dragon Skull
+
+Basanite: {
+	DisplayName: Basanite
 	Tooltip: ""
 }

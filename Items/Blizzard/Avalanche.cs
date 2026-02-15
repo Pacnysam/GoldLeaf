@@ -199,7 +199,7 @@ namespace GoldLeaf.Items.Blizzard
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddRecipeGroup("GoldLeaf:SilverBars", 8);
+            recipe.AddRecipeGroup("GoldLeaf:SilverBar", 8);
             recipe.AddIngredient(ItemID.IllegalGunParts);
             recipe.AddIngredient(ItemType<AuroraCluster>(), 15);
             recipe.AddTile(TileID.Anvils);

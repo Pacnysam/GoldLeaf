@@ -56,7 +56,7 @@ namespace GoldLeaf.Core
 
                     if (Player.statLife <= 0)
                     {
-                        Player.KillMe(PlayerDeathReason.ByCustomReason(QuickDeathReason("Overhealth", Player)), 0, 0);
+                        Player.KillMe(QuickDeathReason("Overhealth", Player), 0, 0);
                         overhealth = 0;
                     }
                 }

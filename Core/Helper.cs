@@ -1,24 +1,26 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GoldLeaf.Items.Blizzard;
+using GoldLeaf.Items.Blizzard.Armor;
+using GoldLeaf.Items.Vanity;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
+using Newtonsoft.Json.Linq;
+using ReLogic.Content;
 using ReLogic.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
+using System.IO;
 using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
-using Terraria.UI;
-using Terraria.ModLoader;
-using static Terraria.WorldGen;
-using static Terraria.ModLoader.ModContent;
 using Terraria.Localization;
-using ReLogic.Content;
-using GoldLeaf.Items.Blizzard;
-using GoldLeaf.Items.Blizzard.Armor;
-using System.IO;
-using System.Diagnostics.Metrics;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
-using Newtonsoft.Json.Linq;
+using Terraria.ModLoader;
+using Terraria.UI;
+using static Terraria.ModLoader.ModContent;
+using static Terraria.WorldGen;
 
 
 namespace GoldLeaf.Core
@@ -50,7 +52,7 @@ namespace GoldLeaf.Core
         public static string SetBonusSecondaryKey => Language.GetTextValue(Main.ReversedUpDownArmorSetBonuses ? "Key.DOWN" : "Key.UP");
 
         public static float LavaLayer => Main.maxTilesY * 0.72f;
-
+        
         public static bool CheckCircularCollision(Vector2 center, int radius, Rectangle hitbox)
         {
             if (Vector2.Distance(center, hitbox.TopLeft()) <= radius) return true;
@@ -91,12 +93,32 @@ namespace GoldLeaf.Core
         
         public static float Opacity(this Gore gore) => 1f - gore.alpha / 255f;
 
-        public static bool Toggle(this bool input) => !input;
+        public static bool Toggle(this ref bool input) => input = !input;
         public static float RandNeg(this float num) => Main.rand.NextBool() ? num : -num;
         public static int RandNeg(this int num) => Main.rand.NextBool() ? num : -num;
 
         public static void WritePoint16(this BinaryWriter writer, Point16 point) { writer.Write(point.X); writer.Write(point.Y); }
         public static Point16 ReadPoint16(this BinaryReader reader) => new(reader.ReadInt16(), reader.ReadInt16());
+
+        public static void WriteArray(this BinaryWriter writer, int[] array)
+        {
+            writer.Write(array.Length);
+            for (int i = 0; i < array.Length; i++)
+            {
+                writer.Write(array[i]);
+            }
+        }//no clue if this works im not trying it
+        public static int[] ReadArray(this BinaryReader reader)
+        {
+            int length = reader.ReadInt32();
+            
+            int[] array = new int[length];
+            for (int i = 0; i < length; i++)
+            {
+                array[i] = reader.ReadInt32();
+            }
+            return array;
+        }
 
         public static float BezierEase(float time)
         {

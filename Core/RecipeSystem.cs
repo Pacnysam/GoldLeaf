@@ -75,23 +75,67 @@ namespace GoldLeaf.Core
                 };
                 return new RecipeGroup(() => Name, Items);
             }
+            void RegisterVarietyGroup(string name, int[] items, bool prefix = false)
+            {
+                string groupName = "";
+
+                if (items.Length < 2)
+                    return;
+                for (int i = 0; i < items.Length - 1; i++)
+                {
+                    ItemID.Search.TryGetName(items[i], out string itemName);
+                    ModItem currentItem = GetModItem(items[i]);
+                    string localizedName = (currentItem != null) ? currentItem.DisplayName.Value : Language.GetTextValue("ItemName." + itemName);
+                    if (i + 2 == items.Length)
+                    {
+                        ItemID.Search.TryGetName(items[i + 1], out string nextItemName);
+                        ModItem nextItem = GetModItem(items[i + 1]);
+                        string nextLocalizedName = (nextItem != null) ? nextItem.DisplayName.Value : Language.GetTextValue("ItemName." + nextItemName);
+
+                        groupName += Language.GetTextValue("Mods.GoldLeaf.RecipeGroups.Or", localizedName, nextLocalizedName);
+                        break;
+                    }
+                    groupName += localizedName + ", ";
+                }
+                RecipeGroup.RegisterGroup(name, BaseGroup(groupName, items, prefix));
+            }
 
             RecipeGroup woodGrp = RecipeGroup.recipeGroups[RecipeGroup.recipeGroupIDs["Wood"]];
             woodGrp.ValidItems.Add(ItemType<Echobark>());
 
-            RecipeGroup.RegisterGroup("GoldLeaf:CopperBars", BaseGroup(ItemID.CopperBar, [ItemID.CopperBar, ItemID.TinBar]));
-            RecipeGroup.RegisterGroup("GoldLeaf:SilverBars", BaseGroup(ItemID.SilverBar, [ItemID.SilverBar, ItemID.TungstenBar]));
-            RecipeGroup.RegisterGroup("GoldLeaf:GoldBars", BaseGroup(ItemID.GoldBar, [ItemID.GoldBar, ItemID.PlatinumBar]));
+            #region ores
+            RegisterVarietyGroup("GoldLeaf:CopperOre", [ItemID.CopperOre, ItemID.TinOre]);
+            RegisterVarietyGroup("GoldLeaf:IronOre", [ItemID.SilverOre, ItemID.TungstenOre]);
+            RegisterVarietyGroup("GoldLeaf:SilverOre", [ItemID.SilverOre, ItemID.TungstenOre]);
+            RegisterVarietyGroup("GoldLeaf:GoldOre", [ItemID.GoldOre, ItemID.PlatinumOre]);
 
-            RecipeGroup.RegisterGroup("GoldLeaf:EvilBar", BaseGroup(Language.GetTextValue("Mods.GoldLeaf.RecipeGroups.Or", Language.GetTextValue("ItemName.DemoniteBar"), Language.GetTextValue("ItemName.CrimtaneBar")), [ItemID.DemoniteBar, ItemID.CrimtaneBar], false));
+            RegisterVarietyGroup("GoldLeaf:EvilOre", [ItemID.DemoniteOre, ItemID.CrimtaneOre]);
 
-            RecipeGroup.RegisterGroup("GoldLeaf:CobaltBars", BaseGroup(ItemID.CobaltBar, [ItemID.CobaltBar, ItemID.PalladiumBar]));
-            RecipeGroup.RegisterGroup("GoldLeaf:MythrilBars", BaseGroup(ItemID.MythrilBar, [ItemID.MythrilBar, ItemID.OrichalcumBar]));
-            RecipeGroup.RegisterGroup("GoldLeaf:AdamantiteBars", BaseGroup(ItemID.AdamantiteBar, [ItemID.AdamantiteBar, ItemID.TitaniumBar]));
+            RegisterVarietyGroup("GoldLeaf:CobaltOre", [ItemID.CobaltOre, ItemID.PalladiumOre]);
+            RegisterVarietyGroup("GoldLeaf:MythrilOre", [ItemID.MythrilOre, ItemID.OrichalcumOre]);
+            RegisterVarietyGroup("GoldLeaf:AdamantiteOre", [ItemID.AdamantiteOre, ItemID.TitaniumOre]);
+            #endregion ores
 
-            RecipeGroup.RegisterGroup("GoldLeaf:EvilMaterial", BaseGroup(Language.GetTextValue("Mods.GoldLeaf.RecipeGroups.Or", Language.GetTextValue("ItemName.ShadowScale"), Language.GetTextValue("ItemName.TissueSample")), [ItemID.ShadowScale, ItemID.TissueSample], false));
-            RecipeGroup.RegisterGroup("GoldLeaf:JellyfishBait", BaseGroup(Language.GetTextValue("Mods.GoldLeaf.RecipeGroups.Jellyfish"), [ItemID.PinkJellyfish, ItemID.BlueJellyfish, ItemID.GreenJellyfish]));
+            #region bars
+            RegisterVarietyGroup("GoldLeaf:CopperBar", [ItemID.CopperBar, ItemID.TinBar]);
+            RegisterVarietyGroup("GoldLeaf:SilverBar", [ItemID.SilverBar, ItemID.TungstenBar]);
+            RegisterVarietyGroup("GoldLeaf:GoldBar", [ItemID.GoldBar, ItemID.PlatinumBar]);
+
+            RegisterVarietyGroup("GoldLeaf:EvilBar", [ItemID.DemoniteBar, ItemID.CrimtaneBar]);
+
+            RegisterVarietyGroup("GoldLeaf:CobaltBar", [ItemID.CobaltBar, ItemID.PalladiumBar]);
+            RegisterVarietyGroup("GoldLeaf:MythrilBar", [ItemID.MythrilBar, ItemID.OrichalcumBar]);
+            RegisterVarietyGroup("GoldLeaf:AdamantiteBar", [ItemID.AdamantiteBar, ItemID.TitaniumBar]);
+            #endregion bars
+
+            RegisterVarietyGroup("GoldLeaf:JellyfishBait", [ItemID.PinkJellyfish, ItemID.BlueJellyfish, ItemID.GreenJellyfish]);
+            RegisterVarietyGroup("GoldLeaf:EvilYoyo", [ItemID.CorruptYoyo, ItemID.CrimsonYoyo]);
+
+            RegisterVarietyGroup("GoldLeaf:EvilMaterial", [ItemID.RottenChunk, ItemID.Vertebrae]);
+            RegisterVarietyGroup("GoldLeaf:EvilBossMaterial", [ItemID.ShadowScale, ItemID.TissueSample]);
         }
+
+        
 
         public static List<int> learnedRecipes = [];
 

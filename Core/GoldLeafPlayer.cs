@@ -45,8 +45,11 @@ namespace GoldLeaf.Core
 
         public int summonCritChance = 0;
 
+        public float damageResistance = 0f;
+
         #region minor variables
         public bool royalGel = false;
+        public bool hiveCarcass = false;
         public bool hasDoneHurtSound = false;
 
         #endregion minor variables
@@ -83,7 +86,12 @@ namespace GoldLeaf.Core
             modifiers.CritDamage += (proj.GetGlobalProjectile<GoldLeafProjectile>().critDamageMod);
             modifiers.CritDamage *= critDamageMult;
         }
-        
+
+        public override void ModifyHurt(ref Player.HurtModifiers modifiers)
+        {
+            modifiers.FinalDamage *= 1f - Math.Min(damageResistance, 0.9f);
+        }
+
         public delegate void OnHitNPCDelegate(Player player, NPC target, NPC.HitInfo hit, int damageDone);
         public static event OnHitNPCDelegate OnHitNPCEvent;
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -91,21 +99,23 @@ namespace GoldLeaf.Core
             OnHitNPCEvent?.Invoke(Player, target, hit, damageDone);
         }
 
-        public delegate void ResetEffectsDelegate(GoldLeafPlayer player);
+        public delegate void ResetEffectsDelegate(Player player);
         public static event ResetEffectsDelegate ResetEffectsEvent;
         public override void ResetEffects()
         {
-            ResetEffectsEvent?.Invoke(this);
+            ResetEffectsEvent?.Invoke(Player);
 
             itemSpeed = 1;
             critDamageMult = 1f;
             meleeCritDamageMod = rangedCritDamageMod = magicCritDamageMod = 0f;
             summonCritChance = 0;
+            damageResistance = 0f;
 
             stunned = false;
 
             #region minor variables
             royalGel = false;
+            hiveCarcass = false;
             hasDoneHurtSound = false;
             #endregion minor variables
         }
@@ -162,8 +172,8 @@ namespace GoldLeaf.Core
                     {
                         return 
                             [
-                            new Item(ItemType<BatPlushie>(), 99),
-                            new Item(ItemType<RedPlushie>(), 99),
+                            new Item(ItemType<BatPlushie>()),
+                            new Item(ItemType<RedPlushie>()),
                             new Item(ItemType<MadcapPainting>()), 
                             new Item(ItemType<WatcherEyedrops>()), 
                             new Item(ItemType<WatcherCloak>())
@@ -184,12 +194,12 @@ namespace GoldLeaf.Core
                     }
                 case "Grant":
                     {
-                        return [new Item(ItemType<GrantMask>()) ];//, new Item(ItemType<CypherCoat>()), new Item(ItemType<CypherPants>())];
+                        return [new Item(ItemType<GrantMask>()), new Item(ItemType<GrantCuffs>()), new Item(ItemType<GrantPants>()), new Item(ItemType<GrantCloak>())];
                     }
                 case "Gameboy":
                 case "Game Boy":
                     {
-                        return [new Item(ItemType<Gameboy>()), new Item(ItemType<RetroDye>(), 99)];
+                        return [new Item(ItemType<Gameboy>()), new Item(ItemType<RetroDye>(), 5)];
                     }
             }
             return Enumerable.Empty<Item>();
