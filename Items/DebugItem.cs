@@ -14,6 +14,7 @@ using GoldLeaf.Items.Pickups;
 using Terraria.GameContent.Drawing;
 using GoldLeaf.Items.Nightshade;
 using GoldLeaf.Effects.Dusts;
+using GoldLeaf.Items.Ocean.Jellyfisher;
 
 namespace GoldLeaf.Items
 {
@@ -21,6 +22,7 @@ namespace GoldLeaf.Items
     {
         public int temp, temp2, temp3 = 0;
         public float tempFloat = 0.9f;
+        public Vector2 tempVec2 = new();
 
         //public override string Texture => "GoldLeaf/";
         public override void SetDefaults()
@@ -39,29 +41,21 @@ namespace GoldLeaf.Items
 
         public override bool? UseItem(Player player)
         {
-            if (player.altFunctionUse != 2)
+            if (player.altFunctionUse != 2) //primary
             {
                 //player.GetModPlayer<GoldLeafPlayer>().ScreenMoveTime = temp;
                 //player.GetModPlayer<GoldLeafPlayer>().ScreenMoveHold = false;
 
-                player.GetModPlayer<CameraSystem>().ScreenMoveTarget = Main.screenPosition + new Vector2(Main.mouseX, Main.mouseY);
+                //player.GetModPlayer<CameraSystem>().ScreenMoveTarget = Main.screenPosition + new Vector2(Main.mouseX, Main.mouseY);
+                Dust.NewDustPerfect(Main.MouseWorld, DustType<JellyLightningDust>(), tempVec2);
             }
-            else
+            else //secondary
             {
-                player.GetModPlayer<CameraSystem>().ScreenMoveTime = temp;
-                player.GetModPlayer<CameraSystem>().ScreenMoveHold = false;
-                player.GetModPlayer<CameraSystem>().ScreenMovePan = Main.screenPosition + new Vector2(Main.mouseX, Main.mouseY);
+                //player.GetModPlayer<CameraSystem>().ScreenMoveTime = temp;
+                //player.GetModPlayer<CameraSystem>().ScreenMoveHold = false;
+                //player.GetModPlayer<CameraSystem>().ScreenMovePan = Main.screenPosition + new Vector2(Main.mouseX, Main.mouseY);
+                tempVec2 = Main.MouseWorld;
             }
-
-            //Vector3 coords = Helper.ScreenCoord(new Vector3(Main.MouseScreen.X, Main.MouseScreen.Y, 0));
-            //Main.NewText("cursor coords: (" + coords.X + "," + coords.Y + ")");
-
-            /*ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, (ParticleOrchestraType)temp,
-                new ParticleOrchestraSettings { PositionInWorld = Main.MouseWorld },
-                Main.LocalPlayer.whoAmI);
-            */
-
-            //Gore.NewGorePerfect(Terraria.Entity.GetSource_None(), Main.MouseWorld, Vector2.Zero, GoreType<RingGoreRewrite>(), Scale: 0.7f + Main.rand.NextFloat(temp1, temp2) / 30f);
             return true;
         }
 

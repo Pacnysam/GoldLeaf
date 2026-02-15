@@ -100,6 +100,26 @@ namespace GoldLeaf.Core
         public static void WritePoint16(this BinaryWriter writer, Point16 point) { writer.Write(point.X); writer.Write(point.Y); }
         public static Point16 ReadPoint16(this BinaryReader reader) => new(reader.ReadInt16(), reader.ReadInt16());
 
+        public static void WriteArray(this BinaryWriter writer, int[] array)
+        {
+            writer.Write(array.Length);
+            for (int i = 0; i < array.Length; i++)
+            {
+                writer.Write(array[i]);
+            }
+        }//no clue if this works im not trying it
+        public static int[] ReadArray(this BinaryReader reader)
+        {
+            int length = reader.ReadInt32();
+            
+            int[] array = new int[length];
+            for (int i = 0; i < length; i++)
+            {
+                array[i] = reader.ReadInt32();
+            }
+            return array;
+        }
+
         public static float BezierEase(float time)
         {
             return time * time / (2f * (time * time - time) + 1f);

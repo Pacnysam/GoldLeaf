@@ -549,7 +549,8 @@ Jellyfisher: {
 	Tooltip:
 		'''
 		{$CommonItemTooltip.Sentry}
-		<right> to summons a jellyfish, shocking nearby enemies
+		<right> to transform into a fishing rod
+		<right> to transform into a sentry
 		'''
 }
 

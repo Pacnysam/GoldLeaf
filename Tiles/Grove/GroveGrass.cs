@@ -111,7 +111,7 @@ namespace GoldLeaf.Tiles.Grove
 
         public override void RandomUpdate(int i, int j)
         {
-            //TODO: this
+            //TODO: growing grass
         }
 
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)

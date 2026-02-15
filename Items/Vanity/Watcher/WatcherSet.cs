@@ -66,7 +66,7 @@ namespace GoldLeaf.Items.Vanity.Watcher
             //glowMask = EquipLoader.GetEquipSlot(Mod, "WatcherHeadGlow", EquipType.Head);
             glowMaskColor = Color.White.Alpha(MathF.Sin(Main.GlobalTimeWrappedHourly) * 0.5f + 0.5f) * 0.35f;
         }
-    } //TODO: Glowmasks
+    } //TODO: Armor Glowmasks
 
     [AutoloadEquip(EquipType.Body)]
     public class WatcherCloak : ModItem
@@ -126,7 +126,7 @@ namespace GoldLeaf.Items.Vanity.Watcher
             Item.bodySlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Body);
             Item.vanity = true;
         }
-    } //TODO: Glowmasks
+    } //TODO: Armor Glowmasks
     
     public class WatcherPlayer : ModPlayer
     {
@@ -240,7 +240,7 @@ namespace GoldLeaf.Items.Vanity.Watcher
                 SoundEngine.PlaySound(SoundID.Item68, Player.position);
             }
         }
-    } //TODO: movement and idle particles
+    }
 
     public class WatcherPunch : ModProjectile
     {

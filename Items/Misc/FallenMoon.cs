@@ -114,12 +114,8 @@ namespace GoldLeaf.Items.Misc
 
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {
-            //Texture2D texture = TextureAssets.Item[Item.type].Value;
-
             Main.GetItemDrawFrame(Item.type, out Texture2D texture, out Rectangle frame);
             
-            //TODO: add swirly bits like on fallen star
-
             float num7 = Item.timeSinceItemSpawned / 240f + Main.GlobalTimeWrappedHourly * 0.09f;
             float globalTimeWrappedHourly2 = Main.GlobalTimeWrappedHourly;
             globalTimeWrappedHourly2 %= 5f;
@@ -131,11 +127,11 @@ namespace GoldLeaf.Items.Misc
             globalTimeWrappedHourly2 = globalTimeWrappedHourly2 * 0.5f + 0.5f;
             for (float i = 0f; i < 1f; i += 0.25f)
             {
-                Main.spriteBatch.Draw(TextureAssets.Item[Item.type].Value, Item.Center - Main.screenPosition +  new Vector2(0f, 6f).RotatedBy((i + num7) * ((float)Math.PI * 2f)) * globalTimeWrappedHourly2, frame, new Color(214, 51, 145).MultiplyAlpha(0.5f) * 0.55f, rotation, frame.Size() / 2f, scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(texture, Item.Center - Main.screenPosition +  new Vector2(0f, 8f).RotatedBy((i + num7) * ((float)Math.PI * 2f)) * globalTimeWrappedHourly2, frame, new Color(214, 51, 145).MultiplyAlpha(0.5f) * 0.55f, rotation, frame.Size() / 2f, scale, SpriteEffects.None, 0f);
             }
             for (float k = 0f; k < 1f; k += 0.25f)
             {
-                Main.spriteBatch.Draw(TextureAssets.Item[Item.type].Value, Item.Center - Main.screenPosition + new Vector2(0f, 1f).RotatedBy((k + (num7 * -1.75f)) * ((float)Math.PI * 2f)) * globalTimeWrappedHourly2, frame, new Color(210, 164, 255) { A = 120 } * 0.7f, rotation, frame.Size()/2f, scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(texture, Item.Center - Main.screenPosition + new Vector2(0f, 2f).RotatedBy((k + (num7 * -1.75f)) * ((float)Math.PI * 2f)) * globalTimeWrappedHourly2, frame, new Color(210, 164, 255) { A = 120 } * 0.7f, rotation, frame.Size()/2f, scale, SpriteEffects.None, 0f);
             }
             Color glowColor = new Color(181, 140, 255) { A = 30 } * (0.5f + (float)Math.Sin(rottime * 6) * 0.75f);
             
