@@ -63,7 +63,7 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
             Item.useStyle = ItemUseStyleID.Swing;
             Item.autoReuse = false;
 
-            Item.damage = 32;
+            Item.damage = 28;
             Item.fishingPole = 20;
             Item.sentry = true;
 
@@ -288,8 +288,6 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
-
             Color color1 = new(63, 74, 255) { A = 80 };
             Color color2 = new(197, 145, 255) { A = 80 };
 
@@ -314,24 +312,6 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
                 Main.EntitySpriteDraw(bloomTex.Value, Projectile.Center + new Vector2(0, -4) - Main.screenPosition, null, evilBloomColor * Projectile.Opacity * evilGlowStrength, 0, bloomTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(GoldLeafWorld.rottime * 1.5f) * 0.15f)) * 0.325f * evilGlowStrength, SpriteEffects.None, 0f);
                 Main.EntitySpriteDraw(bloomTex.Value, Projectile.Center + new Vector2(0, -4) - Main.screenPosition, null, evilBloomColor * Projectile.Opacity * evilGlowStrength, 0, bloomTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(GoldLeafWorld.rottime * 1.5f) * -0.15f)) * 0.325f * evilGlowStrength, SpriteEffects.None, 0f);
             }
-
-            /*float blinkIntensity = 1f;
-            Color blinkColor = ColorHelper.AdditiveWhite();
-
-            if (Projectile.ai[1] != 0 && Projectile.localAI[1] > 0f) //checks for item
-            {
-                blinkIntensity = 2.75f;
-            }
-            if (Projectile.localAI[1] < 0f) //checks for enemy
-            {
-                blinkIntensity = 2.75f;
-                blinkColor = Color.Red with { A = 0 };
-            }*/
-
-            //main sprite
-            //Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite(160) * Projectile.Opacity, Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
-            //glowmask
-            //Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, blinkColor * Projectile.Opacity * (float)Math.Sin(GoldLeafWorld.rottime * 2f * blinkIntensity) * (0.3f * blinkIntensity), Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
             return true;
         }
 
@@ -426,7 +406,7 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
         private const int Attacking = 1;
         private const int Swimming = 2;
 
-        private static readonly int AttackRange = 400;
+        public const int AttackRange = 400;
 
         public override void ModifyDamageHitbox(ref Rectangle hitbox)
         {
@@ -690,7 +670,7 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
             Projectile.DamageType = DamageClass.Summon;
 
             Projectile.width = Projectile.height = 4;
-            Projectile.penetrate = maxTargets;
+            Projectile.penetrate = maxTargets + 1;
 
             Projectile.timeLeft = Projectile.extraUpdates = 100;
 
@@ -700,15 +680,15 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
         }
 
         const int maxTargets = 3;
-        const int RangeLoss = 100;
-        const float MultihitPenalty = 0.7f;
+        const int RangeLoss = 75;
+        const float MultihitPenalty = 0.8f;
 
         private Vector2 SentryPos;
         bool HasSetup = false;
 
         int[] targets = new int[maxTargets];
         ref float Target => ref Projectile.ai[0];
-        int HomingRange = 450;
+        int HomingRange = JellyfishSentry.AttackRange;
         NPC TargetNPC => Main.npc[(int)Target];
 
         public override void AI()
@@ -728,7 +708,7 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
 
             float targetDistance = 8000f;
             
-            if (TargetNPC == null || targets.Contains(TargetNPC.whoAmI))
+            if (TargetNPC == null || !TargetNPC.active || targets.Contains(TargetNPC.whoAmI))
             {
                 Projectile.netUpdate = true;
                 foreach (NPC npc in Main.ActiveNPCs)
@@ -741,7 +721,7 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
                         targetDistance = range;
                     }
                 }
-                if (TargetNPC == null || targets.Contains((int)Target) || !Collision.CanHit(Projectile.position, Projectile.width, Projectile.height, TargetNPC.position, TargetNPC.width, TargetNPC.height)) 
+                if (TargetNPC == null || targets.Contains((int)Target) || Projectile.penetrate == 1 || !Collision.CanHit(Projectile.position, Projectile.width, Projectile.height, TargetNPC.position, TargetNPC.width, TargetNPC.height)) 
                 {
                     Projectile.Kill();
                 }
@@ -780,7 +760,7 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
                 if (targets[i] == -1)
                 {
                     targets[i] = target.whoAmI;
-                    
+
                     HomingRange = Math.Max(HomingRange - RangeLoss, 50);
                     Projectile.damage = (int)(Projectile.damage * MultihitPenalty);
                     break;
@@ -799,8 +779,10 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
 
                     if (i == 0)
                         Dust.NewDustPerfect(SentryPos, DustType<JellyLightningDust>(), Main.npc[targets[i]].Center);
-                    else
+                    else 
                         Dust.NewDustPerfect(Main.npc[targets[i - 1]].Center, DustType<JellyLightningDust>(), Main.npc[targets[i]].Center);
+                    
+                    Main.NewText(targets[i]);
                 }
             }
         }

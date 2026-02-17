@@ -105,32 +105,5 @@ namespace GoldLeaf.Core
             //gravityDelay = binaryReader.ReadInt32();
             critDamageMod = binaryReader.ReadSingle();
         }
-
-        public override bool OnTileCollide(Projectile projectile, Vector2 oldVelocity)
-        {
-            if (projectile.type == ProjectileID.FallingStar)
-            {
-                /*for (int i = 0; i < 2; i++)
-                {
-                    Gore gore2 = Gore.NewGoreDirect(null, projectile.Center, Vector2.Zero, GoreType<ConstellationGore>());
-                    gore2.rotation = MathHelper.ToRadians(Main.rand.NextFloat(240, 420)).RandNeg();
-                    gore2.velocity.X *= 2f;
-                    gore2.velocity.Y = Main.rand.NextFloat(-3f, 2f);
-                    gore2.frame = 2;
-                    gore2.alpha += Main.rand.Next(20, 50);
-                }*/
-                for (int i = 0; i < 6; i++)
-                {
-                    Gore gore3 = Gore.NewGoreDirect(null, projectile.Center, Vector2.Zero, GoreType<ConstellationGore>());
-                    gore3.rotation = MathHelper.ToRadians(Main.rand.NextFloat(580, 780)).RandNeg();
-                    gore3.velocity.X *= 1.85f;
-                    gore3.velocity.Y = Main.rand.NextFloat(-2f, 1f);
-                    gore3.frame = (byte)Main.rand.Next(3);
-                    gore3.alpha += Main.rand.Next(0, 30);
-                }
-            }
-            
-            return base.OnTileCollide(projectile, oldVelocity);
-        }
     }
 }

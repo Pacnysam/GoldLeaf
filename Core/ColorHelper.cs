@@ -15,12 +15,6 @@ namespace GoldLeaf.Core
 
         public readonly struct Gradient(List<(Color, float)> points)
         {
-            private struct ColorPoint(Color color, float position)
-            {
-                public Color color = color;
-                public float position = position;
-            }
-
             public Color GetColor(float position)
             {
                 List<(Color, float)> colorPoints = [.. points.OrderBy(point => point.Item2)];
@@ -30,19 +24,15 @@ namespace GoldLeaf.Core
 
                 for (int i = 0; i < colorPoints.Count - 1; i++)
                 {
-                    ColorPoint color = new(colorPoints.ElementAt(i).Item1, colorPoints.ElementAt(i).Item2);
-                    ColorPoint nextColor = new(colorPoints.ElementAt(i + 1).Item1, colorPoints.ElementAt(i + 1).Item2);
-
-                    if (nextColor.position > position)
+                    if (colorPoints.ElementAt(i + 1).Item2 > position)
                     {
-                        float pos = Utils.Remap(position, color.position, nextColor.position, 0f, 1f);
-                        return color.color.Lerp(nextColor.color, pos);
+                        float pos = Utils.Remap(position, colorPoints.ElementAt(i).Item2, colorPoints.ElementAt(i + 1).Item2, 0f, 1f);
+                        return colorPoints.ElementAt(i).Item1.Lerp(colorPoints.ElementAt(i + 1).Item1, pos);
                     }
                 }
                 return colorPoints.Last().Item1;
             }
         }
-
         public static Gradient QuickGradient(List<Color> colors, bool loop = true)
         {
             List<(Color, float)> colorPoints = [];

@@ -26,38 +26,6 @@ namespace GoldLeaf.Core
             learnedRecipes.Clear();
         }
 
-        public override void PostAddRecipes()
-        {
-            for (int i = 0; i < Recipe.numRecipes; i++)
-            {
-                Recipe recipe = Main.recipe[i];
-                /*if (recipe.TryGetIngredient(ItemType<EveDroplet>(), out Item aether) && (recipe.HasCondition(Condition.NearLava) || recipe.HasTile(TileID.Furnaces)))
-                {
-                    recipe.AddOnCraftCallback(RecipeCallbacks.AetherCraftEffect);
-                }*/
-                recipe.AddOnCraftCallback(RecipeCallbacks.DyeMinor);
-
-
-                if (recipe.TryGetIngredient(ItemID.FallenStar, out Item star))
-                {
-                    recipe.AddOnCraftCallback(RecipeCallbacks.Star);
-                }
-                if (recipe.HasTile(TileID.Anvils))
-                {
-                    recipe.AddOnCraftCallback(RecipeCallbacks.Anvil);
-                }
-                if (recipe.HasTile(TileID.Solidifier) || (recipe.TryGetIngredient(ItemID.Gel, out Item gel) && (!recipe.HasRecipeGroup(RecipeGroup.recipeGroupIDs["Wood"]) || !recipe.HasIngredient(ItemID.Torch))))
-                {
-                    recipe.AddOnCraftCallback(RecipeCallbacks.Slime);
-                }
-                /*if (recipe.HasRecipeGroup(RecipeGroup.recipeGroupIDs["GoldLeaf:Dyes"]))
-                {
-                    recipe.AddOnCraftCallback(RecipeCallbacks.FluidColorful);
-                }*/
-                
-            }       
-        }
-
         public override void AddRecipeGroups()
         {
             RecipeGroup BaseGroup(object GroupName, int[] Items, bool Prefix = true) //yoinked from spirit
@@ -131,6 +99,7 @@ namespace GoldLeaf.Core
             RegisterVarietyGroup("GoldLeaf:JellyfishBait", [ItemID.PinkJellyfish, ItemID.BlueJellyfish, ItemID.GreenJellyfish]);
             RegisterVarietyGroup("GoldLeaf:EvilYoyo", [ItemID.CorruptYoyo, ItemID.CrimsonYoyo]);
 
+            RegisterVarietyGroup("GoldLeaf:EvilMushroom", [ItemID.VileMushroom, ItemID.ViciousMushroom]);
             RegisterVarietyGroup("GoldLeaf:EvilMaterial", [ItemID.RottenChunk, ItemID.Vertebrae]);
             RegisterVarietyGroup("GoldLeaf:EvilBossMaterial", [ItemID.ShadowScale, ItemID.TissueSample]);
         }
