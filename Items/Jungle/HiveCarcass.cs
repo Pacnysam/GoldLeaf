@@ -67,9 +67,7 @@ namespace GoldLeaf.Items.Jungle
 
         public override void PostDrawInWorld(Item item, SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
-            base.PostDrawInWorld(item, spriteBatch, lightColor, alphaColor, rotation, scale, whoAmI);
-
-            if (Main.LocalPlayer.GetModPlayer<GoldLeafPlayer>().hiveCarcass) 
+            if (Main.LocalPlayer.GetModPlayer<GoldLeafPlayer>().hiveCarcass && ItemSets.HeartPickup[item.type]) 
             {
                 Main.GetItemDrawFrame(item.type, out Texture2D texture, out Rectangle frame);
                 Vector2 origin = frame.Size() / 2;

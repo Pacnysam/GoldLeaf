@@ -269,13 +269,13 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
                     float y = (float)Math.Sin(GoldLeafWorld.rottime + Math.Min(Counter, 180) * 0.03f + k) * Math.Min(Counter, 180) / 64f;
                     Vector2 pos = new Vector2(x, y).RotatedBy(k / 12f * 6.28f);
 
-                    Dust d = Dust.NewDustPerfect(Projectile.Center, DustType<AetherSparkDust>(), pos * (0.45f + Math.Min(Counter, 180) * 0.00075f), 0, default, 1f + Math.Min(Counter * 0.25f, 180) * 0.00125f);
+                    Dust dust = Dust.NewDustPerfect(Projectile.Center, DustType<AetherSparkDust>(), pos * (0.45f + Math.Min(Counter, 180) * 0.00075f), 0, default, 1f + Math.Min(Counter * 0.25f, 180) * 0.00125f);
                     //d.velocity += new Vector2(0, Counter * -0.0125f);
-                    d.position += d.velocity * 2f;
-                    d.rotation = d.velocity.ToRotation();// + MathHelper.PiOver2;
-                    d.shader = Projectile.GetDyeShader();
-                }
-            } //dust trails
+                    dust.position += dust.velocity * 2f;
+                    dust.rotation = dust.velocity.ToRotation();// + MathHelper.PiOver2;
+                    dust.shader = Projectile.GetDyeShader();
+                } //dust trails
+            }
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -293,6 +293,8 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
         {
             Player player = Main.player[Projectile.owner];
 
+            float explosionVolume = Counter >= THRESHHOLD ? 110f : 30f + Counter * 0.65f;
+
             if (!Main.dedServ)
             {
                 SoundEngine.PlaySound(new("GoldLeaf/Sounds/SE/RoR2/EngineerMine") { Volume = 0.7f }, Projectile.Center);
@@ -301,31 +303,29 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
                 //CameraSystem.AddScreenshake(Main.LocalPlayer, 18 + ShotsFired, Projectile.Center);
                 CameraSystem.QuickScreenShake(Projectile.Center, null, 14.5f + ShotsFired * 0.25f, 5.5f + ShotsFired * 0.085f, 26 + (int)(ShotsFired * 1.15f), 1500);
                 CameraSystem.QuickScreenShake(Projectile.Center, 0f.ToRotationVector2(), 14.5f + ShotsFired * 0.25f, 10f + ShotsFired * 0.115f, 18 + (int)(ShotsFired * 0.85f), 1500);
-            }
 
-            float explosionVolume = Counter >= THRESHHOLD ? 110f : 30f + Counter * 0.65f;
+                for (int j = 0; j < 10 + explosionVolume / 8f; j++)
+                {
+                    var dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustType<AetherSmoke>(), Scale: Main.rand.NextFloat(0.9f, 1.8f));
+                    dust.velocity = Main.rand.NextVector2Circular(8.5f, 8.5f) * Math.Clamp(explosionVolume / 85f, 1f, 2f);
+                    dust.alpha = 90 + Main.rand.Next(60);
+                    dust.rotation = Main.rand.NextFloat(6.28f);
+                    dust.shader = Projectile.GetDyeShader();
+                } //smoke
 
-            for (int j = 0; j < 10 + explosionVolume / 8f; j++)
-            {
-                var dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustType<AetherSmoke>(), Scale: Main.rand.NextFloat(0.9f, 1.8f));
-                dust.velocity = Main.rand.NextVector2Circular(8.5f, 8.5f) * Math.Clamp(explosionVolume / 85f, 1f, 2f);
-                dust.alpha = 90 + Main.rand.Next(60);
-                dust.rotation = Main.rand.NextFloat(6.28f);
-                dust.shader = Projectile.GetDyeShader();
-            }
+                for (int j = 0; j < 10 + explosionVolume / 5f; j++)
+                {
+                    Color color = new Color(179, 255, 224).Lerp(new Color(255, 169, 255), Main.rand.NextFloat(0.7f));
 
-            for (int j = 0; j < 10 + explosionVolume / 5f; j++)
-            {
-                Color color = new Color(179, 255, 224).Lerp(new Color(255, 169, 255), Main.rand.NextFloat(0.7f));
-
-                var dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustID.FireworksRGB, 0, 0, 10 + Main.rand.Next(60), 
-                    color.Alpha() * Main.rand.NextFloat(0.45f, 0.85f), Main.rand.NextFloat(0.5f, 0.8f));
-                dust.fadeIn = Main.rand.NextFloat(0.65f, 0.95f);
-                dust.velocity = Main.rand.NextVector2Circular(7f + (explosionVolume / 12.5f), 4.5f + (explosionVolume / 12.5f));
-                dust.velocity.Y -= 2.5f;
-                dust.noGravity = Main.rand.NextBool(2, 5);
-                dust.rotation = Main.rand.NextFloat(6.28f);
-                dust.shader = Projectile.GetDyeShader();
+                    var dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustID.FireworksRGB, 0, 0, 10 + Main.rand.Next(60),
+                        color.Alpha() * Main.rand.NextFloat(0.45f, 0.85f), Main.rand.NextFloat(0.5f, 0.8f));
+                    dust.fadeIn = Main.rand.NextFloat(0.65f, 0.95f);
+                    dust.velocity = Main.rand.NextVector2Circular(7f + (explosionVolume / 12.5f), 4.5f + (explosionVolume / 12.5f));
+                    dust.velocity.Y -= 2.5f;
+                    dust.noGravity = Main.rand.NextBool(2, 5);
+                    dust.rotation = Main.rand.NextFloat(6.28f);
+                    dust.shader = Projectile.GetDyeShader();
+                } //sparks
             }
 
             if (Main.myPlayer == Projectile.owner) 
@@ -334,7 +334,7 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
                 explosion.ai[0] = explosionVolume;
                 if (Counter < THRESHHOLD) explosion.ai[1] = 12;
                 if (ShotsFired >= 12) explosion.ai[2] = 1;
-            }
+            } //projectile
         }
     }
     

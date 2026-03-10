@@ -18,6 +18,7 @@ namespace GoldLeaf.Prefixes
 {
     public class Radiant : TooltipPrefix
     {
+        public override bool IsLoadingEnabled(Mod mod) => false;
         public override PrefixCategory Category => PrefixCategory.Magic;
         public override bool IsNegative => false;
         
