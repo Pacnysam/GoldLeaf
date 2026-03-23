@@ -1,10 +1,5 @@
 CritMultTooltip: "{0:+0;-#}% critical strike damage"
 MinionSpeedTooltip: "{0:+0;-#}% summon speed"
-FishingRodBaitTooltip: "{0:+0;-#}% chance to save bait"
-ExtraBobbersTooltip: +{0} extra {^0:bobber;bobbers}
-UnbreakableLineTooltip: Line will never break
-FishingRodLineSnapTooltip: "{0:+0;-#}% chance for line to break"
-FishingRodSonarTooltip: Detects hooked fish
 Vindictive.DisplayName: Vindictive
 Accurate.DisplayName: Accurate
 Pinpoint.DisplayName: Pinpoint
@@ -28,20 +23,41 @@ Radiant: {
 	Tooltip: Critical strikes spawn stars
 }
 
+FishingRodBaitTooltip: "{0:+0;-#}% chance to save bait"
+ExtraBobbersTooltip: +{0} extra {^0:bobber;bobbers}
+UnbreakableLineTooltip: Line will never break
+FishingRodLineSnapTooltip: "{0:+0;-#}% chance for line to break"
+DangerousCatchTooltip: May catch dangerous things
+Wiry.DisplayName: Wiry
+Twin.DisplayName: Twin
+Steady.DisplayName: Steady
+
+Sonorous: {
+	DisplayName: Sonorous
+	Tooltip: Detects hooked fish
+}
+
+Shallow.DisplayName: Shallow
+Sensitive.DisplayName: Sensitive
+Robust.DisplayName: Robust
+Riveting.DisplayName: Riveting
+Resourceful.DisplayName: Resourceful
 Profishient.DisplayName: Profishient
 Luring.DisplayName: Luring
-Wiry.DisplayName: Wiry
-Sensitive.DisplayName: Sensitive
-Flimsy.DisplayName: Flimsy
-Resourceful.DisplayName: Resourceful
-Riveting.DisplayName: Riveting
-Shallow.DisplayName: Shallow
-Sonorous.DisplayName: Sonorous
-Steady.DisplayName: Steady
-Barren.DisplayName: Barren
-Fishless.DisplayName: Fishless
-Consequential.DisplayName: Consequential
-Robust.DisplayName: Robust
 Indiscriminate.DisplayName: Indiscriminate
-Twin.DisplayName: Twin
+Flimsy.DisplayName: Flimsy
+Fishless.DisplayName: Fishless
+
+Consequential: {
+	DisplayName: Consequential
+	Tooltip: Isn't that what you're here for?
+}
+
+Repulsive.DisplayName: Repulsive
+
+Meticulous: {
+	DisplayName: Meticulous
+	Tooltip: More likely to catch quest fish
+}
+
 Overflowing.DisplayName: Overflowing
