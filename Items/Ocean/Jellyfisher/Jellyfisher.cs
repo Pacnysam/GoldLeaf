@@ -2,13 +2,6 @@ using GoldLeaf.Core;
 using GoldLeaf.Core.CrossMod;
 using GoldLeaf.Core.Helpers;
 using GoldLeaf.Effects.Dusts;
-using GoldLeaf.Items.Blizzard;
-using GoldLeaf.Items.FishWeapons;
-using GoldLeaf.Items.Grove;
-using GoldLeaf.Items.Grove.Boss;
-using GoldLeaf.Items.Nightshade;
-using GoldLeaf.Items.Sky;
-using GoldLeaf.Items.Underground;
 using GoldLeaf.Items.Vanity;
 using GoldLeaf.Prefixes;
 using Microsoft.Xna.Framework;
@@ -18,19 +11,17 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Mail;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using static GoldLeaf.Core.ColorHelper;
 using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 using static GoldLeaf.Core.Helper;
-using static GoldLeaf.Core.ColorHelper;
 using static GoldLeaf.Core.Helpers.DrawHelper;
 using static Terraria.ModLoader.ModContent;
 
@@ -63,7 +54,7 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
             Item.useStyle = ItemUseStyleID.Swing;
             Item.autoReuse = false;
 
-            Item.damage = 32;
+            Item.damage = 30;
             Item.fishingPole = 20;
             Item.sentry = true;
 
@@ -77,10 +68,17 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
             Item.height = 30;
         }
 
-        //public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(Language.GetTextValue("Mods.GoldLeaf.Items.Jellyfisher." + (sentryMode ? "FishingMode" : "SentryMode")));
-        
         public static readonly SoundStyle JellyfishLightningSound = new("GoldLeaf/Sounds/SE/JellyfishLightning") { Volume = 0.75f, Pitch = -0.2f, PitchVariance = 0.4f };
         public bool sentryMode = true;
+        private static bool OwnsBobber(Player player)
+        {
+            foreach (Projectile projectile in Main.projectile)
+            {
+                if (projectile.active && projectile.bobber && projectile.owner == player.whoAmI)
+                    return true;
+            }
+            return false;
+        }
 
         public override void UpdateInventory(Player player)
         {
@@ -97,22 +95,17 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
             }
         }
 
-        public override bool CanUseItem(Player player)
-        {
-            if (sentryMode)
-            {
-                foreach (Projectile projectile in Main.projectile) 
-                {
-                    if (projectile.active && projectile.bobber && projectile.owner == player.whoAmI)
-                        return false;
-                }
-            }
-            return base.CanUseItem(player);
-        }
-
         public override float UseTimeMultiplier(Player player) => !sentryMode ? 0.425f : 1f;
         public override float UseAnimationMultiplier(Player player) => !sentryMode ? 0.425f : 1f;
-        
+
+        public override void ApplyPrefix(int pre)
+        {
+            ModPrefix prefix = PrefixLoader.GetPrefix(pre);
+            
+            if (prefix is FishingRodPrefix fishPrefix && fishPrefix.FishingPower != 0)
+                Item.damage = (int)(Item.damage * (1 + (0.01f * fishPrefix.FishingPower)));
+        }
+
         public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
         {
             if (!sentryMode)
@@ -128,7 +121,19 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
                 position = Main.MouseWorld;
             }
         }
-
+        
+        public override bool CanShoot(Player player)
+        {
+            if (player.altFunctionUse != 2) //primary
+            {
+                
+            }
+            else //secondary
+            {
+                return false;
+            }
+            return base.CanShoot(player);
+        }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             if (sentryMode)
@@ -173,7 +178,7 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
         }
 
         public override bool ConsumeItem(Player player) => false;
-        public override bool CanRightClick() => Main.LocalPlayer.ownedProjectileCounts[ProjectileType<JellyfishBobber>()] == 0;
+        public override bool CanRightClick() => false;//!OwnsBobber(Main.LocalPlayer);
         public override void RightClick(Player player)
         {
             sentryMode = !sentryMode;
@@ -184,6 +189,30 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
             SoundEngine.PlaySound(sentryMode ? SoundID.DD2_LightningBugHurt : SoundID.Item112);
         }
 
+        public override bool AltFunctionUse(Player player) => true;
+        public override bool CanUseItem(Player player) => (!sentryMode || !OwnsBobber(player));
+        public override bool? UseItem(Player player)
+        {
+            if (player.altFunctionUse != 2) //primary
+            {
+
+            }
+            else //secondary
+            {
+                sentryMode = !sentryMode;
+                Item.NetStateChanged();
+
+                if (sentryMode)
+                    SoundEngine.PlaySound(SoundID.NPCHit52 with { Volume = 0.65f });
+                SoundEngine.PlaySound(sentryMode ? SoundID.DD2_LightningBugHurt : SoundID.Item112);
+
+                player.itemTime = 15;
+                player.itemAnimation = 15;
+                return false;
+            }
+            return base.UseItem(player);
+        }
+        
         #region Save & Load Stuff
         protected override bool CloneNewInstances => true;
         public override ModItem Clone(Item item)
@@ -236,7 +265,7 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
             }
         }
     }
-
+    
     public class JellyfishBobber : ModProjectile
     {
         private static Asset<Texture2D> bloomTex;
@@ -420,7 +449,7 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
 
         private ref float State => ref Projectile.ai[0];
         private ref float Rottime => ref Projectile.ai[1];
-        private ref float Charge => ref Projectile.ai[2]; //for the first frame this is instead the target Y position, theres definitely a better way to do this but im sleep deprived rn
+        private ref float Charge => ref Projectile.ai[2];
 
         private const int Idle = 0;
         private const int Attacking = 1;
@@ -596,7 +625,7 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
                 enemyVector.Normalize();
                 enemyVector *= 9f;
 
-                Projectile projectile = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, enemyVector, ProjectileType<JellyfishLightning>(), Projectile.damage, Projectile.knockBack, Projectile.owner, target.whoAmI);
+                Projectile projectile = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + (enemyVector * 1.25f), enemyVector, ProjectileType<JellyfishLightning>(), Projectile.damage, Projectile.knockBack, Projectile.owner, target.whoAmI);
                 projectile.DamageType = DamageClass.Summon;
             } //projectile
         }
@@ -614,9 +643,9 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
 
             if (State != Swimming) 
             {
-                //dark bloom
-                Main.EntitySpriteDraw(bloomTex.Value, Projectile.Center + new Vector2(0, -4) - Main.screenPosition, null, Color.Black * Projectile.Opacity * Projectile.localAI[0] * 0.85f, 0, bloomTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(Rottime * 3) * 0.15f)) * 0.85f, SpriteEffects.None, 0f);
-                Main.EntitySpriteDraw(bloomTex.Value, Projectile.Center + new Vector2(0, -4) - Main.screenPosition, null, Color.Black * Projectile.Opacity * Projectile.localAI[0] * 0.85f, 0, bloomTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(Rottime * 3) * -0.15f)) * 0.85f, SpriteEffects.None, 0f);
+                //shadow
+                Main.EntitySpriteDraw(bloomTex.Value, Projectile.Center + new Vector2(0, -4) - Main.screenPosition, null, Color.Black * Projectile.Opacity * Projectile.localAI[0] * 0.8f, 0, bloomTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(Rottime * 3) * 0.15f)) * (size + 0.05f), SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(bloomTex.Value, Projectile.Center + new Vector2(0, -4) - Main.screenPosition, null, Color.Black * Projectile.Opacity * Projectile.localAI[0] * 0.8f, 0, bloomTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(Rottime * 3) * -0.15f)) * (size + 0.05f), SpriteEffects.None, 0f);
 
                 //bloom
                 Main.EntitySpriteDraw(bloomTex.Value, Projectile.Center + new Vector2(0, -4) - Main.screenPosition, null, Color.Lerp(color2, color1, (float)(Math.Sin(Rottime * 8) / 2f) + 0.5f) with { A = 0 } * Projectile.Opacity * Projectile.localAI[0] * glopacity, 0, bloomTex.Value.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(Rottime * 3) * 0.15f)) * size, SpriteEffects.None, 0f);
@@ -646,9 +675,13 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, rect, Color.White.Alpha(0) * Projectile.Opacity * (float)Math.Sin(Rottime * 6) * 0.3f, Projectile.rotation, rect.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
 
             //Main.spriteBatch.ResetBlendState();
+
+            if (State != Swimming && Main.player[Projectile.owner].HasItem(ItemType<DebugItem>())) //TODO: change to debug when i implement that
+                Projectile.DrawProjectileHealthBar((int)Math.Clamp(Charge * 100f, 0, 100), 100, Projectile.localAI[0]);
+
             return false;
         }
-        
+
         public override void OnKill(int timeLeft)
         {
             Projectile.TryGetOwner(out Player owner);
@@ -802,6 +835,13 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
                     else
                         Dust.NewDustPerfect(Main.npc[targets[i - 1]].Center, DustType<JellyLightningDust>(), Main.npc[targets[i]].Center);
                 }
+                for (int i = 0; i < maxTargets; i++)
+                {
+                    if (targets[i] == -1)
+                        break;
+
+                    Dust.NewDustPerfect(Main.npc[targets[i]].Center, DustType<JellyLightningNodeDust>(), Vector2.Zero, Scale: 1f);
+                }
             }
         }
     }
@@ -821,6 +861,103 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
 
         public override void OnSpawn(Dust dust)
         {
+            dust.frame = Texture2D.Frame(1, 5, 0, Main.rand.Next(5));
+            dust.fadeIn = Main.rand.Next(1, 5);
+            dust.alpha = 0;
+
+            if (dust.customData is not Gradient)
+                dust.customData = defaultGradient;
+        }
+
+        public override bool Update(Dust dust)
+        {
+            dust.alpha = (int)MathHelper.SmoothStep(dust.alpha, 280, 0.15f + ((1 - dust.Opacity()) * 0.15f));
+            if (dust.alpha > 255) dust.active = false;
+            
+            if (!dust.noLight && dust.customData is Gradient gradient)
+            {
+                float lightIntensity = 1.25f * dust.Opacity();
+                Color color = gradient.GetColor(0.5f + 1f - dust.Opacity());
+
+                Lighting.AddLight(dust.position, (color.R / 255f) * lightIntensity, (color.G / 255f) * lightIntensity, (color.B / 255f) * lightIntensity);
+            }
+
+            return false;
+        }
+
+        public override bool PreDraw(Dust dust)
+        {
+            if (dust.customData is Gradient gradient)
+            {
+                float bloomLength = 1f / bloomTex.Width() * dust.position.Distance(dust.velocity);
+                float bloomWidth = 0.9f;
+                Rectangle bloomFrame = bloomTex.Frame() with { X = (int)(bloomTex.Width() * 0.25f), Width = bloomTex.Width() - (int)(bloomTex.Width() * 0.5f) };
+                
+                //bloom
+                Main.spriteBatch.Draw(bloomTex.Value, dust.position - Main.screenPosition, bloomFrame, Color.Black * (dust.Opacity() * 0.75f) * 0.25f,
+                       dust.position.DirectionTo(dust.velocity).ToRotation(), Vector2.Zero + new Vector2(0, bloomTex.Height() / 2f), new Vector2(bloomLength * 2f, bloomWidth * 1.15f * dust.Opacity()), SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(bloomTex.Value, dust.position - Main.screenPosition, bloomFrame, gradient.GetColor(0.35f + 1 - dust.Opacity()).Alpha(160) * (dust.Opacity() * 0.75f) * 0.55f,
+                       dust.position.DirectionTo(dust.velocity).ToRotation(), Vector2.Zero + new Vector2(0, bloomTex.Height() / 2f), new Vector2(bloomLength * 2f, bloomWidth * 1.35f * dust.Opacity()), SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(bloomTex.Value, dust.position - Main.screenPosition, bloomFrame, gradient.GetColor(1 - dust.Opacity() * 0.65f).Alpha(0) * (dust.Opacity() * 0.75f) * 0.4f,
+                       dust.position.DirectionTo(dust.velocity).ToRotation(), Vector2.Zero + new Vector2(0, bloomTex.Height() / 2f), new Vector2(bloomLength * 2f, bloomWidth * 0.75f * dust.Opacity()), SpriteEffects.None, 0f);
+
+                int repeats = 0;
+                for (float traveled = 0.25f; traveled < dust.position.Distance(dust.velocity); traveled += dust.frame.Width - 4)
+                {
+                    Vector2 position = dust.position.MoveTowards(dust.velocity, traveled);
+                    Rectangle frame = (repeats == 0)? dust.frame with { Width = (int)Math.Min(position.Distance(dust.velocity), dust.frame.Width) } :
+                        Texture2D.Frame(1, 5, 0, (int)dust.fadeIn * repeats % 5) with { Width = (int)Math.Min(position.Distance(dust.velocity), dust.frame.Width) };
+
+                    //lightning
+                    Main.spriteBatch.Draw(Texture2D.Value, position - Main.screenPosition, frame, gradient.GetColor(1 - dust.Opacity()).Alpha(160) * (dust.Opacity() + 0.15f),
+                            dust.position.DirectionTo(dust.velocity).ToRotation(), Vector2.Zero + new Vector2(0, dust.frame.Height / 2f), new Vector2(1f, 0.15f + (0.875f - dust.Opacity())), SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(Texture2D.Value, position - Main.screenPosition, frame, gradient.GetColor(0.45f + 1 - dust.Opacity()).Alpha(0) * (dust.Opacity() + 0.05f),
+                            dust.position.DirectionTo(dust.velocity).ToRotation(), Vector2.Zero + new Vector2(0, dust.frame.Height / 2f), new Vector2(1f, 0.05f + (0.7f * dust.Opacity())), SpriteEffects.None, 0f);
+                    
+                    repeats++;
+                }
+            }
+            return false;
+        }
+
+        private void ClassicDrawMethod(Dust dust)
+        {
+            if (dust.customData is Gradient gradient)
+            {
+                //node
+                Main.spriteBatch.Draw(bloomTex.Value, dust.velocity - Main.screenPosition, null, Color.Black * (dust.Opacity() + 0.2f) * 0.85f, 0,
+                    bloomTex.Size() / 2f, (dust.Opacity() * 0.5f) + 0.25f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(nodeTex.Value, dust.velocity - Main.screenPosition, null, gradient.GetColor((1 - dust.Opacity()) * 0.65f).Alpha(160) * (dust.Opacity() + 0.35f), 0,
+                    nodeTex.Size() / 2f, (dust.Opacity() * 0.45f) + 0.2f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(nodeTex.Value, dust.velocity - Main.screenPosition, null, gradient.GetColor((1 - dust.Opacity()) * 0.35f).Alpha(0) * (dust.Opacity() + 0.35f) * 0.7f, 0,
+                    nodeTex.Value.Size() / 2f, dust.Opacity() * 0.65f, SpriteEffects.None, 0f);
+
+                float length = 1f / dust.frame.Width * dust.position.Distance(dust.velocity);
+
+                //lightning
+                Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, Color.Black * (dust.Opacity() + 0.05f) * 0.5f,
+                        dust.position.DirectionTo(dust.velocity).ToRotation(), Vector2.Zero + new Vector2(0, dust.frame.Height / 2f), new Vector2(length, 1.75f * dust.Opacity()), SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, gradient.GetColor(1 - dust.Opacity()) * (dust.Opacity() + 0.15f),
+                        dust.position.DirectionTo(dust.velocity).ToRotation(), Vector2.Zero + new Vector2(0, dust.frame.Height / 2f), new Vector2(length, 1.5f * dust.Opacity()), SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, gradient.GetColor(0.45f + 1 - dust.Opacity()).Alpha(0) * (dust.Opacity() + 0.05f),
+                        dust.position.DirectionTo(dust.velocity).ToRotation(), Vector2.Zero + new Vector2(0, dust.frame.Height / 2f), new Vector2(length, 0.25f + (1 - dust.Opacity())), SpriteEffects.None, 0f);
+            }
+        }
+    }
+    
+    public class JellyLightningNodeDust : ModDust
+    {
+        private static Asset<Texture2D> bloomTex;
+        public override void Load()
+        {
+            bloomTex = Request<Texture2D>("GoldLeaf/Textures/Glow");
+        }
+
+        public override string Texture => "GoldLeaf/Textures/GlowSolid0";
+        private static readonly Gradient defaultGradient = new([(new Color(255, 231, 253), 0.1f), (new Color(255, 156, 224), 0.25f), (new Color(197, 145, 255), 0.4f), (new Color(63, 74, 255), 0.55f)]);
+
+        public override void OnSpawn(Dust dust)
+        {
             if (dust.fadeIn < 1f)
                 dust.fadeIn = 1f;
 
@@ -833,8 +970,16 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
 
         public override bool Update(Dust dust)
         {
-            dust.alpha = (int)MathHelper.SmoothStep(dust.alpha, 280, (dust.fadeIn * 0.15f) + ((1 - dust.Opacity()) * 0.15f));
+            dust.alpha = (int)MathHelper.SmoothStep(dust.alpha, 280, ((dust.fadeIn - 0.05f) * 0.15f) + ((1 - dust.Opacity()) * 0.15f));
             if (dust.alpha > 255) dust.active = false;
+
+            if (!dust.noLight && dust.customData is Gradient gradient)
+            {
+                float intensity = 1.25f * dust.Opacity();
+                Color color = gradient.GetColor(0.5f + 1f - dust.Opacity());
+
+                Lighting.AddLight(dust.position, (color.R / 255f) * intensity, (color.G / 255f) * intensity, (color.B / 255f) * intensity);
+            }
 
             return false;
         }
@@ -843,27 +988,17 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
         {
             if (dust.customData is Gradient gradient)
             {
-                float length = 1f / dust.frame.Width * dust.position.Distance(dust.velocity);
-
-                //lightning
-                Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, Color.Black * (dust.Opacity() + 0.05f) * 0.5f,
-                        dust.position.DirectionTo(dust.velocity).ToRotation(), Vector2.Zero + new Vector2(0, dust.frame.Height / 2f), new Vector2(length, 1.75f * dust.Opacity()), SpriteEffects.None, 0f);
-                Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, gradient.GetColor(1 - dust.Opacity()) * (dust.Opacity() + 0.15f),
-                        dust.position.DirectionTo(dust.velocity).ToRotation(), Vector2.Zero + new Vector2(0, dust.frame.Height / 2f), new Vector2(length, 1.5f * dust.Opacity()), SpriteEffects.None, 0f);
-                Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, gradient.GetColor(0.45f + 1 - dust.Opacity()).Alpha(0) * (dust.Opacity() + 0.05f),
-                        dust.position.DirectionTo(dust.velocity).ToRotation(), Vector2.Zero + new Vector2(0, dust.frame.Height / 2f), new Vector2(length, 0.25f + (1 - dust.Opacity())), SpriteEffects.None, 0f);
-                //node
-                Main.spriteBatch.Draw(bloomTex.Value, dust.velocity - Main.screenPosition, null, Color.Black * (dust.Opacity() + 0.2f) * 0.85f, 0,
-                    bloomTex.Size() / 2f, (dust.Opacity() * 0.5f) + 0.25f, SpriteEffects.None, 0f);
-                Main.spriteBatch.Draw(nodeTex.Value, dust.velocity - Main.screenPosition, null, gradient.GetColor((1 - dust.Opacity()) * 0.65f).Alpha(160) * (dust.Opacity() + 0.35f), 0, 
-                    nodeTex.Size() / 2f, (dust.Opacity() * 0.45f) + 0.2f, SpriteEffects.None, 0f);
-                Main.spriteBatch.Draw(nodeTex.Value, dust.velocity - Main.screenPosition, null, gradient.GetColor((1 - dust.Opacity()) * 0.35f).Alpha(0) * (dust.Opacity() + 0.35f) * 0.7f, 0, 
-                    nodeTex.Value.Size() / 2f, dust.Opacity() * 0.65f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(bloomTex.Value, dust.position - Main.screenPosition, null, Color.Black * (dust.Opacity() + 0.2f) * 0.85f, 0,
+                    bloomTex.Size() / 2f, ((dust.Opacity() * 0.525f) + 0.25f) * dust.scale, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, null, gradient.GetColor((1 - dust.Opacity()) * 0.65f).Alpha(160) * (dust.Opacity() + 0.35f), 0,
+                    Texture2D.Size() / 2f, ((dust.Opacity() * 0.45f) + 0.2f) * dust.scale, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, null, gradient.GetColor((1 - dust.Opacity()) * 0.35f).Alpha(0) * (dust.Opacity() + 0.35f) * 0.7f, 0,
+                    Texture2D.Value.Size() / 2f, (dust.Opacity() * 0.5f) * dust.scale, SpriteEffects.None, 0f);
             }
             return false;
         }
     }
-
+    
     public class JellyfisherPlayer : ModPlayer
     {
         public override void CatchFish(FishingAttempt attempt, ref int itemDrop, ref int npcSpawn, ref AdvancedPopupRequest sonar, ref Vector2 sonarPosition)

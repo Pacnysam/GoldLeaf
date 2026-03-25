@@ -43,17 +43,11 @@ namespace GoldLeaf.Items
         {
             if (player.altFunctionUse != 2) //primary
             {
-                //player.GetModPlayer<GoldLeafPlayer>().ScreenMoveTime = temp;
-                //player.GetModPlayer<GoldLeafPlayer>().ScreenMoveHold = false;
-
-                //player.GetModPlayer<CameraSystem>().ScreenMoveTarget = Main.screenPosition + new Vector2(Main.mouseX, Main.mouseY);
                 Dust.NewDustPerfect(Main.MouseWorld, DustType<JellyLightningDust>(), tempVec2);
+                Dust.NewDustPerfect(Main.MouseWorld, DustType<JellyLightningNodeDust>(), Vector2.Zero);
             }
             else //secondary
             {
-                //player.GetModPlayer<CameraSystem>().ScreenMoveTime = temp;
-                //player.GetModPlayer<CameraSystem>().ScreenMoveHold = false;
-                //player.GetModPlayer<CameraSystem>().ScreenMovePan = Main.screenPosition + new Vector2(Main.mouseX, Main.mouseY);
                 tempVec2 = Main.MouseWorld;
             }
             return true;
