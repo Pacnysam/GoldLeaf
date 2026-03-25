@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
-using Terraria.Enums;
 using Terraria.Localization;
-using static Terraria.ModLoader.ModContent;
-using static GoldLeaf.Core.Helper;
 using GoldLeaf.Core;
 using Terraria.Utilities;
-using Terraria.ModLoader.IO;
-using Terraria.Audio;
 using Terraria.DataStructures;
+using static Terraria.ModLoader.ModContent;
+using static GoldLeaf.Core.Helper;
 
 namespace GoldLeaf.Prefixes
 {
@@ -61,8 +57,9 @@ namespace GoldLeaf.Prefixes
     }
     public class Sonorous : FishingRodPrefix
     {
-        public override string Description => this.GetLocalizedValue("Tooltip");
-        public override bool Sonar => true;
+        public override bool HasTooltip => true;
+        public override void ModifyValue(ref float valueMult) => valueMult *= 1.35f;
+        public override void HeldEffects(Item item, Player player) => player.sonarPotion = true;
     }
     public class Profishient : FishingRodPrefix
     {
@@ -85,7 +82,7 @@ namespace GoldLeaf.Prefixes
     public class Meticulous : FishingRodPrefix
     {
         public override float RollChance(Item item) => 0.2f;
-        public override string Description => this.GetLocalizedValue("Tooltip");
+        public override bool HasTooltip => true;
         public override void ModifyAttempt(ref FishingAttempt attempt)
         {
             if (Main.rand.NextBool(3) && attempt.questFish != -1 && !Main.LocalPlayer.HasItem(attempt.questFish) && NPC.AnyNPCs(NPCID.Angler) && !Main.anglerQuestFinished)
@@ -97,22 +94,31 @@ namespace GoldLeaf.Prefixes
                     attempt.common = false;
                 }
             }
-                
         }
     }
     public class Fishless : FishingRodPrefix
     {
         public override int FishingPower => -20;
         //public override int LineSnapChance => 50;
+        public override bool HasTooltip => true;
         public override float RollChance(Item item) => 0.2f;
         public override void ModifyAttempt(ref FishingAttempt attempt)
         {
 
         }
-        public override string Description => this.GetLocalizedValue("Tooltip");
     }
     public class Consequential : FishingRodPrefix
     {
+        public override bool Dangerous => true;
+        public override bool HasTooltip => true;
+        public override bool IsNegative => true;
+        public override bool CanRoll(Item item) => Main.hardMode;
+        public override float RollChance(Item item) => 0.025f;
+        public override void HeldEffects(Item item, Player player)
+        {
+            player.sonarPotion = false;
+            player.accFishingLine = true;
+        }
         public override void ModifyCatch(FishingAttempt attempt, ref int itemDrop, ref int npcSpawn)
         {
             if (attempt.playerFishingConditions.BaitItemType == ItemID.TruffleWorm || !Main.rand.NextBool(3)) return;
@@ -123,18 +129,18 @@ namespace GoldLeaf.Prefixes
             if (attempt.rare || attempt.veryrare)
                 npcSpawn = NPCID.RedDevil;
             if (attempt.legendary)
+            {
                 npcSpawn = NPCID.DungeonGuardian;
+                if (Main.rand.NextBool(100)) npcSpawn = NPCID.MoonLordCore;
+            }
         }
-        public override bool Dangerous => true;
-        public override string Description => this.GetLocalizedValue("Tooltip");
-        public override bool IsNegative => true;
-        public override bool CanRoll(Item item) => Main.hardMode;
-        public override float RollChance(Item item) => 0.025f;
     }
     public class Robust : FishingRodPrefix
     {
         public override int FishingPower => 5;
-        public override bool Unbreakable => true;
+        public override bool HasTooltip => true;
+        public override void ModifyValue(ref float valueMult) => valueMult *= 1.1f; 
+        public override void HeldEffects(Item item, Player player) => player.accFishingLine = true; 
     }
 
     public abstract class FishingRodPrefix : ModPrefix
@@ -144,26 +150,25 @@ namespace GoldLeaf.Prefixes
         public virtual int BaitSaveChance => 0;
         public virtual int LineSnapChance => 0;
         public virtual int ExtraBobbers => 0;
-        public virtual bool Sonar => false;
-        public virtual bool Unbreakable => false;
         public virtual bool Dangerous => false;
-        public virtual string Description => "";
+        public virtual bool HasTooltip => false;
         public virtual bool IsNegative => false;
 
         public virtual void ModifyCatch(FishingAttempt attempt, ref int itemDrop, ref int npcSpawn) { }
         public virtual void ModifyAttempt(ref FishingAttempt attempt) { }
+        public virtual void HeldEffects(Item item, Player player) { }
 
         public override PrefixCategory Category => PrefixCategory.Custom;
+        public override bool CanRoll(Item item) => item.fishingPole > 0;
+
+        public override string LocalizationCategory => "Prefixes.Fishing";
 
         public override void ModifyValue(ref float valueMult)
         {
-            valueMult *= Math.Clamp(1f + (FishingPower * 0.015f) + (BaitSaveChance * 0.0075f) - (LineSnapChance * 0.005f) + (ExtraBobbers * 0.15f) + (Sonar? 0.25f : 0) 
-                + (Unbreakable ? 0.1f : 0) - (Dangerous ? 0.15f : 0), 0.25f, 2.25f);
+            valueMult *= Math.Clamp(1f + (FishingPower * 0.015f) + (BaitSaveChance * 0.0075f) - (LineSnapChance * 0.005f) 
+                + (ExtraBobbers * 0.15f) - (Dangerous ? 0.15f : 0), 0.25f, 2.25f);
         }
 
-        //public override bool AllStatChangesHaveEffectOn(Item item) => item.fishingPole + FishingPower > 0;
-        public override bool CanRoll(Item item) => item.fishingPole > 0;
-        
         public override IEnumerable<TooltipLine> GetTooltipLines(Item item)
         {
             if (ExtraBobbers > 0)
@@ -190,14 +195,6 @@ namespace GoldLeaf.Prefixes
                     IsModifierBad = true,
                 };
             }
-            if (Unbreakable)
-            {
-                yield return new TooltipLine(Mod, "UnbreakableLineTooltip", UnbreakableLineTooltip.Format())
-                {
-                    IsModifier = true,
-                    IsModifierBad = false,
-                };
-            }
             if (Dangerous)
             {
                 yield return new TooltipLine(Mod, "DangerousCatchTooltip", DangerousCatchTooltip.Format())
@@ -207,9 +204,9 @@ namespace GoldLeaf.Prefixes
                     OverrideColor = Color.Crimson,
                 };
             }
-            if (Description != "") 
+            if (HasTooltip) 
             {
-                yield return new TooltipLine(Mod, "PrefixTooltip", Description)
+                yield return new TooltipLine(Mod, "PrefixTooltip", this.GetLocalizedValue("Tooltip"))
                 {
                     IsModifier = true,
                     IsModifierBad = IsNegative,
@@ -219,7 +216,6 @@ namespace GoldLeaf.Prefixes
         public static LocalizedText ExtraBobbersTooltip { get; private set; }
         public static LocalizedText FishingRodBaitTooltip { get; private set; }
         public static LocalizedText FishingRodLineSnapTooltip { get; private set; }
-        public static LocalizedText UnbreakableLineTooltip { get; private set; }
         public static LocalizedText DangerousCatchTooltip { get; private set; }
 
         public override void SetStaticDefaults()
@@ -229,7 +225,6 @@ namespace GoldLeaf.Prefixes
             ExtraBobbersTooltip = Mod.GetLocalization($"{LocalizationCategory}.{nameof(ExtraBobbersTooltip)}");
             FishingRodBaitTooltip = Mod.GetLocalization($"{LocalizationCategory}.{nameof(FishingRodBaitTooltip)}");
             FishingRodLineSnapTooltip = Mod.GetLocalization($"{LocalizationCategory}.{nameof(FishingRodLineSnapTooltip)}");
-            UnbreakableLineTooltip = Mod.GetLocalization($"{LocalizationCategory}.{nameof(UnbreakableLineTooltip)}");
             DangerousCatchTooltip = Mod.GetLocalization($"{LocalizationCategory}.{nameof(DangerousCatchTooltip)}");
         }
         public sealed override void Unload()
@@ -267,6 +262,16 @@ namespace GoldLeaf.Prefixes
             entity.Prefix(Main.rand.Next(list.Count()));
         }
 
+        public override void PreReforge(Item item)
+        {
+            if (item.fishingPole > 0)
+                item.accessory = true;
+        }
+        public override void PostReforge(Item item)
+        {
+            if (item.fishingPole > 0)
+                item.accessory = false;
+        }
         public override bool CanReforge(Item item)
         {
             if (item.fishingPole > 0)
@@ -308,9 +313,7 @@ namespace GoldLeaf.Prefixes
         {
             bool result = orig(self, prefix);
 
-            ModPrefix actualPrefix = PrefixLoader.GetPrefix(prefix);
-
-            if (self.fishingPole > 0 && actualPrefix is FishingRodPrefix)
+            if (self.fishingPole > 0 && PrefixLoader.GetPrefix(prefix) is FishingRodPrefix)
                 result = true;
 
             return result;
@@ -353,13 +356,10 @@ namespace GoldLeaf.Prefixes
                 int finalFishingPower = Math.Max(1, item.fishingPole + fishPrefix.FishingPower);
                 int changedFishingPower = finalFishingPower - item.fishingPole;
 
-                player.sonarPotion = true;
-                if (fishPrefix.Unbreakable || fishPrefix is Consequential)
-                    player.accFishingLine = true;
                 if (fishPrefix.FishingPower != 0)
-                {
                     player.fishingSkill += changedFishingPower;
-                }
+
+                fishPrefix.HeldEffects(item, player);
             }
         }
 

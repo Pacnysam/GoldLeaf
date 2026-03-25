@@ -1,0 +1,41 @@
+FishingRodBaitTooltip: "{0:+0;-#}% chance to save bait"
+ExtraBobbersTooltip: +{0} extra {^0:bobber;bobbers}
+FishingRodLineSnapTooltip: "{0:+0;-#}% chance for line to break"
+DangerousCatchTooltip: May catch dangerous things
+Wiry.DisplayName: Wiry
+Twin.DisplayName: Twin
+Steady.DisplayName: Steady
+Shallow.DisplayName: Shallow
+Sensitive.DisplayName: Sensitive
+Riveting.DisplayName: Riveting
+Resourceful.DisplayName: Resourceful
+Profishient.DisplayName: Profishient
+Luring.DisplayName: Luring
+Indiscriminate.DisplayName: Indiscriminate
+Flimsy.DisplayName: Flimsy
+Repulsive.DisplayName: Repulsive
+
+Robust: {
+	DisplayName: Robust
+	Tooltip: The line will never break
+}
+
+Sonorous: {
+	DisplayName: Sonorous
+	Tooltip: Detects hooked fish
+}
+
+Consequential: {
+	DisplayName: Consequential
+	Tooltip: Isn't that what you're here for?
+}
+
+Meticulous: {
+	DisplayName: Meticulous
+	Tooltip: More likely to catch quest fish
+}
+
+Fishless: {
+	DisplayName: Fishless
+	Tooltip: Only catches junk
+}

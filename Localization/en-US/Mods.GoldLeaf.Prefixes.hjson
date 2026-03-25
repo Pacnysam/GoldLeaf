@@ -12,6 +12,7 @@ Peppy.DisplayName: Peppy
 Spunky.DisplayName: Spunky
 Vivacious.DisplayName: Vivacious
 Jubilated.DisplayName: Jubilated
+Overflowing.DisplayName: Overflowing
 
 Vital: {
 	DisplayName: Vital
@@ -22,42 +23,3 @@ Radiant: {
 	DisplayName: Radiant
 	Tooltip: Critical strikes spawn stars
 }
-
-FishingRodBaitTooltip: "{0:+0;-#}% chance to save bait"
-ExtraBobbersTooltip: +{0} extra {^0:bobber;bobbers}
-UnbreakableLineTooltip: Line will never break
-FishingRodLineSnapTooltip: "{0:+0;-#}% chance for line to break"
-DangerousCatchTooltip: May catch dangerous things
-Wiry.DisplayName: Wiry
-Twin.DisplayName: Twin
-Steady.DisplayName: Steady
-
-Sonorous: {
-	DisplayName: Sonorous
-	Tooltip: Detects hooked fish
-}
-
-Shallow.DisplayName: Shallow
-Sensitive.DisplayName: Sensitive
-Robust.DisplayName: Robust
-Riveting.DisplayName: Riveting
-Resourceful.DisplayName: Resourceful
-Profishient.DisplayName: Profishient
-Luring.DisplayName: Luring
-Indiscriminate.DisplayName: Indiscriminate
-Flimsy.DisplayName: Flimsy
-Fishless.DisplayName: Fishless
-
-Consequential: {
-	DisplayName: Consequential
-	Tooltip: Isn't that what you're here for?
-}
-
-Repulsive.DisplayName: Repulsive
-
-Meticulous: {
-	DisplayName: Meticulous
-	Tooltip: More likely to catch quest fish
-}
-
-Overflowing.DisplayName: Overflowing
