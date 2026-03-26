@@ -3,7 +3,7 @@ using GoldLeaf.Core.CrossMod;
 using GoldLeaf.Core.Helpers;
 using GoldLeaf.Effects.Dusts;
 using GoldLeaf.Items.Vanity;
-using GoldLeaf.Prefixes;
+using GoldLeaf.Prefixes.Fishing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -177,6 +177,11 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
             return true;
         }
 
+        public override float UseSpeedMultiplier(Player player)
+        {
+            return 1f;
+        }
+
         public override bool ConsumeItem(Player player) => false;
         public override bool CanRightClick() => false;//!OwnsBobber(Main.LocalPlayer);
         public override void RightClick(Player player)
@@ -197,7 +202,7 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
             {
 
             }
-            else //secondary
+            else if (player.altFunctionUse == 2) //secondary
             {
                 sentryMode = !sentryMode;
                 Item.NetStateChanged();
@@ -205,7 +210,7 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
                 if (sentryMode)
                     SoundEngine.PlaySound(SoundID.NPCHit52 with { Volume = 0.65f });
                 SoundEngine.PlaySound(sentryMode ? SoundID.DD2_LightningBugHurt : SoundID.Item112);
-
+                
                 player.itemTime = 15;
                 player.itemAnimation = 15;
                 return false;

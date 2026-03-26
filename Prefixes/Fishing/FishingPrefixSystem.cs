@@ -12,151 +12,85 @@ using Terraria.DataStructures;
 using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
 
-namespace GoldLeaf.Prefixes
+namespace GoldLeaf.Prefixes.Fishing
 {
-    public class Repulsive : FishingRodPrefix
-    {
-        public override int FishingPower => -15;
-    }
-    public class Flimsy : FishingRodPrefix
-    {
-        public override int FishingPower => -5;
-        public override int LineSnapChance => 20;
-    }
-    public class Wiry : FishingRodPrefix
-    {
-        public override int LineSnapChance => 45;
-    }
-    public class Shallow : FishingRodPrefix
-    {
-        public override int FishingPower => -5;
-        public override int BaitSaveChance => 5;
-    }
-    public class Sensitive : FishingRodPrefix
-    {
-        public override int FishingPower => 5;
-        public override int LineSnapChance => 20;
-    }
-    public class Steady : FishingRodPrefix
-    {
-        public override int FishingPower => 10;
-        public override int BaitSaveChance => 15;
-    }
-    public class Luring : FishingRodPrefix
-    {
-        public override int FishingPower => 20;
-    }
-    public class Resourceful : FishingRodPrefix
-    {
-        public override int BaitSaveChance => 50;
-    }
-    public class Riveting : FishingRodPrefix
-    {
-        public override int FishingPower => 5;
-        public override int BaitSaveChance => 10;
-    }
-    public class Sonorous : FishingRodPrefix
-    {
-        public override bool HasTooltip => true;
-        public override void ModifyValue(ref float valueMult) => valueMult *= 1.35f;
-        public override void HeldEffects(Item item, Player player) => player.sonarPotion = true;
-    }
-    public class Profishient : FishingRodPrefix
-    {
-        public override int FishingPower => 15;
-        public override int BaitSaveChance => 25;
-        public override int ExtraBobbers => 2;
-
-        public override float RollChance(Item item) => 0.25f;
-    }
-    public class Twin : FishingRodPrefix
-    {
-        public override int ExtraBobbers => 1;
-    }
-    public class Indiscriminate : FishingRodPrefix
-    {
-        public override int FishingPower => -20;
-        public override int LineSnapChance => 35;
-        public override int ExtraBobbers => 3;
-    }
-    public class Meticulous : FishingRodPrefix
-    {
-        public override float RollChance(Item item) => 0.2f;
-        public override bool HasTooltip => true;
-        public override void ModifyAttempt(ref FishingAttempt attempt)
-        {
-            if (Main.rand.NextBool(3) && attempt.questFish != -1 && !Main.LocalPlayer.HasItem(attempt.questFish) && NPC.AnyNPCs(NPCID.Angler) && !Main.anglerQuestFinished)
-            {
-                attempt.rolledItemDrop = attempt.questFish;
-                if (!attempt.rare && !attempt.veryrare && !attempt.legendary)
-                {
-                    attempt.uncommon = true;
-                    attempt.common = false;
-                }
-            }
-        }
-    }
-    public class Fishless : FishingRodPrefix
-    {
-        public override int FishingPower => -20;
-        //public override int LineSnapChance => 50;
-        public override bool HasTooltip => true;
-        public override float RollChance(Item item) => 0.2f;
-        public override void ModifyAttempt(ref FishingAttempt attempt)
-        {
-
-        }
-    }
-    public class Consequential : FishingRodPrefix
-    {
-        public override bool Dangerous => true;
-        public override bool HasTooltip => true;
-        public override bool IsNegative => true;
-        public override bool CanRoll(Item item) => Main.hardMode;
-        public override float RollChance(Item item) => 0.025f;
-        public override void HeldEffects(Item item, Player player)
-        {
-            player.sonarPotion = false;
-            player.accFishingLine = true;
-        }
-        public override void ModifyCatch(FishingAttempt attempt, ref int itemDrop, ref int npcSpawn)
-        {
-            if (attempt.playerFishingConditions.BaitItemType == ItemID.TruffleWorm || !Main.rand.NextBool(3)) return;
-
-            itemDrop = 0;
-            if (attempt.common || attempt.uncommon)
-                npcSpawn = NPCID.Demon;
-            if (attempt.rare || attempt.veryrare)
-                npcSpawn = NPCID.RedDevil;
-            if (attempt.legendary)
-            {
-                npcSpawn = NPCID.DungeonGuardian;
-                if (Main.rand.NextBool(100)) npcSpawn = NPCID.MoonLordCore;
-            }
-        }
-    }
-    public class Robust : FishingRodPrefix
-    {
-        public override int FishingPower => 5;
-        public override bool HasTooltip => true;
-        public override void ModifyValue(ref float valueMult) => valueMult *= 1.1f; 
-        public override void HeldEffects(Item item, Player player) => player.accFishingLine = true; 
-    }
-
     public abstract class FishingRodPrefix : ModPrefix
     {
-        public static List<int> fishingRodPrefixes = [];
+        public enum DangerLevel : int
+        {
+            Dangerous = -1,
+            Neutral = 0,
+            Wonderful = 1,
+        }
+
         public virtual int FishingPower => 0;
         public virtual int BaitSaveChance => 0;
         public virtual int LineSnapChance => 0;
         public virtual int ExtraBobbers => 0;
-        public virtual bool Dangerous => false;
+        public virtual DangerLevel FishingSafety => DangerLevel.Neutral;
         public virtual bool HasTooltip => false;
         public virtual bool IsNegative => false;
+        public virtual Color? TooltipColorOverride => null;
 
         public virtual void ModifyCatch(FishingAttempt attempt, ref int itemDrop, ref int npcSpawn) { }
         public virtual void ModifyAttempt(ref FishingAttempt attempt) { }
         public virtual void HeldEffects(Item item, Player player) { }
+        public virtual void PostRollFish(Projectile projectile, ref FishingAttempt attempt) { }
+
+        public static void ImproveRarity(ref FishingAttempt attempt)
+        {
+            if (attempt.veryrare)
+            {
+                attempt.veryrare = false;
+                attempt.legendary = true;
+            }
+            else if (attempt.rare)
+            {
+                attempt.rare = false;
+                attempt.veryrare = true;
+            }
+            else if (attempt.uncommon)
+            {
+                attempt.uncommon = false;
+                attempt.rare = true;
+            }
+            else if (attempt.common)
+            {
+                attempt.common = false;
+                attempt.uncommon = true;
+            }
+            else
+            {
+                attempt.common = true;
+            }
+        }
+        public static void DowngradeRarity(ref FishingAttempt attempt)
+        {
+            if (attempt.legendary)
+            {
+                attempt.veryrare = true;
+                attempt.legendary = false;
+            }
+            if (attempt.veryrare)
+            {
+                attempt.rare = true;
+                attempt.veryrare = false;
+            }
+            else if (attempt.rare)
+            {
+                attempt.uncommon = true;
+                attempt.rare = false;
+            }
+            else if (attempt.uncommon)
+            {
+                attempt.common = true;
+                attempt.uncommon = false;
+            }
+            else
+            {
+                attempt.common = false;
+            }
+        }
 
         public override PrefixCategory Category => PrefixCategory.Custom;
         public override bool CanRoll(Item item) => item.fishingPole > 0;
@@ -165,10 +99,11 @@ namespace GoldLeaf.Prefixes
 
         public override void ModifyValue(ref float valueMult)
         {
-            valueMult *= Math.Clamp(1f + (FishingPower * 0.015f) + (BaitSaveChance * 0.0075f) - (LineSnapChance * 0.005f) 
-                + (ExtraBobbers * 0.15f) - (Dangerous ? 0.15f : 0), 0.25f, 2.25f);
+            valueMult *= Math.Clamp(1f + FishingPower * 0.015f + BaitSaveChance * 0.0075f - LineSnapChance * 0.005f 
+                + ExtraBobbers * 0.15f, 0.25f, 2.25f) * (FishingSafety == DangerLevel.Dangerous? 0.875f : FishingSafety == DangerLevel.Wonderful ? 1.125f : 1f);
         }
-
+        
+        #region tooltip zone
         public override IEnumerable<TooltipLine> GetTooltipLines(Item item)
         {
             if (ExtraBobbers > 0)
@@ -195,7 +130,7 @@ namespace GoldLeaf.Prefixes
                     IsModifierBad = true,
                 };
             }
-            if (Dangerous)
+            if (FishingSafety == DangerLevel.Dangerous)
             {
                 yield return new TooltipLine(Mod, "DangerousCatchTooltip", DangerousCatchTooltip.Format())
                 {
@@ -204,12 +139,22 @@ namespace GoldLeaf.Prefixes
                     OverrideColor = Color.Crimson,
                 };
             }
+            if (FishingSafety == DangerLevel.Wonderful)
+            {
+                yield return new TooltipLine(Mod, "WonderfulCatchTooltip", WonderfulCatchTooltip.Format())
+                {
+                    IsModifier = true,
+                    IsModifierBad = true,
+                    OverrideColor = Color.PaleGoldenrod,
+                };
+            }
             if (HasTooltip) 
             {
-                yield return new TooltipLine(Mod, "PrefixTooltip", this.GetLocalizedValue("Tooltip"))
+                yield return new TooltipLine(Mod, "PrefixTooltip", this.GetLocalization("Tooltip").Value)
                 {
                     IsModifier = true,
                     IsModifierBad = IsNegative,
+                    OverrideColor = TooltipColorOverride,
                 };
             }
         }
@@ -217,26 +162,27 @@ namespace GoldLeaf.Prefixes
         public static LocalizedText FishingRodBaitTooltip { get; private set; }
         public static LocalizedText FishingRodLineSnapTooltip { get; private set; }
         public static LocalizedText DangerousCatchTooltip { get; private set; }
+        public static LocalizedText WonderfulCatchTooltip { get; private set; }
+        #endregion tooltip zone
 
         public override void SetStaticDefaults()
         {
-            fishingRodPrefixes.Add(Type);
+            FishingRodPrefixItem.fishingRodPrefixes.Add(Type);
 
+            #region mini tooltip zone
             ExtraBobbersTooltip = Mod.GetLocalization($"{LocalizationCategory}.{nameof(ExtraBobbersTooltip)}");
             FishingRodBaitTooltip = Mod.GetLocalization($"{LocalizationCategory}.{nameof(FishingRodBaitTooltip)}");
             FishingRodLineSnapTooltip = Mod.GetLocalization($"{LocalizationCategory}.{nameof(FishingRodLineSnapTooltip)}");
             DangerousCatchTooltip = Mod.GetLocalization($"{LocalizationCategory}.{nameof(DangerousCatchTooltip)}");
-        }
-        public sealed override void Unload()
-        {
-            fishingRodPrefixes = null;
+            WonderfulCatchTooltip = Mod.GetLocalization($"{LocalizationCategory}.{nameof(WonderfulCatchTooltip)}");
+            #endregion mini tooltip zone
         }
     }
 
     public class FishingRodPrefixItem : GlobalItem
     {
         public override bool InstancePerEntity => true;
-
+        public static List<int> fishingRodPrefixes = [];
         public override bool AppliesToEntity(Item entity, bool lateInstantiation) => entity.fishingPole > 0;
 
         public override bool? PrefixChance(Item item, int pre, UnifiedRandom rand)
@@ -258,8 +204,10 @@ namespace GoldLeaf.Prefixes
         {
             base.SetDefaults(entity);
 
-            List<int> list = FishingRodPrefix.fishingRodPrefixes;
-            entity.Prefix(Main.rand.Next(list.Count()));
+            /*List<int> list = fishingRodPrefixes;
+            entity.Prefix(Main.rand.Next(list.Count()));*/
+
+            //entity.Prefix(Main.rand.Next(fishingRodPrefixes.Count));
         }
 
         public override void PreReforge(Item item)
@@ -282,13 +230,13 @@ namespace GoldLeaf.Prefixes
 
         public override int ChoosePrefix(Item item, UnifiedRandom rand)
         {
-            if ((item.damage > 0 && rand.NextBool()) || item.fishingPole <= 0)
+            if (item.damage > 0 && rand.NextBool() || item.fishingPole <= 0)
                 return -1;
 
-            List<int> list = FishingRodPrefix.fishingRodPrefixes;
+            List<int> list = fishingRodPrefixes;
             return list[rand.Next(list.Count)];
         }
-
+        
         public override void Load()
         {
             On_Item.CanHavePrefixes += FishingRodCanHavePrefix;
@@ -296,6 +244,7 @@ namespace GoldLeaf.Prefixes
         }
         public override void Unload()
         {
+            fishingRodPrefixes = null;
             On_Item.CanHavePrefixes -= FishingRodCanHavePrefix;
             On_Item.CanRollPrefix -= FishingRodCanRollPrefix;
         }
@@ -304,7 +253,7 @@ namespace GoldLeaf.Prefixes
         {
             bool result = orig(self);
 
-            if (self.fishingPole > 0 && (self.type != ItemID.None && (self.maxStack == 1 || self.AllowReforgeForStackableItem) && self.ammo == 0))
+            if (self.fishingPole > 0 && self.type != ItemID.None && (self.maxStack == 1 || self.AllowReforgeForStackableItem) && self.ammo == 0)
                 result = true;
 
             return result;
@@ -381,8 +330,42 @@ namespace GoldLeaf.Prefixes
 
     public class FishingRodPrefixPlayer : ModPlayer
     {
-        public override void Load() => On_Player.ItemCheck_CheckFishingBobber_PickAndConsumeBait += SaveBaitChance;
-        public override void Unload() => On_Player.ItemCheck_CheckFishingBobber_PickAndConsumeBait -= SaveBaitChance;
+        public override void Load()
+        { 
+            On_Player.ItemCheck_CheckFishingBobber_PickAndConsumeBait += SnipLine;
+            On_Projectile.FishingCheck_RollItemDrop += PostFishingRolls;
+        }
+        public override void Unload()
+        {
+            On_Player.ItemCheck_CheckFishingBobber_PickAndConsumeBait -= SnipLine;
+            On_Projectile.FishingCheck_RollItemDrop -= PostFishingRolls;
+        }
+
+        private void SnipLine(On_Player.orig_ItemCheck_CheckFishingBobber_PickAndConsumeBait orig, Player self, Projectile bobber, out bool pullTheBobber, out int baitTypeUsed)
+        {
+            orig(self, bobber, out pullTheBobber, out baitTypeUsed);
+
+            if (pullTheBobber && PrefixLoader.GetPrefix(self.HeldItem.prefix) is FishingRodPrefix prefix)
+            {
+                if (Main.rand.NextBool(Math.Clamp(prefix.LineSnapChance, 0, 100), 100))
+                {
+                    bobber.localAI[1] = 0; //gets rid of any catch
+                    bobber.ai[0] = 2f; //instantly snaps line
+                    bobber.netUpdate = true;
+                }
+            }
+        }
+
+        private void PostFishingRolls(On_Projectile.orig_FishingCheck_RollItemDrop orig, Projectile projectile, ref FishingAttempt attempt)
+        {
+            orig(projectile, ref attempt);
+
+            Item fishingPole = attempt.playerFishingConditions.Pole;
+            if (fishingPole.fishingPole > 0 && PrefixLoader.GetPrefix(fishingPole.prefix) is FishingRodPrefix prefix)
+            {
+                prefix.PostRollFish(projectile, ref attempt);
+            }
+        }
 
         public override void CatchFish(FishingAttempt attempt, ref int itemDrop, ref int npcSpawn, ref AdvancedPopupRequest sonar, ref Vector2 sonarPosition)
         {
@@ -398,45 +381,9 @@ namespace GoldLeaf.Prefixes
         public override void ModifyFishingAttempt(ref FishingAttempt attempt)
         {
             Item fishingPole = attempt.playerFishingConditions.Pole;
-            ModPrefix modPrefix = PrefixLoader.GetPrefix(fishingPole.prefix);
-
-            if (fishingPole.fishingPole > 0 && modPrefix is Fishless)
-            {
-                if (attempt.waterTilesCount > 75)
-                    attempt.waterTilesCount = 75;
-                attempt.waterNeededToFish = 10;
-            }
-            if (fishingPole.fishingPole > 0 && modPrefix is Shallow)
-            {
-                attempt.waterNeededToFish = 10;
-            }
-
-            if (fishingPole.fishingPole > 0 && modPrefix is FishingRodPrefix prefix)
+            if (fishingPole.fishingPole > 0 && PrefixLoader.GetPrefix(fishingPole.prefix) is FishingRodPrefix prefix)
             {
                 prefix.ModifyAttempt(ref attempt);
-            }
-        }
-
-        private void SaveBaitChance(On_Player.orig_ItemCheck_CheckFishingBobber_PickAndConsumeBait orig, Player self, Projectile bobber, out bool pullTheBobber, out int baitTypeUsed)
-        {
-            orig(self, bobber, out pullTheBobber, out baitTypeUsed);
-
-            ModPrefix prefix = PrefixLoader.GetPrefix(self.HeldItem.prefix);
-            if (pullTheBobber && prefix is FishingRodPrefix)
-            {
-                if (Main.rand.NextBool(Math.Clamp((prefix as FishingRodPrefix).LineSnapChance, 0, 100), 100))
-                {
-                    bobber.localAI[1] = 0; //gets rid of any catch
-                    bobber.ai[0] = 2f; //instantly snaps line
-                    bobber.netUpdate = true;
-                }
-                /*else if (Main.rand.NextBool(Math.Clamp((prefix as FishingRodPrefix).BaitSaveChance, 0, 100), 100))
-                {
-                    self.GetItem(self.whoAmI, new Item(baitTypeUsed), new GetItemSettings(false, true));
-
-                    if (!Main.dedServ)
-                        SoundEngine.PlaySound(SoundID.Item35 with { Volume = 1.0f, Pitch = 1.0f });
-                }*/
             }
         }
 

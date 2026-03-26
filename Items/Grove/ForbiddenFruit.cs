@@ -73,7 +73,8 @@ namespace GoldLeaf.Items.Grove
             Item.healLife = 0;
             player.AddBuff(BuffID.PotionSickness, (int)player.PotionDelayModifier.ApplyTo(TimeToTicks(BaseSicknessTime)));
             player.AddBuff(BuffType<VampirePotionBuff>(), TimeToTicks(LifestealBuffTime));
-            return base.UseItem(player);
+            
+            return true;
         }
 
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
