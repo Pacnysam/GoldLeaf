@@ -178,12 +178,12 @@ namespace GoldLeaf.Core
         {
             switch (npc.type)
             {
-                case NPCID.VampireBat:
+                /*case NPCID.VampireBat:
                 case NPCID.Vampire:
                     {
                         npcLoot.Add(ItemDropRule.Common(ItemType<VampirePotion>(), 5));
                         break;
-                    }
+                    }*/
                 case NPCID.GraniteGolem:
                     {
                         npcLoot.Add(ItemDropRule.Common(ItemType<GraniteVoice>(), 50));

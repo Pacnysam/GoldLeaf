@@ -57,12 +57,8 @@ namespace GoldLeaf.Items.Grove
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            TooltipLine tipLine = tooltips.Find(n => n.Name == "HealLife");
-
-            if (tipLine != null)
-            {
-                tipLine.Text = HealDesc.Value;
-            }
+            foreach (TooltipLine line in tooltips.Where(x => x.Mod == "Terraria" && x.Name == "HealLife"))
+                line.Text = HealDesc.Value;
         }
 
         public override void UpdateInventory(Player player) => Item.healLife = QuickHealPriority;

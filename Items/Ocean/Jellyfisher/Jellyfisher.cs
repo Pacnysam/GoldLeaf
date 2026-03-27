@@ -54,7 +54,7 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
             Item.useStyle = ItemUseStyleID.Swing;
             Item.autoReuse = false;
 
-            Item.damage = 30;
+            Item.damage = 28;
             Item.fishingPole = 20;
             Item.sentry = true;
 
@@ -460,7 +460,7 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
         private const int Attacking = 1;
         private const int Swimming = 2;
 
-        private static readonly int AttackRange = 400;
+        public const int AttackRange = 400;
 
         public override void ModifyDamageHitbox(ref Rectangle hitbox)
         {
@@ -738,15 +738,15 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
         }
 
         const int maxTargets = 3;
-        const int RangeLoss = 100;
-        const float MultihitPenalty = 0.7f;
+        const int RangeLoss = 75;
+        const float MultihitPenalty = 0.8f;
 
         private Vector2 SentryPos;
         bool HasSetup = false;
 
         int[] targets = new int[maxTargets];
         ref float Target => ref Projectile.ai[0];
-        int HomingRange = 450;
+        int HomingRange = JellyfishSentry.AttackRange;
         NPC TargetNPC => Main.npc[(int)Target];
 
         public override void AI()
