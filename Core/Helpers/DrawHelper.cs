@@ -68,8 +68,7 @@ namespace GoldLeaf.Core.Helpers
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, sampler, DepthStencilState.None, Main.Rasterizer, null, viewMatrix);
         }
 
-        public readonly static BlendState
-            SubtractiveBlend = new()
+        public readonly static BlendState SubtractiveBlend = new()
             {
                 ColorSourceBlend = Blend.SourceAlpha,
                 ColorDestinationBlend = Blend.One,

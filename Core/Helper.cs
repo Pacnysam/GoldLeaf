@@ -158,6 +158,35 @@ namespace GoldLeaf.Core
             return false;
         }
 
+        public static void DrawProjectileHealthBar(this Projectile projectile, int health, int maxHealth, float opacityMult = 1f, float scale = 1f, bool noFlip = false)
+        {
+            static float ProjectileAddHeight(Projectile projectile)
+            {
+                float offset = 0f;
+                if (projectile.ModProjectile != null)
+                {
+                    offset = projectile.ModProjectile.DrawOriginOffsetY;
+                }
+                return offset * projectile.scale;
+            }
+
+            float offset = 10f;
+
+            if (Main.HealthBarDrawSettings == 2)
+                offset -= 34f;
+
+            if (Main.HealthBarDrawSettings == 1)
+            {
+                offset += ProjectileAddHeight(projectile);
+                Main.instance.DrawHealthBar(projectile.Center.X, projectile.Bottom.Y + offset + projectile.gfxOffY, health, maxHealth, Lighting.Brightness((int)(projectile.Center.X / 16f), (int)((projectile.Center.Y + projectile.gfxOffY) / 16f)) * opacityMult, scale, noFlip);
+            }
+            else if (Main.HealthBarDrawSettings == 2)
+            {
+                offset -= ProjectileAddHeight(projectile) / 2f;
+                Main.instance.DrawHealthBar(projectile.Center.X, projectile.position.Y + offset + projectile.gfxOffY, health, maxHealth, Lighting.Brightness((int)(projectile.Center.X / 16f), (int)((projectile.Center.Y + projectile.gfxOffY) / 16f)) * opacityMult, scale, noFlip);
+            }
+        }
+
         public static bool IsValidDebuff(Player player, int buffindex)
         {
             int bufftype = player.buffType[buffindex];

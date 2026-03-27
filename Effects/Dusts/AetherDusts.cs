@@ -120,7 +120,11 @@ namespace GoldLeaf.Effects.Dusts
 
         public override bool PreDraw(Dust dust)
         {
-            Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, null, dust.color * dust.Opacity(), dust.rotation, Texture2D.Size() / 2f, new Vector2(1f, Math.Clamp(dust.velocity.Length() * 1.35f, 0.45f, 3.5f) * 0.75f) * dust.scale, SpriteEffects.None, 0f);
+            Color color = dust.color;
+            if (dust.customData is ColorHelper.Gradient gradient)
+                color = gradient.GetColor(dust.Opacity() * 1.25f - 0.2f).Alpha(40);
+
+            Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, null, color * dust.Opacity(), dust.rotation, Texture2D.Size() / 2f, new Vector2(1f, Math.Clamp(dust.velocity.Length() * 1.35f, 0.45f, 3.5f) * 0.75f) * dust.scale, SpriteEffects.None, 0f);
             return false;
         }
     }

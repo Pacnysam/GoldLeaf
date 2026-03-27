@@ -1,0 +1,68 @@
+FishingRodBaitTooltip: "{0:+0;-#}% chance to save bait"
+ExtraBobbersTooltip: +{0} extra {^0:bobber;bobbers}
+FishingRodLineSnapTooltip: "{0:+0;-#}% chance for line to break"
+DangerousCatchTooltip: May catch dangerous things
+WonderfulCatchTooltip: May catch wonderful things
+
+Wiry.DisplayName: Wiry
+Twin.DisplayName: Twin
+Steady.DisplayName: Steady
+Shallow.DisplayName: Shallow
+Sensitive.DisplayName: Sensitive
+Riveting.DisplayName: Riveting
+Resourceful.DisplayName: Resourceful
+Profishient.DisplayName: Profishient
+Luring.DisplayName: Luring
+Indiscriminate.DisplayName: Indiscriminate
+Flimsy.DisplayName: Flimsy
+Repulsive.DisplayName: Repulsive
+
+Robust: {
+	DisplayName: Robust
+	Tooltip: The line will never break
+}
+
+Sonorous: {
+	DisplayName: Sonorous
+	Tooltip: Detects hooked fish
+}
+
+Meticulous: {
+	DisplayName: Meticulous
+	Tooltip: More likely to catch quest fish
+}
+
+Prosperous: {
+	DisplayName: Prosperous
+	Tooltip: More likely to catch crates
+}
+
+Ambitious: {
+	DisplayName: Ambitious
+	Tooltip: Rare catches are more common
+}
+
+Callous: {
+	DisplayName: Callous
+	Tooltip: Rare catches are less common
+}
+
+Fishless: {
+	DisplayName: Fishless
+	Tooltip: Only catches junk
+}
+
+Adaptable: {
+	DisplayName: Adaptable
+	Tooltip: Massively improved fishing abilities in honey or lava
+}
+
+Consequential: {
+	DisplayName: Consequential
+	Tooltip: Isn't that what you're here for?
+}
+
+Miraculous: {
+	DisplayName: Miraculous
+	Tooltip: Isn't that lovely?
+}

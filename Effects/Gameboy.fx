@@ -24,8 +24,12 @@ float4 GameboyShaderFunction(float4 sampleColor : COLOR0, float2 coords : TEXCOO
 {
     float4 originalColor = tex2D(uImage0, coords);
     
-    float2 offset = (0.0f, 0.0f);
-    float pixelSize = 2.0f;
+    float pixelSize = round(2.0f * uZoom);
+    
+    float2 offset = round(coords * uScreenResolution) % pixelSize;
+    float4 color = tex2D(uImage0, coords - (offset / uScreenResolution));
+    
+    /*float2 offset = (0.0f, 0.0f);
     
     if (trunc((uScreenResolution.x * coords.x) % pixelSize) >= (pixelSize / 2.0f))
     {
@@ -36,7 +40,7 @@ float4 GameboyShaderFunction(float4 sampleColor : COLOR0, float2 coords : TEXCOO
         offset += float2(0.0f, -(pixelSize / 2.0f));
     }
     
-    float4 color = tex2D(uImage0, coords.xy + (offset.xy / uScreenResolution.xy));
+    float4 color = tex2D(uImage0, coords.xy + (offset.xy / uScreenResolution.xy)); */
     
     float brightness = (color.r + color.g + color.b) / 3.0;
     
