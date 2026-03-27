@@ -3,7 +3,6 @@ ExtraBobbersTooltip: +{0} extra {^0:bobber;bobbers}
 FishingRodLineSnapTooltip: "{0:+0;-#}% chance for line to break"
 DangerousCatchTooltip: May catch dangerous things
 WonderfulCatchTooltip: May catch wonderful things
-
 Wiry.DisplayName: Wiry
 Twin.DisplayName: Twin
 Steady.DisplayName: Steady
