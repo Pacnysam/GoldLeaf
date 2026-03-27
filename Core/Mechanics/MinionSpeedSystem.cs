@@ -47,15 +47,10 @@ namespace GoldLeaf.Core.Mechanics
     public class MinionSpeedProjectile : GlobalProjectile
     {
         public override bool InstancePerEntity => true;
-
-        public override bool AppliesToEntity(Projectile entity, bool lateInstantiation)
-        {
-            return entity.minion || entity.sentry;
-        }
+        public override bool AppliesToEntity(Projectile entity, bool lateInstantiation) => entity.minion || entity.sentry;
 
         private float minionSpeedCounter;
         private float sentrySpeedCounter;
-        //private float familiarSpeedCounter;
         private int extraUpdateCache;
 
         public override bool PreAI(Projectile projectile)
@@ -66,7 +61,7 @@ namespace GoldLeaf.Core.Mechanics
             {
                 for (int k = 0; k < extraUpdateCache; extraUpdateCache--)
                 {
-                    projectile.netUpdate = true;
+                    //projectile.netUpdate = true;
                     if (projectile.extraUpdates > 0)
                     {
                         projectile.position -= projectile.velocity;
@@ -81,7 +76,7 @@ namespace GoldLeaf.Core.Mechanics
 
                     for (; minionSpeedCounter >= 1; minionSpeedCounter--)
                     {
-                        projectile.netUpdate = true;
+                        //projectile.netUpdate = true;
                         projectile.extraUpdates++; extraUpdateCache++;
                     }
                 }
@@ -92,7 +87,7 @@ namespace GoldLeaf.Core.Mechanics
 
                     for (; sentrySpeedCounter >= 1; sentrySpeedCounter--)
                     {
-                        projectile.netUpdate = true;
+                        //projectile.netUpdate = true;
                         projectile.extraUpdates++; extraUpdateCache++;
                     }
                 }
@@ -101,19 +96,19 @@ namespace GoldLeaf.Core.Mechanics
             return true;
         }
 
-        public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
+        public override void ModifyHitNPC(Projectile projectile, NPC target, ref NPC.HitModifiers modifiers)
         {
             projectile.TryGetOwner(out Player player);
 
-            if (player != null && ProjectileSets.summonSpeedImmune[projectile.type]) 
+            if (player != null && ProjectileSets.summonSpeedImmune[projectile.type])
             {
                 if (projectile.minion)
                 {
-                    hit.SourceDamage += (int)(hit.SourceDamage * player.GetModPlayer<MinionSpeedPlayer>().minionSpeed);
+                    modifiers.ScalingBonusDamage += player.GetModPlayer<MinionSpeedPlayer>().minionSpeed;
                 }
                 if (projectile.sentry)
                 {
-                    hit.SourceDamage += (int)(hit.SourceDamage * player.GetModPlayer<MinionSpeedPlayer>().sentrySpeed);
+                    modifiers.ScalingBonusDamage += player.GetModPlayer<MinionSpeedPlayer>().sentrySpeed;
                 }
             }
         }

@@ -18,7 +18,7 @@ using GoldLeaf.Items.Accessories;
 using Terraria.DataStructures;
 using Steamworks;
 
-namespace GoldLeaf.Items.Misc
+namespace GoldLeaf.Items.SlimeRain
 {
     public class RoyalCanister : ModItem
     {

@@ -73,6 +73,7 @@ namespace GoldLeaf.Prefixes
     }
     public class Burgeoning : CritDamagePrefix
     {
+        public override PrefixCategory Category => PrefixCategory.Melee;
         public override float CritDamageMult => 0.25f;
 
         public override void ModifyValue(ref float valueMult)
@@ -84,7 +85,7 @@ namespace GoldLeaf.Prefixes
         {
             damageMult += 0.16f;
             useTimeMult += 0.12f;
-            scaleMult += 0.15f;
+            scaleMult += 0.32f;
         }
     }
     public class Vindictive : CritDamagePrefix
@@ -101,6 +102,23 @@ namespace GoldLeaf.Prefixes
             damageMult += 0.12f;
             knockbackMult -= 0.15f;
             useTimeMult -= 0.1f;
+        }
+    }
+    public class Overflowing : CritDamagePrefix
+    {
+        public override PrefixCategory Category => PrefixCategory.Magic;
+        public override float CritDamageMult => -0.5f;
+
+        public override void ModifyValue(ref float valueMult)
+        {
+            valueMult *= 1f + (CritDamageMult / 5) + 0.35f;
+        }
+
+        public override void SetStats(ref float damageMult, ref float knockbackMult, ref float useTimeMult, ref float scaleMult, ref float shootSpeedMult, ref float manaMult, ref int critBonus)
+        {
+            damageMult -= 0.08f;
+            useTimeMult -= 0.25f;
+            manaMult += 0.28f;
         }
     }
 

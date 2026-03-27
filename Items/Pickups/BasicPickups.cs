@@ -1,20 +1,13 @@
-﻿using Terraria;
-using static Terraria.ModLoader.ModContent;
-using Terraria.ModLoader;
-using GoldLeaf.Effects.Dusts;
-using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using GoldLeaf.Core;
 using Microsoft.Xna.Framework;
-using Terraria.DataStructures;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.Localization;
-using GoldLeaf.Core;
-using Terraria.Audio;
-using Microsoft.CodeAnalysis;
-using static Terraria.Item;
-using GoldLeaf.Items.Grove;
-using GoldLeaf.Items.Nightshade;
-using static GoldLeaf.Core.GoldLeafPlayer;
+using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Items.Pickups
 {
@@ -46,11 +39,13 @@ namespace GoldLeaf.Items.Pickups
 
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {
-            Texture2D tex = Request<Texture2D>(Texture).Value;
+            Main.GetItemDrawFrame(Item.type, out Texture2D tex, out Rectangle frame);
+            Vector2 origin = frame.Size() / 2;
+            Vector2 drawPos = Item.Bottom - Main.screenPosition - new Vector2(0, origin.Y);
 
             float drawScale = Main.essScale * 0.25f + 0.75f;
 
-            spriteBatch.Draw(tex, new Vector2(Item.position.X - Main.screenPosition.X, Item.position.Y - Main.screenPosition.Y + 2), new Rectangle(0, 0, tex.Width, tex.Height), new Color(200, 200, 200, 200), rotation, tex.Size() * 0.5f, /*scale * */drawScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(tex, drawPos, frame, Item.color, rotation, origin, scale * drawScale, SpriteEffects.None, 0f);
             return false;
         }
 
@@ -101,11 +96,13 @@ namespace GoldLeaf.Items.Pickups
 
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {
-            Texture2D tex = Request<Texture2D>(Texture).Value;
+            Main.GetItemDrawFrame(Item.type, out Texture2D tex, out Rectangle frame);
+            Vector2 origin = frame.Size() / 2;
+            Vector2 drawPos = Item.Bottom - Main.screenPosition - new Vector2(0, origin.Y);
 
             float drawScale = Main.essScale * 0.25f + 0.75f;
 
-            spriteBatch.Draw(tex, new Vector2(Item.position.X - Main.screenPosition.X, Item.position.Y - Main.screenPosition.Y + 2), new Rectangle(0, 0, tex.Width, tex.Height), new Color(200, 200, 200, 200), rotation, tex.Size() * 0.5f, /*scale * */drawScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(tex, drawPos, frame, Item.color, rotation, origin, scale * drawScale, SpriteEffects.None, 0f);
             return false;
         }
 
@@ -157,11 +154,13 @@ namespace GoldLeaf.Items.Pickups
 
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {
-            Texture2D tex = Request<Texture2D>(Texture).Value;
+            Main.GetItemDrawFrame(Item.type, out Texture2D tex, out Rectangle frame);
+            Vector2 origin = frame.Size() / 2;
+            Vector2 drawPos = Item.Bottom - Main.screenPosition - new Vector2(0, origin.Y);
 
             float drawScale = Main.essScale * 0.25f + 0.75f;
 
-            spriteBatch.Draw(tex, new Vector2(Item.position.X - Main.screenPosition.X, Item.position.Y - Main.screenPosition.Y + 2), new Rectangle(0, 0, tex.Width, tex.Height), new Color(200, 200, 200, 200), rotation, tex.Size() * 0.5f, /*scale * */drawScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(tex, drawPos, frame, Item.color, rotation, origin, scale * drawScale, SpriteEffects.None, 0f);
             return false;
         }
 
@@ -196,11 +195,7 @@ namespace GoldLeaf.Items.Pickups
 
         public override bool OnPickup(Player player)
         {
-            player.ManaEffect(160); player.statMana += 160;
-            /*if (GetInstance<GameplayConfig>().ClassGimmicks) 
-            { player.ManaEffect(120); player.statMana += 120; }
-            else 
-            { player.ManaEffect(200); player.statMana += 200; }*/
+            player.ManaEffect(200); player.statMana += 200;
 
             SoundEngine.PlaySound(SoundID.Grab, player.Center);
             return false;
@@ -208,11 +203,13 @@ namespace GoldLeaf.Items.Pickups
 
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {
-            Texture2D tex = Request<Texture2D>(Texture).Value;
+            Main.GetItemDrawFrame(Item.type, out Texture2D tex, out Rectangle frame);
+            Vector2 origin = frame.Size() / 2;
+            Vector2 drawPos = Item.Bottom - Main.screenPosition - new Vector2(0, origin.Y);
 
             float drawScale = Main.essScale * 0.25f + 0.75f;
 
-            spriteBatch.Draw(tex, new Vector2(Item.position.X - Main.screenPosition.X, Item.position.Y - Main.screenPosition.Y + 2), new Rectangle(0, 0, tex.Width, tex.Height), new Color(200, 200, 200, 200), rotation, tex.Size() * 0.5f, /*scale * */drawScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(tex, drawPos, frame, Item.color, rotation, origin, scale * drawScale, SpriteEffects.None, 0f);
             return false;
         }
 

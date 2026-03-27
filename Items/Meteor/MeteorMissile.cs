@@ -53,8 +53,7 @@ namespace GoldLeaf.Items.Meteor
 		{
 			Recipe recipe = CreateRecipe();
 			recipe.AddIngredient(ItemID.MeteoriteBar, 10);
-            recipe.AddIngredient(ItemID.Gel, 25);
-            recipe.AddIngredient(ItemID.Grenade, 6);
+            recipe.AddIngredient(ItemID.Grenade, 5);
             recipe.AddTile(TileID.Anvils);
 			recipe.Register();
 		}

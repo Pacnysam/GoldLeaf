@@ -1,20 +1,20 @@
-﻿using GoldLeaf.Core;
-using GoldLeaf.Core.Mechanics;
-using GoldLeaf.Effects.Dusts;
-using GoldLeaf.Items.Nightshade;
-using GoldLeaf.Items.Pickups;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Terraria;
+using static Terraria.ModLoader.ModContent;
+using Terraria.ModLoader;
 using System;
-using System.Diagnostics.Metrics;
-using Terraria;
-using Terraria.Audio;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 using Terraria.DataStructures;
-using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.Localization;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
+using GoldLeaf.Core;
+using Terraria.Audio;
+using System.Diagnostics.Metrics;
+using GoldLeaf.Items.Pickups;
+using Terraria.GameContent.Drawing;
+using GoldLeaf.Items.Nightshade;
+using GoldLeaf.Effects.Dusts;
+using GoldLeaf.Items.Ocean.Jellyfisher;
 
 namespace GoldLeaf.Items
 {
@@ -22,6 +22,7 @@ namespace GoldLeaf.Items
     {
         public int temp, temp2, temp3 = 0;
         public float tempFloat = 0.9f;
+        public Vector2 tempVec2 = new();
 
         //public override string Texture => "GoldLeaf/";
         public override void SetDefaults()
@@ -40,13 +41,14 @@ namespace GoldLeaf.Items
 
         public override bool? UseItem(Player player)
         {
-            if (player.altFunctionUse != 2)
+            if (player.altFunctionUse != 2) //primary
             {
-                OverhealthManager.AddOverhealthPool(player, new VigorPool() { size = 5, timer = 60 });
+                Dust.NewDustPerfect(Main.MouseWorld, DustType<JellyLightningDust>(), tempVec2);
+                Dust.NewDustPerfect(Main.MouseWorld, DustType<JellyLightningNodeDust>(), Vector2.Zero);
             }
-            else
+            else //secondary
             {
-                
+                tempVec2 = Main.MouseWorld;
             }
             return true;
         }

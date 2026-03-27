@@ -134,7 +134,7 @@ namespace GoldLeaf.Effects.Dusts
             Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, Color.Black * ((175 - dust.alpha) / 255f) * 0.2f, dust.rotation, dust.frame.Size() / 2f, dust.scale * 1.6f, SpriteEffects.None, 0);
             Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, color * ((100 - dust.alpha) / 255f) * 0.5f, dust.rotation, dust.frame.Size() / 2f, dust.scale * 1.35f, SpriteEffects.None, 0);
             Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, color, dust.rotation, dust.frame.Size() / 2f, dust.scale, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, coreColor * (1 - (brightness/255)) /** ((225 - dust.alpha) / 255f) * 0.5f*/, dust.rotation, dust.frame.Size() / 2f, dust.scale * 0.55f, SpriteEffects.None, 0);
+            //Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, coreColor * (1 - (brightness/255)) /** ((225 - dust.alpha) / 255f) * 0.5f*/, dust.rotation, dust.frame.Size() / 2f, dust.scale * 0.55f, SpriteEffects.None, 0);
 
             //Main.spriteBatch.Draw(Request<Texture2D>("GoldLeaf/Effects/Dusts/LightDust").Value, dust.position - Main.screenPosition, dust.frame, dust.color * dust.alpha, GoldLeafWorld.rottime * 2, new Vector2(0, 0), dust.scale * 1.5f, SpriteEffects.None, 0);
             //Main.spriteBatch.Draw(Request<Texture2D>("GoldLeaf/Effects/Dusts/LightDust").Value, dust.position - Main.screenPosition, dust.frame, dust.color * dust.alpha, GoldLeafWorld.rottime * -2, new Vector2(0, 0), dust.scale * 1.5f, SpriteEffects.None, 0);
@@ -206,7 +206,7 @@ namespace GoldLeaf.Effects.Dusts
             Main.spriteBatch.Draw(tex.Value, new Vector2(dust.position.X, dust.position.Y) - Main.screenPosition, dust.frame, Color.Black * ((175 - dust.alpha) / 255f) * 0.2f, dust.rotation, dust.frame.Size() / 2f, dust.scale * 1.6f, SpriteEffects.None, 0);
             Main.spriteBatch.Draw(tex.Value, new Vector2(dust.position.X, dust.position.Y) - Main.screenPosition, dust.frame, color * ((100 - dust.alpha) / 255f) * 0.5f, dust.rotation, dust.frame.Size() / 2f, dust.scale * 1.35f, SpriteEffects.None, 0);
             Main.spriteBatch.Draw(tex.Value, dust.position - Main.screenPosition, dust.frame, color, dust.rotation, dust.frame.Size() / 2f, dust.scale, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(tex.Value, dust.position - Main.screenPosition, dust.frame, coreColor * (1 - (brightness / 255)) /** ((225 - dust.alpha) / 255f) * 0.5f*/, dust.rotation, dust.frame.Size() / 2f, dust.scale * 0.55f, SpriteEffects.None, 0);
+            //Main.spriteBatch.Draw(tex.Value, dust.position - Main.screenPosition, dust.frame, coreColor * (1 - (brightness / 255)) /** ((225 - dust.alpha) / 255f) * 0.5f*/, dust.rotation, dust.frame.Size() / 2f, dust.scale * 0.55f, SpriteEffects.None, 0);
 
             return false;
         }

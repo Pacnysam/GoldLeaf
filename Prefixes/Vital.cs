@@ -18,6 +18,7 @@ namespace GoldLeaf.Prefixes
 {
     public class Vital : TooltipPrefix
     {
+        public override bool IsLoadingEnabled(Mod mod) => false;
         public override PrefixCategory Category => PrefixCategory.AnyWeapon;
         public override bool IsNegative => false;
         

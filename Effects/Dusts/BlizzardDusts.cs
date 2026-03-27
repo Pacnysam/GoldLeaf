@@ -1,18 +1,29 @@
-﻿using Microsoft.Xna.Framework;
-using static Terraria.ModLoader.ModContent;
-using static GoldLeaf.Core.Helper;
-using System;
-using Terraria;
-using Terraria.ModLoader;
+﻿using GoldLeaf.Core;
+using GoldLeaf.Core.Helpers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using GoldLeaf.Core;
 using ReLogic.Content;
+using System;
+using System.Collections.Generic;
+using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
+using static GoldLeaf.Core.Helper;
+using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Effects.Dusts
 {
     public class ArcticDust : ModDust
     {
+        public static readonly int afterImageCount = 6;
+        private static Asset<Texture2D> bloomTex;
+        private static Asset<Texture2D> flareTex;
+        public override void Load()
+        {
+            bloomTex = Request<Texture2D>("GoldLeaf/Textures/Glow");
+            flareTex = Request<Texture2D>("GoldLeaf/Textures/Flares/FlareSmall");
+        }
+
         public override Color? GetAlpha(Dust dust, Color lightColor)
         {
             return Color.White;
@@ -25,16 +36,30 @@ namespace GoldLeaf.Effects.Dusts
             dust.frame = new Rectangle(0, 0, 10, 10);
             dust.velocity *= 1.75f;
 
-            dust.position += new Vector2(5, 5);
+            //dust.position += new Vector2(5, 5);
         }
 
         public override bool Update(Dust dust)
         {
-            if (dust.customData is null)
+            /*if (dust.customData is not List<Vector2>)
             {
                 dust.position -= new Vector2(9, 9) * dust.scale;
-                dust.customData = 1;
+                dust.customData = new List<Vector2>();
             }
+            else if (dust.customData is List<Vector2>)
+            {
+                List<Vector2> oldPos = dust.customData as List<Vector2>;
+
+                if (dust.velocity.Length() > 0)
+                    oldPos.Add(dust.position);
+
+                if (oldPos.Count > afterImageCount || (oldPos.Count > 0 && dust.velocity.Length() <= 0.15f))
+                {
+                    oldPos.RemoveAt(0);
+                }
+
+                dust.customData = oldPos;
+            }*/
 
             if (dust.alpha % 30 == 25)
                 dust.frame.Y += 10;
@@ -50,6 +75,36 @@ namespace GoldLeaf.Effects.Dusts
             dust.velocity *= 0.95f;
             dust.position += dust.velocity;
 
+            return false;
+        }
+
+        public override bool PreDraw(Dust dust)
+        {
+            Vector2 dustCenter = dust.position + (dust.frame.Size() / 2f * dust.scale);
+            Texture2D flare = Request<Texture2D>("GoldLeaf/Textures/Flare").Value;
+            //trail
+            /*if (dust.customData is List<Vector2>) 
+            {
+                Vector2[] oldPos = [.. dust.customData as List<Vector2>];
+
+                for (int k = oldPos.Length - 1; k >= 0; k--)
+                {
+                    Vector2 drawPos = oldPos[k] - Main.screenPosition;// - (dust.frame.Size() / 2f * dust.scale);
+                    Color color1 = new(0, 225, 241) { A = 185 };
+                    Color color2 = new(0, 38, 128) { A = 185 };
+
+                    Main.spriteBatch.Draw(Texture2D.Value, drawPos, dust.frame, Color.Lerp(color1, color2, k / (oldPos.Length + 2f)) * (0.65f - (k / 6f)), dust.rotation, dust.frame.Size() / 2, dust.scale, SpriteEffects.None, 0);
+                }
+            }*/
+            //glow
+            Main.spriteBatch.Draw(bloomTex.Value, dust.position - Main.screenPosition, null, Color.RoyalBlue.Alpha(180) * MathHelper.Clamp(dust.Opacity() - 0.45f, 0f, 0.4f), dust.rotation, bloomTex.Size() / 2, dust.scale * MathHelper.Clamp(dust.Opacity() * 1.5f, 0.45f, 0.95f) * 0.425f, SpriteEffects.None, 0);
+            //dust
+            Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, Color.White, dust.rotation, dust.frame.Size() / 2f, dust.scale, SpriteEffects.None, 0);
+            //flare
+            Main.spriteBatch.Draw(flare, dust.position - Main.screenPosition, null, Color.LightSkyBlue.Alpha(0) * MathHelper.Clamp(dust.Opacity() - 0.45f, 0f, 0.15f) * 0.35f, dust.rotation, flare.Size() / 2, new Vector2(Math.Min((1 - dust.Opacity()) * 3f, 3f), 0.85f) * dust.scale * MathHelper.Clamp(dust.Opacity() * 1.75f, 0.35f, 0.85f) * 0.125f, SpriteEffects.None, 0);
+            //front glow
+            Main.spriteBatch.Draw(bloomTex.Value, dust.position - Main.screenPosition, null, Color.LightSkyBlue.Alpha() * MathHelper.Clamp(dust.Opacity() - 0.25f, 0f, 0.25f), dust.rotation, bloomTex.Size() / 2, dust.scale * MathHelper.Clamp((1 - dust.Opacity()) * 1.75f, 0.35f, 0.85f) * 0.25f, SpriteEffects.None, 0);
+            
             return false;
         }
     }

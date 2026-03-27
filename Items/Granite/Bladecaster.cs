@@ -69,7 +69,7 @@ namespace GoldLeaf.Items.Granite
             CreateRecipe()
                 .AddIngredient(ItemID.Granite, 12)
                 //.AddIngredient(ItemType<Magnesium>(), 18)
-                .AddRecipeGroup("GoldLeaf:SilverBars", 7)
+                .AddRecipeGroup("GoldLeaf:SilverBar", 7)
                 .AddCondition(GoldLeafConditions.LearnedRecipe(Item.type))
                 .AddTile(TileID.Anvils)
                 .Register();

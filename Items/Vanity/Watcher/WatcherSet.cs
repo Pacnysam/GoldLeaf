@@ -66,7 +66,7 @@ namespace GoldLeaf.Items.Vanity.Watcher
             //glowMask = EquipLoader.GetEquipSlot(Mod, "WatcherHeadGlow", EquipType.Head);
             glowMaskColor = Color.White.Alpha(MathF.Sin(Main.GlobalTimeWrappedHourly) * 0.5f + 0.5f) * 0.35f;
         }
-    } //TODO: Glowmasks
+    } //TODO: Armor Glowmasks
 
     [AutoloadEquip(EquipType.Body)]
     public class WatcherCloak : ModItem
@@ -126,7 +126,7 @@ namespace GoldLeaf.Items.Vanity.Watcher
             Item.bodySlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Body);
             Item.vanity = true;
         }
-    } //TODO: Glowmasks
+    } //TODO: Armor Glowmasks
     
     public class WatcherPlayer : ModPlayer
     {
@@ -163,7 +163,8 @@ namespace GoldLeaf.Items.Vanity.Watcher
             CustomShadowColor = new Color(255, 120, 235).Alpha(40) * 0.7f;
             for (float k = 0f; k < 1f; k += 0.25f)
             {
-                Main.PlayerRenderer.DrawPlayer(camera, Player, Player.position + new Vector2(0f, 2.5f /*3f + MathF.Sin(Main.GlobalTimeWrappedHourly * 10f) * 0.5f*/).RotatedBy((k + (num7 * -1.75f)) * ((float)Math.PI * 2f)) * globalTime, Player.fullRotation, Player.fullRotationOrigin, 1, 1f);
+                Vector2 playerPosition = Player.position + new Vector2(0f, Player.gfxOffY);
+                Main.PlayerRenderer.DrawPlayer(camera, Player, playerPosition + new Vector2(0f, 2.5f).RotatedBy((k + (num7 * -1.75f)) * ((float)Math.PI * 2f)) * globalTime, Player.fullRotation, Player.fullRotationOrigin, 1, 1f);
             }
             CustomShadowColor = Color.White;
 
@@ -173,6 +174,7 @@ namespace GoldLeaf.Items.Vanity.Watcher
             for (int i = totalShadows - totalShadows % skip; i > 0; i -= skip)
             {
                 EntityShadowInfo advancedShadow = Player.GetAdvancedShadow(i);
+                
                 float shadow = Utils.Remap((float)i / totalShadows, 0, 1, 0.5f, 1f, clamped: true);
                 CustomShadowColor = Color.Black * 0.1f * MathHelper.SmoothStep(0.95f, 0f, i / 28f) * ShadowOpacity;
                 Main.PlayerRenderer.DrawPlayer(camera, Player, advancedShadow.Position, advancedShadow.Rotation, advancedShadow.Origin, shadow);
@@ -240,7 +242,7 @@ namespace GoldLeaf.Items.Vanity.Watcher
                 SoundEngine.PlaySound(SoundID.Item68, Player.position);
             }
         }
-    } //TODO: movement and idle particles
+    }
 
     public class WatcherPunch : ModProjectile
     {

@@ -1,7 +1,8 @@
 ﻿using GoldLeaf.Core.Helpers;
 using GoldLeaf.Effects.Dusts;
-using GoldLeaf.Items.Accessories;
+using GoldLeaf.Items.Jungle;
 using GoldLeaf.Items.Nightshade;
+using GoldLeaf.Items.Sky;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -35,14 +36,6 @@ namespace GoldLeaf.Core
 
         public int counter = 0;
 
-        /*public static void ChangeDebuffDuration(NPC target, float amount)
-        {
-            for (int i = 0; target.buffType[1] != 0; i++)
-            {
-                target.AddBuff(target.buffType[i],target.buffTime[i] + (int)(target.buffTime[i]*amount));
-            }
-        }*/
-
         public override void OnSpawn(Projectile projectile, IEntitySource source) {
 			if (source is IEntitySource_WithStatsFromItem realSource && realSource.Item.IsWeapon()) 
             {
@@ -59,7 +52,7 @@ namespace GoldLeaf.Core
         {
             Player player = Main.player[projectile.owner];
 
-            if (lifestealMax >= 1 && lifesteal > 0) 
+            if (lifestealMax >= 1 && lifesteal > 0) //TODO: REMOVE LIFESTEAL
             {
                 lifestealMax--;
                 player.Heal(lifesteal);
@@ -68,14 +61,10 @@ namespace GoldLeaf.Core
 
         public override void AI(Projectile projectile)
         {
-            if (gravity != 0f && counter >= gravityDelay) //TODO, fix this
+            if (gravity != 0f && counter >= gravityDelay) //TODO: remove gravity
             {
                 projectile.velocity.Y += gravity;
                 projectile.netUpdate = true;    
-            }
-            if ((projectile.type == ProjectileID.FallingStar) && counter % 15 == 0) 
-            {
-                DustHelper.DrawStar(projectile.Center, DustID.FireworkFountain_Blue, 5, 1.8f, 0.65f, 0.55f, 0.6f, 0.5f, true, 0, -1);
             }
             counter++;
         }
@@ -115,17 +104,6 @@ namespace GoldLeaf.Core
             gravity = binaryReader.ReadInt32();
             //gravityDelay = binaryReader.ReadInt32();
             critDamageMod = binaryReader.ReadSingle();
-        }
-
-        public override bool OnTileCollide(Projectile projectile, Vector2 oldVelocity)
-        {
-            if (projectile.type == ProjectileID.FallingStar)
-            {
-                DustHelper.DrawStar(projectile.Center, DustID.FireworkFountain_Yellow, 5, 2.6f, 1f, 0.55f, 0.6f, 0.5f, true, 0, -1);
-                DustHelper.DrawStar(projectile.Center, DustID.FireworkFountain_Blue,   5, 4.8f, 1.25f, 0.7f, 0.6f, 0.5f, true, 0, -1);
-            }
-
-            return base.OnTileCollide(projectile, oldVelocity);
         }
     }
 }

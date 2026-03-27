@@ -96,7 +96,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(manaMax, magicDamage);
 
         private static readonly int manaMax = 20;
-        private static readonly int magicDamage = 3;
+        private static readonly int magicDamage = 2;
 
         public override void Load()
         {

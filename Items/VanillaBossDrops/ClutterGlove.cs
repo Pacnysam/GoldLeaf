@@ -403,8 +403,8 @@ namespace GoldLeaf.Items.VanillaBossDrops
                         if (text[i] != string.Empty)
                             tooltips.Insert(index + 1, new TooltipLine(Mod, "ClutterTooltip", /*"[i/s1:" + glove + "]: " +*/ text[i]));
                     }
+                    tooltipLine?.Hide();
                 }
-                tooltips.Remove(tooltipLine);
             }
         }
     }
