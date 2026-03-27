@@ -1,7 +1,7 @@
 ﻿using GoldLeaf.Items.Accessories;
 using GoldLeaf.Items.Hell;
 using GoldLeaf.Items.Pickups;
-using GoldLeaf.Items.VanillaBossDrops;
+using GoldLeaf.Items.SlimeRain.Goonai;
 using GoldLeaf.Items.Vanity.Watcher;
 using GoldLeaf.Tiles.Decor;
 using Microsoft.Xna.Framework;
@@ -55,8 +55,12 @@ namespace GoldLeaf.Core
             {
                 case ItemID.RoyalGel:
                     {
+                        if (!Main.LocalPlayer.HasItem(ItemType<Goonai>()))
+                            break;
+
                         TooltipLine tooltipLine = tooltips.Find(n => n.Name == "Tooltip0");
                         int index = tooltips.IndexOf(tooltipLine);
+
                         if (tooltipLine != null)
                             tooltips.Insert(index + 1, new TooltipLine(Mod, "RoyalGel", Language.GetTextValue("Mods.GoldLeaf.Items.Vanilla.RoyalGel", tooltipLine)));
                         break;

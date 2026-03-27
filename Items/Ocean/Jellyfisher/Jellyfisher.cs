@@ -121,19 +121,8 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
                 position = Main.MouseWorld;
             }
         }
-        
-        public override bool CanShoot(Player player)
-        {
-            if (player.altFunctionUse != 2) //primary
-            {
-                
-            }
-            else //secondary
-            {
-                return false;
-            }
-            return base.CanShoot(player);
-        }
+
+        public override bool CanShoot(Player player) => player.altFunctionUse != 2;
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             if (sentryMode)
@@ -177,23 +166,6 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
             return true;
         }
 
-        public override float UseSpeedMultiplier(Player player)
-        {
-            return 1f;
-        }
-
-        public override bool ConsumeItem(Player player) => false;
-        public override bool CanRightClick() => false;//!OwnsBobber(Main.LocalPlayer);
-        public override void RightClick(Player player)
-        {
-            sentryMode = !sentryMode;
-            Item.NetStateChanged();
-
-            if (sentryMode)
-                SoundEngine.PlaySound(SoundID.NPCHit52 with { Volume = 0.65f });
-            SoundEngine.PlaySound(sentryMode ? SoundID.DD2_LightningBugHurt : SoundID.Item112);
-        }
-
         public override bool AltFunctionUse(Player player) => true;
         public override bool CanUseItem(Player player) => (!sentryMode || !OwnsBobber(player));
         public override bool? UseItem(Player player)
@@ -210,10 +182,12 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
                 if (sentryMode)
                     SoundEngine.PlaySound(SoundID.NPCHit52 with { Volume = 0.65f });
                 SoundEngine.PlaySound(sentryMode ? SoundID.DD2_LightningBugHurt : SoundID.Item112);
-                
-                player.itemTime = 15;
-                player.itemAnimation = 15;
-                return false;
+                if (!sentryMode || !OwnsBobber(player))
+                {
+                    player.itemAnimation = 0;
+                    return false;
+                }
+                return true;
             }
             return base.UseItem(player);
         }
@@ -250,7 +224,7 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
         {
             if (!sentryMode)
             {
-                foreach (TooltipLine line in tooltips.Where(x => x.Mod == "Terraria" && (x.Name == "Tooltip0" || x.Name == "Tooltip1")))
+                foreach (TooltipLine line in tooltips.Where(x => x.Mod == "Terraria" && (x.Name == "Damage" || x.Name == "Knockback" || x.Name == "Tooltip0" || x.Name == "Tooltip1")))
                     line.Hide();
             }
             else

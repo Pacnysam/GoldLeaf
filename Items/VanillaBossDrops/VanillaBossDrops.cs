@@ -8,6 +8,7 @@ using Terraria;
 using Terraria.ModLoader;
 
 using GoldLeaf.Tiles.Decor;
+using GoldLeaf.Items.SlimeRain.Goonai;
 
 namespace GoldLeaf.Items.VanillaBossDrops
 {
