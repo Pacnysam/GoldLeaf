@@ -24,6 +24,7 @@ namespace GoldLeaf.Items.Potions
         public bool vampirePotion = false;
         public bool consistencyPotion = false;
         public bool vigorPotion = false;
+        public int vigorTime = 0;
 
         public override void ResetEffects()
         {
