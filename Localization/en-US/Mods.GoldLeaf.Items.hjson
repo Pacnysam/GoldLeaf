@@ -32,7 +32,6 @@ AetherComet: {
 	Tooltip:
 		'''
 		Casts an explosive flame that sparks at nearby enemies
-		{$CommonItemTooltip.IgnoresDefense}
 		'''
 }
 
