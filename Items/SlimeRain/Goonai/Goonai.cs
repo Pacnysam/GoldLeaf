@@ -202,7 +202,7 @@ namespace GoldLeaf.Items.SlimeRain.Goonai
                     var effects = Projectile.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
                     Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + new Vector2(weaponTexture.Width/2f, -weaponTexture.Height/2f)/* + new Vector2(0f, Projectile.gfxOffY)*/;
                     
-                    Main.EntitySpriteDraw(glowTex.Value, drawPos, null, color * Math.Min(Projectile.localAI[0] * 3f, 1f) * (0.6f - 0.06f * k ), Projectile.rotation, glowTex.Size()/2f, Projectile.scale * (1.25f - 0.075f * k), effects);
+                    Main.EntitySpriteDraw(glowTex.Value, drawPos, null, color * Math.Min(Projectile.localAI[0] * 3f, 1f) * (0.6f - 0.04f * k ), Projectile.rotation, glowTex.Size()/2f, Projectile.scale * (1.25f - 0.075f * k), effects);
                 }
                 Main.EntitySpriteDraw(bigGlowTex.Value, Projectile.Center + new Vector2(0, -6) - Main.screenPosition, null, color * Math.Min(Projectile.localAI[0] * 3f, 1f), Projectile.rotation, bigGlowTex.Size() / 2f, Projectile.scale * 1.25f, SpriteEffects.None);
             }

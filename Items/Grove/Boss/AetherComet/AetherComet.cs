@@ -27,9 +27,7 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
             glowTex = Request<Texture2D>(Texture + "Glow");
         }
 
-        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(Item.ArmorPenetration);
-
-        public override void SetStaticDefaults()
+         public override void SetStaticDefaults()
         {
             ItemSets.Glowmask[Type] = (glowTex, Color.White.Alpha(120), true);
             Item.AddElements([Element.Fire, Element.Arcane, Element.Holy]);
@@ -50,8 +48,6 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
 			Item.knockBack = 6;
             Item.crit = -4;
             Item.damage = 24;
-            Item.ArmorPenetration = 10;
-            //Item.UseSound = SoundID.DD2_EtherianPortalOpen;
             Item.UseSound = new SoundStyle("GoldLeaf/Sounds/SE/RoR2/FireCast") { Volume = 0.85f };
             Item.shoot = ProjectileType<AetherBolt>();
 			Item.rare = ItemRarityID.Pink;
@@ -80,7 +76,7 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
     {
         const int THRESHHOLD = 60;
         private static readonly int TargetingRange = 450;
-        private static readonly int SparkCost = 4;
+        private static readonly int SparkCost = 5;
 
         ref float Counter => ref Projectile.ai[0];
         ref float ShootCounter => ref Projectile.ai[1];
@@ -328,9 +324,11 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
                 } //sparks
             }
 
-            if (Main.myPlayer == Projectile.owner) 
+            if (Main.myPlayer == Projectile.owner)
             {
-                Projectile explosion = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ProjectileType<AetherBurst>(), (int)(Projectile.damage * 2.5f) + (int)(ShotsFired * 2.2), Projectile.knockBack, player.whoAmI);
+                int damage = (int)(Projectile.damage * (1.5f + (ShotsFired * 0.195f)));
+
+                Projectile explosion = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ProjectileType<AetherBurst>(), damage, Projectile.knockBack, player.whoAmI);
                 explosion.ai[0] = explosionVolume;
                 if (Counter < THRESHHOLD) explosion.ai[1] = 12;
                 if (ShotsFired >= 12) explosion.ai[2] = 1;
