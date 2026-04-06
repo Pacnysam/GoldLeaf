@@ -29,10 +29,7 @@ VampireBat: {
 
 AetherComet: {
 	DisplayName: Aether's Comet
-	Tooltip:
-		'''
-		Casts an explosive flame that sparks at nearby enemies
-		'''
+	Tooltip: Casts an explosive flame that sparks at nearby enemies
 }
 
 GraniteVoice: {
