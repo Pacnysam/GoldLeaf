@@ -41,9 +41,11 @@ namespace GoldLeaf.Core
             }
             #endregion*/
 
-            if (Main.LocalPlayer.GetModPlayer<SafetyBlanketPlayer>().safetyBlanket && Main.debuff[type] && !BuffSets.Cosmetic[type] && !BuffSets.NoCleanseTooltip[type])
+            int buffTime = Main.LocalPlayer.buffTime[Main.LocalPlayer.FindBuffIndex(type)];
+
+            if (Main.LocalPlayer.GetModPlayer<SafetyBlanketPlayer>().safetyBlanket && buffTime > 2 && Main.debuff[type] && !Main.buffNoTimeDisplay[type] && !BuffSets.Cosmetic[type] && !BuffSets.RemoveCleanseTooltip[type])
             {
-                if (IsValidDebuff(type, Main.LocalPlayer.buffTime[Main.LocalPlayer.FindBuffIndex(type)] + 2))
+                if (IsValidDebuff(type, buffTime + 2))
                     tip += "\n[c/78BE78:" + Language.GetTextValue("Mods.GoldLeaf.CommonItemTooltip.BuffCanBeCleansed") + "]";
                 else
                     tip += "\n[c/BE7878:" + Language.GetTextValue("Mods.GoldLeaf.CommonItemTooltip.BuffCanNotBeCleansed") + "]";

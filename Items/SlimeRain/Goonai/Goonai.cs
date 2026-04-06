@@ -74,11 +74,11 @@ namespace GoldLeaf.Items.SlimeRain.Goonai
 
         public override void AddRecipes()
         {
-            Recipe recipe2 = CreateRecipe(30);
-            recipe2.AddIngredient(ItemID.ThrowingKnife, 30);
-            recipe2.AddIngredient(ItemID.Gel, 5);
-            recipe2.AddTile(TileID.Solidifier);
-            recipe2.Register();
+            Recipe recipe = CreateRecipe(20)
+            .AddRecipeGroup("GoldLeaf:GoldBar", 2)
+            .AddIngredient(ItemID.Gel, 5)
+            .AddTile(TileID.Solidifier)
+            .Register();
         }
     }
     

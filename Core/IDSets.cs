@@ -78,7 +78,7 @@ namespace GoldLeaf.Core
         public static bool[] ccSusceptibleException = NPCID.Sets.Factory.CreateNamedSet("ccSusceptibleException")
             .Description("Whether or not a given NPC will be susceptible to CC despite having knockback immunity")
             .RegisterBoolSet(false, NPCID.Antlion, NPCID.DesertDjinn, NPCID.DD2DrakinT2, NPCID.DD2DrakinT3, NPCID.GrayGrunt, NPCID.HeadlessHorseman, NPCID.Paladin, 
-            NPCID.ShadowFlameApparition, NPCID.SolarSroller, NPCID.ThePossessed, NPCID.EyeballFlyingFish, NPCID.Yeti, NPCID.ZombieMerman);
+            NPCID.ShadowFlameApparition, NPCID.ThePossessed, NPCID.EyeballFlyingFish, NPCID.Yeti, NPCID.ZombieMerman);
     }
 
     public static class BuffSets
@@ -89,13 +89,13 @@ namespace GoldLeaf.Core
         public static bool[] Cosmetic = BuffID.Sets.Factory.CreateNamedSet("Cosmetic")
             .RegisterBoolSet(false, BuffID.Slimed, BuffID.GelBalloonBuff, BuffID.Lovestruck, BuffID.Stinky, BuffID.Wet);
 
-        public static bool[] NoCleanseTooltip = BuffID.Sets.Factory.CreateNamedSet("NoCleanseTooltip")
-            .Description("Does not display tooltip for being cleansable")
-            .RegisterBoolSet(false, BuffType<SafetyBlanketBuff>(), BuffID.StarInBottle);
+        public static bool[] RemoveCleanseTooltip = BuffID.Sets.Factory.CreateNamedSet("RemoveCleanseTooltip")
+            .Description("Buff description will not display whether or not it is cleansable")
+            .RegisterBoolSet(false, BuffType<SafetyBlanketBuff>());
 
         public static bool[] IsRemovable = BuffID.Sets.Factory.CreateNamedSet("IsRemovable")
             .Description("Can be removed by safety blanket and similar methods")
-            .RegisterBoolSet(true, BuffID.MoonLeech, BuffID.TheTongue, BuffID.Obstructed, BuffID.Horrified, BuffID.Hunger, BuffID.NeutralHunger, BuffID.Starving, BuffID.StarInBottle, BuffType<ToxicPositivityBuff>());
+            .RegisterBoolSet(true, BuffID.MoonLeech, BuffID.TheTongue, BuffID.Obstructed, BuffID.Horrified, BuffID.Hunger, BuffID.NeutralHunger, BuffID.Starving, BuffType<ToxicPositivityBuff>());
     }
 
     public static class ArmorSets
