@@ -1030,7 +1030,7 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
                     }
                     if (ThoriumHelper.ThoriumLoaded(out Mod thorium))
                     {
-                        if (thorium.TryFind("JellyfishResonator", out ModItem queenJellyfishSummon) && Main.rand.NextBool(10) && Player.ZoneBeach) //thorium queen jellyfish summon
+                        if (thorium.TryFind("JellyfishResonator", out ModItem queenJellyfishSummon) && Main.rand.NextBool(Main.hardMode? 20 : 10) && Player.ZoneBeach) //thorium queen jellyfish summon
                         {
                             itemDrop = queenJellyfishSummon.Type;
                         }
