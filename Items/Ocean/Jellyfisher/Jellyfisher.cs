@@ -632,27 +632,27 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
             float glopacity = 0.75f;
 
             Rectangle rect = jellyBloomTex.Frame(Main.projFrames[Projectile.type], 2, Projectile.frame, State != Attacking ? 0 : 1);
+            bool noDye = (Projectile.GetDye() == 0);
 
             Color color1 = new Color(63, 74, 255).Alpha() * 0.85f;
-            Color color2 = new Color(197, 145, 255).Alpha() * 0.85f;
-
-            Color color = Color.Lerp(color2, color1, (float)(Math.Sin(Rottime * 8) / 2f) + 0.5f);
+            Color color2 = new Color(193, 131, 255).Alpha() * 0.85f;
+            Color flashColor = Color.Lerp(color2, color1, (float)(Math.Sin(Rottime * 8) / 2f) + 0.5f);
 
             if (State == Swimming) 
             {
                 //bloom
-                Main.EntitySpriteDraw(bloomTex.Value, Projectile.Center + new Vector2(0, -2) - Main.screenPosition, null, Color.Blue.Alpha() * Projectile.Opacity * 0.5f, 0, bloomTex.Value.Size() / 2, Projectile.scale * 0.75f, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(bloomTex.Value, Projectile.Center + new Vector2(0, -2) - Main.screenPosition, null, (noDye ? Color.Blue : color2).Alpha() * Projectile.Opacity * 0.5f, 0, bloomTex.Value.Size() / 2, Projectile.scale * 0.75f, SpriteEffects.None, 0f);
             }
             else
             {
                 //shadow
-                Main.EntitySpriteDraw(jellyBloomTex.Value, Projectile.Center + new Vector2(0, 2) - Main.screenPosition, rect, Color.Black * Projectile.Opacity * Projectile.localAI[0] * 0.5f, 0, rect.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(jellyBloomTex.Value, Projectile.Center + new Vector2(0, 2) - Main.screenPosition, rect, Color.Black * Projectile.Opacity * Projectile.localAI[0] * 0.75f, 0, rect.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
                 //bloom
-                Main.EntitySpriteDraw(bloomTex.Value, Projectile.Center + new Vector2(0, -2) - Main.screenPosition, null, Color.Blue.Alpha() * Projectile.Opacity * Projectile.localAI[0] * glopacity * 0.35f, 0, bloomTex.Size() / 2, Projectile.scale * 1.25f, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(bloomTex.Value, Projectile.Center + new Vector2(0, -2) - Main.screenPosition, null, (noDye ? Color.Blue : color2).Alpha() * Projectile.Opacity * Projectile.localAI[0] * glopacity * 0.3f, 0, bloomTex.Size() / 2, Projectile.scale * 1.25f, SpriteEffects.None, 0f);
                 Main.EntitySpriteDraw(jellyBloomTex.Value, Projectile.Center + new Vector2(0, 2) - Main.screenPosition, rect, color1.Alpha() * Projectile.Opacity * Projectile.localAI[0] * glopacity * 0.7f, 0, rect.Size() / 2, Projectile.scale * 1.15f, SpriteEffects.None, 0f);
                 //flicker
-                Main.EntitySpriteDraw(bloomTex.Value, Projectile.Center + new Vector2(0, -2) - Main.screenPosition, null, color.Alpha() * Projectile.Opacity * Projectile.localAI[0] * glopacity * 0.75f, 0, bloomTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(Rottime * 3) * 0.15f)) * size, SpriteEffects.None, 0f);
-                Main.EntitySpriteDraw(bloomTex.Value, Projectile.Center + new Vector2(0, -2) - Main.screenPosition, null, color.Alpha() * Projectile.Opacity * Projectile.localAI[0] * glopacity * 0.35f, 0, bloomTex.Size() / 2, Projectile.scale * (0.75f + (float)(Math.Sin(Rottime * 3) * -0.15f)) * size, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(bloomTex.Value, Projectile.Center + new Vector2(0, -2) - Main.screenPosition, null, flashColor.Alpha() * Projectile.Opacity * Projectile.localAI[0] * glopacity * 0.75f, 0, bloomTex.Size() / 2, Projectile.scale * (0.8f + (float)(Math.Sin(Rottime * 3) * 0.15f)) * size, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(bloomTex.Value, Projectile.Center + new Vector2(0, -2) - Main.screenPosition, null, flashColor.Alpha() * Projectile.Opacity * Projectile.localAI[0] * glopacity * 0.35f, 0, bloomTex.Size() / 2, Projectile.scale * (0.75f + (float)(Math.Sin(Rottime * 3) * -0.15f)) * size, SpriteEffects.None, 0f);
             }
             return true;
         }
@@ -660,32 +660,32 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
         {
             Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
             Rectangle rect = texture.Frame(Main.projFrames[Projectile.type], 2, Projectile.frame, State != Attacking? 0 : 1);
+            bool noDye = Projectile.GetDye() == 0;
 
-            //Main.spriteBatch.StartBlendState(BlendState.Additive, DrawContext.InWorld, SpriteSortMode.Deferred);
+            Color color1 = new Color(63, 74, 255);
+            Color color2 = new Color(193, 131, 255);
+            Color flashColor = Color.Lerp(color2, color1, (float)(Math.Sin(Rottime * 8) / 2f) + 0.5f);
 
             for (int k = 0; k < Projectile.oldPos.Length; k++)
             {
                 Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + rect.Size() / 2 + new Vector2(0, 2);
-
-                Color color1 = new Color(63, 74, 255).Alpha(80);
-                Color color2 = new Color(171, 131, 255).Alpha(80);
-
-                Color color = Color.Lerp(color1, color2, (float)(Math.Sin(Rottime + Main.GlobalTimeWrappedHourly * 10f - k) / 2f) + 0.5f);
+                Color afterimageColor = Color.Lerp(color1, color2, (float)(Math.Sin(Rottime + Main.GlobalTimeWrappedHourly * 10f - k) / 2f) + 0.5f).Alpha();
 
                 //afterimage
-                Main.EntitySpriteDraw(texture, drawPos, rect, color.MultiplyAlpha(0.65f - (k * 0.05f)) * Projectile.Opacity * (0.7f - k / (Projectile.oldPos.Length + 4f)) * 0.85f, Projectile.oldRot[k], rect.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(texture, drawPos, rect, afterimageColor.MultiplyAlpha(0.65f - (k * 0.05f)) * Projectile.Opacity * (0.7f - k / (Projectile.oldPos.Length + 4f)) * 0.35f, Projectile.oldRot[k], rect.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
             }
+            
+            //extra bloom
+            Main.EntitySpriteDraw(bloomTex.Value, Projectile.Center + new Vector2(0, -2) - Main.screenPosition, null, (noDye ? flashColor : color2).Alpha(80) * Projectile.Opacity * 0.25f, 0, bloomTex.Value.Size() / 2, Projectile.scale * 0.85f, SpriteEffects.None, 0f);
             //extra jellyfish
             if (State == Swimming)
-                Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, rect, Color.White.Alpha() * Projectile.Opacity * 0.4f, Projectile.rotation, rect.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, rect, Color.White.Alpha(80) * Projectile.Opacity * 0.5f, Projectile.rotation, rect.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
 
             //jellyfish
-            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, rect, Color.White.Alpha(80) * Projectile.Opacity * 0.25f, Projectile.rotation, rect.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
-            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, rect, Color.White.Alpha() * Projectile.Opacity * (float)Math.Sin(Rottime * 6) * 0.3f, Projectile.rotation, rect.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, rect, Color.White.Alpha(80) * Projectile.Opacity * 0.3f, Projectile.rotation, rect.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
+            //Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, rect, Color.White.Alpha() * Projectile.Opacity * (float)Math.Sin(Rottime * 6) * 0.25f, Projectile.rotation, rect.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
 
-            //Main.spriteBatch.ResetBlendState();
-
-            if (State != Swimming && Main.player[Projectile.owner].HasItem(ItemType<DebugItem>())) //TODO: change to debug when i implement that
+            if (State != Swimming && Main.player[Projectile.owner].HasItem(ItemType<DebugItem>()))
                 Projectile.DrawProjectileHealthBar((int)Math.Clamp(Charge * 100f, 0, 100), 100, Projectile.localAI[0]);
 
             return false;

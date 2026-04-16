@@ -19,6 +19,8 @@ namespace GoldLeaf.Core
         Pet,
         LightPet,
         Grapple,
+        Mount,
+        Minecart,
         Special,
     }
 
@@ -46,6 +48,8 @@ namespace GoldLeaf.Core
                     DyeGroup.Pet => owner.cPet,
                     DyeGroup.LightPet => owner.cLight,
                     DyeGroup.Grapple => owner.cGrapple,
+                    DyeGroup.Mount => owner.cMount,
+                    DyeGroup.Minecart => owner.cMinecart,
                     //DyeGroup.Special => owner.cMinecart, //TODO: implement item or ui to activate this
                     _ => 0,
                 };
@@ -58,28 +62,29 @@ namespace GoldLeaf.Core
         }
     }
 
-    public class ProjectileDyeSystem : ModPlayer
+    public class ProjectileDyeSystem : ModSystem
     {
-        public override void Load()
+        public override void Load() => On_Main.GetProjectileDesiredShader += EvaluateDyeGroups;
+        public override void Unload() => On_Main.GetProjectileDesiredShader -= EvaluateDyeGroups;
+
+        public override void PostSetupContent()
         {
-            On_Main.GetProjectileDesiredShader += EvaluateDyeGroups;
-        }
-        public override void Unload()
-        {
-            On_Main.GetProjectileDesiredShader -= EvaluateDyeGroups;
+            for (int i = 0; i < ProjectileLoader.ProjectileCount - 1; i++)
+            {
+                if (ContentSamples.ProjectilesByType[i].sentry && ProjectileSets.DyeGroup[i] == DyeGroup.None)
+                {
+                    ProjectileSets.DyeGroup[i] = DyeGroup.Sentry;
+                }
+            }
         }
 
         private int EvaluateDyeGroups(On_Main.orig_GetProjectileDesiredShader orig, Projectile proj)
         {
             int dye = orig(proj);
 
-            if (proj.owner != 255)
+            if (proj.owner != 255 && ProjectileSets.DyeGroup[proj.type] != DyeGroup.None)
             {
-                if (proj.sentry)
-                    dye = Main.player[proj.owner].GetModPlayer<TurretPaintPlayer>().cSentry;
-
-                if (ProjectileSets.DyeGroup[proj.type] != DyeGroup.None)
-                    dye = proj.GetDye();
+                dye = proj.GetDye();
             }
             return dye;
         }
