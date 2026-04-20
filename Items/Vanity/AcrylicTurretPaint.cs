@@ -81,25 +81,13 @@ namespace GoldLeaf.Items.Vanity
 
         public override void ResetEffects()
         {
-            if (!turretPaint)
-            {
-                cSentry = 0;
-                dyeItem = 0;
-            }
-
+            cSentry = 0;
+            dyeItem = 0;
             turretPaint = false;
         }
 
-        public override void Load()
-        {
-            On_Player.UpdateItemDye += PickSentryPaint;
-            //On_Main.GetProjectileDesiredShader += ApplySentryPaint;
-        }
-        public override void Unload()
-        {
-            On_Player.UpdateItemDye -= PickSentryPaint;
-            //On_Main.GetProjectileDesiredShader -= ApplySentryPaint;
-        }
+        public override void Load() => On_Player.UpdateItemDye += PickSentryPaint;
+        public override void Unload() => On_Player.UpdateItemDye -= PickSentryPaint;
 
         private void PickSentryPaint(On_Player.orig_UpdateItemDye orig, Player self, bool isNotInVanitySlot, bool isSetToHidden, Item armorItem, Item dyeItem)
         {
@@ -110,14 +98,6 @@ namespace GoldLeaf.Items.Vanity
                 self.GetModPlayer<TurretPaintPlayer>().cSentry = dyeItem.dye;
                 self.GetModPlayer<TurretPaintPlayer>().dyeItem = dyeItem.type;
             }
-        }
-        private int ApplySentryPaint(On_Main.orig_GetProjectileDesiredShader orig, Projectile proj)
-        {
-            if (proj.sentry && proj.owner != 255)
-            {
-                return Main.player[proj.owner].GetModPlayer<TurretPaintPlayer>().cSentry;
-            }
-            return orig(proj);
         }
     }
 }

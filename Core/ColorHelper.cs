@@ -15,6 +15,8 @@ namespace GoldLeaf.Core
 
         public readonly struct Gradient(List<(Color, float)> points)
         {
+            public List<(Color, float)> GetPoints() => [.. points.OrderBy(point => point.Item2)];
+
             public Color GetColor(float position)
             {
                 List<(Color, float)> colorPoints = [.. points.OrderBy(point => point.Item2)];
