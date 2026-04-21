@@ -45,6 +45,7 @@ namespace GoldLeaf.Prefixes
 
     public class VitalPlayer : ModPlayer 
     {
+        public override bool IsLoadingEnabled(Mod mod) => false;
         int heartTimer;
         const int HEARTCOOLDOWN = 240;
 
@@ -82,6 +83,7 @@ namespace GoldLeaf.Prefixes
 
     public class VitalItem : GlobalItem 
     {
+        public override bool IsLoadingEnabled(Mod mod) => false;
         public override bool InstancePerEntity => true;
         public bool vital = false;
 
@@ -93,6 +95,7 @@ namespace GoldLeaf.Prefixes
 
     public class VitalProjectile : GlobalProjectile 
     {
+        public override bool IsLoadingEnabled(Mod mod) => false;
         public override bool InstancePerEntity => true;
         public bool vital = false;
 

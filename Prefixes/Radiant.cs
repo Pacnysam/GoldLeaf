@@ -45,6 +45,7 @@ namespace GoldLeaf.Prefixes
 
     public class RadiantPlayer : ModPlayer 
     {
+        public override bool IsLoadingEnabled(Mod mod) => false;
         int starTimer;
         const int STARCOOLDOWN = 120;
 
@@ -82,6 +83,7 @@ namespace GoldLeaf.Prefixes
 
     public class RadiantItem : GlobalItem 
     {
+        public override bool IsLoadingEnabled(Mod mod) => false;
         public override bool InstancePerEntity => true;
         public bool radiant = false;
 
@@ -93,6 +95,7 @@ namespace GoldLeaf.Prefixes
 
     public class RadiantProjectile : GlobalProjectile 
     {
+        public override bool IsLoadingEnabled(Mod mod) => false;
         public override bool InstancePerEntity => true;
         public bool radiant = false;
 
