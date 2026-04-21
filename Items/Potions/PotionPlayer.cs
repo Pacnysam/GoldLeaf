@@ -1,21 +1,22 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GoldLeaf.Core;
+using GoldLeaf.Core.Mechanics;
+using GoldLeaf.Items.Nightshade;
+using GoldLeaf.Tiles.Decor;
+using Microsoft.Build.Execution;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using System;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
-using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
-using GoldLeaf.Tiles.Decor;
-using GoldLeaf.Items.Nightshade;
-using GoldLeaf.Core;
-using Microsoft.Build.Execution;
-using Terraria.DataStructures;
-using GoldLeaf.Core.Mechanics;
+using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Items.Potions
 {
@@ -23,14 +24,12 @@ namespace GoldLeaf.Items.Potions
     {
         public bool vampirePotion = false;
         public bool consistencyPotion = false;
-        public bool vigorPotion = false;
         public int vigorTime = 0;
 
         public override void ResetEffects()
         {
             vampirePotion = false;
             consistencyPotion = false;
-            vigorPotion = false;
         }
 
         public override void Load()
@@ -57,6 +56,12 @@ namespace GoldLeaf.Items.Potions
             return orig(isBallooned);
         }
 
+        public override void OnHurt(Player.HurtInfo info)
+        {
+            if (Player.HasBuff<VigorPotionBuff>())
+                vigorTime = (int)Math.Max(vigorTime - (info.Damage * 2.5f), 0);
+        }
+
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             if (consistencyPotion)
@@ -70,11 +75,6 @@ namespace GoldLeaf.Items.Potions
             if (vampirePotion && hit.Crit)
             {
                 Player.Heal(1 + damageDone / 45);
-            }
-
-            if (vigorPotion && hit.DamageType.CountsAsClass(DamageClass.Melee))
-            {
-                //OverhealthManager.AddOverhealth(Player, hit.Damage/10, TimeToTicks(5));
             }
         }
     }

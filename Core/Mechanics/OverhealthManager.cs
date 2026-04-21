@@ -1,8 +1,9 @@
 ﻿using GoldLeaf.Core.Mechanics;
-using Microsoft.Xna.Framework;
+using GoldLeaf.Items;
+using GoldLeaf.Items.Sky;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using Terraria;
 using Terraria.ModLoader;
 using static GoldLeaf.Core.Helper;
@@ -10,29 +11,31 @@ using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Core.Mechanics
 {
-    //ok this is a mess i should maybe possibly consider rewriting this
-    public class OverhealthPool(/*string key*/) : ILoadable
+    public abstract class OverhealthPool : ILoadable
     {
+        public OverhealthPool()
+        {
+            size = 1;
+            duration = DefaultDuration;
+            timer = 0;
+        }
+
         public virtual int MaxSize => 20;
         public virtual int TimeToDecrement => 5;
         public virtual int AmountToDecrement => 1;
+        public virtual int DefaultDuration => 240;
 
         public int size = 1;
         public int duration = 240;
         public int timer = 0;
-        public bool Active => size > 0;
 
-        public virtual bool PreUpdateTime(Player player)
-        {
-            return true;
-        }
-
+        public virtual bool PreUpdateTime(Player player) => true;
         public void UpdateTime(Player player)
         {
             if (duration > 0)
             {
                 duration--;
-                Main.NewText(duration, Color.Gold);
+                //if (player.HasItem(ItemType<DebugItem>())) Main.NewText(duration, Color.Gold);
             }
             else
             {
@@ -44,7 +47,6 @@ namespace GoldLeaf.Core.Mechanics
                 {
                     size -= AmountToDecrement;
                     timer = 0;
-                    Main.NewText(player.Overhealth());
                 }
             }
         }
@@ -70,16 +72,15 @@ namespace GoldLeaf.Core.Mechanics
             }
             return total;
         }
-
-        public static void AddOverhealth(Player player, OverhealthPool pool)
+        public static void AddOverhealth<T>(Player player, int size = 1) where T : OverhealthPool, new()
         {
+            T pool = new() { size = size }; pool.duration = pool.DefaultDuration;
+
             if (pool.size == 0)
-            {
                 return;
-            }
 
             OverhealthManager manager = player.GetModPlayer<OverhealthManager>();
-            OverhealthPool foundPool = GetOverhealthPool(player, pool);
+            OverhealthPool foundPool = GetOverhealthPool<T>(player);
 
             if (foundPool == null && pool.size > 0)
             {
@@ -90,21 +91,65 @@ namespace GoldLeaf.Core.Mechanics
                 foundPool.size = Math.Clamp(foundPool.size + pool.size, 0, foundPool.MaxSize);
                 foundPool.duration = Math.Max(pool.duration, foundPool.duration);
                 foundPool.timer = 0;
-
-                if (foundPool.size <= 0)
-                    manager.overhealthPools.Remove(foundPool);
             }
         }
-        public static OverhealthPool GetOverhealthPool(Player player, OverhealthPool poolType)
+        public static void AddOverhealth(Player player, OverhealthPool pool)
+        {
+            if (pool.size == 0)
+                return;
+
+            OverhealthManager manager = player.GetModPlayer<OverhealthManager>();
+            var foundPool = manager.overhealthPools.Find(p => p.GetType() == pool.GetType());
+            
+            if (foundPool == null && pool.size > 0)
+            {
+                manager.overhealthPools.Add(pool);
+            }
+            else
+            {
+                foundPool.size = Math.Clamp(foundPool.size + pool.size, 0, foundPool.MaxSize);
+                foundPool.duration = Math.Max(pool.duration, foundPool.duration);
+                foundPool.timer = 0;
+            }
+        }
+
+        public static void SetOverhealth<T>(Player player, int size) where T : OverhealthPool, new()
+        {
+            T pool = new() { size = size }; pool.duration = pool.DefaultDuration;
+
+            OverhealthManager manager = player.GetModPlayer<OverhealthManager>();
+            var foundPool = manager.overhealthPools.Find(p => p.GetType() == pool.GetType());
+
+            if (foundPool == null && pool.size > 0)
+                manager.overhealthPools.Add(pool);
+            else
+                foundPool = pool;
+        }
+        public static void SetOverhealth(Player player, OverhealthPool pool)
         {
             OverhealthManager manager = player.GetModPlayer<OverhealthManager>();
-            foreach (OverhealthPool pool in manager.overhealthPools)
+            var foundPool = manager.overhealthPools.Find(p => p.GetType() == pool.GetType());
+
+            if (foundPool == null && pool.size > 0)
+                manager.overhealthPools.Add(pool);
+            else
+                foundPool = pool;
+        }
+        
+        public static OverhealthPool GetOverhealthPool<T>(Player player) where T : OverhealthPool
+        {
+            OverhealthManager manager = player.GetModPlayer<OverhealthManager>();
+
+            foreach (OverhealthPool foundPool in manager.overhealthPools)
             {
-                if (pool.GetType() == poolType.GetType())
+                if (foundPool is T pool)
+                {
                     return pool;
+                }
             }
             return null;
         }
+        public static OverhealthPool GetOverhealthPool(Player player, OverhealthPool pool) => player.GetModPlayer<OverhealthManager>().overhealthPools.Find(p => p.GetType() == pool.GetType());
 
         public override void OnHurt(Player.HurtInfo info)
         {
@@ -114,29 +159,22 @@ namespace GoldLeaf.Core.Mechanics
 
                 foreach (OverhealthPool pool in overhealthPools)
                 {
-                    int overhealthLost = Math.Min(pool.size, info.Damage);
+                    int overhealthLost = Math.Min(pool.size, info.Damage - totalOverhealthLost);
                     
                     totalOverhealthLost += overhealthLost;
                     pool.size -= overhealthLost;
                     
-                    pool.OnHurt(Player, info, totalOverhealthLost);
+                    pool.OnHurt(Player, info, overhealthLost);
 
                     if (totalOverhealthLost >= info.Damage) 
                         break;
                 }
                 Player.statLife += totalOverhealthLost;
-                Main.NewText("Overhealth Lost: " + totalOverhealthLost, ColorHelper.Overhealth);
+                overhealth = GetTotalOverhealth(Player);
+
+                if (Player.HasItem(ItemType<DebugItem>()))
+                    Main.NewText("Overhealth Lost: " + totalOverhealthLost, ColorHelper.Overhealth);
                 return;
-
-                //int overhealthLost = Math.Min(Overhealth, info.Damage);
-                for (; totalOverhealthLost > 0; totalOverhealthLost--)
-                {
-                    OverhealthPool pool = overhealthPools.First();
-                    pool.size -= Math.Min(pool.size, totalOverhealthLost); totalOverhealthLost -= Math.Min(pool.size, totalOverhealthLost);
-
-                    if (pool.size <= 0)
-                        overhealthPools.Remove(pool);
-                }
             }
         }
 
@@ -153,27 +191,6 @@ namespace GoldLeaf.Core.Mechanics
             overhealthPools.Clear();
         }
 
-        private static void UpdateTime(OverhealthPool pool) 
-        {
-            if (pool.duration > 0)
-            {
-                pool.duration--;
-                Main.NewText(pool.duration, Color.Gold);
-            }
-            else
-            {
-                if (pool.TimeToDecrement == 0)
-                {
-                    pool.size = 0;
-                }
-                else if (pool.timer++ >= pool.TimeToDecrement)
-                {
-                    pool.size -= pool.AmountToDecrement;
-                    pool.timer = 5;
-                }
-            }
-        }
-
         private void UpdateOverhealthPools()
         {
             foreach (OverhealthPool pool in overhealthPools)
@@ -188,8 +205,42 @@ namespace GoldLeaf.Core.Mechanics
 
                 if (pool.size > pool.MaxSize) pool.size = pool.MaxSize;
             }
+            RemoveEmptyPools();
             overhealth = GetTotalOverhealth(Player);
         }
+        private void RemoveEmptyPools()
+        {
+            for (int i = 0; i < overhealthPools.Count; i++)
+            {
+                if (overhealthPools[i].size <= 0)
+                    overhealthPools.RemoveAt(i);
+            }
+        }
+
+        /*public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+        {
+            ModPacket packet = Mod.GetPacket();
+            packet.Write((byte)GoldLeaf.MessageType.OverhealthSync);
+            packet.Write((byte)Player.whoAmI);
+            packet.Send(toWho, fromWho);
+        }
+        public void ReceivePlayerSync(BinaryReader reader)
+        {
+            //extraSegments = reader.ReadByte();
+        }
+
+        public override void CopyClientState(ModPlayer targetCopy)
+        {
+            OverhealthManager clone = (OverhealthManager)targetCopy;
+            clone.overhealthPools = overhealthPools;
+        }
+        public override void SendClientChanges(ModPlayer clientPlayer)
+        {
+            OverhealthManager clone = (OverhealthManager)clientPlayer;
+
+            if (overhealth != clone.overhealth)
+                SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
+        }*/
     }
 }
 
@@ -198,5 +249,12 @@ namespace GoldLeaf.Core
     public static partial class Helper
     {
         public static int Overhealth(this Player player) => player.GetModPlayer<OverhealthManager>().overhealth;
+        public static int GetOverhealthOfType<T>(this Player player) where T : OverhealthPool => (OverhealthManager.GetOverhealthPool<T>(player) == null) ? 0 : OverhealthManager.GetOverhealthPool<T>(player).size;
+        public static void AddOverhealth<T>(this Player player, int size = 1) where T : OverhealthPool, new() => OverhealthManager.AddOverhealth<T>(player, size);
+        public static void AddOverhealth(Player player, OverhealthPool pool) => OverhealthManager.AddOverhealth(player, pool);
+        public static void SetOverhealthPool<T>(this Player player, int size) where T : OverhealthPool, new() => OverhealthManager.SetOverhealth<T>(player, size);
+        public static void SetOverhealth(Player player, OverhealthPool pool) => OverhealthManager.SetOverhealth(player, pool);
+        public static OverhealthPool GetOverhealthPool<T>(this Player player) where T : OverhealthPool => OverhealthManager.GetOverhealthPool<T>(player);
+        public static OverhealthPool GetOverhealthPool(this Player player, OverhealthPool pool) => OverhealthManager.GetOverhealthPool(player, pool);
     }
 }
