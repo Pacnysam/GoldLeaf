@@ -62,6 +62,15 @@ namespace GoldLeaf.Core.Mechanics
         
         public int overhealth = 0;
 
+        public override void Load()
+        {
+            
+        }
+        public override void Unload() 
+        {
+            
+        }
+
         public static int GetTotalOverhealth(Player player)
         {
             int total = 0;
