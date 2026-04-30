@@ -57,7 +57,7 @@ namespace GoldLeaf.Core.Mechanics
         {
             Player player = Main.player[projectile.owner];
 
-            if (player != null && !ProjectileSets.summonSpeedImmune[projectile.type])
+            if (player != null && !ProjectileSets.SummonSpeedImmune[projectile.type])
             {
                 for (int k = 0; k < extraUpdateCache; extraUpdateCache--)
                 {
@@ -100,7 +100,7 @@ namespace GoldLeaf.Core.Mechanics
         {
             projectile.TryGetOwner(out Player player);
 
-            if (player != null && ProjectileSets.summonSpeedImmune[projectile.type])
+            if (player != null && ProjectileSets.SummonSpeedImmune[projectile.type])
             {
                 if (projectile.minion)
                 {

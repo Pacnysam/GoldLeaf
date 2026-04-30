@@ -65,8 +65,8 @@ namespace GoldLeaf.Core
         public static float Counter(this NPC npc) => npc.GetGlobalNPC<GoldLeafNPC>().counter;
 
         public static bool Stunned(this Player player) => player.CCed || player.GetModPlayer<GoldLeafPlayer>().stunned;
-        public static bool CanBeStunned(this NPC npc) => !npc.boss && !NPCID.Sets.ShouldBeCountedAsBoss[npc.type] && !NPCSets.ccImmune[npc.type] 
-            && npc.aiStyle != NPCAIStyleID.Worm && (npc.knockBackResist != 0f || NPCSets.ccSusceptibleException[npc.type]);
+        public static bool CanBeStunned(this NPC npc) => (NPCSets.CCImmunity[npc.type] != null)? !(bool)NPCSets.CCImmunity[npc.type] : 
+            !(npc.boss || NPCID.Sets.ShouldBeCountedAsBoss[npc.type] || npc.aiStyle == NPCAIStyleID.Worm || npc.knockBackResist == 0f);
 
         public static bool ZoneGrove(this Player player) => player.GetModPlayer<GoldLeafPlayer>().ZoneGrove;
         public static bool ZoneLava(this Player player) => player.position.Y / 16 >= Main.maxTilesY * 0.72f;
