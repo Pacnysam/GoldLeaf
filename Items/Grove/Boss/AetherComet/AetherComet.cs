@@ -482,7 +482,7 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (/*hit.Crit || */Projectile.ai[2] != 0)
-                target.AddBuff(BuffType<AetherFlameBuff>(), Helper.TimeToTicks(3f));
+                target.AddBuff(BuffType<AetherFlameBuff>(), Helper.TimeToTicks(4f));
         }
 
         /*public override void OnHitPlayer(Player target, Player.HurtInfo info)

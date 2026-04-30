@@ -74,13 +74,13 @@ namespace GoldLeaf.Items.Meteor
 
         public override void SetDefaults()
         {
-            Projectile.aiStyle = 36;
+            Projectile.aiStyle = ProjAIStyleID.SmallFlying;
             Projectile.width = 12;
             Projectile.height = 12;
             Projectile.friendly = true;
             Projectile.tileCollide = true;
             Projectile.ignoreWater = false;
-            Projectile.ArmorPenetration = 3;
+            Projectile.ArmorPenetration = 8;
             Projectile.timeLeft = 360;
 
             ProjectileID.Sets.DontApplyParryDamageBuff[Type] = true;
