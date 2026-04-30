@@ -52,7 +52,7 @@ namespace GoldLeaf.Items.Misc
             {
                 if (projectile.owner == player.whoAmI && projectile.sentry)
                 {
-                    if (ProjectileSets.sentryCanDetonaterExplode[projectile.type])
+                    if (ProjectileSets.SentryCanDetonaterExplode[projectile.type])
                     {
                         explosionEffectActivated = true;
                         
@@ -68,7 +68,7 @@ namespace GoldLeaf.Items.Misc
                         }*/
                     }
 
-                    if (Main.LocalPlayer == player && ProjectileSets.sentryCanDetonaterExplode[projectile.type])
+                    if (Main.LocalPlayer == player && ProjectileSets.SentryCanDetonaterExplode[projectile.type])
                         Projectile.NewProjectile(projectile.GetSource_Death("SentryDetonator"), projectile.Center, Vector2.Zero, ProjectileType<SentryDetonatorExplosion>(), 0, 0, projectile.owner);
 
                     if (ProjectileID.Sets.IsADD2Turret[projectile.type] && player.ZoneOldOneArmy)

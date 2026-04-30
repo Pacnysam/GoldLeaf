@@ -40,6 +40,27 @@ namespace GoldLeaf.Items.Granite
             Item.AddElements([Element.Thunder]);
         }
 
+        /*public override void ApplyPrefix(int pre) //TODO: move this to pristine blade
+        {
+            Item basic = GetInstance<Bladecaster>().Item;
+            ModPrefix prefix = PrefixLoader.GetPrefix(pre);
+
+            Item.damage += Item.damage - basic.damage;
+            Item.knockBack += Item.knockBack - basic.knockBack;
+            Item.scale += Item.scale - basic.scale;
+            Item.useTime += Item.useTime - basic.useTime;
+            Item.useAnimation += Item.useAnimation - basic.useTime;
+            Item.reuseDelay += Item.reuseDelay - basic.reuseDelay;
+            Item.shootSpeed += Item.shootSpeed - basic.shootSpeed;
+            Item.crit += Item.crit - basic.crit;
+            
+            if (prefix is CritDamagePrefix critPrefix)
+            {
+                if (critPrefix.CritDamageMult != 0)
+                    Item.GetGlobalItem<GoldLeafItem>().critDamageMod += critPrefix.CritDamageMult;
+            }
+        }*/
+
         public override void SetDefaults()
 		{
 			Item.damage = 19;

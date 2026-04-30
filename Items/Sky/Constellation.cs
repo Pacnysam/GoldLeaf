@@ -1,6 +1,7 @@
 ﻿using GoldLeaf.Core;
 using GoldLeaf.Core.CrossMod;
 using GoldLeaf.Core.Mechanics;
+using GoldLeaf.Effects.Dusts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -11,6 +12,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.GameContent.Animations;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.Localization;
@@ -40,18 +42,15 @@ namespace GoldLeaf.Items.Sky
 
         public override void SetDefaults()
         {
-            Item.DefaultToWhip(ProjectileType<ConstellationP>(), 18, 1.5f, 3.25f, 40);
+            Item.DefaultToWhip(ProjectileType<ConstellationP>(), 18, 1.5f, 3.25f, 45);
 
             Item.rare = ItemRarityID.Blue;
             Item.value = Item.sellPrice(0, 1, 0, 0);
             Item.autoReuse = true;
         }
 
-        public override float UseSpeedMultiplier(Player player) 
-            => MathHelper.Lerp(12/9f, 1f, (float)player.GetModPlayer<ConstellationPlayer>().extraSegments / 10);
-        
-        public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
-            => damage.Base -= MathHelper.Lerp(6, 0, (float)player.GetModPlayer<ConstellationPlayer>().extraSegments / 10);
+        public override float UseSpeedMultiplier(Player player)
+            => Utils.Remap(player.GetModPlayer<ConstellationPlayer>().extraSegments, 0, ConstellationPlayer.MaxExtraSegments, 4/3f, 1f);
 
         public override bool MeleePrefix() => true;
     }
@@ -64,7 +63,7 @@ namespace GoldLeaf.Items.Sky
         public override void Load()
         {
             glowTex = Request<Texture2D>(Texture + "Glow");
-            bloomTex = Request<Texture2D>("GoldLeaf/Textures/Masks/Mask0");
+            bloomTex = Request<Texture2D>("GoldLeaf/Textures/GlowSharp");
         }
 
         public override void SetStaticDefaults()
@@ -95,36 +94,39 @@ namespace GoldLeaf.Items.Sky
             if (!hasSetup)
             {
                 Segments = player.GetModPlayer<ConstellationPlayer>().extraSegments;
+                Projectile.WhipSettings.RangeMultiplier += 0.07f * Segments;
                 hasSetup = true;
             }
 
             Projectile.GetWhipSettings(Projectile, out var timeToFlyOut, out var _, out var _);
-            Projectile.WhipSettings.Segments = 4 + (int)(Segments * 0.6f);
+            Projectile.WhipSettings.Segments = 4 + (int)(Segments * 1.85f);
 
             float flyTimer = Timer / timeToFlyOut;
 
-            /*if (Utils.GetLerpValue(0.3f, 0.8f, flyTimer, clamped: true) * Utils.GetLerpValue(0.9f, 0.7f, flyTimer, clamped: true) > 0.1f)
+            if (Utils.GetLerpValue(0.3f, 0.8f, flyTimer, clamped: true) * Utils.GetLerpValue(0.9f, 0.7f, flyTimer, clamped: true) > 0.35f)
             {
+                Projectile.localAI[0]--;
                 Projectile.WhipPointsForCollision.Clear();
                 Projectile.FillWhipControlPoints(Projectile, Projectile.WhipPointsForCollision);
                 Rectangle rectangle = Utils.CenteredRectangle(Projectile.WhipPointsForCollision[^1], new Vector2(18f, 20f));
                 Vector2 forwardVector = Projectile.WhipPointsForCollision[^2].DirectionTo(Projectile.WhipPointsForCollision[^1]).SafeNormalize(Vector2.Zero);
-                float tipRotation = (Projectile.WhipPointsForCollision[^1] - Projectile.WhipPointsForCollision[^2]).ToRotation() - MathHelper.PiOver2;
+                //float tipRotation = (Projectile.WhipPointsForCollision[^1] - Projectile.WhipPointsForCollision[^2]).ToRotation() - MathHelper.PiOver2;
 
-                if (Timer % 2 == 0) 
+                if (Projectile.localAI[0] <= 0 && !Main.dedServ) 
                 {
-                    Dust dust = Dust.NewDustDirect(rectangle.TopLeft(), rectangle.Width, rectangle.Height, DustID.PortalBoltTrail, 0f, 0f, 0, new Color(51, 156, 248).Alpha(160) * 0.65f, 0.7f);
-                    dust.noGravity = true;
-                    dust.color = new ColorHelper.Gradient([(new Color(81, 166, 243).Alpha(), 0.45f), (new Color(255, 241, 83).Alpha(), 0.5f), (new Color(81, 166, 243).Alpha(), 0.55f)]).GetColor(flyTimer);
-                    dust.rotation = tipRotation;//Main.rand.NextFloat(MathHelper.TwoPi);
-                    dust.scale = MathHelper.Lerp(0.95f, 1.35f, Segments / ConstellationPlayer.maxExtraSegments) + Main.rand.NextFloat() * 0.185f;
-                    dust.fadeIn = 1.05f;
-                    dust.shader = GameShaders.Armor.GetSecondaryShader(111, Main.LocalPlayer);
-                    dust.velocity = (dust.velocity * Main.rand.NextFloat() * 0.55f) + (forwardVector.RotatedBy(MathHelper.PiOver4 * Math.Sign(Projectile.direction)) * 3f * flyTimer);
-                }
-            }*/
+                    float dustSizeMult = 0.5f + (Segments / ConstellationPlayer.MaxExtraSegments * 0.5f);
 
-            if (Timer == (int)(timeToFlyOut / 2f))
+                    Dust dust = Dust.NewDustDirect(rectangle.TopLeft(), rectangle.Width, rectangle.Height, DustType<TwinkleDust>(), 0f, 0f, Main.rand.Next(-5, 10), new Color(255, 251, 189).Alpha() * 0.65f, Main.rand.NextFloat(0.4f, 0.6f) * dustSizeMult);
+                    dust.customData = new LightDust.LightDustData(Main.rand.NextFloat(0.85f, 0.935f), MathHelper.ToRadians(Main.rand.NextFloat(-4f, 4f)));
+                    dust.noGravity = true;
+                    dust.rotation = Main.rand.NextFloat(MathHelper.TwoPi);//tipRotation;
+                    dust.fadeIn = Main.rand.NextFloat(-0.5f, 2f);
+                    dust.velocity = (dust.velocity * Main.rand.NextFloat() * 0.55f) + (forwardVector.RotatedBy(MathHelper.PiOver4 * Math.Sign(Projectile.direction)) * 3f * flyTimer) * Main.rand.NextFloat(1f, 2.5f);
+                    Projectile.localAI[0] = Main.rand.Next(2, 4) + (int)Utils.Remap(Segments, 0, ConstellationPlayer.MaxExtraSegments, 2, 0);
+                }
+            }
+
+            if (Timer == (int)(timeToFlyOut / 2f) && !Main.dedServ)
             {
                 SoundEngine.FindActiveSound(in SoundID.Item153)?.Stop();
                 
@@ -140,53 +142,60 @@ namespace GoldLeaf.Items.Sky
             target.AddBuff(BuffType<ConstellationTag>(), TimeToTicks(5));
             player.MinionAttackTargetNPC = target.whoAmI;
 
-            if (player.GetModPlayer<ConstellationPlayer>().extraSegments < ConstellationPlayer.maxExtraSegments && target.IsValid())
+            if (player.GetModPlayer<ConstellationPlayer>().extraSegments < ConstellationPlayer.MaxExtraSegments && target.IsValid())
             {
                 player.GetModPlayer<ConstellationPlayer>().extraSegments++;
 
-                Gore gore = Gore.NewGoreDirect(null, target.Top, Vector2.Zero, GoreType<ConstellationGore>());
-                gore.rotation = MathHelper.ToRadians(Main.rand.NextFloat(180, 380)).RandNeg();
-                gore.velocity.X *= 0.65f;
-                gore.velocity.Y = Main.rand.NextFloat(-5.5f, -4f);
-                gore.frame = 2;
-                gore.alpha -= Main.rand.Next(40, 70);
-
-                for (int i = 0; i < 7; i++)
+                if (!Main.dedServ && false) //TODO: replace these particles for rework
                 {
-                    Gore gore2 = Gore.NewGoreDirect(null, target.Top, Vector2.Zero, GoreType<ConstellationGore>());
-                    gore2.rotation = MathHelper.ToRadians(Main.rand.NextFloat(420, 820)).RandNeg();
-                    gore2.velocity.X *= 1.85f;
-                    gore2.velocity.Y = Main.rand.NextFloat(-2f, 1f);
-                    gore2.frame = 0;
-                    gore2.alpha += Main.rand.Next(-10, 15);
+                    Gore gore = Gore.NewGoreDirect(null, target.Top, Vector2.Zero, GoreType<ConstellationGore>());
+                    gore.rotation = MathHelper.ToRadians(Main.rand.NextFloat(180, 380)).RandNeg();
+                    gore.velocity.X *= 0.65f;
+                    gore.velocity.Y = Main.rand.NextFloat(-5.5f, -4f);
+                    gore.frame = 2;
+                    gore.alpha -= Main.rand.Next(40, 70);
+
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Gore gore2 = Gore.NewGoreDirect(null, target.Top, Vector2.Zero, GoreType<ConstellationGore>());
+                        gore2.rotation = MathHelper.ToRadians(Main.rand.NextFloat(420, 820)).RandNeg();
+                        gore2.velocity.X *= 1.85f;
+                        gore2.velocity.Y = Main.rand.NextFloat(-3.5f, -2f);
+                        gore2.frame = 0;
+                        gore2.alpha += Main.rand.Next(-10, 15);
+                    }
                 }
             }
             else
             {
                 Projectile.damage = (int)(Projectile.damage * 0.75f);
 
-                Gore gore = Gore.NewGoreDirect(null, target.Top, Vector2.Zero, GoreType<ConstellationGore>());
-                gore.rotation = MathHelper.ToRadians(Main.rand.NextFloat(240, 420)).RandNeg();
-                gore.velocity.X *= 0.65f;
-                gore.velocity.Y = Main.rand.NextFloat(-5f, -3.5f);
-                gore.frame = 1;
-                gore.alpha -= Main.rand.Next(10, 30);
-
-                for (int i = 0; i < 5; i++)
+                if (!Main.dedServ && false)
                 {
-                    Gore gore2 = Gore.NewGoreDirect(null, target.Top, Vector2.Zero, GoreType<ConstellationGore>());
-                    gore2.rotation = MathHelper.ToRadians(Main.rand.NextFloat(580, 780)).RandNeg();
-                    gore2.velocity.X *= 1.85f;
-                    gore2.velocity.Y = Main.rand.NextFloat(-1.5f, 1f);
-                    gore2.frame = 0;
-                    gore2.alpha += Main.rand.Next(0, 30);
+                    Gore gore = Gore.NewGoreDirect(null, target.Top, Vector2.Zero, GoreType<ConstellationGore>());
+                    gore.rotation = MathHelper.ToRadians(Main.rand.NextFloat(240, 420)).RandNeg();
+                    gore.velocity.X *= 0.65f;
+                    gore.velocity.Y = Main.rand.NextFloat(-5f, -3.5f);
+                    gore.frame = 1;
+                    gore.alpha -= Main.rand.Next(10, 30);
+
+                    for (int i = 0; i < 3; i++)
+                    {
+                        Gore gore2 = Gore.NewGoreDirect(null, target.Top, Vector2.Zero, GoreType<ConstellationGore>());
+                        gore2.rotation = MathHelper.ToRadians(Main.rand.NextFloat(580, 780)).RandNeg();
+                        gore2.velocity.X *= 1.85f;
+                        gore2.velocity.Y = Main.rand.NextFloat(-3f, -1.5f);
+                        gore2.frame = 0;
+                        gore2.alpha += Main.rand.Next(0, 30);
+                    }
                 }
             }
 
             if (player.GetModPlayer<ConstellationPlayer>().extraSegments > 0)
                 player.AddBuff(BuffType<ConstellationTag>(), TimeToTicks(5));
 
-            SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/SuperStar/MirrorReflect") { Pitch = -0.5f + (player.GetModPlayer<ConstellationPlayer>().extraSegments * 0.05f), Volume = 0.7f }, player.Center);
+            if (!Main.dedServ)
+                SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/SuperStar/MirrorReflect") { Pitch = -0.65f + (player.GetModPlayer<ConstellationPlayer>().extraSegments * 0.135f), Volume = 0.7f }, player.Center);
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -199,6 +208,9 @@ namespace GoldLeaf.Items.Sky
 
             Main.instance.LoadProjectile(Type);
 
+            Projectile.GetWhipSettings(Projectile, out float timeToFlyOut, out int _, out float _);
+            float flyTimer = Timer / timeToFlyOut;
+
             for (int i = 0; i < list.Count - 1; i++)
             {
                 Rectangle frame = new(0, 0, 18, 20); //handle
@@ -209,8 +221,6 @@ namespace GoldLeaf.Items.Sky
                     frame.Y = 68; //whip length minus tip
                     frame.Height = 24;
 
-                    Projectile.GetWhipSettings(Projectile, out float timeToFlyOut, out int _, out float _);
-                    float flyTimer = Timer / timeToFlyOut;
                     scale = MathHelper.Lerp(0.5f, 1.5f, Utils.GetLerpValue(0.1f, 0.7f, flyTimer, true) * Utils.GetLerpValue(0.9f, 0.7f, flyTimer, true));
                 }
                 else if (i > 9) //far segment
@@ -239,17 +249,18 @@ namespace GoldLeaf.Items.Sky
 
                 float rotation = diff.ToRotation() - MathHelper.PiOver2;
                 Color color = Lighting.GetColor(element.ToTileCoordinates());
-                Color glowColor = ColorHelper.AdditiveWhite(200);
+                Color glowColor = Color.White.Alpha(180);
 
-                Color color1 = new(81, 166, 243) { A = 0 };
-                Color color2 = new(255, 241, 83) { A = 0 };
+                Color color1 = new Color(31, 139, 255);
+                Color color2 = new Color(255, 241, 83);
 
                 if (i > 0 && i < list.Count - 2)
                 {
                     color = Color.Lerp(color1, color2, MathHelper.Lerp(0f, 1f, Math.Clamp(i / (list.Count - 1f), 0f, 1f))) with { A = 255 };
                     glowColor = color.MultiplyAlpha(0.85f - MathHelper.Lerp(0f, 1f, Math.Clamp(i / (list.Count - 1f), 0f, 0.4f)));
                 }
-                Color bloomColor = Color.Lerp(color1, color2, MathHelper.Lerp(0f, 1f, Math.Clamp(i / (list.Count - 1f), 0f, 1f)));
+                Color bloomColor = Color.Lerp(color1, color2, MathHelper.Lerp(0f, 1f, Math.Clamp(i / (list.Count - 1f), 0f, 1f))).Alpha();
+                float bloomStrength = 0.35f + (Utils.GetLerpValue(0.3f, 0.8f, flyTimer, clamped: true) * Utils.GetLerpValue(0.9f, 0.7f, flyTimer, clamped: true) * 0.75f);
 
                 if (i == list.Count - 2)
                 {
@@ -259,14 +270,14 @@ namespace GoldLeaf.Items.Sky
                     }*/
 
                     Vector2 forwardVector = list[^2].DirectionTo(list[^1]).SafeNormalize(Vector2.Zero);
-                    Main.EntitySpriteDraw(bloomTex.Value, pos + (forwardVector * 12f) - Main.screenPosition, null, color1 * 0.175f, rotation, bloomTex.Size() / 2, scale * 0.275f, SpriteEffects.None);
+                    Main.EntitySpriteDraw(bloomTex.Value, pos + (forwardVector * 14f) - Main.screenPosition, null, color1.Alpha() * 0.25f * bloomStrength, rotation, bloomTex.Size() / 2, scale * 0.275f * 3f, SpriteEffects.None);
                 }
                 Main.EntitySpriteDraw(TextureAssets.Projectile[Type].Value, pos - Main.screenPosition, frame, color, rotation, origin, scale, flip);
-                Main.EntitySpriteDraw(glowTex.Value, pos - Main.screenPosition, frame, glowColor * 0.85f, rotation, origin, scale, flip);
+                Main.EntitySpriteDraw(glowTex.Value, pos - Main.screenPosition, frame, glowColor * 0.75f, rotation, origin, scale, flip);
                 if (i > 0)
                 {
-                    Main.EntitySpriteDraw(bloomTex.Value, pos - Main.screenPosition, null, bloomColor * 0.15f, rotation, bloomTex.Size() / 2, 
-                        scale * MathHelper.Lerp(0.145f, 0.25f, Math.Clamp(i / (list.Count - 1f), 0f, 1f)), SpriteEffects.None);
+                    Main.EntitySpriteDraw(bloomTex.Value, pos - Main.screenPosition, null, bloomColor * 0.25f * bloomStrength, rotation, bloomTex.Size() / 2, 
+                        scale * MathHelper.Lerp(0.145f, 0.25f, Math.Clamp(i / (list.Count - 1f), 0f, 1f)) * 4f, SpriteEffects.None);
                 }
 
                 pos += diff;
@@ -278,12 +289,11 @@ namespace GoldLeaf.Items.Sky
     public class ConstellationPlayer : ModPlayer
     {
         public int extraSegments = 0;
-        public const int maxExtraSegments = 12;
-        //public int segmentTimer = 60;
+        public static int MaxExtraSegments => 5;
 
         public override void PreUpdate()
         {
-            if (extraSegments > maxExtraSegments) extraSegments = maxExtraSegments;
+            if (extraSegments > MaxExtraSegments) extraSegments = MaxExtraSegments;
         }
 
         public override void PostUpdateBuffs()
@@ -291,10 +301,18 @@ namespace GoldLeaf.Items.Sky
             if (!Player.HasBuff(BuffType<ConstellationTag>()))
                 extraSegments = 0;
 
-            if (extraSegments > 0)
-                Player.whipRangeMultiplier += 0.0725f * extraSegments;
+            if (extraSegments > 0) Player.whipRangeMultiplier += 0.135f * extraSegments;
         }
 
+        public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (ProjectileID.Sets.IsAWhip[proj.type] && extraSegments > 0 && proj.type != ProjectileType<ConstellationP>())
+            {
+
+            }
+        }
+
+        #region networking stuff
         public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
         {
             ModPacket packet = Mod.GetPacket();
@@ -307,7 +325,6 @@ namespace GoldLeaf.Items.Sky
         {
             extraSegments = reader.ReadByte();
         }
-
         public override void CopyClientState(ModPlayer targetCopy)
         {
             ConstellationPlayer clone = (ConstellationPlayer)targetCopy;
@@ -320,49 +337,7 @@ namespace GoldLeaf.Items.Sky
             if (extraSegments != clone.extraSegments)
                 SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
         }
-    }
-
-    public class ConstellationGlobalProj : GlobalProjectile
-    {
-        public override bool InstancePerEntity => true;
-        public override bool AppliesToEntity(Projectile entity, bool lateInstantiation) => ProjectileID.Sets.IsAWhip[entity.type];
-
-        public bool hasSetup = false;
-        public int segments = 0;
-
-        public override bool PreAI(Projectile projectile)
-        {
-            if (!hasSetup)
-            {
-                projectile.TryGetOwner(out Player player);
-                if (player != null)
-                {
-                    segments = player.GetModPlayer<ConstellationPlayer>().extraSegments;
-                    projectile.netUpdate = true;
-                }
-                hasSetup = true;
-
-                Projectile.GetWhipSettings(projectile, out var timeToFlyOut, out var _, out var _);
-
-                if (projectile.type == ProjectileType<ConstellationP>())
-                    projectile.WhipSettings.RangeMultiplier += 0.035f * segments;
-
-                /*if (projectile.type == ProjectileType<ConstellationP>())
-                    projectile.WhipSettings.RangeMultiplier += 0.115f * segments;
-                else
-                    projectile.WhipSettings.RangeMultiplier += 0.0725f * segments;*/
-            }
-            return true;
-        }
-
-        public override void SendExtraAI(Projectile projectile, BitWriter bitWriter, BinaryWriter binaryWriter)
-        {
-            binaryWriter.Write(segments);
-        }
-        public override void ReceiveExtraAI(Projectile projectile, BitReader bitReader, BinaryReader binaryReader)
-        {
-            segments = binaryReader.ReadInt32();
-        }
+        #endregion save & load stuff
     }
 
     public class ConstellationTag : ModBuff
@@ -390,6 +365,7 @@ namespace GoldLeaf.Items.Sky
         public override void OnSpawn(Gore gore, IEntitySource source)
         {
             gore.position -= new Vector2(22, 23) * gore.scale;
+            gore.velocity.Y -= 6f;
             gore.numFrames = 3;
             gore.behindTiles = false;
             gore.timeLeft = 30;
@@ -408,9 +384,10 @@ namespace GoldLeaf.Items.Sky
 
         public override bool Update(Gore gore)
         {
-            gore.velocity *= 0.95f;
+            gore.velocity.X *= 0.95f;
+            gore.velocity.Y += gore.Opacity() * 0.15f;
             gore.position += gore.velocity;
-            gore.position.Y += (0.035f * (MathHelper.TwoPi * gore.velocity.Length())) * -(3 - gore.frame);
+            //gore.position.Y += (0.035f * (MathHelper.TwoPi * gore.velocity.Length())) * -(3 - gore.frame);
 
             gore.alpha += 4;
 
@@ -423,7 +400,7 @@ namespace GoldLeaf.Items.Sky
                 gore.scale = MathHelper.Lerp(gore.scale, 1, 0.075f);
             }
 
-            gore.rotation += (MathHelper.TwoPi * gore.velocity.Length()) * 0.05f * Math.Sign(gore.velocity.X + 0.0001f);//MathHelper.Lerp(gore.rotation, gore.rotation * 0.45f, 0.075f);
+            gore.rotation *= 0.95f;// += (MathHelper.TwoPi * gore.velocity.Length()) * 0.05f * Math.Sign(gore.velocity.X + 0.0001f);//MathHelper.Lerp(gore.rotation, gore.rotation * 0.45f, 0.075f);
 
             if (gore.alpha > 245)
                 gore.active = false;

@@ -670,9 +670,10 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
             {
                 Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + rect.Size() / 2 + new Vector2(0, 2);
                 Color afterimageColor = Color.Lerp(color1, color2, (float)(Math.Sin(Rottime + Main.GlobalTimeWrappedHourly * 10f - k) / 2f) + 0.5f).Alpha();
+                float opacity = (State == Swimming)? 0.5f : 0.35f;
 
                 //afterimage
-                Main.EntitySpriteDraw(texture, drawPos, rect, afterimageColor.MultiplyAlpha(0.65f - (k * 0.05f)) * Projectile.Opacity * (0.7f - k / (Projectile.oldPos.Length + 4f)) * 0.35f, Projectile.oldRot[k], rect.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(texture, drawPos, rect, afterimageColor.MultiplyAlpha(0.65f - (k * 0.05f)) * Projectile.Opacity * (0.7f - k / (Projectile.oldPos.Length + 4f)) * opacity, Projectile.oldRot[k], rect.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
             }
             
             //extra bloom
