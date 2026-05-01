@@ -21,6 +21,7 @@ namespace GoldLeaf.Items.Nightshade
         public override void SetStaticDefaults()
         {
             Item.AddElements([Element.Shadow]);
+            ItemSets.WorkInProgress[Type] = true;
         }
 
         public override void SetDefaults()

@@ -99,7 +99,7 @@ namespace GoldLeaf.Items.Sky
             }
 
             Projectile.GetWhipSettings(Projectile, out var timeToFlyOut, out var _, out var _);
-            Projectile.WhipSettings.Segments = 4 + (int)(Segments * 1.85f);
+            Projectile.WhipSettings.Segments = 5 + (int)(Segments * 1.85f);
 
             float flyTimer = Timer / timeToFlyOut;
 
@@ -117,12 +117,13 @@ namespace GoldLeaf.Items.Sky
                     float dustSizeMult = 0.5f + (Segments / ConstellationPlayer.MaxExtraSegments * 0.5f);
 
                     Dust dust = Dust.NewDustDirect(rectangle.TopLeft(), rectangle.Width, rectangle.Height, DustType<TwinkleDust>(), 0f, 0f, Main.rand.Next(-5, 10), new Color(255, 251, 189).Alpha() * 0.65f, Main.rand.NextFloat(0.4f, 0.6f) * dustSizeMult);
-                    dust.customData = new LightDust.LightDustData(Main.rand.NextFloat(0.85f, 0.935f), MathHelper.ToRadians(Main.rand.NextFloat(-4f, 4f)));
+                    dust.customData = new LightDust.LightDustData(Main.rand.NextFloat(0.85f, 0.935f), MathHelper.ToRadians(Main.rand.NextFloat(-8f, 8f)));
                     dust.noGravity = true;
                     dust.rotation = Main.rand.NextFloat(MathHelper.TwoPi);//tipRotation;
                     dust.fadeIn = Main.rand.NextFloat(-0.5f, 2f);
                     dust.velocity = (dust.velocity * Main.rand.NextFloat() * 0.55f) + (forwardVector.RotatedBy(MathHelper.PiOver4 * Math.Sign(Projectile.direction)) * 3f * flyTimer) * Main.rand.NextFloat(1f, 2.5f);
-                    Projectile.localAI[0] = Main.rand.Next(2, 4) + (int)Utils.Remap(Segments, 0, ConstellationPlayer.MaxExtraSegments, 2, 0);
+                    dust.velocity *= dustSizeMult;
+                    Projectile.localAI[0] = Main.rand.Next(1, 4) + (int)Utils.Remap(Segments, 0, ConstellationPlayer.MaxExtraSegments, 2, 0);
                 }
             }
 
@@ -194,8 +195,8 @@ namespace GoldLeaf.Items.Sky
             if (player.GetModPlayer<ConstellationPlayer>().extraSegments > 0)
                 player.AddBuff(BuffType<ConstellationTag>(), TimeToTicks(5));
 
-            if (!Main.dedServ)
-                SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/SuperStar/MirrorReflect") { Pitch = -0.65f + (player.GetModPlayer<ConstellationPlayer>().extraSegments * 0.135f), Volume = 0.7f }, player.Center);
+            if (!Main.dedServ && player.GetModPlayer<ConstellationPlayer>().extraSegments > 0)
+                SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/SuperStar/MirrorReflect") { Pitch = -0.65f + (player.GetModPlayer<ConstellationPlayer>().extraSegments * 0.15f), Volume = 0.7f }, player.Center);
         }
 
         public override bool PreDraw(ref Color lightColor)

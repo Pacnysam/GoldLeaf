@@ -86,6 +86,9 @@ namespace GoldLeaf.Core
                 if (critLine != null || damageLine != null)
                     tooltips.Insert(index + 1, new TooltipLine(Mod, "CritMult", Language.GetTextValue("Mods.GoldLeaf.CommonItemTooltip.CriticalDamageMultiplier", updatedCritMod)));
             }
+
+            if (ItemSets.WorkInProgress[item.type])
+                tooltips.Add(new TooltipLine(Mod, "WorkInProgress", Language.GetTextValue("Mods.GoldLeaf.CommonItemTooltip.WorkInProgress")) { OverrideColor = Color.Red });
         }
 
         public override void UpdateEquip(Item item, Player player)

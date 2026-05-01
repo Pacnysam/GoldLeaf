@@ -20,3 +20,4 @@ FlatIncreasedMeleeDamage: Increases melee damage by {0}
 FlatIncreasedRangedDamage: Increases ranged damage by {0}
 FlatIncreasedMagicDamage: Increases magic damage by {0}
 FlatIncreasedSummonDamage: Increases summon damage by {0}
+WorkInProgress: This item is unfinished and may be buggy, unbalanced or pending a rework

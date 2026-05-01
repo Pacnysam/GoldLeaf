@@ -27,6 +27,8 @@ namespace GoldLeaf.Items.Dungeon
         {
             ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite() * 0.5f, true);
             Item.AddElements([Element.Arcane, Element.Water]);
+
+            ItemSets.WorkInProgress[Type] = true;
         }
 
         public override void SetDefaults() 
