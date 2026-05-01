@@ -24,23 +24,6 @@ namespace GoldLeaf.Core
     {
         public override void ModifyBuffText(int type, ref string buffName, ref string tip, ref int rare)
         {
-            /*#region Vanilla Items
-            switch (type)
-            {
-                case BuffID.OnFire:
-                case BuffID.OnFire3:
-                    {
-                        tip += Language.GetTextValue("Mods.GoldLeaf.Buffs.Vanilla.OnFire");
-                        break;
-                    }
-                case BuffID.Ichor:
-                    {
-                        tip = Language.GetTextValue("Mods.GoldLeaf.Buffs.Vanilla.Ichor");
-                        break;
-                    }
-            }
-            #endregion*/
-
             int buffTime = Main.LocalPlayer.buffTime[Main.LocalPlayer.FindBuffIndex(type)];
 
             if (Main.LocalPlayer.GetModPlayer<SafetyBlanketPlayer>().safetyBlanket && buffTime > 2 && Main.debuff[type] && !Main.buffNoTimeDisplay[type] && !BuffSets.Cosmetic[type] && !BuffSets.RemoveCleanseTooltip[type])

@@ -39,6 +39,8 @@ namespace GoldLeaf.Items.Grove
                 new Color(217, 93, 76),
                 new Color(167, 68, 121)
             ];
+
+            ItemSets.WorkInProgress[Type] = true;
         }
 
         const int QuickHealPriority = 125;

@@ -45,13 +45,16 @@ namespace GoldLeaf.Core
             .RegisterBoolSet(false, ItemID.Star, ItemID.SoulCake, ItemID.SugarPlum, ItemType<StarTiny>(), ItemType<StarLarge>(), ItemID.ManaCloakStar);
 
         public static bool[] IsSword = ItemID.Sets.Factory.CreateNamedSet("IsSword")
-            .Description("Enables unique interactions such as clashing, and unique prefixes.")
+            .Description("Enables unique interactions such as clashing or unique prefixes.")
             .RegisterBoolSet(false, ItemID.IronBroadsword, ItemID.IronShortsword, ItemID.Terragrim);
 
         public static bool[] ThrownFlail = ItemID.Sets.Factory.CreateNamedSet("ThrownFlail")
             .Description("Not used for launched flails like anchor or chain knife.")
             .RegisterBoolSet(false, ItemID.BallOHurt, ItemID.BlueMoon, ItemID.Sunfury, ItemID.DaoofPow, ItemID.TheMeatball, ItemID.FlowerPow,
             ItemID.Flairon, ItemID.DripplerFlail, ItemID.Mace, ItemID.FlamingMace);
+
+        public static bool[] WorkInProgress = ItemID.Sets.Factory.CreateNamedSet("WorkInProgress")
+            .RegisterBoolSet(false);
     }
 
     public static partial class ProjectileSets

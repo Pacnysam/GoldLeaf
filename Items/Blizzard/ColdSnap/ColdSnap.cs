@@ -37,6 +37,7 @@ namespace GoldLeaf.Items.Blizzard.ColdSnap
         public override void SetStaticDefaults()
         {
             Item.AddElements([Element.Ice]);
+            ItemSets.WorkInProgress[Type] = true;
         }
 
         public override void SetDefaults()

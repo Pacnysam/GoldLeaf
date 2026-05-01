@@ -37,6 +37,8 @@ namespace GoldLeaf.Items.Granite
         {
             ItemSets.Glowmask[Type] = (glowTex, ColorHelper.AdditiveWhite(), true);
             Item.AddElements([Element.Earth]);
+
+            ItemSets.WorkInProgress[Type] = true;
         }
 
         //public override bool? PrefixChance(int pre, UnifiedRandom rand) => false;

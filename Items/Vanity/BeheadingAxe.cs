@@ -17,7 +17,6 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 namespace GoldLeaf.Items.Vanity
 {
-    //[AutoloadEquip(EquipType.Head)]
     public class BeheadingAxe : ModItem
     {
         public override void SetDefaults()
@@ -40,7 +39,6 @@ namespace GoldLeaf.Items.Vanity
 
         public override void SetMatch(bool male, ref int equipSlot, ref bool robes)
         {
-            //Main.LocalPlayer.armor[0].headSlot
             equipSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
         }
 
@@ -55,17 +53,11 @@ namespace GoldLeaf.Items.Vanity
     public class BeheadedPlayer : ModPlayer 
     {
         public bool axed = false;
-        public bool axeEquipped = false;
-
-        public override void ResetEffects()
-        {
-            //axed = false;
-            axeEquipped = Player.armor[0].type == ItemType<BeheadingAxe>() && Player.armor[10].type == ItemID.None || Player.armor[10].type == ItemType<BeheadingAxe>();
-        }
+        public bool AxeEquipped => Player.armor[0].type == ItemType<BeheadingAxe>() && Player.armor[10].type == ItemID.None || Player.armor[10].type == ItemType<BeheadingAxe>();
 
         public override void PostUpdateEquips()
         {
-            if (axeEquipped) 
+            if (AxeEquipped)
             {
                 if (!axed)
                 {
@@ -77,12 +69,9 @@ namespace GoldLeaf.Items.Vanity
                         }
 
                         CameraSystem.QuickScreenShake(Player.MountedCenter, (0f).ToRotationVector2(), 18, 7.5f, 24);
-                        //CameraSystem.AddScreenshake(Player, 12);
                         SoundEngine.PlaySound(new("GoldLeaf/Sounds/SE/HollowKnight/MawlekExplode") { Volume = 1f, Pitch = 0.2f, PitchVariance = 0.4f }, Player.Center);
                         SoundEngine.PlaySound(new("GoldLeaf/Sounds/SE/DeadCells/Crit") { Volume = 0.65f, Pitch = -0.2f, PitchVariance = 0.6f }, Player.Center);
                     }
-
-                    //Gore.NewGorePerfect(null, new Vector2(Player.Center.X, Player.Top.Y + 22), new Vector2(Player.Center.X, Player.Top.Y + 22));
                     axed = true;
                 }
             }
@@ -94,7 +83,7 @@ namespace GoldLeaf.Items.Vanity
 
         public override void HideDrawLayers(PlayerDrawSet drawInfo)
         {
-            if (axed)
+            if ((Main.gameMenu && AxeEquipped) || (!Main.gameMenu && axed))
             {
                 PlayerDrawLayers.Head.Hide();
                 PlayerDrawLayers.FaceAcc.Hide();

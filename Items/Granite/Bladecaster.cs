@@ -36,8 +36,9 @@ namespace GoldLeaf.Items.Granite
         public override void SetStaticDefaults()
         {
             ItemSets.Glowmask[Type] = (glowTex, Color.White with { A = 120 }, true);
-
             Item.AddElements([Element.Thunder]);
+
+            ItemSets.WorkInProgress[Type] = true;
         }
 
         /*public override void ApplyPrefix(int pre) //TODO: move this to pristine blade

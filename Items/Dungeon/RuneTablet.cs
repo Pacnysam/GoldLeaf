@@ -34,6 +34,7 @@ namespace GoldLeaf.Items.Dungeon
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 3;
+            ItemSets.WorkInProgress[Type] = true;
         }
 
         public override void SetDefaults()
