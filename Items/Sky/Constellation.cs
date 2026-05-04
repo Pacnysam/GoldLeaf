@@ -87,7 +87,8 @@ namespace GoldLeaf.Items.Sky
         bool hasSetup = false;
         ref float Timer => ref Projectile.ai[0];
         ref float Segments => ref Projectile.ai[1];
-        
+        bool HasStruckEnemy { get => Projectile.ai[2] != 0; set => Projectile.ai[2] = Utils.ToInt(value); }
+
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -131,8 +132,7 @@ namespace GoldLeaf.Items.Sky
             {
                 SoundEngine.FindActiveSound(in SoundID.Item153)?.Stop();
                 
-                SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/StarSlot")
-                { Variants = [1, 2, 3], Pitch = 0.125f, SoundLimitBehavior = SoundLimitBehavior.IgnoreNew }, Projectile.WhipPointsForCollision[^1]);
+                SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/StarSlot") { Variants = [1, 2, 3], Pitch = 0.125f, SoundLimitBehavior = SoundLimitBehavior.IgnoreNew }, Projectile.WhipPointsForCollision[^1]);
                 SoundEngine.PlaySound(SoundID.DD2_CrystalCartImpact, Projectile.WhipPointsForCollision[^1]);
             }
         }
@@ -145,7 +145,8 @@ namespace GoldLeaf.Items.Sky
 
             if (player.GetModPlayer<ConstellationPlayer>().extraSegments < ConstellationPlayer.MaxExtraSegments && target.IsValid())
             {
-                player.GetModPlayer<ConstellationPlayer>().extraSegments++;
+                if (!HasStruckEnemy)
+                    player.GetModPlayer<ConstellationPlayer>().extraSegments++;
 
                 if (!Main.dedServ && false) //TODO: replace these particles for rework
                 {
@@ -197,6 +198,9 @@ namespace GoldLeaf.Items.Sky
 
             if (!Main.dedServ && player.GetModPlayer<ConstellationPlayer>().extraSegments > 0)
                 SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/SuperStar/MirrorReflect") { Pitch = -0.65f + (player.GetModPlayer<ConstellationPlayer>().extraSegments * 0.15f), Volume = 0.7f }, player.Center);
+            
+            if (target.IsValid())
+                HasStruckEnemy = true;
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -253,33 +257,31 @@ namespace GoldLeaf.Items.Sky
                 Color glowColor = Color.White.Alpha(180);
 
                 Color color1 = new Color(31, 139, 255);
-                Color color2 = new Color(255, 241, 83);
+                Color color2 = new Color(255, 239, 55);
 
                 if (i > 0 && i < list.Count - 2)
                 {
-                    color = Color.Lerp(color1, color2, MathHelper.Lerp(0f, 1f, Math.Clamp(i / (list.Count - 1f), 0f, 1f))) with { A = 255 };
+                    color = Color.Lerp(color1, color2, MathHelper.Lerp(0f, 1f, Math.Clamp(i / (list.Count - 1f), 0f, 1f))).Alpha(255);
                     glowColor = color.MultiplyAlpha(0.85f - MathHelper.Lerp(0f, 1f, Math.Clamp(i / (list.Count - 1f), 0f, 0.4f)));
                 }
                 Color bloomColor = Color.Lerp(color1, color2, MathHelper.Lerp(0f, 1f, Math.Clamp(i / (list.Count - 1f), 0f, 1f))).Alpha();
-                float bloomStrength = 0.35f + (Utils.GetLerpValue(0.3f, 0.8f, flyTimer, clamped: true) * Utils.GetLerpValue(0.9f, 0.7f, flyTimer, clamped: true) * 0.75f);
+                float bloomStrength = 0.5f + (Utils.GetLerpValue(0.3f, 0.8f, flyTimer, clamped: true) * Utils.GetLerpValue(0.9f, 0.7f, flyTimer, clamped: true) * 0.75f);
 
-                if (i == list.Count - 2)
-                {
-                    /*for (int k = 0; k < oldPos.Count; k++)
-                    {
-                        Main.EntitySpriteDraw(TextureAssets.Projectile[Type].Value, oldPos[k] - Main.screenPosition, frame, color1 with { A = 120 } * (0.55f - (0.05f * k)), oldRot[k], frame.Size() / 2f, scale * (1f - (0.035f * k)), flip);
-                    }*/
-
-                    Vector2 forwardVector = list[^2].DirectionTo(list[^1]).SafeNormalize(Vector2.Zero);
-                    Main.EntitySpriteDraw(bloomTex.Value, pos + (forwardVector * 14f) - Main.screenPosition, null, color1.Alpha() * 0.25f * bloomStrength, rotation, bloomTex.Size() / 2, scale * 0.275f * 3f, SpriteEffects.None);
-                }
                 Main.EntitySpriteDraw(TextureAssets.Projectile[Type].Value, pos - Main.screenPosition, frame, color, rotation, origin, scale, flip);
                 Main.EntitySpriteDraw(glowTex.Value, pos - Main.screenPosition, frame, glowColor * 0.75f, rotation, origin, scale, flip);
-                if (i > 0)
+                //whip texture
+                if (i > 0 && i < list.Count - 2)
                 {
-                    Main.EntitySpriteDraw(bloomTex.Value, pos - Main.screenPosition, null, bloomColor * 0.25f * bloomStrength, rotation, bloomTex.Size() / 2, 
+                    Main.EntitySpriteDraw(bloomTex.Value, pos - Main.screenPosition, null, bloomColor * 0.25f * bloomStrength, rotation, (bloomTex.Size()/2) - new Vector2(0, (frame.Height - 8)/2f), 
                         scale * MathHelper.Lerp(0.145f, 0.25f, Math.Clamp(i / (list.Count - 1f), 0f, 1f)) * 4f, SpriteEffects.None);
-                }
+                } //segments bloom
+                if (i == list.Count - 2)
+                {
+                    Vector2 forwardVector = list[^2].DirectionTo(list[^1]).SafeNormalize(Vector2.Zero);
+                    
+                    Main.EntitySpriteDraw(bloomTex.Value, pos - Main.screenPosition, null, color2.Alpha() * 0.35f * bloomStrength, rotation, bloomTex.Size() / 2, scale * 0.65f, SpriteEffects.None);
+                    Main.EntitySpriteDraw(bloomTex.Value, pos + (forwardVector * 16.5f) - Main.screenPosition, null, color1.Alpha() * 0.35f * bloomStrength, rotation, bloomTex.Size() / 2, scale, SpriteEffects.None);
+                } //tip bloom
 
                 pos += diff;
             }
