@@ -1,6 +1,6 @@
 ﻿using GoldLeaf.Core;
 using GoldLeaf.Core.Helpers;
-using GoldLeaf.Core.Mechanics;
+using GoldLeaf.Core.Mechanics.Overhealth;
 using GoldLeaf.Effects.Dusts;
 using GoldLeaf.Items.Blizzard;
 using GoldLeaf.Items.FishWeapons;

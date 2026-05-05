@@ -1,6 +1,7 @@
-﻿using GoldLeaf.Core.Mechanics;
+﻿using GoldLeaf.Core.Mechanics.Overhealth;
 using GoldLeaf.Items;
 using GoldLeaf.Items.Sky;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +10,7 @@ using Terraria.ModLoader;
 using static GoldLeaf.Core.Helper;
 using static Terraria.ModLoader.ModContent;
 
-namespace GoldLeaf.Core.Mechanics
+namespace GoldLeaf.Core.Mechanics.Overhealth
 {
     public abstract class OverhealthPool : ILoadable
     {
@@ -35,7 +36,6 @@ namespace GoldLeaf.Core.Mechanics
             if (duration > 0)
             {
                 duration--;
-                //if (player.HasItem(ItemType<DebugItem>())) Main.NewText(duration, Color.Gold);
             }
             else
             {
@@ -60,7 +60,8 @@ namespace GoldLeaf.Core.Mechanics
     {
         public List<OverhealthPool> overhealthPools = [];
         
-        public int overhealth = 0;
+        public int Overhealth => GetTotalOverhealth(Player);
+        public int visualOverhealth = 0;
 
         public override void Load()
         {
@@ -179,12 +180,12 @@ namespace GoldLeaf.Core.Mechanics
                         break;
                 }
                 Player.statLife += totalOverhealthLost;
-                overhealth = GetTotalOverhealth(Player);
 
                 if (Player.HasItem(ItemType<DebugItem>()))
                     Main.NewText("Overhealth Lost: " + totalOverhealthLost, ColorHelper.Overhealth);
                 return;
             }
+            UpdateVisualOverhealth();
         }
 
         public override void PostUpdateBuffs()
@@ -215,7 +216,7 @@ namespace GoldLeaf.Core.Mechanics
                 if (pool.size > pool.MaxSize) pool.size = pool.MaxSize;
             }
             RemoveEmptyPools();
-            overhealth = GetTotalOverhealth(Player);
+            UpdateVisualOverhealth();
         }
         private void RemoveEmptyPools()
         {
@@ -224,6 +225,20 @@ namespace GoldLeaf.Core.Mechanics
                 if (overhealthPools[i].size <= 0)
                     overhealthPools.RemoveAt(i);
             }
+        }
+        private void UpdateVisualOverhealth()
+        {
+            if (visualOverhealth == Overhealth)
+                return;
+
+            visualOverhealth = (int)MathHelper.Lerp(visualOverhealth, Overhealth, 0.15f);
+            
+            if (visualOverhealth < GetTotalOverhealth(Player))
+                visualOverhealth++;
+            if (visualOverhealth > GetTotalOverhealth(Player))
+                visualOverhealth--;
+
+            visualOverhealth = Math.Clamp(visualOverhealth, 0, GetTotalOverhealth(Player));
         }
 
         /*public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
@@ -257,8 +272,8 @@ namespace GoldLeaf.Core
 {
     public static partial class Helper
     {
-        public static int Overhealth(this Player player) => player.GetModPlayer<OverhealthManager>().overhealth;
-        public static int GetOverhealthOfType<T>(this Player player) where T : OverhealthPool => (OverhealthManager.GetOverhealthPool<T>(player) == null) ? 0 : OverhealthManager.GetOverhealthPool<T>(player).size;
+        public static int Overhealth(this Player player) => OverhealthManager.GetTotalOverhealth(player);
+        public static int GetOverhealthOfType<T>(this Player player) where T : OverhealthPool => OverhealthManager.GetOverhealthPool<T>(player) == null ? 0 : OverhealthManager.GetOverhealthPool<T>(player).size;
         public static void AddOverhealth<T>(this Player player, int size = 1) where T : OverhealthPool, new() => OverhealthManager.AddOverhealth<T>(player, size);
         public static void AddOverhealth(Player player, OverhealthPool pool) => OverhealthManager.AddOverhealth(player, pool);
         public static void SetOverhealthPool<T>(this Player player, int size) where T : OverhealthPool, new() => OverhealthManager.SetOverhealth<T>(player, size);

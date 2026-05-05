@@ -1,5 +1,4 @@
-﻿using GoldLeaf.Core.Mechanics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ using Terraria.ModLoader;
 using static GoldLeaf.Core.Helper;
 using static Terraria.ModLoader.ModContent;
 
-namespace GoldLeaf.UI.ResourceOverlay.Overhealth
+namespace GoldLeaf.Core.Mechanics.Overhealth
 {
 	public class OverhealthOverlay : ModResourceOverlay
 	{
@@ -19,15 +18,17 @@ namespace GoldLeaf.UI.ResourceOverlay.Overhealth
 		private Dictionary<string, Asset<Texture2D>> vanillaAssetCache = new();
 
 		// These fields are used to cache the result of ModContent.Request<Texture2D>()
-		private Asset<Texture2D> heartTexture, greyHeartTexture, barTexture, gayBarTexture;
-		private string Directory = "GoldLeaf/UI/ResourceOverlay/Overhealth/";
+		private Asset<Texture2D> heartTex, HeartTexGrey, barTex, barTexGrey, barHighlight, barGradient;
+		private static string Directory => "GoldLeaf/Core/Mechanics/Overhealth/OverlayTextures/";
         public override void Load()
         {
-            heartTexture = Request<Texture2D>(Directory + "Heart");
-            barTexture = Request<Texture2D>(Directory + "HealthBar");
+            heartTex = Request<Texture2D>(Directory + "Heart");
+            HeartTexGrey = Request<Texture2D>(Directory + "HeartGrey");
 
-            greyHeartTexture = Request<Texture2D>(Directory + "HeartGrey");
-            gayBarTexture = Request<Texture2D>(Directory + "HealthBarGrey");
+            barTex = Request<Texture2D>(Directory + "HealthBar");
+            barTexGrey = Request<Texture2D>(Directory + "HealthBarGrey");
+            barHighlight = Request<Texture2D>(Directory + "HealthBarHighlight");
+            barGradient = Request<Texture2D>(Directory + "HealthBarGrey");
         }
 
         public override bool DisplayHoverText(PlayerStatsSnapshot snapshot, IPlayerResourcesDisplaySet displaySet, bool drawingLife)
@@ -41,7 +42,7 @@ namespace GoldLeaf.UI.ResourceOverlay.Overhealth
 			string fancyFolder = "Images/UI/PlayerResourceSets/FancyClassic/";
 			string barsFolder = "Images/UI/PlayerResourceSets/HorizontalBars/";
 
-			int overhealth = Main.LocalPlayer.GetModPlayer<OverhealthManager>().overhealth;
+			int overhealth = Main.LocalPlayer.GetModPlayer<OverhealthManager>().visualOverhealth;
 
 
 			// NOTE: CompareAssets is defined below this method's body
@@ -61,6 +62,9 @@ namespace GoldLeaf.UI.ResourceOverlay.Overhealth
 
         public override void PostDrawResourceDisplay(PlayerStatsSnapshot snapshot, IPlayerResourcesDisplaySet displaySet, bool drawingLife, Color textColor, bool drawText)
         {
+			OverhealthManager overhealthManager = Main.LocalPlayer.GetModPlayer<OverhealthManager>();
+            int overhealth = overhealthManager.visualOverhealth;
+
             base.PostDrawResourceDisplay(snapshot, displaySet, drawingLife, textColor, drawText);
         }
 
@@ -76,7 +80,7 @@ namespace GoldLeaf.UI.ResourceOverlay.Overhealth
         {
             
         }
-        private void DrawOverhealthBar(ResourceOverlayDrawContext context)
+        private void DrawOverhealthBar(ResourceOverlayDrawContext context, OverhealthManager manager)
         {
             
         }
@@ -84,7 +88,7 @@ namespace GoldLeaf.UI.ResourceOverlay.Overhealth
 			// Draw over the Classic / Fancy hearts
 			// "context" contains information used to draw the resource
 			// If you want to draw directly on top of the vanilla hearts, just replace the texture and have the context draw the new texture
-			context.texture = heartTexture ??= ModContent.Request<Texture2D>("ExampleMod/Common/UI/ResourceOverlay/ClassicLifeOverlay");
+			context.texture = heartTex ??= Request<Texture2D>("ExampleMod/Common/UI/ResourceOverlay/ClassicLifeOverlay");
 			context.Draw();
 		}
 
@@ -92,7 +96,7 @@ namespace GoldLeaf.UI.ResourceOverlay.Overhealth
 			// Draw over the Bars life bars
 			// "context" contains information used to draw the resource
 			// If you want to draw directly on top of the vanilla bars, just replace the texture and have the context draw the new texture
-			context.texture = barTexture ??= ModContent.Request<Texture2D>("ExampleMod/Common/UI/ResourceOverlay/BarsLifeOverlay_Fill");
+			context.texture = barTex ??= Request<Texture2D>("ExampleMod/Common/UI/ResourceOverlay/BarsLifeOverlay_Fill");
 			context.Draw();
 		}
 	}

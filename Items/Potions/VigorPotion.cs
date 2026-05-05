@@ -1,6 +1,6 @@
 ﻿using GoldLeaf.Core;
 using GoldLeaf.Core.CrossMod;
-using GoldLeaf.Core.Mechanics;
+using GoldLeaf.Core.Mechanics.Overhealth;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
