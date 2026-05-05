@@ -595,7 +595,7 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
             if (Main.rand.NextBool(2))
             {
                 var dust = Dust.NewDustPerfect(Projectile.Center, DustType<AetherSmokeFast>(), Main.rand.NextVector2Circular(1.5f, 1.5f));
-                dust.scale = Projectile.scale;
+                dust.scale = Projectile.scale * 2.5f;
                 dust.rotation = Main.rand.NextFloatDirection();
                 dust.shader = Projectile.GetDyeShader();
             }

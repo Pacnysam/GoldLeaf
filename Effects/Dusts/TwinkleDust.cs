@@ -15,7 +15,7 @@ namespace GoldLeaf.Effects.Dusts
         private static Asset<Texture2D> bloomTex;
         public override void Load() => bloomTex = Request<Texture2D>("GoldLeaf/Textures/GlowSharp");
 
-        public override string Texture => "GoldLeaf/Textures/Flares/FlareSmall";
+        public override string Texture => "GoldLeaf/Textures/TwinkleFlare";
 
         public static new Dust Spawn(LightDustData data, Vector2 position, Vector2 spawnBox, Vector2 velocity, int alpha = 0, Color color = default, float scale = 1f)
         {
@@ -44,6 +44,9 @@ namespace GoldLeaf.Effects.Dusts
 
         public override void SafeUpdate(Dust dust)
         {
+            if (!dust.noLight)
+                Lighting.AddLight(dust.position, dust.color.ToVector3() * dust.scale * 0.75f);
+
             if (dust.customData is LightDustData data)
                 data.rotationVelocity *= data.drag;
         }
@@ -57,7 +60,7 @@ namespace GoldLeaf.Effects.Dusts
                 Main.spriteBatch.Draw(bloomTex.Value, dust.position - Main.screenPosition, null, color * ((180 - dust.alpha) / 255f) * 0.85f, dust.rotation, bloomTex.Size() / 2f, dust.scale * 2.35f, SpriteEffects.None, 0);
             
             Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, color * ((100 - dust.alpha) / 255f) * 0.5f, dust.rotation, dust.frame.Size()/2f, dust.scale * 1.35f, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, color with { A = 0 }, dust.rotation, dust.frame.Size()/2f, dust.scale, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, color, dust.rotation, dust.frame.Size()/2f, dust.scale, SpriteEffects.None, 0);
             return false;
         }
     }

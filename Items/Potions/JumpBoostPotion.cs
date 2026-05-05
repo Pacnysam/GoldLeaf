@@ -50,8 +50,14 @@ namespace GoldLeaf.Items.Potions
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.jumpSpeedBoost += 2.8f;
+            player.jumpSpeedBoost += 3f;
             player.autoJump = true;
+
+            if (!(player.slowFall && !player.controlDown) && !(player.controlUp && player.velocity.Y > 0) && !(player.wingTime <= 0 && player.controlJump))
+            {
+                player.maxFallSpeed *= 1.35f;
+                player.gravity += 0.1f;
+            }
         }
     }
 }
