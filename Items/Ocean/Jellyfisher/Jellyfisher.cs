@@ -23,7 +23,6 @@ using Terraria.ModLoader.IO;
 using static GoldLeaf.Core.ColorHelper;
 using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 using static GoldLeaf.Core.Helper;
-using static GoldLeaf.Core.Helpers.DrawHelper;
 using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Items.Ocean.Jellyfisher
@@ -262,6 +261,8 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
             bloomTex = Request<Texture2D>("GoldLeaf/Textures/Masks/Mask0");
             darkBloomTex = Request<Texture2D>("GoldLeaf/Textures/Glow0");
         }
+
+        public override void SetStaticDefaults() => ProjectileSets.DyeGroup[Type] = DyeGroup.Sentry;
 
         public override void SetDefaults()
         {

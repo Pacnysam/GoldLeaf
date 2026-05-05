@@ -143,7 +143,7 @@ namespace GoldLeaf.Items.Sky
             target.AddBuff(BuffType<ConstellationTag>(), TimeToTicks(5));
             player.MinionAttackTargetNPC = target.whoAmI;
 
-            if (player.GetModPlayer<ConstellationPlayer>().extraSegments < ConstellationPlayer.MaxExtraSegments && target.IsValid())
+            if (player.GetModPlayer<ConstellationPlayer>().extraSegments < ConstellationPlayer.MaxExtraSegments && !target.friendly && !target.immortal && !target.dontTakeDamage && target.lifeMax > 5)
             {
                 if (!HasStruckEnemy)
                     player.GetModPlayer<ConstellationPlayer>().extraSegments++;
@@ -199,7 +199,7 @@ namespace GoldLeaf.Items.Sky
             if (!Main.dedServ && player.GetModPlayer<ConstellationPlayer>().extraSegments > 0)
                 SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/SuperStar/MirrorReflect") { Pitch = -0.65f + (player.GetModPlayer<ConstellationPlayer>().extraSegments * 0.15f), Volume = 0.7f }, player.Center);
             
-            if (target.IsValid())
+            if (!target.friendly && !target.immortal && !target.dontTakeDamage && target.lifeMax > 5)
                 HasStruckEnemy = true;
         }
 
