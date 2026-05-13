@@ -57,7 +57,7 @@ namespace GoldLeaf.Effects.Dusts
             int brightness = (color.R + color.G + color.B) / 3;
 
             if (!dust.noLightEmittence)
-                Main.spriteBatch.Draw(bloomTex.Value, dust.position - Main.screenPosition, null, color * ((180 - dust.alpha) / 255f) * 0.85f, dust.rotation, bloomTex.Size() / 2f, dust.scale * 2.35f, SpriteEffects.None, 0);
+                Main.spriteBatch.Draw(bloomTex.Value, dust.position - Main.screenPosition, null, color * ((180 - dust.alpha) / 255f) * 0.85f, dust.rotation, bloomTex.Size() / 2f, dust.scale * 0.35f, SpriteEffects.None, 0);
             
             Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, color * ((100 - dust.alpha) / 255f) * 0.5f, dust.rotation, dust.frame.Size()/2f, dust.scale * 1.35f, SpriteEffects.None, 0);
             Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, color, dust.rotation, dust.frame.Size()/2f, dust.scale, SpriteEffects.None, 0);

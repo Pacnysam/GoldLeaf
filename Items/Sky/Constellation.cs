@@ -221,6 +221,7 @@ namespace GoldLeaf.Items.Sky
                 Rectangle frame = new(0, 0, 18, 20); //handle
                 Vector2 origin = new(9, 4);
                 float scale = 1;
+                float bloomSize = 0.35f;
                 if (i == list.Count - 2) //tip
                 {
                     frame.Y = 68; //whip length minus tip
@@ -232,21 +233,25 @@ namespace GoldLeaf.Items.Sky
                 {
                     frame.Y = 50;
                     frame.Height = 18;
+                    bloomSize = 0.45f;
                 }
                 else if (i > 6) //mid segment
                 {
                     frame.Y = 36;
                     frame.Height = 14;
+                    bloomSize = 0.4f;
                 }
                 else if (i > 3) //first segment
                 {
                     frame.Y = 26;
                     frame.Height = 10;
+                    bloomSize = 0.35f;
                 }
                 else if (i > 0) //right above handle
                 {
                     frame.Y = 20;
                     frame.Height = 6;
+                    bloomSize = 0.35f;
                 }
 
                 Vector2 element = list[i];
@@ -273,14 +278,14 @@ namespace GoldLeaf.Items.Sky
                 if (i > 0 && i < list.Count - 2)
                 {
                     Main.EntitySpriteDraw(bloomTex.Value, pos - Main.screenPosition, null, bloomColor * 0.25f * bloomStrength, rotation, (bloomTex.Size()/2) - new Vector2(0, (frame.Height - 8)/2f), 
-                        scale * MathHelper.Lerp(0.145f, 0.25f, Math.Clamp(i / (list.Count - 1f), 0f, 1f)) * 4f, SpriteEffects.None);
+                        scale * MathHelper.Lerp(0.145f, 0.25f, Math.Clamp(i / (list.Count - 1f), 0f, 1f)) * bloomSize, SpriteEffects.None);
                 } //segments bloom
                 if (i == list.Count - 2)
                 {
                     Vector2 forwardVector = list[^2].DirectionTo(list[^1]).SafeNormalize(Vector2.Zero);
                     
-                    Main.EntitySpriteDraw(bloomTex.Value, pos - Main.screenPosition, null, color2.Alpha() * 0.35f * bloomStrength, rotation, bloomTex.Size() / 2, scale * 0.65f, SpriteEffects.None);
-                    Main.EntitySpriteDraw(bloomTex.Value, pos + (forwardVector * 16.5f) - Main.screenPosition, null, color1.Alpha() * 0.35f * bloomStrength, rotation, bloomTex.Size() / 2, scale, SpriteEffects.None);
+                    Main.EntitySpriteDraw(bloomTex.Value, pos - Main.screenPosition, null, color2.Alpha() * 0.35f * bloomStrength, rotation, bloomTex.Size() / 2, scale * 0.1f, SpriteEffects.None);
+                    Main.EntitySpriteDraw(bloomTex.Value, pos + (forwardVector * 16.5f) - Main.screenPosition, null, color1.Alpha() * 0.35f * bloomStrength, rotation, bloomTex.Size() / 2, scale * 0.135f, SpriteEffects.None);
                 } //tip bloom
 
                 pos += diff;
