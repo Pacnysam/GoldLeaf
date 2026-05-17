@@ -230,15 +230,15 @@ namespace GoldLeaf.Items.VanillaBossDrops
             else if (Main.snowMoon)
                 moonTex = TextureAssets.SnowMoon.Value;
 
-            Main.EntitySpriteDraw(bloomTex.Value, Projectile.Center - Main.screenPosition, null, color * Projectile.localAI[1] * 0.5f, 0, bloomTex.Size() / 2, (Projectile.localAI[1] * Projectile.scale * 1.5f) + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.1f), SpriteEffects.None, 0f);
-            Main.EntitySpriteDraw(moonTex, Projectile.Center - Main.screenPosition, new(0, 0, moonTex.Width, moonTex.Height / 8), new Color(0, 0, 30) * Projectile.localAI[1] * 0.75f, ((float)Math.Sin(GoldLeafWorld.rottime * 5f) * 0.25f * Projectile.localAI[2]) + (-Projectile.velocity.X * 0.015f), frame.Size() / 2, Projectile.localAI[1] + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.1f), SpriteEffects.None, 0f);
+            Main.EntitySpriteDraw(bloomTex.Value, Projectile.Center - Main.screenPosition, null, color * Projectile.localAI[1] * 0.5f, 0, bloomTex.Size() / 2, ((Projectile.localAI[1] * Projectile.scale * 1.5f) + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.1f)) * Projectile.scale * 0.15f, SpriteEffects.None, 0f);
+            Main.EntitySpriteDraw(moonTex, Projectile.Center - Main.screenPosition, new(0, 0, moonTex.Width, moonTex.Height / 8), new Color(0, 0, 30) * Projectile.localAI[1] * 0.75f * Projectile.scale, ((float)Math.Sin(GoldLeafWorld.rottime * 5f) * 0.25f * Projectile.localAI[2]) + (-Projectile.velocity.X * 0.015f), frame.Size() / 2, Projectile.localAI[1] + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.1f), SpriteEffects.None, 0f);
             return true;
         }
 
         public override void PostDraw(Color lightColor)
         {
             if (Main.moonPhase != (int)MoonPhase.Empty)
-                Main.EntitySpriteDraw(glowTex.Value, Projectile.Center - Main.screenPosition, null, Color.White.Alpha() * Projectile.Opacity, 0f, glowTex.Size() / 2, 1f, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(glowTex.Value, Projectile.Center - Main.screenPosition, null, Color.White.Alpha() * Projectile.Opacity, 0f, glowTex.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
 
             Texture2D moonTex = TextureAssets.Moon[Main.moonType].Value;
             Rectangle frame = new(0, (moonTex.Height / 8) * Main.moonPhase, moonTex.Width, moonTex.Height / 8);
@@ -255,9 +255,9 @@ namespace GoldLeaf.Items.VanillaBossDrops
             {
                 Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + TextureAssets.Projectile[Projectile.type].Size() / 2;
 
-                Main.EntitySpriteDraw(moonTex, drawPos, frame, color * (1f - (k / 5f)) * Projectile.localAI[1], ((float)Math.Sin(GoldLeafWorld.rottime * 5f) * 0.25f * Projectile.localAI[2]) + (-Projectile.velocity.X * 0.015f), frame.Size() / 2, Projectile.localAI[1] + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.1f), SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(moonTex, drawPos, frame, color * (1f - (k / 5f)) * Projectile.localAI[1], ((float)Math.Sin(GoldLeafWorld.rottime * 5f) * 0.25f * Projectile.localAI[2]) + (-Projectile.velocity.X * 0.015f), frame.Size() / 2, (Projectile.localAI[1] + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.1f)) * Projectile.scale, SpriteEffects.None, 0f);
             }
-            Main.EntitySpriteDraw(moonTex, Projectile.Center - Main.screenPosition, frame, color.Alpha() * Math.Clamp(Projectile.localAI[2] - 0.5f, 0f, 1f), -Projectile.velocity.X * 0.015f, frame.Size() / 2, 4f - Projectile.localAI[2], SpriteEffects.None, 0f);
+            Main.EntitySpriteDraw(moonTex, Projectile.Center - Main.screenPosition, frame, color.Alpha() * Math.Clamp(Projectile.localAI[2] - 0.5f, 0f, 1f), -Projectile.velocity.X * 0.015f, frame.Size() / 2, (4f - Projectile.localAI[2]) * Projectile.scale, SpriteEffects.None, 0f);
         }
     }
 }
