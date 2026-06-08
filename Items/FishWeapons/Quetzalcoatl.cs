@@ -19,7 +19,6 @@ using GoldLeaf.Items.Underground;
 using Terraria.GameContent.Drawing;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using GoldLeaf.Items.Grove.Toxin;
 using Terraria.Graphics.CameraModifiers;
 using GoldLeaf.Items.Blizzard;
 using GoldLeaf.Items.Nightshade;
@@ -30,6 +29,7 @@ using Terraria.GameInput;
 
 using static GoldLeaf.GoldLeaf;
 using GoldLeaf.Items.Misc;
+using GoldLeaf.Items.Grove.ChalcedonyQuarry;
 
 namespace GoldLeaf.Items.FishWeapons
 {
@@ -55,7 +55,7 @@ namespace GoldLeaf.Items.FishWeapons
             Item.damage = 91;
             Item.mana = 16;
 
-            Item.width = 54;
+            Item.width = 52;
 			Item.height = 62;
 
             Item.useTime = Item.useAnimation = 52;
