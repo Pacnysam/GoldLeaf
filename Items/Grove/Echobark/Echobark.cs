@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.Audio;
 
-namespace GoldLeaf.Items.Grove.Wood
+namespace GoldLeaf.Items.Grove.Echobark
 {
     public class Echobark : ModItem
     {

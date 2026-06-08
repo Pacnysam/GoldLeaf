@@ -15,8 +15,8 @@ using GoldLeaf.Items.Nightshade;
 using GoldLeaf.Core;
 using Microsoft.Build.Execution;
 using Terraria.DataStructures;
-using GoldLeaf.Items.Grove.Toxin;
 using GoldLeaf.Core.CrossMod;
+using GoldLeaf.Items.Grove.ChalcedonyQuarry;
 
 namespace GoldLeaf.Items.Potions
 {

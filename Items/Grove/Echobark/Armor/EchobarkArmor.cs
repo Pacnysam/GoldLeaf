@@ -21,7 +21,7 @@ using System.Linq;
 using GoldLeaf.Prefixes;
 using Terraria.Utilities;
 
-namespace GoldLeaf.Items.Grove.Wood.Armor
+namespace GoldLeaf.Items.Grove.Echobark.Armor
 {
     [AutoloadEquip(EquipType.Head)]
     public class EchobarkHelmet : ModItem
@@ -124,12 +124,12 @@ namespace GoldLeaf.Items.Grove.Wood.Armor
         {
             if (echobarkArmor && info.Damage >= 10) 
             {
-                int amount = Math.Clamp(info.Damage / 12, 1, 10);
+                int amount = Math.Clamp(info.Damage / 10, 1, 10);
 
                 int amountAdded;
                 if (echobarkDefense < 15)
                 {
-                    for (amountAdded = 0; (amountAdded < amount) && (echobarkDefense < 15); amountAdded++)
+                    for (amountAdded = 0; amountAdded < amount && echobarkDefense < 15; amountAdded++)
                     {
                         echobarkDefense ++;
                     }

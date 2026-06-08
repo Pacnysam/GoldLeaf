@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.Audio;
 
-namespace GoldLeaf.Items.Grove.Toxin
+namespace GoldLeaf.Items.Grove.ChalcedonyQuarry
 {
 	public class Demitoxin : ModItem //this is atrocious but toxin stuff is years away so idgaf
 	{
@@ -100,15 +100,15 @@ namespace GoldLeaf.Items.Grove.Toxin
             Texture2D tex = TextureAssets.Item[Item.type].Value;
 
             //Vector2 drawPos = Item.position - Main.screenPosition;
-            float sin = (float)(Math.Sin(rottime * (2f + (3f * squash))) * 7f) * Math.Clamp(squash, 0f, 1f);
-            float cos = (float)(Math.Cos(rottime * (2f + (3f * squash))) * 7f) * Math.Clamp(squash, 0f, 1f);
+            float sin = (float)(Math.Sin(rottime * (2f + 3f * squash)) * 7f) * Math.Clamp(squash, 0f, 1f);
+            float cos = (float)(Math.Cos(rottime * (2f + 3f * squash)) * 7f) * Math.Clamp(squash, 0f, 1f);
 
             Color color = new(46, 10, 79);
 
-            spriteBatch.Draw(tex, Item.Center + new Vector2(0f, 3f - Math.Clamp(squash, 0f, 1f)).RotatedBy((Main.GlobalTimeWrappedHourly * 1.5f) * ((float)Math.PI)) - Main.screenPosition, null, color * (float)Math.Sin(rottime * 2.5f) * 0.55f, rotation, tex.Size()/2, scale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(tex, Item.Center + new Vector2(0f, -3f + Math.Clamp(squash, 0f, 1f)).RotatedBy((Main.GlobalTimeWrappedHourly * -1.5f) * ((float)Math.PI)) - Main.screenPosition, null, color * (float)Math.Sin(-rottime * 2) * 0.55f, rotation, tex.Size() / 2, scale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(tex, Item.Center + new Vector2(0f, 3f - Math.Clamp(squash, 0f, 1f)).RotatedBy((Main.GlobalTimeWrappedHourly * 1.5f) * ((float)Math.PI)) - Main.screenPosition, null, color with { A = 0 } * (float)Math.Cos(rottime * 1.5f) * 0.7f, rotation, tex.Size() / 2, scale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(tex, Item.Center + new Vector2(0f, -3f + Math.Clamp(squash, 0f, 1f)).RotatedBy((Main.GlobalTimeWrappedHourly * -1.5f) * ((float)Math.PI)) - Main.screenPosition, null, color with { A = 0 } * (float)Math.Cos(-rottime * 1f) * 0.7f, rotation, tex.Size() / 2, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(tex, Item.Center + new Vector2(0f, 3f - Math.Clamp(squash, 0f, 1f)).RotatedBy(Main.GlobalTimeWrappedHourly * 1.5f * (float)Math.PI) - Main.screenPosition, null, color * (float)Math.Sin(rottime * 2.5f) * 0.55f, rotation, tex.Size()/2, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(tex, Item.Center + new Vector2(0f, -3f + Math.Clamp(squash, 0f, 1f)).RotatedBy(Main.GlobalTimeWrappedHourly * -1.5f * (float)Math.PI) - Main.screenPosition, null, color * (float)Math.Sin(-rottime * 2) * 0.55f, rotation, tex.Size() / 2, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(tex, Item.Center + new Vector2(0f, 3f - Math.Clamp(squash, 0f, 1f)).RotatedBy(Main.GlobalTimeWrappedHourly * 1.5f * (float)Math.PI) - Main.screenPosition, null, color with { A = 0 } * (float)Math.Cos(rottime * 1.5f) * 0.7f, rotation, tex.Size() / 2, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(tex, Item.Center + new Vector2(0f, -3f + Math.Clamp(squash, 0f, 1f)).RotatedBy(Main.GlobalTimeWrappedHourly * -1.5f * (float)Math.PI) - Main.screenPosition, null, color with { A = 0 } * (float)Math.Cos(-rottime * 1f) * 0.7f, rotation, tex.Size() / 2, scale, SpriteEffects.None, 0f);
 
             spriteBatch.Draw(tex, Item.Center - Main.screenPosition, null, lightColor, rotation, tex.Size()/2f, new Vector2(scale) * (new Vector2(1) + new Vector2(cos * 0.08f, sin * 0.08f)), SpriteEffects.None, 0f);
             //spriteBatch.Draw(tex, new Rectangle((int)(drawPos.X - (scale * sin)), (int)(drawPos.Y - (scale * cos)), (int)(scale * tex.Width + (sin*2)), (int)(scale * tex.Height + (cos*2))), null, lightColor, rotation, Vector2.Zero, SpriteEffects.None, 0f);
@@ -121,15 +121,15 @@ namespace GoldLeaf.Items.Grove.Toxin
         {
             Texture2D tex = TextureAssets.Item[Item.type].Value;
 
-            float sin = (float)(Math.Sin(GoldLeafWorld.rottime * (2f + (6f * Math.Clamp(squash, 0f, 1f)))) * 7f) * Math.Clamp(squash, 0f, 1f) * 0.7f;
-            float cos = (float)(Math.Cos(GoldLeafWorld.rottime * (2f + (6f * Math.Clamp(squash, 0f, 1f)))) * 7f) * Math.Clamp(squash, 0f, 1f) * 0.7f;
+            float sin = (float)(Math.Sin(GoldLeafWorld.rottime * (2f + 6f * Math.Clamp(squash, 0f, 1f))) * 7f) * Math.Clamp(squash, 0f, 1f) * 0.7f;
+            float cos = (float)(Math.Cos(GoldLeafWorld.rottime * (2f + 6f * Math.Clamp(squash, 0f, 1f))) * 7f) * Math.Clamp(squash, 0f, 1f) * 0.7f;
 
             Color color = new(46, 10, 79);
 
-            spriteBatch.Draw(tex, position + new Vector2(0f, 2f - Math.Clamp(squash, 0f, 1f)).RotatedBy((Main.GlobalTimeWrappedHourly * 1.5f) * ((float)Math.PI)), frame, color * (float)Math.Sin(GoldLeafWorld.rottime * 2.5f) * 0.55f, 0, origin, scale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(tex, position + new Vector2(0f, -2f + Math.Clamp(squash, 0f, 1f)).RotatedBy((Main.GlobalTimeWrappedHourly * -1.5f) * ((float)Math.PI)), frame, color * (float)Math.Sin(-GoldLeafWorld.rottime * 2) * 0.55f, 0, origin, scale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(tex, position + new Vector2(0f, 2f - Math.Clamp(squash, 0f, 1f)).RotatedBy((Main.GlobalTimeWrappedHourly * 1.5f) * ((float)Math.PI)), frame, color with { A = 0 } * (float)Math.Cos(GoldLeafWorld.rottime * 1.5f) * 0.7f, 0, origin, scale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(tex, position + new Vector2(0f, -2f + Math.Clamp(squash, 0f, 1f)).RotatedBy((Main.GlobalTimeWrappedHourly * -1.5f) * ((float)Math.PI)), frame, color with { A = 0 } * (float)Math.Cos(-GoldLeafWorld.rottime * 1f) * 0.7f, 0, origin, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(tex, position + new Vector2(0f, 2f - Math.Clamp(squash, 0f, 1f)).RotatedBy(Main.GlobalTimeWrappedHourly * 1.5f * (float)Math.PI), frame, color * (float)Math.Sin(GoldLeafWorld.rottime * 2.5f) * 0.55f, 0, origin, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(tex, position + new Vector2(0f, -2f + Math.Clamp(squash, 0f, 1f)).RotatedBy(Main.GlobalTimeWrappedHourly * -1.5f * (float)Math.PI), frame, color * (float)Math.Sin(-GoldLeafWorld.rottime * 2) * 0.55f, 0, origin, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(tex, position + new Vector2(0f, 2f - Math.Clamp(squash, 0f, 1f)).RotatedBy(Main.GlobalTimeWrappedHourly * 1.5f * (float)Math.PI), frame, color with { A = 0 } * (float)Math.Cos(GoldLeafWorld.rottime * 1.5f) * 0.7f, 0, origin, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(tex, position + new Vector2(0f, -2f + Math.Clamp(squash, 0f, 1f)).RotatedBy(Main.GlobalTimeWrappedHourly * -1.5f * (float)Math.PI), frame, color with { A = 0 } * (float)Math.Cos(-GoldLeafWorld.rottime * 1f) * 0.7f, 0, origin, scale, SpriteEffects.None, 0f);
 
             if (Main.mouseItem == Item) return true;
 

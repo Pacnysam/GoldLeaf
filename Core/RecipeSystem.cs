@@ -5,7 +5,6 @@ using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.Localization;
-using GoldLeaf.Items.Grove.Wood;
 using GoldLeaf.Items.Grove;
 using GoldLeaf.Items.Blizzard;
 using GoldLeaf.Items.VanillaBossDrops;
@@ -16,6 +15,7 @@ using System.Collections.Generic;
 using Terraria.ModLoader.IO;
 using Microsoft.Xna.Framework;
 using Terraria.Audio;
+using GoldLeaf.Items.Grove.Echobark;
 
 namespace GoldLeaf.Core
 {
