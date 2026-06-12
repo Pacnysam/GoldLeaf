@@ -13,11 +13,10 @@ namespace GoldLeaf.Core.Mechanics.Overhealth
 {
 	public class OverhealthOverlay : ModResourceOverlay
 	{
-		public override bool IsLoadingEnabled(Mod mod) => false;
+		//public override bool IsLoadingEnabled(Mod mod) => false;
 		// This field is used to cache vanilla assets used in the CompareAssets helper method further down in this file
-		private Dictionary<string, Asset<Texture2D>> vanillaAssetCache = new();
+		//private Dictionary<string, Asset<Texture2D>> vanillaAssetCache = new();
 
-		// These fields are used to cache the result of ModContent.Request<Texture2D>()
 		private Asset<Texture2D> heartTex, HeartTexGrey, barTex, barTexGrey, barHighlight, barGradient;
 		private static string Directory => "GoldLeaf/Core/Mechanics/Overhealth/OverlayTextures/";
         public override void Load()
@@ -36,7 +35,7 @@ namespace GoldLeaf.Core.Mechanics.Overhealth
             return true;
         }
 
-        public override void PostDrawResource(ResourceOverlayDrawContext context) {
+        /*public override void PostDrawResource(ResourceOverlayDrawContext context) {
 			Asset<Texture2D> asset = context.texture;
 
 			string fancyFolder = "Images/UI/PlayerResourceSets/FancyClassic/";
@@ -58,32 +57,43 @@ namespace GoldLeaf.Core.Mechanics.Overhealth
 				// Draw over the Bars life bars
 				DrawBarsOverlay(context);
 			}
-		}
+		}*/
 
         public override void PostDrawResourceDisplay(PlayerStatsSnapshot snapshot, IPlayerResourcesDisplaySet displaySet, bool drawingLife, Color textColor, bool drawText)
         {
 			OverhealthManager overhealthManager = Main.LocalPlayer.GetModPlayer<OverhealthManager>();
-            int overhealth = overhealthManager.visualOverhealth;
 
-            base.PostDrawResourceDisplay(snapshot, displaySet, drawingLife, textColor, drawText);
+			if (!drawingLife || overhealthManager.visualOverhealth <= 0)
+				return;
+            if (displaySet is FancyClassicPlayerResourcesDisplaySet)
+            {
+                DrawOverhealthHearts(snapshot, displaySet, overhealthManager);
+            }
+            else if (displaySet is HorizontalBarsPlayerResourcesDisplaySet)
+			{
+				DrawOverhealthBar(snapshot, displaySet, overhealthManager);
+			}
+			base.PostDrawResourceDisplay(snapshot, displaySet, drawingLife, textColor, drawText);
         }
-
-		private bool CompareAssets(Asset<Texture2D> existingAsset, string compareAssetPath) {
-			// This is a helper method for checking if a certain vanilla asset was drawn
-			if (!vanillaAssetCache.TryGetValue(compareAssetPath, out var asset))
-				asset = vanillaAssetCache[compareAssetPath] = Main.Assets.Request<Texture2D>(compareAssetPath);
-
-			return existingAsset == asset;
-		}
-
-        private void DrawOverhealthHearts(ResourceOverlayDrawContext context, OverhealthManager manager)
+		
+		private void DrawOverhealthBar(PlayerStatsSnapshot snapshot, IPlayerResourcesDisplaySet displaySet, OverhealthManager manager)
         {
-            
+            int overhealth = manager.visualOverhealth;
         }
-        private void DrawOverhealthBar(ResourceOverlayDrawContext context, OverhealthManager manager)
+        private void DrawOverhealthHearts(PlayerStatsSnapshot snapshot, IPlayerResourcesDisplaySet displaySet, OverhealthManager manager)
         {
-            
+            int overhealth = manager.visualOverhealth;
         }
+
+        /*private bool CompareAssets(Asset<Texture2D> existingAsset, string compareAssetPath)
+        {
+            // This is a helper method for checking if a certain vanilla asset was drawn
+            if (!vanillaAssetCache.TryGetValue(compareAssetPath, out var asset))
+                asset = vanillaAssetCache[compareAssetPath] = Main.Assets.Request<Texture2D>(compareAssetPath);
+
+            return existingAsset == asset;
+        }
+
         private void DrawClassicFancyOverlay(ResourceOverlayDrawContext context) {
 			// Draw over the Classic / Fancy hearts
 			// "context" contains information used to draw the resource
@@ -98,6 +108,6 @@ namespace GoldLeaf.Core.Mechanics.Overhealth
 			// If you want to draw directly on top of the vanilla bars, just replace the texture and have the context draw the new texture
 			context.texture = barTex ??= Request<Texture2D>("ExampleMod/Common/UI/ResourceOverlay/BarsLifeOverlay_Fill");
 			context.Draw();
-		}
+		}*/
 	}
 }

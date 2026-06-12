@@ -1,21 +1,16 @@
 ﻿using GoldLeaf.Core;
-using GoldLeaf.Core.CrossMod;
-using GoldLeaf.Items.Grove.Wood.Armor;
 using GoldLeaf.Items.Potions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using static GoldLeaf.Core.ColorHelper;
-using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 using static GoldLeaf.Core.Helper;
 using static Terraria.ModLoader.ModContent;
 
