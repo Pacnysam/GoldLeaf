@@ -297,16 +297,16 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
                 SoundEngine.PlaySound(new("GoldLeaf/Sounds/SE/RoR2/Aftershock") { Pitch = 1.15f, PitchVariance = 0.35f, Volume = 0.7f }, Projectile.Center);
 
                 //CameraSystem.AddScreenshake(Main.LocalPlayer, 18 + ShotsFired, Projectile.Center);
-                CameraSystem.QuickScreenShake(Projectile.Center, null, 14.5f + ShotsFired * 0.25f, 5.5f + ShotsFired * 0.085f, 26 + (int)(ShotsFired * 1.15f), 1500);
-                CameraSystem.QuickScreenShake(Projectile.Center, 0f.ToRotationVector2(), 14.5f + ShotsFired * 0.25f, 10f + ShotsFired * 0.115f, 18 + (int)(ShotsFired * 0.85f), 1500);
+                CameraSystem.QuickScreenShake(Projectile.Center, null, 14.5f + ShotsFired * 0.25f, 5f + (ShotsFired * 0.085f), 36 + (int)(ShotsFired * 1.45f), 1500);
+                CameraSystem.QuickScreenShake(Projectile.Center, 0f.ToRotationVector2(), 14.5f + ShotsFired * 0.25f, 10f + (ShotsFired * 0.115f), 20 + (int)(ShotsFired * 0.85f), 1500);
 
-                for (int j = 0; j < 10 + explosionVolume / 8f; j++)
+                for (int j = 0; j < 10 + explosionVolume / 6f; j++)
                 {
-                    var dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustType<AetherSmoke>(), Scale: Main.rand.NextFloat(0.9f, 1.8f));
-                    dust.velocity = Main.rand.NextVector2Circular(8.5f, 8.5f) * Math.Clamp(explosionVolume / 85f, 1f, 2f);
-                    dust.alpha = 90 + Main.rand.Next(60);
-                    dust.rotation = Main.rand.NextFloat(6.28f);
+                    var dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustType<SpecialSmoke>(), Scale: Main.rand.NextFloat(0.85f, 1.75f) * Math.Clamp(explosionVolume / 90f, 0.85f, 1.5f));
+                    dust.velocity = Main.rand.NextVector2Circular(8.5f, 8.5f) * Math.Clamp(explosionVolume / 75f, 1f, 2.5f);
+                    dust.alpha = 85 + Main.rand.Next(60);
                     dust.shader = Projectile.GetDyeShader();
+                    dust.customData = SpecialSmoke.aetherSmokeGradient;
                 } //smoke
 
                 for (int j = 0; j < 10 + explosionVolume / 5f; j++)
