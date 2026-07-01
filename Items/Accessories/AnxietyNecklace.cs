@@ -64,6 +64,11 @@ namespace GoldLeaf.Items.Accessories
     public class AnxietyNecklaceBuff : ModBuff
     {
         public override string Texture => CoolBuffTex(base.Texture);
+        
+        public override void SetStaticDefaults()
+        {
+            Main.buffNoSave[Type] = true;
+        }
 
         public override void Update(Player player, ref int buffIndex)
         {

@@ -287,92 +287,94 @@ namespace GoldLeaf.Items.Grove
 
         public override void OnHitByItem(NPC npc, Player player, Item item, NPC.HitInfo hit, int damageDone)
         {
-            EveExplode(npc, hit);
+            if (npc.IsValid() && npc.HasBuff(BuffType<EveDropletBuff>()))
+                EveExplode(npc, hit);
         }
         public override void OnHitByProjectile(NPC npc, Projectile projectile, NPC.HitInfo hit, int damageDone)
         {
-            EveExplode(npc, hit);
+            if (npc.IsValid() && npc.HasBuff(BuffType<EveDropletBuff>()))
+                EveExplode(npc, hit);
         }
 
         private static void EveExplode(NPC npc, NPC.HitInfo hit)
         {
-            if (npc.IsValid() && npc.HasBuff(BuffType<EveDropletBuff>()))
+            int explosionDamage = 40;
+            float explosionVolume = 65f;
+            int armorPen = 5;
+            bool shouldExplode = false;
+
+            if (npc.HasBuff(BuffID.OnFire))
             {
-                bool didExplode = false;
-                if (npc.HasBuff(BuffID.OnFire))
+                if (!Main.dedServ)
                 {
-                    int explosion = Projectile.NewProjectile(npc.GetSource_Buff(npc.FindBuffIndex(BuffType<EveDropletBuff>())), npc.Center, Vector2.Zero, ProjectileType<AetherBurst>(), 40, 0.5f, -1, 65f, 0, 1f);
-                    Main.projectile[explosion].DamageType = hit.DamageType;
-                    Main.projectile[explosion].ArmorPenetration = 15;
-                    Main.projectile[explosion].netUpdate = true;
-
-                    CameraSystem.AddScreenshake(Main.LocalPlayer, 16, npc.Center);
-                    CameraSystem.QuickScreenShake(npc.Center, 0f.ToRotationVector2(), 12.5f, 6.5f, 30, 1500);
-
                     SoundEngine.PlaySound(SoundID.Item74, npc.Center);
                     SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/RoR2/EngineerMine") { Volume = 0.4f, Pitch = -0.5f }, npc.Center);
-
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
-                    {
-                        npc.DelBuff(npc.FindBuffIndex(BuffID.OnFire));
-                        npc.netUpdate = true;
-                    }
-
-                    didExplode = true;
-
-                    /*for (int i = 0; i < 4; i++)
-                    {
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
-                            Projectile.NewProjectileDirect(npc.GetSource_FromAI(), npc.Center, Main.rand.NextFloat(6.28f).ToRotationVector2() * Main.rand.NextFloat(2, 3), ProjectileType<AetherEmber>(), 0, 0, -1).scale = Main.rand.NextFloat(0.75f, 1.25f);
-                    }
-
-                    ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.TrueExcalibur,
-                        new ParticleOrchestraSettings { PositionInWorld = npc.Center });*/
                 }
-                if (npc.HasBuff(BuffID.OnFire3))
+                if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    int explosion = Projectile.NewProjectile(npc.GetSource_Buff(npc.FindBuffIndex(BuffType<EveDropletBuff>())), npc.Center, Vector2.Zero, ProjectileType<AetherBurst>(), 70, 0.5f, -1, 130f, 0, 1f);
-                    Main.projectile[explosion].DamageType = hit.DamageType;
-                    Main.projectile[explosion].ArmorPenetration = 25;
-                    Main.projectile[explosion].netUpdate = true;
+                    npc.DelBuff(npc.FindBuffIndex(BuffID.OnFire));
+                    npc.netUpdate = true;
+                }
 
-                    CameraSystem.AddScreenshake(Main.LocalPlayer, 24, npc.Center);
-                    CameraSystem.QuickScreenShake(npc.Center, 0f.ToRotationVector2(), 12.5f, 9f, 30, 1500);
+                shouldExplode = true;
+            }
+            if (npc.HasBuff(BuffID.OnFire3))
+            {
+                explosionDamage = 70;
+                explosionVolume = 130f;
+                armorPen = 15;
 
+                if (!Main.dedServ)
+                {
                     SoundEngine.PlaySound(SoundID.Item74, npc.Center);
                     SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/RoR2/EngineerMine") { Volume = 0.8f, Pitch = 0.25f }, npc.Center);
-
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
-                    {
-                        npc.DelBuff(npc.FindBuffIndex(BuffID.OnFire3));
-                        npc.netUpdate = true;
-                    }
-
-                    didExplode = true;
-                    
-                    /*for (int i = 0; i < 4; i++)
-                    {
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
-                            Projectile.NewProjectileDirect(npc.GetSource_FromAI(), npc.Center, Main.rand.NextFloat(6.28f).ToRotationVector2() * Main.rand.NextFloat(2, 3), ProjectileType<AetherEmber>(), 0, 0, -1).scale = Main.rand.NextFloat(0.75f, 1.25f);
-                    }
-
-                    ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.TrueExcalibur,
-                        new ParticleOrchestraSettings { PositionInWorld = npc.Center });*/
+                }
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    npc.DelBuff(npc.FindBuffIndex(BuffID.OnFire3));
+                    npc.netUpdate = true;
                 }
 
-                if (didExplode)
-                {
-                    npc.AddBuff(BuffType<AetherFlameBuff>(), Helper.TimeToTicks(5));
-                    npc.RequestBuffRemoval(BuffType<EveDropletBuff>());
+                shouldExplode = true;
+            }
 
-                    for (int j = 0; j < 10; j++)
+            if (shouldExplode)
+            {
+                Projectile explosion = Projectile.NewProjectileDirect(npc.GetSource_Buff(npc.FindBuffIndex(BuffType<EveDropletBuff>())), npc.Center, Vector2.Zero, ProjectileType<AetherBurst>(), explosionDamage, 0.5f, -1, explosionVolume, 0, 1f);
+                explosion.DamageType = hit.DamageType;
+                explosion.ArmorPenetration = armorPen;
+                explosion.netUpdate = true;
+
+                npc.AddBuff(BuffType<AetherFlameBuff>(), Helper.TimeToTicks(5));
+                npc.RequestBuffRemoval(BuffType<EveDropletBuff>());
+
+                if (!Main.dedServ)
+                {
+                    CameraSystem.QuickScreenShake(npc.Center, null, 10 + (explosionVolume * 0.1f), 5f, 30 + (int)(explosionVolume * 0.35f), 1500);
+                    CameraSystem.QuickScreenShake(npc.Center, 0f.ToRotationVector2(), 10 + (explosionVolume * 0.1f), 10f, 20 + (int)(explosionVolume * 0.25f), 1500);
+
+                    for (int j = 0; j < 10 + explosionVolume / 6f; j++)
                     {
-                        var dust = Dust.NewDustDirect(npc.Center, 0, 0, DustType<AetherSmoke>());
-                        dust.velocity = Main.rand.NextVector2Circular(7.5f, 7.5f);
-                        dust.scale = Main.rand.NextFloat(0.9f, 1.2f);
-                        dust.alpha = 20 + Main.rand.Next(60);
+                        var dust = Dust.NewDustDirect(npc.Center, 0, 0, DustType<SpecialSmoke>(), Scale: Main.rand.NextFloat(0.85f, 1.75f) * Math.Clamp(explosionVolume / 90f, 0.85f, 1.5f));
+                        dust.velocity = Main.rand.NextVector2Circular(9.5f, 9.5f) * Math.Clamp(explosionVolume / 60f, 1f, 3f);
+                        dust.position += dust.velocity * 3f;
+                        dust.velocity *= 0.75f;
+                        dust.alpha = 85 + Main.rand.Next(60);
+                        dust.customData = SpecialSmoke.aetherSmokeGradient;
+                    } //smoke
+
+                    for (int j = 0; j < 10 + explosionVolume / 5f; j++)
+                    {
+                        Color color = new Color(179, 255, 224).Lerp(new Color(255, 169, 255), Main.rand.NextFloat(0.7f));
+
+                        var dust = Dust.NewDustDirect(npc.Center, 0, 0, DustID.FireworksRGB, 0, 0, 10 + Main.rand.Next(60),
+                            color.Alpha() * Main.rand.NextFloat(0.45f, 0.85f), Main.rand.NextFloat(0.6f, 0.9f));
+                        dust.fadeIn = Main.rand.NextFloat(0.65f, 0.95f);
+                        dust.velocity = Main.rand.NextVector2Circular(7f + (explosionVolume / 12.5f), 4.5f + (explosionVolume / 12.5f));
+                        dust.velocity.Y -= 2.5f;
+                        dust.noGravity = Main.rand.NextBool(2, 5);
                         dust.rotation = Main.rand.NextFloat(6.28f);
-                    }
+                    } //sparks
                 }
             }
         }
@@ -436,11 +438,12 @@ namespace GoldLeaf.Items.Grove
 
                     for (int j = 0; j < 10; j++)
                     {
-                        var dust = Dust.NewDustDirect(victim.Center, 0, 0, DustType<AetherSmoke>());
+                        var dust = Dust.NewDustDirect(victim.Center, 0, 0, DustType<SpecialSmoke>());
                         dust.velocity = Main.rand.NextVector2Circular(7.5f, 7.5f);
                         dust.scale = Main.rand.NextFloat(0.9f, 1.2f);
                         dust.alpha = 20 + Main.rand.Next(60);
                         dust.rotation = Main.rand.NextFloat(6.28f);
+                        dust.customData = SpecialSmoke.aetherSmokeGradient;
                     }
                 }
             }

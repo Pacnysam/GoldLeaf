@@ -52,6 +52,8 @@ namespace GoldLeaf.Items.Sky
         public override float UseSpeedMultiplier(Player player)
             => Utils.Remap(player.GetModPlayer<ConstellationPlayer>().extraSegments, 0, ConstellationPlayer.MaxExtraSegments, 4/3f, 1f);
 
+        public override bool CanShoot(Player player) => player.ownedProjectileCounts[Item.shoot] == 0;
+
         public override bool MeleePrefix() => true;
     }
     

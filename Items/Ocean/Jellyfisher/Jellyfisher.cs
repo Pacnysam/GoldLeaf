@@ -295,11 +295,13 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
             {
                 Dust dust = TwinkleDust.Spawn(new LightDust.LightDustData(0.9f), Projectile.position, Projectile.Size, new Vector2(0, Main.rand.NextFloat(-1.5f, -3f)), Main.rand.Next(-10, 0), dustColor, Main.rand.NextFloat(0.25f, 0.5f));
                 dust.velocity.X *= 0.5f;
+                dust.shader = Projectile.GetDyeShader();
             }
             if (evilGlowStrength >= 0.5f && Main.rand.NextBool(8))
             {
                 Dust dust = TwinkleDust.Spawn(new LightDust.LightDustData(0.9f), Projectile.position, Projectile.Size, new Vector2(0, Main.rand.NextFloat(-1.5f, -3f)), Main.rand.Next(-10, 0), evilDustColor, Main.rand.NextFloat(0.25f, 0.5f));
                 dust.velocity.X *= 0.5f;
+                dust.shader = Projectile.GetDyeShader();
             }
         }
 
