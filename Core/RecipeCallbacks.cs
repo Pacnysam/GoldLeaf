@@ -33,11 +33,12 @@ namespace GoldLeaf.Core
 
                 for (int j = 0; j < 15; j++)
                 {
-                    Dust dust = Dust.NewDustDirect(player.MountedCenter, 0, 0, DustType<AetherSmoke>());
+                    Dust dust = Dust.NewDustDirect(player.MountedCenter, 0, 0, DustType<SpecialSmoke>());
                     dust.velocity = Main.rand.NextVector2Circular(9f, 9f);
                     dust.scale = Main.rand.NextFloat(0.9f, 1.2f);
                     dust.alpha = 20 + Main.rand.Next(60);
                     dust.rotation = Main.rand.NextFloat(6.28f);
+                    dust.customData = SpecialSmoke.aetherSmokeGradient;
                 }
 
                 int explosion = Projectile.NewProjectile(player.GetSource_FromThis(), player.MountedCenter, Vector2.Zero, ProjectileType<AetherBurst>(), 0, 0, Main.myPlayer);

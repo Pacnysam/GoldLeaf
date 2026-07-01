@@ -4,4 +4,10 @@ ToxicPositivity: {
 	Variant3: "{0} looked on the bright side!"
 }
 
+EternalFlame: {
+	Variant1: "{0} never stopped burning."
+	Variant2: "{0} tried to touch the sun."
+	Variant3: "{0} was met with the unmatched power of the sun!"
+}
+
 Overhealth: "{0} ran out of time."

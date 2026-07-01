@@ -132,6 +132,7 @@ namespace GoldLeaf.Effects.Dusts
     public class AetherSmoke : ModDust
     {
         public override string Texture => "GoldLeaf/Effects/Dusts/SpecialSmoke";
+        public override bool IsLoadingEnabled(Mod mod) => false;
 
         public override void OnSpawn(Dust dust)
         {
