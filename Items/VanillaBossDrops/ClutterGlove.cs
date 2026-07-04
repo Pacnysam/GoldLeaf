@@ -25,12 +25,16 @@ namespace GoldLeaf.Items.VanillaBossDrops
 {
     public abstract class ClutterGlove : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.IsRangedSpecialistWeapon[Type] = true;
+        }
         public override void SetDefaults()
         {
-            Item.damage = 9;
+            Item.damage = 18;
             Item.DamageType = DamageClass.Ranged;
             Item.knockBack = 2;
-            Item.crit = 6;
+            Item.crit = 8;
 
             Item.width = 28;
             Item.height = 38;
@@ -43,49 +47,25 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
 
+            Item.shoot = ProjectileID.PurificationPowder;
             Item.value = Item.sellPrice(0, 1, 50, 0);
             Item.rare = ItemRarityID.Blue;
 
             Item.SetElement(Element.Arcane, -1);
             Item.SetElement(Element.Nature, -1);
 
-            ItemID.Sets.IsRangedSpecialistWeapon[Type] = true;
-
             Item.shootSpeed = 11f;
-            Item.useAmmo = ItemType<EveDroplet>();
-            Item.shoot = ProjectileType<EveDropletP>();
+
+            SafeSetDefaults();
         }
 
-        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-        {
-            int p = Projectile.NewProjectile(source, position, velocity.RotatedBy(MathHelper.ToRadians(Main.rand.Next(-3, 3))), type, damage, knockback, player.whoAmI);
+        public virtual void SafeSetDefaults() { }
 
-            if (type == ProjectileType<EveDropletP>()) { Main.projectile[p].timeLeft = Main.rand.Next(115, 200); Main.projectile[p].velocity *= 0.7f; Main.projectile[p].damage -= 2; }
-            if (type == ProjectileType<ClutterScale>() || type == ProjectileType<ClutterTissue>()) { Main.projectile[p].damage += 13; }
-            if (type == ProjectileID.SpikyBall) { Main.projectile[p].velocity *= 0.5f; Main.projectile[p].damage -= 5; }
-            if (type == ProjectileID.SporeTrap) { Main.projectile[p].velocity *= Main.rand.NextFloat(0.3f, 0.5f); Main.projectile[p].timeLeft = 900; Main.projectile[p].GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.005f; }
-            if (type == ProjectileID.HornetStinger) { Main.projectile[p].GetGlobalProjectile<GoldLeafProjectile>().gravity = 0.12f; Main.projectile[p].damage += 12; }
-
-            Main.projectile[p].DamageType = Item.DamageType;
-            return false;
-        }
-
-        /*public override void OnConsumeAmmo(Item ammo, Player player)
-        {
-            switch (ammo.type)
-            {
-                case ItemID.Stinger:
-                case ItemID.JungleSpores:
-                    {
-                        Helper.TryTakeItem(player, ammo.type, 1);
-                        break;
-                    }
-            }
-        }*/
+        public override bool? CanChooseAmmo(Item ammo, Player player) => ammo.type == ItemID.ShadowScale || ammo.type == ItemID.TissueSample;
 
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
-            if (type == ProjectileID.Bone) { type = ProjectileID.BoneGloveProj; velocity *= 0.65f; }
+            velocity = velocity.RotatedBy(MathHelper.ToRadians(Main.rand.Next(-3, 3)));
         }
     }
 
@@ -93,9 +73,23 @@ namespace GoldLeaf.Items.VanillaBossDrops
     {
         public override void SetStaticDefaults()
         {
-            Item.AddElements([Element.None]);
+            ItemID.Sets.IsRangedSpecialistWeapon[Type] = true;
+            Item.AddElements([Element.Shadow]);
+        }
+        public override void SafeSetDefaults()
+        {
+            Item.useAmmo = ItemID.ShadowScale;
+            Item.shoot = ProjectileType<ClutterScale>();
         }
 
+        public override bool? CanChooseAmmo(Item ammo, Player player)
+        {
+            if (ammo.type == ItemID.ShadowScale)
+            {
+                return true;
+            }
+            return null;
+        }
         public override bool CanConsumeAmmo(Item ammo, Player player)
         {
             if (ammo.type == ItemID.ShadowScale)
@@ -113,9 +107,23 @@ namespace GoldLeaf.Items.VanillaBossDrops
     {
         public override void SetStaticDefaults()
         {
-            Item.AddElements([Element.None]);
+            ItemID.Sets.IsRangedSpecialistWeapon[Type] = true;
+            Item.AddElements([Element.Blood]);
+        }
+        public override void SafeSetDefaults()
+        {
+            Item.useAmmo = ItemID.TissueSample;
+            Item.shoot = ProjectileType<ClutterTissue>();
         }
 
+        public override bool? CanChooseAmmo(Item ammo, Player player)
+        {
+            if (ammo.type == ItemID.TissueSample)
+            {
+                return true;
+            }
+            return null;
+        } 
         public override bool CanConsumeAmmo(Item ammo, Player player)
         {
             if (ammo.type == ItemID.TissueSample)
@@ -148,7 +156,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Projectile.friendly = true;
             Projectile.tileCollide = true;
             Projectile.ignoreWater = false;
-            Projectile.ArmorPenetration = 12;
+            Projectile.ArmorPenetration = 10;
             Projectile.penetrate = 3;
             Projectile.extraUpdates = 1;
 
@@ -181,33 +189,35 @@ namespace GoldLeaf.Items.VanillaBossDrops
                 Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
                 Color color = Projectile.GetAlpha(lightColor) * (float)(((float)(Projectile.oldPos.Length - k) / Projectile.oldPos.Length) / 2);
 
-                Main.spriteBatch.Draw(texture, drawPos, new Microsoft.Xna.Framework.Rectangle?(texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), color, Projectile.rotation, drawOrigin, Projectile.scale, effects, 0f);
+                Main.EntitySpriteDraw(texture, drawPos, new Microsoft.Xna.Framework.Rectangle?(texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), color, Projectile.rotation, drawOrigin, Projectile.scale, effects, 0f);
             }
             return true;
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            Projectile.damage = (int)(Projectile.damage * 0.7f);
+            Projectile.damage = (int)(Projectile.damage * 0.75f);
         }
 
         public override void OnKill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];
 
-            SoundEngine.PlaySound(SoundID.DD2_CrystalCartImpact, Projectile.Center);
-
-            for (int k = 0; k < 12; ++k)
+            if (!Main.dedServ)
             {
-                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.PurpleCrystalShard, Main.rand.NextFloat(-3, 3) + Projectile.velocity.X / 3, Main.rand.NextFloat(-3, 3) + Projectile.velocity.Y / 3, 0, new Color(), 1f);
-                Main.dust[dust].noGravity = true;
+                SoundEngine.PlaySound(SoundID.DD2_CrystalCartImpact, Projectile.Center);
+
+                for (int k = 0; k < 12; ++k)
+                {
+                    int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.PurpleCrystalShard, Main.rand.NextFloat(-3, 3) + Projectile.velocity.X / 3, Main.rand.NextFloat(-3, 3) + Projectile.velocity.Y / 3, 0, new Color(), 1f);
+                    Main.dust[dust].noGravity = true;
+                }
             }
         }
     }
 
     public class ClutterTissue : ModProjectile
     {
-        private int bounces = 2;
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 5;
@@ -225,8 +235,16 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Projectile.friendly = true;
             Projectile.tileCollide = true;
             Projectile.ignoreWater = false;
-
+            
             Projectile.DamageType = DamageClass.Ranged;
+        }
+
+        ref float Bounces => ref Projectile.ai[0];
+
+        public override void OnSpawn(IEntitySource source)
+        {
+            Bounces = Main.rand.Next(2, 5);
+            Projectile.netUpdate = true;
         }
 
         public override void AI()
@@ -254,21 +272,22 @@ namespace GoldLeaf.Items.VanillaBossDrops
                 Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
                 Color color = Projectile.GetAlpha(lightColor) * (float)(((float)(Projectile.oldPos.Length - k) / Projectile.oldPos.Length) / 2);
 
-                Main.spriteBatch.Draw(texture, drawPos, new Microsoft.Xna.Framework.Rectangle?(texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), color, Projectile.rotation, drawOrigin, Projectile.scale, effects, 0f);
+                Main.EntitySpriteDraw(texture, drawPos, new Microsoft.Xna.Framework.Rectangle?(texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), color, Projectile.rotation, drawOrigin, Projectile.scale, effects, 0f);
             }
             return true;
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            SoundEngine.PlaySound(SoundID.DD2_LightningBugHurt, Projectile.Center);
+            if (!Main.dedServ)
+                SoundEngine.PlaySound(SoundID.DD2_LightningBugHurt, Projectile.Center);
 
             NPC.HitInfo hitInfo = new()
             {
                 Damage = (int)(damageDone * 0.7),
                 DamageType = DamageClass.Ranged,
                 Crit = hit.Crit,
-                Knockback = hit.Knockback,
+                Knockback = 0,
                 HitDirection = hit.HitDirection,
             };
 
@@ -277,9 +296,12 @@ namespace GoldLeaf.Items.VanillaBossDrops
 
         public override void OnKill(int timeLeft)
         {
-            for (int i = 0; i < 12; i++)
+            if (!Main.dedServ)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Crimslime, Main.rand.NextFloat(-3, 3) + Projectile.velocity.X / 3, Main.rand.Next(-3, 3) + Projectile.velocity.Y / 3);
+                for (int i = 0; i < 12; i++)
+                {
+                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Crimslime, Main.rand.NextFloat(-3, 3) + Projectile.velocity.X / 3, Main.rand.Next(-3, 3) + Projectile.velocity.Y / 3);
+                }
             }
         }
 
@@ -288,28 +310,27 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Player player = Main.player[Projectile.owner];
 
             if (Projectile.velocity.X != oldVelocity.X)
-            {
                 Projectile.velocity.X = -oldVelocity.X;
-            }
-
             if (Projectile.velocity.Y != oldVelocity.Y)
-            {
                 Projectile.velocity.Y = -oldVelocity.Y;
-            }
-
-            Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Crimslime);
-
-            SoundEngine.PlaySound(SoundID.DD2_LightningBugZap, Projectile.Center);
 
             Projectile.velocity *= 0.7f;
 
-            if (bounces <= 0)
+            if (!Main.dedServ)
+            {
+                for (int k = 0; k < 4; ++k)
+                {
+                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Crimslime);
+                }
+                SoundEngine.PlaySound(SoundID.DD2_LightningBugZap, Projectile.Center);
+            }
+            if (Bounces <= 0)
             {
                 Projectile.Kill(); return true;
             }
             else
             {
-                bounces--; return false;
+                Bounces--; return false;
             }
         }
     }
@@ -320,91 +341,16 @@ namespace GoldLeaf.Items.VanillaBossDrops
         {
             switch (item.type)
             {
-                /*case ItemID.StoneBlock:
-                    {
-                        item.ammo = ItemType<EveDroplet>();
-                        item.shoot = ProjectileID.PewMaticHornShot;
-                        break;
-                    }*/
-                case ItemID.SpikyBall:
-                    {
-                        item.ammo = ItemType<EveDroplet>();
-                        break;
-                    }
                 case ItemID.ShadowScale:
                     {
-                        item.ammo = ItemType<EveDroplet>();
-                        item.shoot = ProjectileType<ClutterScale>();
-                        item.value = Item.buyPrice(0, 0, 7, 50);
+                        item.ammo = item.type;
                         break;
                     }
                 case ItemID.TissueSample:
                     {
-                        item.ammo = ItemType<EveDroplet>();
-                        item.shoot = ProjectileType<ClutterTissue>();
-                        item.value = Item.buyPrice(0, 0, 7, 50);
+                        item.ammo = item.type;
                         break;
                     }
-                case ItemID.Stinger:
-                    {
-                        item.ammo = ItemType<EveDroplet>();
-                        item.shoot = ProjectileID.HornetStinger;
-                        item.consumable = true;
-                        break;
-                    }
-                case ItemID.JungleSpores:
-                    {
-                        item.ammo = ItemType<EveDroplet>();
-                        item.shoot = ProjectileID.SporeTrap;
-                        item.consumable = true;
-                        break;
-                    }
-                case ItemID.Bone:
-                    {
-                        item.ammo = ItemType<EveDroplet>();
-                        break;
-                    }
-            }
-        }
-
-        /*public override void AddRecipes()
-        {
-            Recipe tissueToScale = Recipe.Create(ItemID.ShadowScale, 5)
-                .AddIngredient(ItemID.TissueSample, 5)
-                .AddTile(TileID.TinkerersWorkbench)
-                .AddCondition(GoldLeafConditions.HasClutterGlove)
-                .Register();
-            Recipe scaleToTissue = Recipe.Create(ItemID.TissueSample, 5)
-                .AddIngredient(ItemID.ShadowScale, 5)
-                .AddTile(TileID.TinkerersWorkbench)
-                .AddCondition(GoldLeafConditions.HasClutterGlove)
-                .Register();
-        }*/
-
-        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
-        {
-            int glove = ItemType<ClutterGlove>();
-            if (!WorldGen.crimson) glove = ItemType<ClutterGloveCorruption>(); else glove = ItemType<ClutterGloveCrimson>();
-
-            if (item.ammo == ItemType<EveDroplet>())
-            {
-                string[] text =
-                [
-                    Language.GetTextValue("Mods.GoldLeaf.Items.ClutterGlove.ClutterTooltip" /*+ ItemID.Search.GetName(item.type)*/)
-                ];
-
-                TooltipLine tooltipLine = tooltips.Find(n => n.Name == "Ammo");
-
-                if (tooltipLine != null && GoldLeafConditions.HasClutterGlove.IsMet())
-                {
-                    int index = tooltips.IndexOf(tooltipLine);
-                    for (int i = 0; i < text.Length; i++)
-                    {
-                        if (text[i] != string.Empty)
-                            tooltips.Insert(index + 1, new TooltipLine(Mod, "ClutterTooltip", /*"[i/s1:" + glove + "]: " +*/ text[i]));
-                    }
-                    tooltipLine?.Hide();
-                }
             }
         }
     }

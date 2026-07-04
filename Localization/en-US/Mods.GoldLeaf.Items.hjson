@@ -145,21 +145,24 @@ ClutterGlove: {
 	DisplayName: Clutter Glove
 	Tooltip: ""
 	ClutterTooltip: Can be thrown with Clutter Glove
-	EveDroplet: ""
-	ShadowScale: Pierces enemies and ignores armor
-	TissueSample: Bounces and hits twice
-	Bone: Throws bouncing crossbones
-	SpikyBall: Throws with extra velocity and damage
-}
-
-ClutterGloveCrimson: {
-	DisplayName: Clutter Glove
-	Tooltip: 50% chance to not consume tissue samples
 }
 
 ClutterGloveCorruption: {
 	DisplayName: Clutter Glove
-	Tooltip: 50% chance to not consume shadow scales
+	Tooltip:
+		'''
+		Uses shadow scales as ammo, penetrating armor
+		50% chance to not consume ammo
+		'''
+}
+
+ClutterGloveCrimson: {
+	DisplayName: Clutter Glove
+	Tooltip:
+		'''
+		Uses tissue samples as ammo, bouncing and dealing damage twice
+		50% chance to not consume ammo
+		'''
 }
 
 Echobark: {
