@@ -36,6 +36,8 @@ namespace GoldLeaf.Items.Grove
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 99;
+            ItemID.Sets.IsRangedSpecialistWeapon[Type] = true;
+            AmmoID.Sets.IsSpecialist[Type] = true;
 
             Item.AddElements([Element.Arcane, Element.Nature]);
         }
@@ -60,55 +62,27 @@ namespace GoldLeaf.Items.Grove
             Item.UseSound = SoundID.Item1;
 			Item.autoReuse = true;
 
-            ItemID.Sets.IsRangedSpecialistWeapon[Type] = true;
-            AmmoID.Sets.IsSpecialist[Type] = true;
-            //ItemID.Sets.ItemIconPulse[Item.type] = true;
-
             Item.shoot = ProjectileType<EveDropletP>();
-			Item.shootSpeed = 10f;
+			Item.shootSpeed = 12f;
 		}
 
-        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
-            int p = Projectile.NewProjectile(source, position, velocity.RotatedBy(MathHelper.ToRadians(Main.rand.Next(-7, 7))), type, damage, knockback, player.whoAmI);
-			Main.projectile[p].GetGlobalProjectile<GoldLeafProjectile>().gravity = Main.rand.NextFloat(0.25f, 0.35f);
-            Main.projectile[p].GetGlobalProjectile<GoldLeafProjectile>().gravityDelay = Main.rand.Next(10, 20);
-            Main.projectile[p].timeLeft = (Main.rand.Next(40, 125));
-            Main.projectile[p].velocity *= (Main.rand.NextFloat(0.9f, 1.1f));
-            Main.projectile[p].netUpdate = true;
-            return false;
+            velocity = velocity.RotatedBy(MathHelper.ToRadians(Main.rand.Next(-5, 5))) * Main.rand.NextFloat(0.9f, 1.1f);
         }
 
         public override void Update(ref float gravity, ref float maxFallSpeed)
         {
             if (Item.timeSinceItemSpawned % dustTime == 0)
             {
-                Dust dust2 = Dust.NewDustPerfect(Item.Center + new Vector2(0f, Item.height * -0.1f) + Main.rand.NextVector2CircularEdge(Item.width * 0.6f, Item.height * 0.6f) * (0.3f + Main.rand.NextFloat() * 0.5f), 279, new Vector2(0f, (0f - Main.rand.NextFloat()) * 0.3f - 1.5f), 0, new Color(201, 60, 210) { A = 0 }, Main.rand.NextFloat(0.4f, 0.6f));
-                dust2.fadeIn = 1.1f;
-                dust2.noGravity = true;
-                dust2.noLight = true;
+                Dust dust = Dust.NewDustPerfect(Item.Center + new Vector2(0f, Item.height * -0.1f) + Main.rand.NextVector2CircularEdge(Item.width * 0.6f, Item.height * 0.6f) * (0.3f + Main.rand.NextFloat() * 0.5f), 
+                    DustID.SilverFlame, new Vector2(0f, (0f - Main.rand.NextFloat()) * 0.3f - 1.5f), 0, new Color(201, 60, 210).Alpha(), Main.rand.NextFloat(0.4f, 0.6f));
+                dust.fadeIn = 1.1f;
+                dust.noGravity = true;
+                dust.noLight = true;
 
                 dustTime = Main.rand.Next(15, 30);
             }
-
-            /*if (Item.timeSinceItemSpawned % dustTime == 0) 
-            {
-                dustTime = Main.rand.Next(9, 38);
-
-                var dust = Dust.NewDustPerfect(new Vector2(Item.Center.X + Main.rand.Next(Item.width / -3, Item.width / 3), Item.position.Y + Main.rand.Next(0, Item.height)), DustType<LightDust>(), new Vector2(0, Main.rand.NextFloat(-0.4f, -1.2f)), 0, new Color(201, 60, 210) { A = 0 }, Main.rand.NextFloat(0.35f, 0.75f));
-                dust.noGravity = true;
-                dust.fadeIn = 1.4f;
-
-                //new Color(255, 152, 221);
-            }*/
-
-            /*if (Main.rand.NextBool(20))
-            {
-                //var dust = Dust.NewDustDirect(Item.position, Item.width, Item.height, DustID.FireworksRGB, 0f, -1.7f, 0, new Color(255, 152, 221), 0.65f);
-                var dust = Dust.NewDustPerfect(new Vector2(Item.position.X + Main.rand.Next(0, Item.width), Item.position.Y + Main.rand.Next(0, Item.height)), DustType<LightDust>(), new Vector2(0, Main.rand.NextFloat(-0.4f, -1.2f)), 0, new Color(255, 152, 221), Main.rand.NextFloat(0.4f, 0.8f));
-                dust.noGravity = true;
-                dust.fadeIn = 1.4f;
-            }*/
         }
 
         public override void PostUpdate()
@@ -127,28 +101,10 @@ namespace GoldLeaf.Items.Grove
 
             return true;
         }
-        
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
             //Color color = new(255, 198, 249) { A = 0 };
-            spriteBatch.Draw(TextureAssets.Item[Item.type].Value, Item.Center - Main.screenPosition, null, ColorHelper.AdditiveWhite() * ((float)Math.Sin(GoldLeafWorld.rottime - 0.75f) * 0.75f), rotation, TextureAssets.Item[Item.type].Size() / 2, scale, SpriteEffects.None, 0f);
-
-            /*spriteBatch.Draw
-            (
-                glowTex.Value,
-                new Vector2
-                (
-                    Item.position.X - Main.screenPosition.X + Item.width * 0.5f,
-                    Item.position.Y - Main.screenPosition.Y + Item.height - glowTex.Height() * 0.5f
-                ),
-                new Rectangle(0, 0, glowTex.Width(), glowTex.Height()),
-                color * ((float)Math.Sin(GoldLeafWorld.rottime) * 0.5f),
-                rotation,
-                glowTex.Size() * 0.5f,
-                scale,
-                SpriteEffects.None,
-                0f
-            );*/
+            spriteBatch.Draw(TextureAssets.Item[Item.type].Value, Item.Center - Main.screenPosition, null, Color.White.Alpha() * ((float)Math.Sin(GoldLeafWorld.rottime - 0.75f) * 0.75f), rotation, TextureAssets.Item[Item.type].Size() / 2, scale, SpriteEffects.None, 0f);
         }
 
         public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
@@ -158,7 +114,6 @@ namespace GoldLeaf.Items.Grove
 
             return true;
         }
-
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             spriteBatch.Draw(TextureAssets.Item[Item.type].Value, position, null, ColorHelper.AdditiveWhite() * ((float)Math.Sin(GoldLeafWorld.rottime - 0.75f) * 0.75f), 0, origin, scale, SpriteEffects.None, 0f);
@@ -169,8 +124,7 @@ namespace GoldLeaf.Items.Grove
 	{
         public override void SetStaticDefaults()
         {
-			//DisplayName.SetDefault("Eve Droplet");
-            Main.projFrames[Projectile.type] = 6;
+			Main.projFrames[Projectile.type] = 6;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 
@@ -179,21 +133,21 @@ namespace GoldLeaf.Items.Grove
 
         public override void SetDefaults()
         {
-            Projectile.aiStyle = -1;
+            //Projectile.aiStyle = -1;
             Projectile.width = 18;
             Projectile.height = 28;
             Projectile.friendly = true;
 			Projectile.tileCollide = true;
             Projectile.ignoreWater = true;
+            Projectile.timeLeft = Main.rand.Next(50, 150);
 
             Projectile.DamageType = DamageClass.Ranged;
-            //Projectile.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType = DamageClass.Ranged;
         }
 
         public override void OnSpawn(IEntitySource source)
         {
-            Projectile.ai[0] = Main.rand.NextFloat(0.25f, 0.35f);
-            Projectile.ai[1] = Main.rand.Next(10, 20);
+            Projectile.ai[0] = Main.rand.NextFloat(0.2f, 0.3f);
+            Projectile.ai[1] = Main.rand.Next(15, 30);
             Projectile.netUpdate = true;
         }
 
@@ -211,8 +165,6 @@ namespace GoldLeaf.Items.Grove
                 Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
             }
             if (Main.rand.NextBool(3)) Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<EveDust>());
-
-
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -226,7 +178,7 @@ namespace GoldLeaf.Items.Grove
                 Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
                 Color color = Projectile.GetAlpha(lightColor) * (float)(((float)(Projectile.oldPos.Length - k) / Projectile.oldPos.Length) / 2);
 
-                Main.spriteBatch.Draw(texture, drawPos, new Microsoft.Xna.Framework.Rectangle?(texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), color, Projectile.rotation, drawOrigin, Projectile.scale, effects, 0f);
+                Main.EntitySpriteDraw(texture, drawPos, new Microsoft.Xna.Framework.Rectangle?(texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), color, Projectile.rotation, drawOrigin, Projectile.scale, effects, 0f);
             }
             return true;
         }
@@ -247,13 +199,15 @@ namespace GoldLeaf.Items.Grove
         {
             Player player = Main.player[Projectile.owner];
 
-            SoundEngine.PlaySound(new("GoldLeaf/Sounds/SE/HollowKnight/JellyfishEggPop") { Volume = 0.65f, PitchVariance = 0.4f }, Projectile.Center);
-
-            //SoundEngine.PlaySound(SoundID.Shimmer1, Projectile.Center);
-
-            for (int i = 0; i < 12; i++)
+            if (!Main.dedServ)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<EveDust>(), Main.rand.NextFloat(-3 , 3) + Projectile.velocity.X / 3, Main.rand.Next(-6, 3) + Projectile.velocity.Y / 3);
+                SoundEngine.PlaySound(new("GoldLeaf/Sounds/SE/HollowKnight/JellyfishEggPop") { Volume = 0.65f, PitchVariance = 0.4f }, Projectile.Center);
+                //SoundEngine.PlaySound(SoundID.Shimmer1, Projectile.Center);
+
+                for (int i = 0; i < 12; i++)
+                {
+                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<EveDust>(), Main.rand.NextFloat(-3, 3) + Projectile.velocity.X / 3, Main.rand.Next(-6, 3) + Projectile.velocity.Y / 3);
+                }
             }
         }
     }
@@ -285,6 +239,14 @@ namespace GoldLeaf.Items.Grove
     {
         public override bool InstancePerEntity => true;
 
+        public override void PostAI(NPC npc)
+        {
+            if (npc.HasBuff(BuffType<EveDropletBuff>()) && npc.HasBuff(BuffType<AetherFlameBuff>()))
+            {
+                npc.RequestBuffRemoval(BuffType<EveDropletBuff>());
+            }
+        }
+
         public override void OnHitByItem(NPC npc, Player player, Item item, NPC.HitInfo hit, int damageDone)
         {
             if (npc.IsValid() && npc.HasBuff(BuffType<EveDropletBuff>()))
@@ -298,7 +260,7 @@ namespace GoldLeaf.Items.Grove
 
         private static void EveExplode(NPC npc, NPC.HitInfo hit)
         {
-            int explosionDamage = 40;
+            int explosionDamage = 30;
             float explosionVolume = 65f;
             int armorPen = 5;
             bool shouldExplode = false;
@@ -320,7 +282,7 @@ namespace GoldLeaf.Items.Grove
             }
             if (npc.HasBuff(BuffID.OnFire3))
             {
-                explosionDamage = 70;
+                explosionDamage = 60;
                 explosionVolume = 130f;
                 armorPen = 15;
 
@@ -384,69 +346,4 @@ namespace GoldLeaf.Items.Grove
             if (npc.HasBuff(BuffType<EveDropletBuff>())) drawColor = NPC.buffColor(drawColor, 255f/255, 80f/255, 202f/255, 1f);
         }
     }
-
-    /*public class EveDropletPlayer : ModPlayer
-    {
-        public override void OnHitByProjectile(Projectile proj, Player.HurtInfo hurtInfo)
-        {
-            if (hurtInfo.PvP)
-            {
-                EveExplode(Player, hurtInfo);
-            }
-        }
-
-        private static void EveExplode(Player victim, Player.HurtInfo hurtInfo)
-        {
-            if (!victim.dead && victim.HasBuff(BuffType<EveDropletBuff>()))
-            {
-                bool didExplode = false;
-                if (victim.HasBuff(BuffID.OnFire))
-                {
-                    int explosion = Projectile.NewProjectile(victim.GetSource_Buff(victim.FindBuffIndex(BuffType<EveDropletBuff>())), victim.MountedCenter, Vector2.Zero, ProjectileType<AetherBurst>(), 30, 0.5f, -1, 65f, 0, 1f);
-                    Main.projectile[explosion].netUpdate = true;
-
-                    CameraSystem.AddScreenshake(Main.LocalPlayer, 16, victim.Center);
-                    CameraSystem.QuickScreenShake(victim.Center, 0f.ToRotationVector2(), 12.5f, 6.5f, 30, 1500);
-
-                    SoundEngine.PlaySound(SoundID.Item74, victim.Center);
-                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/RoR2/EngineerMine") { Volume = 0.4f, Pitch = -0.5f }, victim.Center);
-
-                    victim.ClearBuff(BuffID.OnFire);
-
-                    didExplode = true;
-                }
-                if (victim.HasBuff(BuffID.OnFire3))
-                {
-                    int explosion = Projectile.NewProjectile(victim.GetSource_Buff(victim.FindBuffIndex(BuffType<EveDropletBuff>())), victim.MountedCenter, Vector2.Zero, ProjectileType<AetherBurst>(), 55, 0.5f, -1, 130f, 0, 1f);
-                    Main.projectile[explosion].netUpdate = true;
-
-                    CameraSystem.AddScreenshake(Main.LocalPlayer, 24, victim.Center);
-                    CameraSystem.QuickScreenShake(victim.Center, 0f.ToRotationVector2(), 12.5f, 9f, 30, 1500);
-
-                    SoundEngine.PlaySound(SoundID.Item74, victim.Center);
-                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/RoR2/EngineerMine") { Volume = 0.8f, Pitch = 0.25f }, victim.Center);
-
-                    victim.ClearBuff(BuffID.OnFire3);
-
-                    didExplode = true;
-                }
-
-                if (didExplode)
-                {
-                    victim.AddBuff(BuffType<AetherFlameBuff>(), Helper.TimeToTicks(5));
-                    victim.ClearBuff(BuffType<EveDropletBuff>());
-
-                    for (int j = 0; j < 10; j++)
-                    {
-                        var dust = Dust.NewDustDirect(victim.Center, 0, 0, DustType<SpecialSmoke>());
-                        dust.velocity = Main.rand.NextVector2Circular(7.5f, 7.5f);
-                        dust.scale = Main.rand.NextFloat(0.9f, 1.2f);
-                        dust.alpha = 20 + Main.rand.Next(60);
-                        dust.rotation = Main.rand.NextFloat(6.28f);
-                        dust.customData = SpecialSmoke.aetherSmokeGradient;
-                    }
-                }
-            }
-        }
-    }*/
 }

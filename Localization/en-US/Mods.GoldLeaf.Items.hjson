@@ -51,11 +51,6 @@ ToxicPositivity: {
 		'''
 }
 
-ArcticFlower: {
-	DisplayName: Rimeflora Rod
-	Tooltip: Summons a ghost to freeze your enemies
-}
-
 EveDroplet: {
 	DisplayName: Eve Droplet
 	Tooltip: Coats enemies in an explosive fluid
@@ -90,8 +85,9 @@ PorcelainPunch: {
 	DisplayName: Porcelain Punch
 	Tooltip:
 		'''
-		<right> to parry, successful parries accumulate nightshade
-		Charged punches inject enemies with accumulated nightshade
+		<right> to parry, successful parries shatter it into damaging shards
+		Charged punches repair it early
+		Increases movement stats while shattered and defense while repaired 
 		'''
 }
 
@@ -145,21 +141,24 @@ ClutterGlove: {
 	DisplayName: Clutter Glove
 	Tooltip: ""
 	ClutterTooltip: Can be thrown with Clutter Glove
-	EveDroplet: ""
-	ShadowScale: Pierces enemies and ignores armor
-	TissueSample: Bounces and hits twice
-	Bone: Throws bouncing crossbones
-	SpikyBall: Throws with extra velocity and damage
-}
-
-ClutterGloveCrimson: {
-	DisplayName: Clutter Glove
-	Tooltip: 50% chance to not consume tissue samples
 }
 
 ClutterGloveCorruption: {
 	DisplayName: Clutter Glove
-	Tooltip: 50% chance to not consume shadow scales
+	Tooltip:
+		'''
+		Uses shadow scales as ammo, penetrating armor
+		50% chance to not consume ammo
+		'''
+}
+
+ClutterGloveCrimson: {
+	DisplayName: Clutter Glove
+	Tooltip:
+		'''
+		Uses tissue samples as ammo, bouncing and dealing damage twice
+		50% chance to not consume ammo
+		'''
 }
 
 Echobark: {
@@ -176,11 +175,6 @@ Constellation: {
 		'''
 }
 
-RemorseCandle: {
-	DisplayName: Remorse Candle
-	Tooltip: Enemies are less likely to target you when placed nearby
-}
-
 Demitoxin: {
 	DisplayName: Demitoxin
 	Tooltip: "'Smells like death'"
@@ -188,7 +182,7 @@ Demitoxin: {
 
 Lodestar: {
 	DisplayName: Lodestar
-	Tooltip: ""
+	Tooltip: A vestige of power long gone
 }
 
 Sediment: {
@@ -210,8 +204,8 @@ HiveCarcass: {
 }
 
 GroveHook: {
-	DisplayName: Wisp Hook
-	Tooltip: ""
+	DisplayName: Chalcedony Claw
+	Tooltip: Pulls you faster over time
 }
 
 RetroDye: {
@@ -285,22 +279,17 @@ ConsistencyPotion: {
 
 WatcherEyedrops: {
 	DisplayName: Truth Seeker Eyedrops
-	Tooltip: ""
+	Tooltip: "'Great for impersonating Gold Leaf developers!'"
 }
 
 WatcherCloak: {
 	DisplayName: Truth Seeker Cloak
-	Tooltip: ""
+	Tooltip: "'Great for impersonating Gold Leaf developers!'"
 }
 
 Bladecaster: {
 	DisplayName: Bladecaster
-	Tooltip: <right> to launch the blade
-}
-
-OxeyeHover: {
-	DisplayName: Oxeye Hover
-	Tooltip: ""
+	Tooltip: <right> to launch the blade, slicing enemies upon returning
 }
 
 ExclamationIcon: {
@@ -320,7 +309,7 @@ BeheadingAxe: {
 
 AuroraCluster: {
 	DisplayName: Aurora Cluster
-	Tooltip: "'A guiding light in the dark of the blizzard'"
+	Tooltip: "'A guiding light in the darkness'"
 }
 
 FrostCloth: {
@@ -329,7 +318,7 @@ FrostCloth: {
 }
 
 FrostyMask: {
-	DisplayName: Frosty Masque
+	DisplayName: Cryomancer's Masque
 	Tooltip:
 		'''
 		{$CommonItemTooltip.IncreasesMaxManaBy}
@@ -338,7 +327,7 @@ FrostyMask: {
 }
 
 FrostyRobe: {
-	DisplayName: Frosty Robe
+	DisplayName: Cryomancer's Robe
 	Tooltip:
 		'''
 		{$CommonItemTooltip.IncreasesMaxManaBy}
@@ -347,7 +336,7 @@ FrostyRobe: {
 }
 
 FrostyBoots: {
-	DisplayName: Frosty Boots
+	DisplayName: Cryomancer's Boots
 	Tooltip:
 		'''
 		{$CommonItemTooltip.IncreasesMaxManaBy}
@@ -359,9 +348,45 @@ SafetyBlanket: {
 	DisplayName: Safety Blanket
 	Tooltip:
 		'''
-		Prevents a single debuff, goes on cooldown for a portion of the unrealized debuff's duration
+		Prevents a single debuff, going on cooldown for a portion of it's duration
 		'It's not very warm...'
 		'''
+}
+
+Avalanche: {
+	DisplayName: Avalanche
+	Tooltip:
+		'''
+		Can use snowballs as ammo
+		Consecutive hits increase firerate and critical strike chance
+		50% chance to save ammo
+		'''
+	HighScore:
+		'''
+		Current Streak: {0}
+		High Score: {1}
+		'''
+	NewHighScore: New High Score!
+}
+
+BlizzardBrassBullet: {
+	DisplayName: Blizzard Brass Bullet
+	Tooltip: Empowers after a ricochet, chilling enemies on hit
+}
+
+ColdSnap: {
+	DisplayName: Cold Snap
+	Tooltip: Release <left> to snip, freezing enemies
+}
+
+ArcticFlower: {
+	DisplayName: Rimeflora Rod
+	Tooltip: Summons a ghost to freeze your enemies
+}
+
+NitrogenPerfume: {
+	DisplayName: Nitrogen Perfume
+	Tooltip: First strike deep chills enemies, critical strikes chill them further
 }
 
 AncientEchoslate: {
@@ -402,41 +427,6 @@ AuroraHairDye: {
 BrassDye: {
 	DisplayName: Bronze Dye
 	Tooltip: ""
-}
-
-Avalanche: {
-	DisplayName: Avalanche
-	Tooltip:
-		'''
-		Consecutive hits increase firerate and critical strike chance
-		Can use snowballs as ammo
-		50% chance to save ammo
-		'''
-	HighScore:
-		'''
-		Current Streak: {0}
-		High Score: {1}
-		'''
-	NewHighScore: New High Score!
-}
-
-BlizzardBrassBullet: {
-	DisplayName: Blizzard Brass Bullet
-	Tooltip:
-		'''
-		Critical strikes are determined upon firing
-		Repeated critical strikes freeze enemies
-		'''
-}
-
-GlacialScissors: {
-	DisplayName: Glacial Scissors
-	Tooltip: Repeated hits freeze enemies
-}
-
-NitrogenPerfume: {
-	DisplayName: Nitrogen Perfume
-	Tooltip: Freezes enemies on first strike
 }
 
 SunstoneDye: {
@@ -482,6 +472,8 @@ AnxietyNecklace: {
 		'''
 }
 
+DragonSkull.DisplayName: Gold Dragon Skull
+
 ChampionsCloak: {
 	DisplayName: Champion's Cape
 	Tooltip: ""
@@ -493,7 +485,7 @@ ChampionsBelt: {
 }
 
 GymShorts: {
-	DisplayName: Gym Shorts
+	DisplayName: Champion's Shorts
 	Tooltip: ""
 }
 
@@ -611,15 +603,16 @@ CrescentRoll: {
 
 WellspringWatch: {
 	DisplayName: Wellspring Watch
-	Tooltip: Healing potions provide double their healing amount in decaying overhealth
+	Tooltip: Healing potions provide twice their healing amount in decaying overhealth
 }
 
 BulwarkBracelet: {
 	DisplayName: Bulwark Bracelet
 	Tooltip:
 		'''
-		Summons a water paladin to protect you
-		Double tap {0} to direct your paladin to a location, hold to recall
+		Double tap {0} to summon a water paladin to your cursor, hold {0} to recall it
+		The water paladin will distract enemies while active
+		Increases defense and life regen while inactive
 		'''
 }
 
@@ -643,9 +636,16 @@ GrantPants: {
 	Tooltip: ""
 }
 
-DragonSkull.DisplayName: Gold Dragon Skull
-
 Basanite: {
 	DisplayName: Basanite
 	Tooltip: ""
+}
+
+BeastFang: {
+	DisplayName: Beast Fang
+	Tooltip:
+		'''
+		Non-summon weapons inflict {0} summon tag damage on hit
+		'Is its owner still alive...?'
+		'''
 }
