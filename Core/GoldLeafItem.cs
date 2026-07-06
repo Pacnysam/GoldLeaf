@@ -1,4 +1,5 @@
 ﻿using GoldLeaf.Items.Accessories;
+using GoldLeaf.Items.Desert.BeastFang;
 using GoldLeaf.Items.Hell;
 using GoldLeaf.Items.Pickups;
 using GoldLeaf.Items.SlimeRain.Goonai;
@@ -30,8 +31,6 @@ namespace GoldLeaf.Core
 
         public int lifesteal;
         public int lifestealMax;
-
-        //public DamageClass throwingDamageType = DamageClass.Default;
 
         public override void ModifyWeaponCrit(Item item, Player player, ref float crit)
         {
@@ -157,34 +156,12 @@ namespace GoldLeaf.Core
             item.velocity.Y = (item.velocity.Y * (float)(acc - 1) + num2) / (float)acc;
         }
 
-        public override void SetDefaults(Item item)
+        public override void ExtractinatorUse(int extractType, int extractinatorBlockType, ref int resultType, ref int resultStack)
         {
-            /*if (item.GetGlobalItem<GoldLeafItem>().throwingDamageType != DamageClass.Default)
+            if (extractType == ItemID.DesertFossil && Main.rand.NextBool(Main.LocalPlayer.GetModPlayer<BeastFangPlayer>().hasObtainedBeastFang? 100 : 50))
             {
-                if (GetInstance<MiscConfig>().ThrowerSupport)
-                {
-                    item.DamageType = DamageClass.Throwing;
-                }
-                else
-                {
-                    item.DamageType = item.GetGlobalItem<GoldLeafItem>().throwingDamageType;
-                }
-            }*/
-
-            switch (item.type)
-            {
-                case ItemID.SlimeStaff:
-                    {
-                        item.rare = ItemRarityID.Blue;
-                        item.damage = 10;
-                        item.value = Item.sellPrice(0, 0, 75, 0);
-                        break;
-                    }
-                case ItemID.ImpStaff: 
-                    {
-                        item.damage = 23;
-                        break;
-                    }
+                resultType = ItemType<BeastFang>();
+                resultStack = 1;
             }
         }
     }

@@ -121,3 +121,8 @@ FreezeBuff: {
 	DisplayName: Frozen
 	Description: Mobility is disabled
 }
+
+BeastFangBuff: {
+	DisplayName: Beast Fang Tag
+	Description: Tagged
+}

@@ -640,3 +640,12 @@ Basanite: {
 	DisplayName: Basanite
 	Tooltip: ""
 }
+
+BeastFang: {
+	DisplayName: Beast Fang
+	Tooltip:
+		'''
+		Non-summon weapons inflict {0} summon tag damage on hit
+		'Is its owner still alive...?'
+		'''
+}
