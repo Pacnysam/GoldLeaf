@@ -80,6 +80,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
         {
             Item.useAmmo = ItemID.ShadowScale;
             Item.shoot = ProjectileType<ClutterScale>();
+            Item.shootSpeed = 9f;
         }
 
         public override bool? CanChooseAmmo(Item ammo, Player player)
@@ -142,7 +143,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 5;
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 7;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 
             Projectile.AddElements([Element.Shadow]);
@@ -165,8 +166,8 @@ namespace GoldLeaf.Items.VanillaBossDrops
 
         public override void AI()
         {
-            if (Projectile.Counter() > 15)
-                Projectile.velocity.Y += 0.08f;
+            if (Projectile.Counter() > 25)
+                Projectile.velocity.Y += 0.025f + (Projectile.Counter() * 0.0025f);
 
             Projectile.rotation = Projectile.velocity.ToRotation() + 1.57f;
 
@@ -221,7 +222,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 5;
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 2;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 3;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 
             Projectile.AddElements([Element.Blood]);
@@ -249,7 +250,8 @@ namespace GoldLeaf.Items.VanillaBossDrops
 
         public override void AI()
         {
-            Projectile.velocity.Y += 0.15f;
+            if (Projectile.Counter() >= 10)
+                Projectile.velocity.Y += 0.15f;
 
             Projectile.rotation = Projectile.velocity.ToRotation() + 1.57f;
 

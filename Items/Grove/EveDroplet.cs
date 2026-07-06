@@ -239,6 +239,14 @@ namespace GoldLeaf.Items.Grove
     {
         public override bool InstancePerEntity => true;
 
+        public override void PostAI(NPC npc)
+        {
+            if (npc.HasBuff(BuffType<EveDropletBuff>()) && npc.HasBuff(BuffType<AetherFlameBuff>()))
+            {
+                npc.RequestBuffRemoval(BuffType<EveDropletBuff>());
+            }
+        }
+
         public override void OnHitByItem(NPC npc, Player player, Item item, NPC.HitInfo hit, int damageDone)
         {
             if (npc.IsValid() && npc.HasBuff(BuffType<EveDropletBuff>()))
@@ -252,7 +260,7 @@ namespace GoldLeaf.Items.Grove
 
         private static void EveExplode(NPC npc, NPC.HitInfo hit)
         {
-            int explosionDamage = 40;
+            int explosionDamage = 30;
             float explosionVolume = 65f;
             int armorPen = 5;
             bool shouldExplode = false;
@@ -274,7 +282,7 @@ namespace GoldLeaf.Items.Grove
             }
             if (npc.HasBuff(BuffID.OnFire3))
             {
-                explosionDamage = 70;
+                explosionDamage = 60;
                 explosionVolume = 130f;
                 armorPen = 15;
 
@@ -338,69 +346,4 @@ namespace GoldLeaf.Items.Grove
             if (npc.HasBuff(BuffType<EveDropletBuff>())) drawColor = NPC.buffColor(drawColor, 255f/255, 80f/255, 202f/255, 1f);
         }
     }
-
-    /*public class EveDropletPlayer : ModPlayer
-    {
-        public override void OnHitByProjectile(Projectile proj, Player.HurtInfo hurtInfo)
-        {
-            if (hurtInfo.PvP)
-            {
-                EveExplode(Player, hurtInfo);
-            }
-        }
-
-        private static void EveExplode(Player victim, Player.HurtInfo hurtInfo)
-        {
-            if (!victim.dead && victim.HasBuff(BuffType<EveDropletBuff>()))
-            {
-                bool didExplode = false;
-                if (victim.HasBuff(BuffID.OnFire))
-                {
-                    int explosion = Projectile.NewProjectile(victim.GetSource_Buff(victim.FindBuffIndex(BuffType<EveDropletBuff>())), victim.MountedCenter, Vector2.Zero, ProjectileType<AetherBurst>(), 30, 0.5f, -1, 65f, 0, 1f);
-                    Main.projectile[explosion].netUpdate = true;
-
-                    CameraSystem.AddScreenshake(Main.LocalPlayer, 16, victim.Center);
-                    CameraSystem.QuickScreenShake(victim.Center, 0f.ToRotationVector2(), 12.5f, 6.5f, 30, 1500);
-
-                    SoundEngine.PlaySound(SoundID.Item74, victim.Center);
-                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/RoR2/EngineerMine") { Volume = 0.4f, Pitch = -0.5f }, victim.Center);
-
-                    victim.ClearBuff(BuffID.OnFire);
-
-                    didExplode = true;
-                }
-                if (victim.HasBuff(BuffID.OnFire3))
-                {
-                    int explosion = Projectile.NewProjectile(victim.GetSource_Buff(victim.FindBuffIndex(BuffType<EveDropletBuff>())), victim.MountedCenter, Vector2.Zero, ProjectileType<AetherBurst>(), 55, 0.5f, -1, 130f, 0, 1f);
-                    Main.projectile[explosion].netUpdate = true;
-
-                    CameraSystem.AddScreenshake(Main.LocalPlayer, 24, victim.Center);
-                    CameraSystem.QuickScreenShake(victim.Center, 0f.ToRotationVector2(), 12.5f, 9f, 30, 1500);
-
-                    SoundEngine.PlaySound(SoundID.Item74, victim.Center);
-                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/RoR2/EngineerMine") { Volume = 0.8f, Pitch = 0.25f }, victim.Center);
-
-                    victim.ClearBuff(BuffID.OnFire3);
-
-                    didExplode = true;
-                }
-
-                if (didExplode)
-                {
-                    victim.AddBuff(BuffType<AetherFlameBuff>(), Helper.TimeToTicks(5));
-                    victim.ClearBuff(BuffType<EveDropletBuff>());
-
-                    for (int j = 0; j < 10; j++)
-                    {
-                        var dust = Dust.NewDustDirect(victim.Center, 0, 0, DustType<SpecialSmoke>());
-                        dust.velocity = Main.rand.NextVector2Circular(7.5f, 7.5f);
-                        dust.scale = Main.rand.NextFloat(0.9f, 1.2f);
-                        dust.alpha = 20 + Main.rand.Next(60);
-                        dust.rotation = Main.rand.NextFloat(6.28f);
-                        dust.customData = SpecialSmoke.aetherSmokeGradient;
-                    }
-                }
-            }
-        }
-    }*/
 }

@@ -164,7 +164,7 @@ namespace GoldLeaf.Items.Vanity.Watcher
             for (float k = 0f; k < 1f; k += 0.25f)
             {
                 Vector2 playerPosition = Player.position + new Vector2(0f, Player.gfxOffY);
-                Main.PlayerRenderer.DrawPlayer(camera, Player, playerPosition + new Vector2(0f, 2.5f).RotatedBy((k + (num7 * -1.75f)) * ((float)Math.PI * 2f)) * globalTime, Player.fullRotation, Player.fullRotationOrigin, 1, 1f);
+                Main.PlayerRenderer.DrawPlayer(camera, Player, playerPosition + new Vector2(0f, 2f).RotatedBy((k + (num7 * -1.75f)) * ((float)Math.PI * 2f)) * (globalTime * 2f), Player.fullRotation, Player.fullRotationOrigin, 1, 1f);
             }
             CustomShadowColor = Color.White;
 
