@@ -3,8 +3,10 @@ using GoldLeaf.Effects.Dusts;
 using GoldLeaf.Items.Blizzard;
 using GoldLeaf.Items.Blizzard.Armor;
 using GoldLeaf.Items.Jungle.ToxicPositivity;
+using GoldLeaf.Items.Meteor;
 using GoldLeaf.Items.Ocean;
 using GoldLeaf.Items.Pickups;
+using GoldLeaf.Items.Underground;
 using GoldLeaf.Tiles.Grove;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -59,6 +61,17 @@ namespace GoldLeaf.Core
 
     public static partial class ProjectileSets
     {
+        public static bool[] BeastFangTargetOnHit = ProjectileID.Sets.Factory.CreateNamedSet("BeastFangTargetOnHit")
+            .Description("Set to false to prevent setting a minion target on hit while beast fang is equipped. Typically disabled for lingering, involuntary or autonomous projectiles")
+            .RegisterBoolSet(true, ProjectileID.Bee, ProjectileID.GiantBee, ProjectileID.Wasp, ProjectileID.FlowerPetal, ProjectileID.MagnetSphereBolt, ProjectileID.CrystalLeafShot, 
+            ProjectileID.TinyEater, ProjectileID.Bat, ProjectileID.FlamingJack, ProjectileID.SpectreWrath, ProjectileID.ScutlixLaserFriendly, ProjectileID.BoneGloveProj, 
+            ProjectileID.SpiritFlame, ProjectileID.SporeTrap, ProjectileID.SporeTrap2, ProjectileID.SporeGas, ProjectileID.SporeGas2, ProjectileID.SporeGas3, ProjectileID.MonkStaffT2Ghast,
+            ProjectileID.MinecartMechLaser, ProjectileID.WeatherPainShot, ProjectileID.Flare, ProjectileID.BlueFlare, ProjectileID.CursedFlare, ProjectileID.RainbowFlare, 
+            ProjectileID.ShimmerFlare, ProjectileID.SpelunkerFlare, ProjectileID.RainFriendly, ProjectileID.BloodRain, ProjectileID.RainbowFront, ProjectileID.RainbowBack,
+            ProjectileID.ClingerStaff, ProjectileID.StarCloakStar, ProjectileID.BeeCloakStar, ProjectileID.ManaCloakStar, ProjectileID.InsanityShadowFriendly, ProjectileID.VolatileGelatinBall,
+            ProjectileID.BlackCounterweight, ProjectileID.BlueCounterweight, ProjectileID.GreenCounterweight, ProjectileID.PurpleCounterweight, ProjectileID.RedCounterweight, ProjectileID.YellowCounterweight, 
+            ProjectileType<BasicRubyBolt>(), ProjectileType<FallingEmerald>(), ProjectileType<MeteorMissileP>());
+
         public static bool[] SummonSpeedImmune = ProjectileID.Sets.Factory.CreateNamedSet("SummonSpeedImmune")
             .Description("Some minions break when increasing summon speed. Setting this to true will give these minions a damage bonus instead")
             .RegisterBoolSet(false, ProjectileID.Spazmamini, ProjectileID.DeadlySphere);

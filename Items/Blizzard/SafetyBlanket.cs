@@ -111,7 +111,7 @@ namespace GoldLeaf.Items.Blizzard
 
         private static void SafetyBuff(On_Player.orig_AddBuff orig, Player self, int type, int timeToAdd, bool quiet, bool foodHack)
         {
-            if (!self.dead && self.GetModPlayer<SafetyBlanketPlayer>().safetyBlanket && IsValidDebuff(type, timeToAdd) && !self.HasBuff(BuffType<SafetyBlanketBuff>()))
+            if (!self.dead && self.GetModPlayer<SafetyBlanketPlayer>().safetyBlanket && IsValidDebuff(type, timeToAdd) && !self.HasBuff(BuffType<SafetyBlanketBuff>()) && !self.HasBuff(type))
             {
                 self.GetModPlayer<SafetyBlanketPlayer>().safetyBuffImmuneType = type;
                 self.GetModPlayer<SafetyBlanketPlayer>().safetyBuffImmuneTime = Math.Clamp(timeToAdd / 3, 30, 120);
@@ -127,7 +127,7 @@ namespace GoldLeaf.Items.Blizzard
                 }
 
                 type = BuffType<SafetyBlanketBuff>();
-                timeToAdd = (int)Math.Clamp(timeToAdd * 1.25f, TimeToTicks(3), TimeToTicks(16));
+                timeToAdd = (int)Math.Clamp(timeToAdd * 1.75f, TimeToTicks(3), TimeToTicks(20));
             }
             orig(self, type, timeToAdd, quiet, foodHack);
         }

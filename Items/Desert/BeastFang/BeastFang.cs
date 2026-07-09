@@ -132,7 +132,7 @@ namespace GoldLeaf.Items.Desert.BeastFang
         }
         public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (beastFang && !(proj.DamageType.CountsAsClass(DamageClass.Summon) || proj.IsMinionOrSentryRelated || ProjectileID.Sets.IsAWhip[proj.type]))
+            if (beastFang && ProjectileSets.BeastFangTargetOnHit[proj.type] && !(proj.DamageType.CountsAsClass(DamageClass.Summon) || proj.IsMinionOrSentryRelated || ProjectileID.Sets.IsAWhip[proj.type]))
             {
                 target.AddBuff(BuffType<BeastFangBuff>(), TimeToTicks(5));
 
