@@ -176,13 +176,13 @@ namespace GoldLeaf.Items.SlimeRain.Goonai
                 dust.fadeIn = 0.5f;
                 dust.customData = new LightDust.LightDustData(0.9f, Main.rand.NextFloat(0.1f, 0.25f).RandNeg());
 
-                if (Main.myPlayer == Projectile.owner)
+                if (Main.myPlayer == Projectile.owner && !Main.dedServ)
                     SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Overwatch/Headshot") { Volume = 0.55f }, Main.player[Projectile.owner].Center);
-                target.AddBuff(BuffID.Slimed, 60);
+                target.AddBuff(BuffID.Slimed, TimeToTicks(4f));
             }
             if (!target.active)
             {
-                if (Main.myPlayer == Projectile.owner)
+                if (Main.myPlayer == Projectile.owner && !Main.dedServ)
                     SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Overwatch/Elimination") { Volume = 0.7f }, Main.player[Projectile.owner].Center);
             }
         }

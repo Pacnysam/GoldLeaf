@@ -2,12 +2,14 @@
 using GoldLeaf.Core.Helpers;
 using GoldLeaf.Items.Grove.Boss.AetherComet;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.ColorHelper;
+using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Effects.Dusts
 {
@@ -20,7 +22,7 @@ namespace GoldLeaf.Effects.Dusts
 
         public override void OnSpawn(Dust dust)
         {
-            dust.fadeIn = 2;
+            dust.fadeIn += 1;
 
             if (dust.customData is not Gradient)
                 dust.customData = defaultGradient;
@@ -45,12 +47,12 @@ namespace GoldLeaf.Effects.Dusts
         public override bool Update(Dust dust)
         {
             if (!dust.noGravity)
-                dust.velocity.Y -= (dust.alpha / 1750f) * (dust.fadeIn / 2f);
+                dust.velocity.Y -= (dust.alpha / 1750f) * ((dust.fadeIn * 2f) / 2f);
 
             if (dust.alpha > 100)
             {
-                dust.scale += (dust.fadeIn / 75f);
-                dust.alpha += (int)dust.fadeIn;
+                dust.scale *= 1f + Math.Min(dust.fadeIn / 100f, 0.15f);
+                dust.alpha += Math.Max((int)(dust.fadeIn * 2f), 1);
                 dust.velocity *= 0.925f;
             }
             else
@@ -58,8 +60,8 @@ namespace GoldLeaf.Effects.Dusts
                 if (!dust.noLight)
                     Lighting.AddLight(dust.position, dust.color.ToVector3() * 0.15f);
 
-                dust.scale += (dust.fadeIn / 200f);
-                dust.alpha += (int)(dust.fadeIn * 2f);
+                dust.scale *= 1f + dust.fadeIn / 150f;
+                dust.alpha += Math.Max((int)(dust.fadeIn * 4f), 1);
                 dust.velocity *= 0.975f;
             }
 
@@ -68,6 +70,17 @@ namespace GoldLeaf.Effects.Dusts
             if (dust.alpha >= 255)
                 dust.active = false;
 
+            return false;
+        }
+
+        public override bool PreDraw(Dust dust)
+        {
+            Color color = dust.color;
+
+            if (dust.customData is Gradient gradient)
+                color = gradient.GetColor(1f - dust.Opacity());
+
+            Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, color * dust.Opacity(), dust.rotation, dust.frame.Size() / 2f, dust.scale, SpriteEffects.None, 0f);
             return false;
         }
     }
