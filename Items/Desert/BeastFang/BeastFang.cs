@@ -125,15 +125,19 @@ namespace GoldLeaf.Items.Desert.BeastFang
             if (beastFang && !item.CountsAsClass(DamageClass.Summon))
             {
                 target.AddBuff(BuffType<BeastFangBuff>(), TimeToTicks(5));
-                Player.MinionAttackTargetNPC = target.whoAmI;
+                
+                if (target.IsValid())
+                    Player.MinionAttackTargetNPC = target.whoAmI;
             }
         }
         public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (beastFang && !(proj.DamageType.CountsAsClass(DamageClass.Summon) || proj.IsMinionOrSentryRelated || ProjectileID.Sets.IsAWhip[proj.type]))
+            if (beastFang && ProjectileSets.BeastFangTargetOnHit[proj.type] && !(proj.DamageType.CountsAsClass(DamageClass.Summon) || proj.IsMinionOrSentryRelated || ProjectileID.Sets.IsAWhip[proj.type]))
             {
                 target.AddBuff(BuffType<BeastFangBuff>(), TimeToTicks(5));
-                Player.MinionAttackTargetNPC = target.whoAmI;
+
+                if (target.IsValid())
+                    Player.MinionAttackTargetNPC = target.whoAmI;
             }
         }
         

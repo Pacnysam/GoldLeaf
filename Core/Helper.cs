@@ -141,6 +141,21 @@ namespace GoldLeaf.Core
             if (buffTime > 2) player.AddBuff(buffType, buffTime);
         }
 
+        public static void WallBounce(this Projectile projectile, Vector2 oldVelocity, float xMult = 1f, float yMult = 1f)
+        {
+            if (projectile.velocity.X != oldVelocity.X)
+                projectile.velocity.X = -oldVelocity.X * xMult;
+            if (projectile.velocity.Y != oldVelocity.Y)
+                projectile.velocity.Y = -oldVelocity.Y * yMult;
+        }
+        public static void WallBounce(this Projectile projectile, Vector2 oldVelocity, Vector2 multiplier)
+        {
+            if (projectile.velocity.X != oldVelocity.X)
+                projectile.velocity.X = -oldVelocity.X * multiplier.X;
+            if (projectile.velocity.Y != oldVelocity.Y)
+                projectile.velocity.Y = -oldVelocity.Y * multiplier.Y;
+        }
+
         public static bool IsTargetValid(NPC npc) => npc.active && !npc.friendly && !npc.immortal && !npc.dontTakeDamage && npc.lifeMax > 5;
         public static bool IsValid(this NPC npc) => IsTargetValid(npc);
 
