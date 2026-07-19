@@ -48,7 +48,7 @@ namespace GoldLeaf.Core
 
         public static bool[] IsSword = ItemID.Sets.Factory.CreateNamedSet("IsSword")
             .Description("Enables unique interactions such as clashing or unique prefixes.")
-            .RegisterBoolSet(false, ItemID.IronBroadsword, ItemID.IronShortsword, ItemID.Terragrim);
+            .RegisterBoolSet(false, ItemType<Bladecaster>());
 
         public static bool[] ThrownFlail = ItemID.Sets.Factory.CreateNamedSet("ThrownFlail")
             .Description("Not used for launched flails like anchor or chain knife.")
@@ -84,7 +84,7 @@ namespace GoldLeaf.Core
     public static class NPCSets
     {
         public static bool[] BossServant = NPCID.Sets.Factory.CreateNamedSet("BossServant")
-            .RegisterBoolSet(false, NPCID.ServantofCthulhu, NPCID.Bee, NPCID.BeeSmall, NPCID.Sharkron, NPCID.Sharkron2, NPCID.TheHungry, NPCID.TheHungryII, 
+            .RegisterBoolSet(false, NPCID.ServantofCthulhu, NPCID.Sharkron, NPCID.Sharkron2, NPCID.TheHungry, NPCID.TheHungryII, 
             NPCID.CultistDragonHead, NPCID.CultistDragonBody1, NPCID.CultistDragonBody2, NPCID.CultistDragonBody3, NPCID.CultistDragonBody4, NPCID.CultistDragonTail,
             NPCID.AncientCultistSquidhead, NPCID.AncientDoom, NPCID.CultistBossClone, NPCID.LeechHead, NPCID.LeechBody, NPCID.LeechTail, NPCID.Probe, 
             NPCID.DD2SkeletonT1, NPCID.DD2SkeletonT3, NPCID.QueenSlimeMinionBlue, NPCID.QueenSlimeMinionPink, NPCID.QueenSlimeMinionPurple);
@@ -102,7 +102,7 @@ namespace GoldLeaf.Core
             .RegisterBoolSet(false, BuffID.PotionSickness, BuffID.ManaSickness, BuffID.ChaosState, BuffID.BrainOfConfusionBuff, BuffType<SnapFreezeBuff>(), BuffType<SafetyBlanketBuff>());
 
         public static bool[] Cosmetic = BuffID.Sets.Factory.CreateNamedSet("Cosmetic")
-            .RegisterBoolSet(false, BuffID.Slimed, BuffID.GelBalloonBuff, BuffID.Lovestruck, BuffID.Stinky, BuffID.Wet);
+            .RegisterBoolSet(false, BuffID.GelBalloonBuff, BuffID.Lovestruck, BuffID.Stinky, BuffID.Wet);
 
         public static bool[] RemoveCleanseTooltip = BuffID.Sets.Factory.CreateNamedSet("RemoveCleanseTooltip")
             .Description("Buff description will not display whether or not it is cleansable")

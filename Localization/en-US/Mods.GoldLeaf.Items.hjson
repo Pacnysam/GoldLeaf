@@ -318,16 +318,17 @@ FrostCloth: {
 }
 
 FrostyMask: {
-	DisplayName: Cryomancer's Masque
+	DisplayName: Rimecaster's Masque
 	Tooltip:
 		'''
 		{$CommonItemTooltip.IncreasesMaxManaBy}
 		Enemies are less likely to target you
+		Grants immunity to Chilled
 		'''
 }
 
 FrostyRobe: {
-	DisplayName: Cryomancer's Robe
+	DisplayName: Rimecaster's Robe
 	Tooltip:
 		'''
 		{$CommonItemTooltip.IncreasesMaxManaBy}
@@ -336,7 +337,7 @@ FrostyRobe: {
 }
 
 FrostyBoots: {
-	DisplayName: Cryomancer's Boots
+	DisplayName: Rimecaster's Boots
 	Tooltip:
 		'''
 		{$CommonItemTooltip.IncreasesMaxManaBy}
