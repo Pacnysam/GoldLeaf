@@ -56,6 +56,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
         {
             player.statManaMax2 += manaMax;
             player.aggro -= 400;
+            player.buffImmune[BuffID.Chilled] = true;
         }
 
         public override bool IsArmorSet(Item head, Item body, Item legs)
@@ -83,7 +84,8 @@ namespace GoldLeaf.Items.Blizzard.Armor
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemType<AuroraCluster>(), 12);
+            recipe.AddIngredient(ItemType<AuroraCluster>(), 10);
+            recipe.AddIngredient(ItemType<FrostCloth>());
             recipe.AddTile(TileID.Anvils);
             recipe.AddOnCraftCallback(RecipeCallbacks.AuroraMajor);
             recipe.Register();
@@ -143,8 +145,8 @@ namespace GoldLeaf.Items.Blizzard.Armor
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemType<FrostCloth>(), 8);
-            recipe.AddIngredient(ItemType<AuroraCluster>(), 10);
+            recipe.AddIngredient(ItemType<AuroraCluster>(), 16);
+            recipe.AddIngredient(ItemType<FrostCloth>());
             recipe.AddTile(TileID.Loom);
             recipe.AddOnCraftCallback(RecipeCallbacks.AuroraMajor);
             recipe.Register();
@@ -186,7 +188,8 @@ namespace GoldLeaf.Items.Blizzard.Armor
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemType<AuroraCluster>(), 10);
+            recipe.AddIngredient(ItemType<AuroraCluster>(), 12);
+            recipe.AddIngredient(ItemType<FrostCloth>());
             recipe.AddTile(TileID.Anvils);
             recipe.AddOnCraftCallback(RecipeCallbacks.AuroraMajor);
             recipe.Register();

@@ -1,7 +1,12 @@
 FrostySet:
 	'''
 	Double tap {0} to snap freeze an enemy near the cursor
-	Snap frozen enemies have reduced defense and shatter when struck below 20% health
+	Damaging frozen enemies siphons mana
+	Reaching a damage threshold on frozen enemies shatters them, executing weak enemies
+	'''
+LesserFrostySet:
+	'''
+	Double tap {0} to snap freeze an enemy near the cursor
 	'''
 Echobark: Gains bonus defense when struck
 EchobarkDefense: "{0}[c/78BE78:(+{1})] defense"
