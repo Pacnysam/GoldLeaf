@@ -2,6 +2,7 @@
 using GoldLeaf.Effects.Dusts;
 using GoldLeaf.Items.Blizzard;
 using GoldLeaf.Items.Blizzard.Armor;
+using GoldLeaf.Items.Granite;
 using GoldLeaf.Items.Jungle.ToxicPositivity;
 using GoldLeaf.Items.Meteor;
 using GoldLeaf.Items.Ocean;

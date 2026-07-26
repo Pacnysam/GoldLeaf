@@ -91,18 +91,23 @@ PorcelainPunch: {
 		'''
 }
 
-SilenceMusicBox: {
-	DisplayName: Music Box (Silence)
-	Tooltip: ""
-}
-
-ToxinGroveMusicBox: {
-	DisplayName: Music Box (Toxin Grove)
+SilenceBox: {
+	DisplayName: Silence Box
 	Tooltip: ""
 }
 
 GroveMusicBox: {
 	DisplayName: Music Box (Whispering Grove)
+	Tooltip: ""
+}
+
+GroveBossMusicBox: {
+	DisplayName: Music Box (Fallen Swordsman)
+	Tooltip: ""
+}
+
+ChalcedonyMusicBox: {
+	DisplayName: Music Box (Chalcedony Quarry)
 	Tooltip: ""
 }
 
@@ -403,16 +408,6 @@ SplashGemItem: {
 EveGemItem: {
 	DisplayName: Eve Gem
 	Tooltip: ""
-}
-
-ToxinBossMusicBox: {
-	Tooltip: ""
-	DisplayName: Music Box (Toxin Grove Boss)
-}
-
-GroveBossMusicBox: {
-	Tooltip: ""
-	DisplayName: Music Box (Fallen Swordsman)
 }
 
 AuroraDye: {

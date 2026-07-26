@@ -11,12 +11,10 @@ namespace GoldLeaf.Biomes
 {
 	public class WhisperingGroveSurface : ModBiome
 	{
-        public override LocalizedText DisplayName => base.DisplayName.WithFormatArgs("Whispering Grove");
-
         //public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => Find<ModSurfaceBackgroundStyle>("GoldLeaf/Biomes/WhisperingGroveBackgroundStyle");
         public override string MapBackground => BackgroundPath;
 
-        public override int Music => MusicLoader.GetMusicSlot(Mod, "Sounds/Music/WhisperingGrove");
+        public override int Music => Main.IsItDay()? MusicLoader.GetMusicSlot(Mod, "Sounds/Music/WhisperingGrove") : MusicLoader.GetMusicSlot(Mod, "Sounds/Music/WhisperingGroveNight");
         public override CaptureBiome.TileColorStyle TileColorStyle => CaptureBiome.TileColorStyle.Normal;
         public override SceneEffectPriority Priority => SceneEffectPriority.BiomeHigh; 
 
@@ -26,32 +24,12 @@ namespace GoldLeaf.Biomes
 
         public override bool IsBiomeActive(Player player) 
         {
-			return (player.ZoneSkyHeight || player.ZoneOverworldHeight) && GetInstance<TileCount>().groveTileCount >= 150;
+			return (player.ZoneSkyHeight || player.ZoneOverworldHeight) && GetInstance<TileCount>().groveTileCount >= 150 && GetInstance<TileCount>().quarryTileCount < 500;
         }
 		public override void OnEnter(Player player) => player.GetModPlayer<GoldLeafPlayer>().ZoneGrove = true;
         public override void OnLeave(Player player) => player.GetModPlayer<GoldLeafPlayer>().ZoneGrove = false;
 
     }
-
-    /*public class UndergroundWhisperingGrove : ModBiome
-    {
-        public override LocalizedText DisplayName => base.DisplayName.WithFormatArgs("Whispering Undergrove");
-
-        public override int Music => MusicLoader.GetMusicSlot(Mod, "Sounds/Music/WhisperingGrove");
-        public override CaptureBiome.TileColorStyle TileColorStyle => CaptureBiome.TileColorStyle.Normal;
-        public override SceneEffectPriority Priority => SceneEffectPriority.BiomeHigh;
-
-        public override string BestiaryIcon => "GoldLeaf/Core/Biomes/WhisperingGroveSurface_Icon";
-        public override string BackgroundPath => base.BackgroundPath;
-        public override Color? BackgroundColor => base.BackgroundColor;
-
-        public override bool IsBiomeActive(Player player)
-        {
-            return (player.ZoneRockLayerHeight || player.ZoneDirtLayerHeight) && GetInstance<TileCount>().groveTileCount >= 150;
-        }
-        public override void OnEnter(Player player) => player.GetModPlayer<GoldLeafPlayer>().ZoneGrove = true;
-        public override void OnLeave(Player player) => player.GetModPlayer<GoldLeafPlayer>().ZoneGrove = false;
-    }*/
 
     public class WhisperingGroveBackgroundStyle : ModSurfaceBackgroundStyle
     {
