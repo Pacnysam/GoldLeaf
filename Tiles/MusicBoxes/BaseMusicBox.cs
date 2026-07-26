@@ -14,7 +14,20 @@ using System;
 
 namespace GoldLeaf.Tiles.MusicBoxes
 {
-    public abstract class BaseMusicBox(int item, string soundPath, bool tall = false) : ModTile
+    public abstract class BaseMusicBox(int tileType) : ModItem
+    {
+        public int tileType = tileType;
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.CanGetPrefixes[Type] = false;
+            ItemID.Sets.ShimmerTransformToItem[Type] = ItemID.MusicBox;
+        }
+        public override void SetDefaults()
+        {
+            Item.DefaultToMusicBox(Item.createTile = tileType);
+        }
+    }
+    public abstract class BaseMusicBoxTile(int item, string soundPath, bool tall = false) : ModTile
     {
         public int item = item;
         public bool tall = tall;
@@ -36,7 +49,7 @@ namespace GoldLeaf.Tiles.MusicBoxes
             TileID.Sets.DisableSmartCursor[Type] = true;
             TileID.Sets.HasOutlines[Type] = true;
 
-            AddMapEntry(new Color(200, 200, 200), Language.GetText("ItemName.MusicBox"));
+            AddMapEntry(new Color(191, 142, 111), Language.GetText("ItemName.MusicBox"));
 			RegisterItemDrop(item);
             DustType = -1;
         }
@@ -56,22 +69,23 @@ namespace GoldLeaf.Tiles.MusicBoxes
 		public override void KillMultiTile(int i, int j, int frameX, int frameY)
 			=> Item.NewItem(null, new Rectangle(i * 16, j * 16, 32, 32), new Item(item), false, true);
 
-        public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData) //grabbed from spirit reforged
+        public override void EmitParticles(int i, int j, Tile tile, short tileFrameX, short tileFrameY, Color tileLight, bool visible)
         {
-            if (Lighting.UpdateEveryFrame && new FastRandom(Main.TileFrameSeed).WithModifier(i, j).Next(4) != 0 || !((int)Main.timeForVisualEffects % 7 == 0 && Main.rand.NextBool(3)))
-                return;
+            if (TileDrawing.IsVisible(tile) && tileFrameX == 36 && tileFrameY % 36 == 0 && (int)Main.timeForVisualEffects % 7 == 0 && Main.rand.NextBool(3))
+            {
+                int goreType = Main.rand.Next(570, 573);
+                Vector2 position = new Vector2(i, j).ToWorldCoordinates(autoAddY: -8);
+                Vector2 velocity = new Vector2(Main.WindForVisuals * 2f, -0.5f) * Main.rand.NextFloat(0.5f, 1.5f);
 
-            var tile = Framing.GetTileSafely(i, j);
-            if (!TileDrawing.IsVisible(tile) || tile.TileFrameX != 36 || tile.TileFrameY % 36 != 0)
-                return;
+                if (goreType == 572)
+                    position.X -= 8f;
 
-            int goreType = Main.rand.Next(570, 573);
-            var position = new Vector2(i, j) * 16 + new Vector2(8, -8);
-            var velocity = new Vector2(Main.WindForVisuals * 2f, -0.5f) * new Vector2(Main.rand.NextFloat(.5f, 1.5f), Main.rand.NextFloat(.5f, 1.5f));
-            var gore = Gore.NewGoreDirect(new EntitySource_TileUpdate(i, j), position, velocity, goreType, .8f);
-            gore.position.X -= gore.Width / 2;
+                if (goreType == 571)
+                    position.X -= 4f;
 
-            return;
+                Gore gore = Gore.NewGoreDirect(new EntitySource_TileUpdate(i, j), position, velocity, goreType, .8f);
+                gore.position.X -= gore.Width / 2;
+            }
         }
     }
 }
