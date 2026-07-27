@@ -119,7 +119,6 @@ namespace GoldLeaf.Items.Accessories
             {
                 if (!Main.dedServ /*&& Player.GetModPlayer<GoldLeafPlayer>().hasDoneHurtSound == false*/)
                 {
-                    //SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/MassAttack/EvilGrunt") { Pitch = 0.3f, PitchVariance = 0.4f, Volume = 0.6f }, Player.MountedCenter);
                     SoundEngine.PlaySound(SoundID.DD2_SkyDragonsFuryShot, Player.MountedCenter);
                     //Player.GetModPlayer<GoldLeafPlayer>().hasDoneHurtSound = true;
                 }

@@ -283,7 +283,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
                     }
 
                     if (Main.netMode != NetmodeID.Server)
-                        SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Reflect") { Volume = 0.9f }, player.Center);
+                        SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Rimecast") { Volume = 0.9f }, player.Center);
                 }
             }
         }
@@ -303,7 +303,7 @@ namespace GoldLeaf.Items.Blizzard.Armor
                 if (Main.netMode != NetmodeID.Server)
                 {
                     //SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/ColdChime") { Volume = 0.3f, PitchVariance = 0.2f });
-                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Freeze") { PitchVariance = 0.2f });
+                    SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/FrostShatter") { PitchVariance = 0.2f });
                     //SoundEngine.PlaySound(SoundID.DeerclopsIceAttack with { Volume = 0.35f, PitchVariance = 0.2f });
                     //SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/IceSmash") { Volume = 1.15f, Pitch = 0.35f, PitchVariance = 0.2f });
                 }

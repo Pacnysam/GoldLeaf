@@ -838,15 +838,22 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
         {
             if (!Main.dedServ)
             {
+                bool spawnedDust = false;
                 for (int i = 0; i < maxTargets; i++)
                 {
                     if (targets[i] == -1)
                         break;
 
                     if (i == 0)
+                    {
                         Dust.NewDustPerfect(SentryPos, DustType<JellyLightningDust>(), Main.npc[targets[i]].Center);
+                        spawnedDust = true;
+                    }
                     else
+                    {
                         Dust.NewDustPerfect(Main.npc[targets[i - 1]].Center, DustType<JellyLightningDust>(), Main.npc[targets[i]].Center);
+                        spawnedDust = true;
+                    }
                 }
                 for (int i = 0; i < maxTargets; i++)
                 {
@@ -854,6 +861,11 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
                         break;
 
                     Dust.NewDustPerfect(Main.npc[targets[i]].Center, DustType<JellyLightningNodeDust>(), Vector2.Zero, Scale: 1f);
+                }
+                if (!spawnedDust)
+                {
+                    Dust.NewDustPerfect(SentryPos, DustType<JellyLightningDust>(), Projectile.Center);
+                    Dust.NewDustPerfect(Projectile.Center, DustType<JellyLightningNodeDust>(), Vector2.Zero, Scale: 1f);
                 }
             }
         }

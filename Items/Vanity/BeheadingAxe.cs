@@ -70,7 +70,7 @@ namespace GoldLeaf.Items.Vanity
 
                         CameraSystem.QuickScreenShake(Player.MountedCenter, (0f).ToRotationVector2(), 18, 7.5f, 24);
                         SoundEngine.PlaySound(new("GoldLeaf/Sounds/SE/HollowKnight/MawlekExplode") { Volume = 1f, Pitch = 0.2f, PitchVariance = 0.4f }, Player.Center);
-                        SoundEngine.PlaySound(new("GoldLeaf/Sounds/SE/DeadCells/Crit") { Volume = 0.65f, Pitch = -0.2f, PitchVariance = 0.6f }, Player.Center);
+                        SoundEngine.PlaySound(new("GoldLeaf/Sounds/SE/DeadCellsCrit") { Volume = 0.65f, Pitch = -0.2f, PitchVariance = 0.6f }, Player.Center);
                     }
                     axed = true;
                 }
