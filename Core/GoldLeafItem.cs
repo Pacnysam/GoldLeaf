@@ -1,5 +1,4 @@
-﻿using GoldLeaf.Items.Accessories;
-using GoldLeaf.Items.Desert.BeastFang;
+﻿using GoldLeaf.Items.Desert.BeastFang;
 using GoldLeaf.Items.Hell;
 using GoldLeaf.Items.Pickups;
 using GoldLeaf.Items.SlimeRain.Goonai;

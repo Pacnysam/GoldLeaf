@@ -328,7 +328,7 @@ FrostyMask: {
 		'''
 		{$CommonItemTooltip.IncreasesMaxManaBy}
 		Enemies are less likely to target you
-		Grants immunity to Chilled
+		Immunity to Chilled
 		'''
 }
 

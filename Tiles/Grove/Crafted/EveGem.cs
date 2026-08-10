@@ -4,17 +4,12 @@ using static Terraria.ModLoader.ModContent;
 using Terraria.ModLoader;
 using Terraria.ID;
 using Terraria.Localization;
-using GoldLeaf.Tiles.Grove.Ancient;
-using Terraria.ObjectData;
 using Terraria.Audio;
 using GoldLeaf.Effects.Dusts;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
-using GoldLeaf.Items.Accessories;
-using Terraria.GameContent;
 using System;
 using GoldLeaf.Items.Grove;
-using GoldLeaf.Items.Blizzard;
 using GoldLeaf.Tiles.Marble;
 
 namespace GoldLeaf.Tiles.Grove.Crafted

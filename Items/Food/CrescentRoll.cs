@@ -1,6 +1,6 @@
 ﻿using GoldLeaf.Core;
 using GoldLeaf.Items.Blizzard;
-using GoldLeaf.Items.Misc;
+using GoldLeaf.Items.Forest;
 using GoldLeaf.Items.Potions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

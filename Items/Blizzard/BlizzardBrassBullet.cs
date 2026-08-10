@@ -16,7 +16,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
 using Terraria.Graphics.Shaders;
 using Terraria.Localization;
-using GoldLeaf.Items.Accessories;
+
 using ReLogic.Content;
 using GoldLeaf.Core.CrossMod;
 using static GoldLeaf.Core.CrossMod.RedemptionHelper;
@@ -135,10 +135,7 @@ namespace GoldLeaf.Items.Blizzard
                 modifiers.DisableCrit();
         }
 
-        public override void ModifyDamageHitbox(ref Rectangle hitbox)
-        {
-            hitbox.Inflate(7, 7);
-        }
+        public override void ModifyDamageHitbox(ref Rectangle hitbox) => hitbox.Inflate(7, 7);
 
         public override void AI()
         {

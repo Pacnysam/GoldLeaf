@@ -5,19 +5,15 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using GoldLeaf.Items.Grove;
-using System.Diagnostics.Metrics;
 using System;
-using GoldLeaf.Effects.Dusts;
 using ReLogic.Content;
 using Terraria.Localization;
-using GoldLeaf.Items.Vanity.Watcher;
 using Terraria.DataStructures;
 using GoldLeaf.Core.Mechanics;
-namespace GoldLeaf.Items.Accessories
+
+namespace GoldLeaf.Items.Jungle.AnxietyNecklace
 {
     [AutoloadEquip(EquipType.Neck)]
     public class AnxietyNecklace : ModItem
@@ -134,7 +130,7 @@ namespace GoldLeaf.Items.Accessories
         public static Asset<Texture2D> waveTex;
         public override void Load()
         {
-            waveTex = Request<Texture2D>("GoldLeaf/Items/Accessories/AnxietyNecklaceWave");
+            waveTex = Request<Texture2D>("GoldLeaf/Items/Jungle/AnxietyNecklace/AnxietyNecklaceWave");
         }
 
         public override Position GetDefaultPosition() => PlayerDrawLayers.BeforeFirstVanillaLayer;
@@ -155,7 +151,7 @@ namespace GoldLeaf.Items.Accessories
 
             var drawDataRight = new DrawData(
                 waveTex.Value,
-                player.MountedCenter - Main.screenPosition + new Vector2(player.width * (1.05f * MathHelper.Clamp(intensity * 3f, 0.35f, 1f)) * MathHelper.Clamp(intensity - 0.35f, 1f, 1.65f), 0) + (new Vector2(Main.rand.NextFloat(8f, 10f) * 3f).RotatedByRandom(MathHelper.TwoPi) * MathHelper.Clamp(intensity - 1.5f, 0f, 0.5f)),
+                player.MountedCenter - Main.screenPosition + new Vector2(player.width * (1.05f * MathHelper.Clamp(intensity * 3f, 0.35f, 1f)) * MathHelper.Clamp(intensity - 0.35f, 1f, 1.65f), 0) + new Vector2(Main.rand.NextFloat(8f, 10f) * 3f).RotatedByRandom(MathHelper.TwoPi) * MathHelper.Clamp(intensity - 1.5f, 0f, 0.5f),
                 null,
                 Color.Lerp(color1, color2, (float)Math.Sin(GoldLeafWorld.rottime * 4f) * 0.5f + 0.5f) * MathHelper.Clamp(intensity, 0f, 1f),
                 0f,
@@ -166,7 +162,7 @@ namespace GoldLeaf.Items.Accessories
             ); //main right
             var drawDataRight2 = new DrawData(
                 waveTex.Value,
-                player.MountedCenter - Main.screenPosition + new Vector2(player.width * (1.1f * MathHelper.Clamp(intensity * 3f, 0.35f, 1f)) * MathHelper.Clamp(intensity - 0.35f, 1f, 1.65f), 0) + (new Vector2(Main.rand.NextFloat(8f, 10f) * 3f).RotatedByRandom(MathHelper.TwoPi) * MathHelper.Clamp(intensity - 1.5f, 0f, 0.5f)),
+                player.MountedCenter - Main.screenPosition + new Vector2(player.width * (1.1f * MathHelper.Clamp(intensity * 3f, 0.35f, 1f)) * MathHelper.Clamp(intensity - 0.35f, 1f, 1.65f), 0) + new Vector2(Main.rand.NextFloat(8f, 10f) * 3f).RotatedByRandom(MathHelper.TwoPi) * MathHelper.Clamp(intensity - 1.5f, 0f, 0.5f),
                 null,
                 Color.Lerp(color1, color2, (float)Math.Cos(GoldLeafWorld.rottime * 4f) * 0.5f + 0.5f) * MathHelper.Clamp(intensity, 0f, 0.7f),
                 0f,
@@ -177,7 +173,7 @@ namespace GoldLeaf.Items.Accessories
             ); //secondary right
             var drawDataRight3 = new DrawData(
                 waveTex.Value,
-                player.MountedCenter - Main.screenPosition + new Vector2(player.width * (1.15f * MathHelper.Clamp(intensity * 3f, 0.35f, 1f)) * MathHelper.Clamp(intensity - 0.35f, 1f, 1.65f), 0) + (new Vector2(Main.rand.NextFloat(8f, 10f) * 3f).RotatedByRandom(MathHelper.TwoPi) * MathHelper.Clamp(intensity - 1.5f, 0f, 0.5f)),
+                player.MountedCenter - Main.screenPosition + new Vector2(player.width * (1.15f * MathHelper.Clamp(intensity * 3f, 0.35f, 1f)) * MathHelper.Clamp(intensity - 0.35f, 1f, 1.65f), 0) + new Vector2(Main.rand.NextFloat(8f, 10f) * 3f).RotatedByRandom(MathHelper.TwoPi) * MathHelper.Clamp(intensity - 1.5f, 0f, 0.5f),
                 null,
                 Color.Lerp(color1, color2, (float)Math.Sin(GoldLeafWorld.rottime * 4f) * 0.5f - 0.5f) * MathHelper.Clamp(intensity, 0f, 0.475f),
                 0f,
@@ -188,7 +184,7 @@ namespace GoldLeaf.Items.Accessories
             ); //tertiary right
             var drawDataLeft = new DrawData(
                 waveTex.Value,
-                player.MountedCenter - Main.screenPosition + new Vector2(player.width * (-1.05f * MathHelper.Clamp(intensity * 3f, 0.35f, 1f)) * MathHelper.Clamp(intensity - 0.35f, 1f, 1.65f), 0) + (new Vector2(Main.rand.NextFloat(8f, 10f) * 3f).RotatedByRandom(MathHelper.TwoPi) * MathHelper.Clamp(intensity - 1.5f, 0f, 0.5f)),
+                player.MountedCenter - Main.screenPosition + new Vector2(player.width * (-1.05f * MathHelper.Clamp(intensity * 3f, 0.35f, 1f)) * MathHelper.Clamp(intensity - 0.35f, 1f, 1.65f), 0) + new Vector2(Main.rand.NextFloat(8f, 10f) * 3f).RotatedByRandom(MathHelper.TwoPi) * MathHelper.Clamp(intensity - 1.5f, 0f, 0.5f),
                 null,
                 Color.Lerp(color1, color2, (float)Math.Sin(GoldLeafWorld.rottime * 4f) * 0.5f + 0.5f) * MathHelper.Clamp(intensity, 0f, 1f),
                 0f,
@@ -199,7 +195,7 @@ namespace GoldLeaf.Items.Accessories
             ); //main left
             var drawDataLeft2 = new DrawData(
                 waveTex.Value,
-                player.MountedCenter - Main.screenPosition + new Vector2(player.width * (-1.1f * MathHelper.Clamp(intensity * 3f, 0.35f, 1f)) * MathHelper.Clamp(intensity - 0.35f, 1f, 1.65f), 0) + (new Vector2(Main.rand.NextFloat(8f, 10f) * 3f).RotatedByRandom(MathHelper.TwoPi) * MathHelper.Clamp(intensity - 1.5f, 0f, 0.5f)),
+                player.MountedCenter - Main.screenPosition + new Vector2(player.width * (-1.1f * MathHelper.Clamp(intensity * 3f, 0.35f, 1f)) * MathHelper.Clamp(intensity - 0.35f, 1f, 1.65f), 0) + new Vector2(Main.rand.NextFloat(8f, 10f) * 3f).RotatedByRandom(MathHelper.TwoPi) * MathHelper.Clamp(intensity - 1.5f, 0f, 0.5f),
                 null,
                 Color.Lerp(color1, color2, (float)Math.Cos(GoldLeafWorld.rottime * 4f) * 0.5f + 0.5f) * MathHelper.Clamp(intensity, 0f, 0.7f),
                 0f,
@@ -210,7 +206,7 @@ namespace GoldLeaf.Items.Accessories
             ); //secondary left
             var drawDataLeft3 = new DrawData(
                 waveTex.Value,
-                player.MountedCenter - Main.screenPosition + new Vector2(player.width * (-1.15f * MathHelper.Clamp(intensity * 3f, 0.35f, 1f)) * MathHelper.Clamp(intensity - 0.35f, 1f, 1.65f), 0) + (new Vector2(Main.rand.NextFloat(8f, 10f) * 3f).RotatedByRandom(MathHelper.TwoPi) * MathHelper.Clamp(intensity - 1.5f, 0f, 0.5f)),
+                player.MountedCenter - Main.screenPosition + new Vector2(player.width * (-1.15f * MathHelper.Clamp(intensity * 3f, 0.35f, 1f)) * MathHelper.Clamp(intensity - 0.35f, 1f, 1.65f), 0) + new Vector2(Main.rand.NextFloat(8f, 10f) * 3f).RotatedByRandom(MathHelper.TwoPi) * MathHelper.Clamp(intensity - 1.5f, 0f, 0.5f),
                 null,
                 Color.Lerp(color1, color2, (float)Math.Sin(GoldLeafWorld.rottime * 4f) * 0.5f - 0.5f) * MathHelper.Clamp(intensity, 0f, 0.475f),
                 0f,

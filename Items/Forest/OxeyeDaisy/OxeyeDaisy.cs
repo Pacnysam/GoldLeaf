@@ -1,5 +1,4 @@
 using static Terraria.ModLoader.ModContent;
-using GoldLeaf.Core;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -7,28 +6,17 @@ using Terraria.ModLoader;
 using static GoldLeaf.Core.Helper;
 using Microsoft.Xna.Framework;
 using GoldLeaf.Effects.Dusts;
-using GoldLeaf.Tiles.Decor;
-using Terraria.Enums;
 using Terraria.ObjectData;
 using GoldLeaf.Tiles.Grove;
 using Terraria.DataStructures;
-using Terraria.Audio;
-using Terraria.GameContent.Metadata;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using System;
 using Terraria.GameContent.ObjectInteractions;
-using GoldLeaf.Items.Granite;
-using GoldLeaf.Tiles.Granite;
-using Terraria.Graphics.Light;
 
-namespace GoldLeaf.Items.Accessories
+namespace GoldLeaf.Items.Forest.OxeyeDaisy
 {
 	public class OxeyeDaisy : ModItem
 	{
-		public override LocalizedText DisplayName => base.DisplayName.WithFormatArgs("Oxeye Daisy");
-		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs("Loves me... loves me not...");
-
 		public override void SetDefaults()
 		{
 			Item.value = Item.sellPrice(0, 0, 30, 0);
@@ -36,14 +24,6 @@ namespace GoldLeaf.Items.Accessories
 
 			Item.width = 30;
 			Item.height = 32;
-
-            /*Item.createTile = TileType<OxeyeDaisyT>();
-            Item.useTime = 10;
-            Item.useAnimation = 15;
-            Item.useStyle = ItemUseStyleID.Swing;
-            Item.autoReuse = true;
-            Item.useTurn = true;
-            Item.consumable = true;*/
 
             ItemID.Sets.IsAMaterial[Item.type] = false;
 
@@ -103,7 +83,7 @@ namespace GoldLeaf.Items.Accessories
                             //NewItemPerfect(target.Center, new Vector2(0, -2f), ItemID.Heart);
 
 
-                            for (int k = 0; k < Main.rand.Next(8 + (target.width / 20), 10 + (target.width / 20)); k++)
+                            for (int k = 0; k < Main.rand.Next(8 + target.width / 20, 10 + target.width / 20); k++)
                                 Gore.NewGore(target.GetSource_Death(), target.Center, new Vector2(Main.rand.NextFloat(-6, 6), Main.rand.NextFloat(-6, 6)), 331, Main.rand.NextFloat(0.8f, 1.2f));
                                 //Gore.NewGorePerfect(null, target.Center, new Vector2(Main.rand.NextFloat(-6, 6), Main.rand.NextFloat(-6, 6)), 331, Main.rand.NextFloat(0.8f, 1.2f));
                         }
@@ -204,7 +184,7 @@ namespace GoldLeaf.Items.Accessories
     
     public class OxeyeDaisyFake : OxeyeDaisyT
     {
-        public override string Texture => "GoldLeaf/Items/Accessories/OxeyeDaisyT";
+        public override string Texture => "GoldLeaf/Items/Forest/OxeyeDaisy/OxeyeDaisyT";
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();

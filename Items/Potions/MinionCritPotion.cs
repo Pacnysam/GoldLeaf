@@ -14,7 +14,7 @@ using GoldLeaf.Tiles.Decor;
 using GoldLeaf.Core;
 using GoldLeaf.Items.Grove;
 using GoldLeaf.Core.CrossMod;
-using GoldLeaf.Items.Misc;
+using GoldLeaf.Items.Forest;
 
 namespace GoldLeaf.Items.Potions
 {

@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.ID;
 using Terraria.ModLoader;
-using GoldLeaf.Items.Accessories;
 using Terraria;
 using GoldLeaf.Tiles.Grove;
 using System.Threading.Channels;
@@ -21,6 +20,7 @@ using GoldLeaf.Items.Hell;
 using Terraria.Audio;
 using GoldLeaf.Effects.Dusts;
 using GoldLeaf.Items.Potions;
+using GoldLeaf.Items.Forest.OxeyeDaisy;
 
 namespace GoldLeaf.Core
 {
@@ -83,11 +83,11 @@ namespace GoldLeaf.Core
                     #region heat flask
                     if (tile.TileFrameX % 36 == 0 && hellPot && Main.rand.NextBool(40)) //2.5% drop chance checks for hell pots
                     {
-                        Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, ItemType<HeatFlask>(), Main.rand.Next(10, 15));
+                        Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, ItemType<HeatFlask>(), Main.rand.Next(5, 10));
                     }
-                    else if (tile.TileFrameX % 36 == 0 && (!dungeonPot && !templePot && !pyramidPot && !spiderPot) && j > Helper.LavaLayer && j < Main.UnderworldLayer && Main.rand.NextBool(50)) //2% drop chance checks for specific pots in lava layer
+                    else if (tile.TileFrameX % 36 == 0 && (!dungeonPot && !templePot && !pyramidPot && !spiderPot) && j > Helper.LavaLayer && j < Main.UnderworldLayer && Main.rand.NextBool(50)) //2% drop chance checks for generic pots in lava layer
                     {
-                        Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, ItemType<HeatFlask>(), Main.rand.Next(10, 15));
+                        Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, ItemType<HeatFlask>(), Main.rand.Next(5, 10));
                     }
                     #endregion heat flask
                     break;
