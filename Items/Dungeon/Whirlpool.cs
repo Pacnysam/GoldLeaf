@@ -149,7 +149,7 @@ namespace GoldLeaf.Items.Dungeon
 				Projectile.velocity.Y = -oldVelocity.Y;
 			}
 
-			SoundEngine.PlaySound(new SoundStyle("Goldleaf/Sounds/SE/SplashBounce"), Projectile.Center);
+			SoundEngine.PlaySound(new SoundStyle("Goldleaf/Sounds/SE/BlastImpact"), Projectile.Center);
 
 			Bounces--;
 			Projectile.velocity *= 0.825f;

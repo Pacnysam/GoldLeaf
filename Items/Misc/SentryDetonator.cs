@@ -1,6 +1,6 @@
 ﻿using GoldLeaf.Core;
 using GoldLeaf.Effects.Dusts;
-using GoldLeaf.Items.Accessories;
+
 using GoldLeaf.Items.VanillaBossDrops;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

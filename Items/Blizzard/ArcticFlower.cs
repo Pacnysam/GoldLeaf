@@ -478,7 +478,7 @@ namespace GoldLeaf.Items.Blizzard
             if (!Main.dedServ)
             {
                 SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/ForgottenLand/StarShot") { Volume = 0.45f, PitchVariance = 0.5f, MaxInstances = 0 }, Projectile.Center);
-                SoundEngine.PlaySound(new SoundStyle("Goldleaf/Sounds/SE/SplashBounce") { Volume = 0.3f, Pitch = 0.15f, PitchVariance = 0.25f, MaxInstances = 0 }, Projectile.Center);
+                SoundEngine.PlaySound(new SoundStyle("Goldleaf/Sounds/SE/BlastImpact") { Volume = 0.75f, Pitch = 0.15f, PitchVariance = 0.25f, MaxInstances = 0 }, Projectile.Center);
             }
             ChangeState(Recoil);
         }

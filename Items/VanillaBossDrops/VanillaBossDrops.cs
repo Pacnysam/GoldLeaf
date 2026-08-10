@@ -6,9 +6,8 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
-
-using GoldLeaf.Tiles.Decor;
 using GoldLeaf.Items.SlimeRain.Goonai;
+using GoldLeaf.Items.Forest;
 
 namespace GoldLeaf.Items.VanillaBossDrops
 {
@@ -30,7 +29,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
                     {
                         LeadingConditionRule notExpertRule = new(new Conditions.NotExpert());
 
-                        notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<Lunar>(), 20));
+                        notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<FallenMoon>()));
                         npcLoot.Add(notExpertRule);
                         break;
                     }
@@ -72,7 +71,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
                     }
                 case ItemID.EyeOfCthulhuBossBag:
                     {
-                        itemLoot.Add(ItemDropRule.Common(ItemType<Lunar>(), 10));
+                        itemLoot.Add(ItemDropRule.Common(ItemType<FallenMoon>()));
                         break;
                     }
                 case ItemID.EaterOfWorldsBossBag:

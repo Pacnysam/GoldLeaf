@@ -1,7 +1,7 @@
 ﻿using GoldLeaf.Core;
 using GoldLeaf.Core.CrossMod;
 using GoldLeaf.Effects.Dusts;
-using GoldLeaf.Items.Accessories;
+
 using GoldLeaf.Prefixes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

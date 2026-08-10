@@ -16,7 +16,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
 using Terraria.Graphics.Shaders;
 using Terraria.Localization;
-using GoldLeaf.Items.Accessories;
+
 using ReLogic.Content;
 
 namespace GoldLeaf.Items.Blizzard

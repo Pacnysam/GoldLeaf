@@ -101,7 +101,7 @@ namespace GoldLeaf
                         packet.Send(-1, player);
                     }
                     else
-                        SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Reflect") { Volume = 0.9f }, Main.player[player].Center);
+                        SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Rimecast") { Volume = 0.9f }, Main.player[player].Center);
 
                     float seed = Main.rand.NextFloat(0f, 8f);
 

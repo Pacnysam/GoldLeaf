@@ -20,14 +20,12 @@ using System.IO;
 using Terraria.ModLoader.IO;
 using Terraria.Chat;
 using GoldLeaf.Core.CrossMod;
-using static GoldLeaf.Core.CrossMod.RedemptionHelper;
-using GoldLeaf.Items.Misc;
 
-namespace GoldLeaf.Items.VanillaBossDrops
+namespace GoldLeaf.Items.Forest.Lunar
 {
     public class Lunar : ModItem
     {
-        public override string Texture => "GoldLeaf/Items/VanillaBossDrops/LunarFull";
+        public override string Texture => "GoldLeaf/Items/Forest/Lunar/LunarFull";
 
         private static Asset<Texture2D> glowTex;
         public override void Load()
@@ -45,7 +43,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
             ItemID.Sets.GamepadExtraRange[Item.type] = 12;
             ItemID.Sets.GamepadSmartQuickReach[Item.type] = true;
 
-            Item.AddElements([Element.Celestial]);
+            Item.AddElements([RedemptionHelper.Element.Celestial]);
         }
 
         public override void SetDefaults()
@@ -89,7 +87,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Texture2D texture = TextureAssets.Item[Item.type].Value;
 
             if (Main.bloodMoon || Main.pumpkinMoon || Main.snowMoon)
-                frame.Y = (texture.Height / 9 * 8);
+                frame.Y = texture.Height / 9 * 8;
             else
                 frame.Y = texture.Height / 9 * Main.moonPhase;
 
@@ -103,7 +101,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
             Rectangle frame = new(0, texture.Height / 9 * Main.moonPhase, texture.Width, texture.Height / 9);
 
             if (Main.bloodMoon || Main.pumpkinMoon || Main.snowMoon)
-                frame.Y = (texture.Height / 9 * 8);
+                frame.Y = texture.Height / 9 * 8;
 
             Vector2 position = new(Item.position.X - Main.screenPosition.X + Item.width / 2, Item.position.Y - Main.screenPosition.Y + Item.height / 2);
 
@@ -142,7 +140,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
 
-            Projectile.AddElements([Element.Celestial]);
+            Projectile.AddElements([RedemptionHelper.Element.Celestial]);
         }
 
         const int MaxCharge = 60;
@@ -220,7 +218,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D moonTex = TextureAssets.Moon[Main.moonType].Value;
-            Rectangle frame = new(0, (moonTex.Height / 8) * Main.moonPhase, moonTex.Width, moonTex.Height / 8);
+            Rectangle frame = new(0, moonTex.Height / 8 * Main.moonPhase, moonTex.Width, moonTex.Height / 8);
             Color color = Color.Blue.Alpha(180);
 
             if (Main.bloodMoon)
@@ -230,8 +228,8 @@ namespace GoldLeaf.Items.VanillaBossDrops
             else if (Main.snowMoon)
                 moonTex = TextureAssets.SnowMoon.Value;
 
-            Main.EntitySpriteDraw(bloomTex.Value, Projectile.Center - Main.screenPosition, null, color * Projectile.localAI[1] * 0.5f, 0, bloomTex.Size() / 2, ((Projectile.localAI[1] * Projectile.scale * 1.5f) + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.1f)) * Projectile.scale * 0.15f, SpriteEffects.None, 0f);
-            Main.EntitySpriteDraw(moonTex, Projectile.Center - Main.screenPosition, new(0, 0, moonTex.Width, moonTex.Height / 8), new Color(0, 0, 30) * Projectile.localAI[1] * 0.75f * Projectile.scale, ((float)Math.Sin(GoldLeafWorld.rottime * 5f) * 0.25f * Projectile.localAI[2]) + (-Projectile.velocity.X * 0.015f), frame.Size() / 2, Projectile.localAI[1] + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.1f), SpriteEffects.None, 0f);
+            Main.EntitySpriteDraw(bloomTex.Value, Projectile.Center - Main.screenPosition, null, color * Projectile.localAI[1] * 0.5f, 0, bloomTex.Size() / 2, (Projectile.localAI[1] * Projectile.scale * 1.5f + (float)Math.Sin(GoldLeafWorld.rottime) * 0.1f) * Projectile.scale * 0.15f, SpriteEffects.None, 0f);
+            Main.EntitySpriteDraw(moonTex, Projectile.Center - Main.screenPosition, new(0, 0, moonTex.Width, moonTex.Height / 8), new Color(0, 0, 30) * Projectile.localAI[1] * 0.75f * Projectile.scale, (float)Math.Sin(GoldLeafWorld.rottime * 5f) * 0.25f * Projectile.localAI[2] + -Projectile.velocity.X * 0.015f, frame.Size() / 2, Projectile.localAI[1] + (float)Math.Sin(GoldLeafWorld.rottime) * 0.1f, SpriteEffects.None, 0f);
             return true;
         }
 
@@ -241,7 +239,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
                 Main.EntitySpriteDraw(glowTex.Value, Projectile.Center - Main.screenPosition, null, Color.White.Alpha() * Projectile.Opacity, 0f, glowTex.Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
 
             Texture2D moonTex = TextureAssets.Moon[Main.moonType].Value;
-            Rectangle frame = new(0, (moonTex.Height / 8) * Main.moonPhase, moonTex.Width, moonTex.Height / 8);
+            Rectangle frame = new(0, moonTex.Height / 8 * Main.moonPhase, moonTex.Width, moonTex.Height / 8);
             Color color = Color.White.Alpha(180) * 0.4f;
 
             if (Main.bloodMoon)
@@ -255,7 +253,7 @@ namespace GoldLeaf.Items.VanillaBossDrops
             {
                 Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + TextureAssets.Projectile[Projectile.type].Size() / 2;
 
-                Main.EntitySpriteDraw(moonTex, drawPos, frame, color * (1f - (k / 5f)) * Projectile.localAI[1], ((float)Math.Sin(GoldLeafWorld.rottime * 5f) * 0.25f * Projectile.localAI[2]) + (-Projectile.velocity.X * 0.015f), frame.Size() / 2, (Projectile.localAI[1] + ((float)Math.Sin(GoldLeafWorld.rottime) * 0.1f)) * Projectile.scale, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(moonTex, drawPos, frame, color * (1f - k / 5f) * Projectile.localAI[1], (float)Math.Sin(GoldLeafWorld.rottime * 5f) * 0.25f * Projectile.localAI[2] + -Projectile.velocity.X * 0.015f, frame.Size() / 2, (Projectile.localAI[1] + (float)Math.Sin(GoldLeafWorld.rottime) * 0.1f) * Projectile.scale, SpriteEffects.None, 0f);
             }
             Main.EntitySpriteDraw(moonTex, Projectile.Center - Main.screenPosition, frame, color.Alpha() * Math.Clamp(Projectile.localAI[2] - 0.5f, 0f, 1f), -Projectile.velocity.X * 0.015f, frame.Size() / 2, (4f - Projectile.localAI[2]) * Projectile.scale, SpriteEffects.None, 0f);
         }

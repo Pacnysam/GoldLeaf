@@ -6,21 +6,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using GoldLeaf.Items.Grove;
-using System.Diagnostics.Metrics;
 using GoldLeaf.Effects.Dusts;
-using Terraria.DataStructures;
-using Terraria.GameContent.Drawing;
-using Terraria.Graphics.Shaders;
-using Terraria.Localization;
-using GoldLeaf.Items.Accessories;
 using ReLogic.Content;
 using GoldLeaf.Items.Blizzard.Armor;
-using System.IO;
-using Terraria.ModLoader.IO;
 using static GoldLeaf.GoldLeaf;
 
 namespace GoldLeaf.Items.Blizzard
@@ -60,7 +50,7 @@ namespace GoldLeaf.Items.Blizzard
 
                 npc.AddBuff(BuffType<FreezeBuff>(), Math.Clamp(FREEZETIME - defrostTimer / 2, 30, FREEZETIME));
                 
-                if (Main.netMode != NetmodeID.Server) 
+                if (!Main.dedServ) 
                 {
                     if (defrostTimer <= 180)
                     {

@@ -14,7 +14,7 @@ using Terraria.ID;
 using Terraria;
 using Microsoft.Xna.Framework;
 using GoldLeaf.Items.VanillaBossDrops;
-using GoldLeaf.Items.Accessories;
+
 using Terraria.DataStructures;
 using Steamworks;
 
