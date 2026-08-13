@@ -55,11 +55,7 @@ FinessePotionBuff: {
 
 VigorPotionBuff: {
 	DisplayName: Vigorous
-	Description:
-		'''
-		Melee strikes generate overhealth
-		Increased max overhealth
-		'''
+	Description: "Avoid damage to generate overhealth"
 }
 
 ConsistencyPotionBuff: {
