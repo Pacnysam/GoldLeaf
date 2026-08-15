@@ -300,7 +300,7 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
                 CameraSystem.QuickScreenShake(Projectile.Center, null, 14.5f + ShotsFired * 0.25f, 5f + (ShotsFired * 0.085f), 36 + (int)(ShotsFired * 1.45f), 1500);
                 CameraSystem.QuickScreenShake(Projectile.Center, 0f.ToRotationVector2(), 14.5f + ShotsFired * 0.25f, 10f + (ShotsFired * 0.115f), 20 + (int)(ShotsFired * 0.85f), 1500);
 
-                for (int j = 0; j < 10 + explosionVolume * 0.2f; j++)
+                for (int j = 0; j < 15 + (explosionVolume * 0.2f); j++)
                 {
                     var dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustType<SpecialSmoke>(), Scale: Main.rand.NextFloat(0.85f, 1.75f) * Math.Clamp(explosionVolume / 90f, 0.85f, 1.5f));
                     dust.velocity = Main.rand.NextVector2Circular(9f, 9f) * Math.Clamp(explosionVolume / 65f, 1f, 3f);

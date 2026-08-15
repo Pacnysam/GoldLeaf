@@ -35,6 +35,8 @@ namespace GoldLeaf.Items.Misc
             Item.noMelee = true;
             Item.noUseGraphic = true;
 
+            Item.DamageType = DamageClass.Summon;
+
             Item.width = 30;
             Item.height = 34;
         }
