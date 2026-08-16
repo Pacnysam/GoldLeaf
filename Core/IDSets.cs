@@ -3,6 +3,7 @@ using GoldLeaf.Effects.Dusts;
 using GoldLeaf.Items.Blizzard;
 using GoldLeaf.Items.Blizzard.Armor;
 using GoldLeaf.Items.Granite;
+using GoldLeaf.Items.Grove;
 using GoldLeaf.Items.Jungle.ToxicPositivity;
 using GoldLeaf.Items.Meteor;
 using GoldLeaf.Items.Ocean;
@@ -58,6 +59,11 @@ namespace GoldLeaf.Core
 
         public static bool[] WorkInProgress = ItemID.Sets.Factory.CreateNamedSet("WorkInProgress")
             .RegisterBoolSet(false);
+
+        public static bool[] PotionCanGainAccessoryEffects = ItemID.Sets.Factory.CreateNamedSet("PotionCanGainAccessoryEffects")
+            .Description("Allows equipment to give this healing potion bonus effects, such as the bonus health given by wellspring watch. " +
+            "Typically disabled in favor of manual implementation for items that heal conditionally or over time")
+            .RegisterBoolSet(true, ItemType<ForbiddenFruit>());
     }
 
     public static partial class ProjectileSets

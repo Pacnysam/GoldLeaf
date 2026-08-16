@@ -55,7 +55,7 @@ FinessePotionBuff: {
 
 VigorPotionBuff: {
 	DisplayName: Vigorous
-	Description: "Avoid damage to generate overhealth"
+	Description: Avoid damage to generate overhealth
 }
 
 ConsistencyPotionBuff: {

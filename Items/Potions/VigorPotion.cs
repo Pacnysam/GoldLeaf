@@ -2,6 +2,7 @@
 using GoldLeaf.Core.CrossMod;
 using GoldLeaf.Core.Mechanics.Overhealth;
 using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -14,7 +15,7 @@ namespace GoldLeaf.Items.Potions
     public class VigorPotion : ModItem
     {
         public static int ExtraOverhealth => 40;
-        public static int TimeUntilGeneration => TimeToTicks(3.5f);
+        public static int TimeUntilGeneration => TimeToTicks(5f);
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(ExtraOverhealth);
 
         public override void SetStaticDefaults()
@@ -58,7 +59,7 @@ namespace GoldLeaf.Items.Potions
             if (potionPlayer.vigorTime < VigorPotion.TimeUntilGeneration)
                 potionPlayer.vigorTime++;
 
-            if (potionPlayer.vigorTime >= VigorPotion.TimeUntilGeneration && player.buffTime[buffIndex] % 20 == 1 && player.GetOverhealthOfType<VigorPool>() < VigorPotion.ExtraOverhealth)
+            if (potionPlayer.vigorTime >= VigorPotion.TimeUntilGeneration && player.buffTime[buffIndex] % 30 == 0 && player.GetOverhealthOfType<VigorPool>() < VigorPotion.ExtraOverhealth)
             {
                 player.AddOverhealth<VigorPool>();
 
@@ -75,5 +76,10 @@ namespace GoldLeaf.Items.Potions
         public override int DefaultDuration => 0;
 
         public override bool PreUpdateTime(Player player) => !player.HasBuff<VigorPotionBuff>();
+        public override void OnHurt(Player player, Player.HurtInfo info, int amountLost)
+        {
+            PotionPlayer potionPlayer = player.GetModPlayer<PotionPlayer>();
+            potionPlayer.vigorTime = (int)Math.Max(potionPlayer.vigorTime - (30 + (info.Damage * 3.5f)), 0);
+        }
     }
 }

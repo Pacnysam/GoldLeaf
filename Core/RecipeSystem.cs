@@ -96,6 +96,8 @@ namespace GoldLeaf.Core
             RegisterVarietyGroup("GoldLeaf:AdamantiteBar", [ItemID.AdamantiteBar, ItemID.TitaniumBar]);
             #endregion bars
 
+            RegisterVarietyGroup("GoldLeaf:GoldWatch", [ItemID.GoldWatch, ItemID.PlatinumWatch]);
+            
             RegisterVarietyGroup("GoldLeaf:JellyfishBait", [ItemID.PinkJellyfish, ItemID.BlueJellyfish, ItemID.GreenJellyfish]);
             RegisterVarietyGroup("GoldLeaf:EvilYoyo", [ItemID.CorruptYoyo, ItemID.CrimsonYoyo]);
 

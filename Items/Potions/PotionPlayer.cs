@@ -56,12 +56,6 @@ namespace GoldLeaf.Items.Potions
             return orig(isBallooned);
         }
 
-        public override void OnHurt(Player.HurtInfo info)
-        {
-            if (Player.HasBuff<VigorPotionBuff>())
-                vigorTime = (int)Math.Max(vigorTime - (info.Damage * 2.5f), 0);
-        }
-
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             if (consistencyPotion)
