@@ -241,6 +241,11 @@ Goonai: {
 SentryPotion: {
 	DisplayName: Reinforcement Potion
 	Tooltip: "{$CommonItemTooltip.IncreasesMaxSentriesBy}"
+	ThoriumTooltip:
+		'''
+		{$CommonItemTooltip.IncreasesMaxSentriesBy}
+		"Not compatible with {1} or {2}"
+		''' 
 }
 
 JumpBoostPotion: {
