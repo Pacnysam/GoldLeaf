@@ -166,16 +166,29 @@ namespace GoldLeaf.Items.Forest.Lunar
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
+            bool isOldest = true;
 
-            if (!Main.dayTime && (player.ZoneOverworldHeight || player.ZoneSkyHeight) && player.channel && player.HasItem(ItemID.FallenStar)) 
+            if (player.ownedProjectileCounts[Type] > 1)
+            {
+                foreach (Projectile projectile in Main.projectile)
+                {
+                    if (projectile.type == Type && projectile.owner == Projectile.owner && projectile.Counter() >= Projectile.Counter())
+                    {
+                        isOldest = false;
+                        break;
+                    }
+                }
+            }
+            if (isOldest && !Main.dayTime && (player.ZoneOverworldHeight || player.ZoneSkyHeight) && player.channel && player.HasItem(ItemID.FallenStar)) 
             {
                 MoonTimer++;
                 
                 if (MoonTimer >= MaxCharge) 
                 {
                     MoonTimer = 0;
-                    //SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/StarSlot") { Variants = [1, 2, 3] }, Projectile.Center);
-                    SoundEngine.PlaySound(SoundID.NPCDeath7, Projectile.Center);
+                    if (!Main.dedServ)
+                        SoundEngine.PlaySound(SoundID.NPCDeath7, Projectile.Center);
+                    
                     player.ConsumeItem(ItemID.FallenStar);
                     Projectile.localAI[2] = 3f;
 
