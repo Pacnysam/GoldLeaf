@@ -245,7 +245,7 @@ SentryPotion: {
 		'''
 		{$CommonItemTooltip.IncreasesMaxSentriesBy}
 		"Not compatible with {1} or {2}"
-		''' 
+		'''
 }
 
 JumpBoostPotion: {
