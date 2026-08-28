@@ -1,18 +1,9 @@
 using Terraria;
-using static Terraria.ModLoader.ModContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using GoldLeaf.Effects.Dusts;
-using Terraria.Localization;
-using Microsoft.Xna.Framework;
 using GoldLeaf.Core;
-using Mono.Cecil;
-using Terraria.DataStructures;
-using GoldLeaf.Items.Grove;
-using Microsoft.Xna.Framework.Graphics;
 using static GoldLeaf.Core.Helper;
-using GoldLeaf.Core.CrossMod;
-using static GoldLeaf.Core.CrossMod.RedemptionHelper;
+using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Items.Nightshade
 {

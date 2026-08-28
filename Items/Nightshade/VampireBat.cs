@@ -3,19 +3,14 @@ using GoldLeaf.Core;
 using static GoldLeaf.Core.Helper;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using GoldLeaf.Effects.Dusts;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Localization;
 using Terraria.GameContent.Drawing;
 using Terraria.GameContent;
-using GoldLeaf.Core.CrossMod;
-using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
 
 namespace GoldLeaf.Items.Nightshade

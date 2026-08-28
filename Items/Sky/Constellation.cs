@@ -1,5 +1,4 @@
 ﻿using GoldLeaf.Core;
-using GoldLeaf.Core.CrossMod;
 using GoldLeaf.Core.Mechanics;
 using GoldLeaf.Effects.Dusts;
 using Microsoft.Xna.Framework;
@@ -12,13 +11,9 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
-using Terraria.GameContent.Animations;
-using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
-using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 using static GoldLeaf.Core.Helper;
 using static Terraria.ModLoader.ModContent;
 

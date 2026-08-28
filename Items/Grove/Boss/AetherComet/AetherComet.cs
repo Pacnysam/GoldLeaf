@@ -1,7 +1,5 @@
 using GoldLeaf.Core;
-using GoldLeaf.Core.CrossMod;
 using GoldLeaf.Effects.Dusts;
-using Microsoft.Build.Evaluation;
 using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,9 +11,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
-using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Items.Grove.Boss.AetherComet
@@ -37,7 +33,7 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
         public override void SetDefaults()
 		{
 			Item.width = 28;
-            Item.mana = 20;
+            Item.mana = 40;
 			Item.height = 28;
 			Item.useStyle = ItemUseStyleID.Shoot;
 			Item.staff[Item.type] = true;
@@ -88,7 +84,7 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
         public override void Load()
         {
             ringTex = Request<Texture2D>("GoldLeaf/Textures/RingGlow5");
-            bloomTex = Request<Texture2D>("GoldLeaf/Textures/Glow");
+            bloomTex = Request<Texture2D>("GoldLeaf/Textures/GlowSharp");
         }
         public override void SetStaticDefaults()
         {
@@ -140,7 +136,8 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
                 float sin = (float)(Math.Sin(Counter * 0.2175f) * 0.5f + 0.5f);
                 Color color = new Color(255, 119, 246) * Utils.Remap(ShotsFired, 10, 24, 0f, 1f) * 0.925f * sin;
 
-                Main.EntitySpriteDraw(bloomTex.Value, drawPos, null, color, Projectile.rotation, bloomTex.Size() / 2, Projectile.scale * Utils.Remap(ShotsFired, 10, 22, 1f, 1.45f), SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(bloomTex.Value, drawPos, null, color, Projectile.rotation, bloomTex.Size() / 2, Projectile.scale * Utils.Remap(ShotsFired, 10, 22, 1f, 1.45f) * 0.2f, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(bloomTex.Value, drawPos, null, color, Projectile.rotation, bloomTex.Size() / 2, Projectile.scale * Utils.Remap(ShotsFired, 10, 22, 1f, 1.45f) * 0.125f, SpriteEffects.None, 0f);
             } //bloom 
             if (ShotsFired >= 20 && Main.myPlayer == Projectile.owner)
             {
@@ -383,20 +380,6 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
             Projectile.localNPCHitCooldown = 6;
 
             Projectile.DamageType = DamageClass.Magic;
-        }
-
-        public override void OnSpawn(IEntitySource source)
-        {
-            /*int repeats = Main.rand.Next(3, 5);
-            for (int i = 0; i < repeats + Projectile.ai[0]/40; i++)
-            {
-                if (Main.myPlayer == Projectile.owner)
-                    Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, (Main.rand.NextVector2Circular(7.5f, 6f) + new Vector2(0, -3.5f)) * Math.Clamp(Projectile.ai[0] / 75f, 0.35f, 1.25f), ProjectileType<AetherEmber>(), 0, 0, Projectile.owner).scale = Main.rand.NextFloat(0.75f, 1.25f);
-            }*/
-
-            /*ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.TrueExcalibur,
-                new ParticleOrchestraSettings { PositionInWorld = Projectile.Center },
-                Projectile.owner);*/
         }
 
         public override bool PreAI()

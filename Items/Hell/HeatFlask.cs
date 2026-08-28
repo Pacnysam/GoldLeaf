@@ -10,8 +10,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.Audio;
 using ReLogic.Content;
-using GoldLeaf.Core.CrossMod;
-using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
 
 namespace GoldLeaf.Items.Hell

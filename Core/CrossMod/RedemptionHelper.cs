@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.ModLoader;
 using Terraria;
+using GoldLeaf.Core.CrossMod;
 
 namespace GoldLeaf.Core.CrossMod
 {
@@ -15,25 +16,6 @@ namespace GoldLeaf.Core.CrossMod
             return ModLoader.TryGetMod("Redemption", out redemption);
         }
 
-        /// <summary>
-        /// Adds given list of elements, must be put in SetStaticDefaults
-        /// </summary>
-        public static void AddElements(this Entity entity, Element[] elements)
-        {
-            if (RedemptionLoaded(out Mod redemption))
-            {
-                for (int i = 0; i < elements.Length; i++)
-                {
-                    if (entity is Item item)
-                        redemption.Call("addElementItem", (int)elements[i], item.type);
-                    if (entity is Projectile proj)
-                        redemption.Call("addElementProj", (int)elements[i], proj.type);
-                    if (entity is NPC npc)
-                        redemption.Call("addElementNPC", (int)elements[i], npc.type);
-                }
-            }
-        }
-        
         /// <summary>
         /// Override type is behavior; 1 adds an element, -1 removes an element, 0 to resets it
         /// Can be put anywhere, does not reset
@@ -170,26 +152,7 @@ namespace GoldLeaf.Core.CrossMod
             if (RedemptionLoaded(out Mod redemption))
                 redemption.Call("addNPCToElementTypeList", attributeString, npcType);
         }
-
-        public enum Element : int
-        {
-            None = 0,
-            Arcane = 1,
-            Fire = 2,
-            Water = 3,
-            Ice = 4,
-            Earth = 5,
-            Wind = 6,
-            Thunder = 7,
-            Holy = 8,
-            Shadow = 9,
-            Nature = 10,
-            Poison = 11,
-            Blood = 12,
-            Psychic = 13,
-            Celestial = 14,
-            Explosive = 15
-        }
+        
         public static class NPCAttributes
         {
             public const string Skeleton = "Skeleton";
@@ -210,6 +173,51 @@ namespace GoldLeaf.Core.CrossMod
             public const string Dark = "Dark";
             public const string Blood = "Blood";
             public const string Slime = "Slime";
+        }
+    }
+}
+
+namespace GoldLeaf.Core
+{
+    public enum Element : int
+    {
+        None = 0,
+        Arcane = 1,
+        Fire = 2,
+        Water = 3,
+        Ice = 4,
+        Earth = 5,
+        Wind = 6,
+        Thunder = 7,
+        Holy = 8,
+        Shadow = 9,
+        Nature = 10,
+        Poison = 11,
+        Blood = 12,
+        Psychic = 13,
+        Celestial = 14,
+        Explosive = 15
+    }
+
+    public static partial class Helper
+    {
+        /// <summary>
+        /// Adds given list of elements, must be put in SetStaticDefaults
+        /// </summary>
+        public static void AddElements(this Entity entity, Element[] elements)
+        {
+            if (RedemptionHelper.RedemptionLoaded(out Mod redemption))
+            {
+                for (int i = 0; i < elements.Length; i++)
+                {
+                    if (entity is Item item)
+                        redemption.Call("addElementItem", (int)elements[i], item.type);
+                    if (entity is Projectile proj)
+                        redemption.Call("addElementProj", (int)elements[i], proj.type);
+                    if (entity is NPC npc)
+                        redemption.Call("addElementNPC", (int)elements[i], npc.type);
+                }
+            }
         }
     }
 }

@@ -1,16 +1,11 @@
 using GoldLeaf.Core;
 using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
-using static GoldLeaf.Core.CrossMod.RedemptionHelper;
-using System.Diagnostics.Metrics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
-using GoldLeaf.Items.Dungeon;
-using Terraria.Localization;
 using Microsoft.Xna.Framework;
-using System.Runtime.InteropServices;
 using Terraria.Graphics.Shaders;
 using Terraria.Graphics;
 using Terraria.DataStructures;
@@ -19,18 +14,9 @@ using GoldLeaf.Items.Underground;
 using Terraria.GameContent.Drawing;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using Terraria.Graphics.CameraModifiers;
-using GoldLeaf.Items.Blizzard;
-using GoldLeaf.Items.Nightshade;
-using Steamworks;
-using GoldLeaf.Effects.Dusts;
 using Terraria.GameContent;
-using Terraria.GameInput;
-
 using static GoldLeaf.GoldLeaf;
-using GoldLeaf.Items.Misc;
 using GoldLeaf.Items.Grove.ChalcedonyQuarry;
-using System.Collections.Generic;
 
 namespace GoldLeaf.Items.FishWeapons
 {

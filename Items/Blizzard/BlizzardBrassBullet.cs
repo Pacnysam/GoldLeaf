@@ -1,5 +1,4 @@
-﻿using System;
-using static Terraria.ModLoader.ModContent;
+﻿using static Terraria.ModLoader.ModContent;
 using GoldLeaf.Core;
 using static GoldLeaf.Core.Helper;
 using Microsoft.Xna.Framework;
@@ -9,18 +8,9 @@ using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using GoldLeaf.Items.Grove;
-using System.Diagnostics.Metrics;
 using GoldLeaf.Effects.Dusts;
 using Terraria.DataStructures;
-using Terraria.GameContent.Drawing;
-using Terraria.Graphics.Shaders;
-using Terraria.Localization;
-
 using ReLogic.Content;
-using GoldLeaf.Core.CrossMod;
-using static GoldLeaf.Core.CrossMod.RedemptionHelper;
-using rail;
 
 namespace GoldLeaf.Items.Blizzard
 {

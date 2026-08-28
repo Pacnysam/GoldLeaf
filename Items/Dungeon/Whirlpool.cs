@@ -9,7 +9,6 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using ReLogic.Content;
-using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 
 namespace GoldLeaf.Items.Dungeon
 {
@@ -75,9 +74,10 @@ namespace GoldLeaf.Items.Dungeon
 
 	public class WhirlpoolP : ModProjectile 
 	{
-		public override string Texture => "Goldleaf/Items/Dungeon/WhirlpoolP";
+        public override bool IsLoadingEnabled(Mod mod) => false;
+        public override string Texture => "Goldleaf/Items/Dungeon/WhirlpoolP";
 
-		public override void SetStaticDefaults()
+        public override void SetStaticDefaults()
 		{
 			// DisplayName.SetDefault("Whirlpool");
 			ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
@@ -265,6 +265,7 @@ namespace GoldLeaf.Items.Dungeon
 
     public class WaterBoltGravity : ModProjectile
     {
+        public override bool IsLoadingEnabled(Mod mod) => false;
         public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.WaterBolt;
         public override void SetDefaults()
         {

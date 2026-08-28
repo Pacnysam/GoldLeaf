@@ -1,7 +1,5 @@
 using GoldLeaf.Core;
 using GoldLeaf.Effects.Dusts;
-using GoldLeaf.Items.Grove;
-using GoldLeaf.Items.Grove.Boss;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -11,11 +9,9 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
-using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static GoldLeaf.Core.ColorHelper;
-using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 using static GoldLeaf.Core.Helper;
 using static Terraria.ModLoader.ModContent;
 

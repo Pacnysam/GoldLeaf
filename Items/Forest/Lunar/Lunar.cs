@@ -3,11 +3,8 @@ using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
 using Terraria.ID;
 using Terraria.ModLoader;
-using GoldLeaf.Effects.Dusts;
-using Terraria.Localization;
 using Microsoft.Xna.Framework;
 using GoldLeaf.Core;
-using Mono.Cecil;
 using Terraria.DataStructures;
 using System;
 using Microsoft.Xna.Framework.Graphics;
@@ -15,11 +12,6 @@ using ReLogic.Content;
 using Terraria.GameContent;
 using Terraria.Enums;
 using Terraria.Audio;
-using GoldLeaf.Items.Underground;
-using System.IO;
-using Terraria.ModLoader.IO;
-using Terraria.Chat;
-using GoldLeaf.Core.CrossMod;
 
 namespace GoldLeaf.Items.Forest.Lunar
 {
@@ -43,7 +35,7 @@ namespace GoldLeaf.Items.Forest.Lunar
             ItemID.Sets.GamepadExtraRange[Item.type] = 12;
             ItemID.Sets.GamepadSmartQuickReach[Item.type] = true;
 
-            Item.AddElements([RedemptionHelper.Element.Celestial]);
+            Item.AddElements([Element.Celestial]);
         }
 
         public override void SetDefaults()
@@ -140,7 +132,7 @@ namespace GoldLeaf.Items.Forest.Lunar
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
 
-            Projectile.AddElements([RedemptionHelper.Element.Celestial]);
+            Projectile.AddElements([Element.Celestial]);
         }
 
         const int MaxCharge = 60;
@@ -166,16 +158,29 @@ namespace GoldLeaf.Items.Forest.Lunar
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
+            bool isOldest = true;
 
-            if (!Main.dayTime && (player.ZoneOverworldHeight || player.ZoneSkyHeight) && player.channel && player.HasItem(ItemID.FallenStar)) 
+            if (player.ownedProjectileCounts[Type] > 1)
+            {
+                foreach (Projectile projectile in Main.projectile)
+                {
+                    if (projectile.type == Type && projectile.owner == Projectile.owner && projectile.Counter() >= Projectile.Counter())
+                    {
+                        isOldest = false;
+                        break;
+                    }
+                }
+            }
+            if (isOldest && !Main.dayTime && (player.ZoneOverworldHeight || player.ZoneSkyHeight) && player.channel && player.HasItem(ItemID.FallenStar)) 
             {
                 MoonTimer++;
                 
                 if (MoonTimer >= MaxCharge) 
                 {
                     MoonTimer = 0;
-                    //SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/StarSlot") { Variants = [1, 2, 3] }, Projectile.Center);
-                    SoundEngine.PlaySound(SoundID.NPCDeath7, Projectile.Center);
+                    if (!Main.dedServ)
+                        SoundEngine.PlaySound(SoundID.NPCDeath7, Projectile.Center);
+                    
                     player.ConsumeItem(ItemID.FallenStar);
                     Projectile.localAI[2] = 3f;
 

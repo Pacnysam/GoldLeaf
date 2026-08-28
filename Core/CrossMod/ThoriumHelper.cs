@@ -15,5 +15,10 @@ namespace GoldLeaf.Core.CrossMod
         {
             return ModLoader.TryGetMod("ThoriumMod", out thorium);
         }
+        public static bool HasSentryPotionBuff(Player player, out ModBuff artilleryBuff)
+        {
+            artilleryBuff = null;
+            return ThoriumLoaded(out Mod thorium) && thorium.TryFind("ArtilleryBuff", out artilleryBuff) && player.HasBuff(artilleryBuff.Type);
+        }
     }
 }

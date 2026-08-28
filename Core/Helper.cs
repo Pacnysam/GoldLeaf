@@ -65,7 +65,6 @@ namespace GoldLeaf.Core
         public static float Counter(this Projectile projectile) => projectile.GetGlobalProjectile<GoldLeafProjectile>().counter;
         public static float Counter(this NPC npc) => npc.GetGlobalNPC<GoldLeafNPC>().counter;
 
-        public static bool Stunned(this Player player) => player.CCed || player.GetModPlayer<GoldLeafPlayer>().stunned;
         public static bool CanBeStunned(this NPC npc) => (NPCSets.CCImmunity[npc.type] != null)? !(bool)NPCSets.CCImmunity[npc.type] : 
             !(npc.boss || NPCID.Sets.ShouldBeCountedAsBoss[npc.type] || npc.aiStyle == NPCAIStyleID.Worm || npc.knockBackResist == 0f);
 

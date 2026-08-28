@@ -2,27 +2,15 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 using GoldLeaf.Effects.Dusts;
-using Terraria.Localization;
 using Microsoft.Xna.Framework;
 using GoldLeaf.Core;
-using Mono.Cecil;
-using Terraria.DataStructures;
-using System;
-using System.Diagnostics.Metrics;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.Audio;
-using GoldLeaf.Items.Grove;
-using Terraria.GameContent.ItemDropRules;
-using Terraria.UI;
-using Terraria.ModLoader.IO;
 using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
-using Terraria.WorldBuilding;
 using ReLogic.Content;
-using System.Collections.Generic;
-using Terraria.GameContent.Drawing;
-using static GoldLeaf.Core.CrossMod.RedemptionHelper;
+using System;
 
 namespace GoldLeaf.Items.SlimeRain.Goonai
 {
@@ -88,7 +76,6 @@ namespace GoldLeaf.Items.SlimeRain.Goonai
         private static Asset<Texture2D> bigGlowTex;
         public override void Load()
         {
-            //glowTex = Request<Texture2D>(Texture + "Glow");
             glowTex = Request<Texture2D>("GoldLeaf/Textures/ShineSmall");
             bigGlowTex = Request<Texture2D>("GoldLeaf/Textures/Shine");
         }
@@ -234,12 +221,15 @@ namespace GoldLeaf.Items.SlimeRain.Goonai
 
         public override void OnKill(int timeLeft)
         {
-            for (int k = 0; k < 18; ++k)
+            if (!Main.dedServ)
             {
-                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<SlimeDustBlue>(), Main.rand.NextFloat(-1.5f, 1.5f) + -Projectile.velocity.X / 5, Main.rand.NextFloat(-0.9f, 0.9f) + -Projectile.velocity.Y / 5, 0, Color.White, Main.rand.NextFloat(0.8f, 1.2f));
-                Main.dust[dust].alpha = 175;
-                if (Main.rand.NextBool(2)) Main.dust[dust].alpha += 25;
-                if (Main.rand.NextBool(2)) Main.dust[dust].alpha += 25;
+                for (int k = 0; k < 18; k++)
+                {
+                    Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustType<SlimeDustBlue>(), Main.rand.NextFloat(-1.5f, 1.5f) + -Projectile.velocity.X / 5, Main.rand.NextFloat(-0.9f, 0.9f) + -Projectile.velocity.Y / 5, 0, Color.White, Main.rand.NextFloat(0.8f, 1.2f));
+                    dust.alpha = 175;
+                    for (int i = 0; i < 2; i++)
+                        if (Main.rand.NextBool()) dust.alpha += 25;
+                }
             }
         }
     }

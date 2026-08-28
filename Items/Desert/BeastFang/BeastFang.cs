@@ -1,23 +1,13 @@
 using GoldLeaf.Core;
-using GoldLeaf.Core.CrossMod;
 using GoldLeaf.Core.Mechanics;
-using GoldLeaf.Effects.Dusts;
-using GoldLeaf.Items.Grove;
-using GoldLeaf.Items.Sky;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using System;
-using System.Diagnostics.Metrics;
 using Terraria;
-using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
-using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 using static GoldLeaf.Core.Helper;
 using static Terraria.ModLoader.ModContent;
 
