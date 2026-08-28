@@ -89,7 +89,8 @@ namespace GoldLeaf.Core
 
         public override void ModifyHurt(ref Player.HurtModifiers modifiers)
         {
-            modifiers.FinalDamage *= 1f - Math.Min(damageResistance, 0.9f);
+            modifiers.ModifyHurtInfo += CalculateDamageResistance;
+            void CalculateDamageResistance(ref Player.HurtInfo info) => info.Damage = (int)(info.Damage * (1f - Math.Min(damageResistance, 0.9f)));
         }
 
         public delegate void OnHitNPCDelegate(Player player, NPC target, NPC.HitInfo hit, int damageDone);

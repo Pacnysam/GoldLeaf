@@ -126,3 +126,17 @@ BeastFangBuff: {
 	DisplayName: Beast Fang Tag
 	Description: Tagged
 }
+
+HealerAggroBuff: {
+	DisplayName: Persecuted
+	Description: Your healing might attract unwanted attention...
+
+	Names: {
+		Level1: Vulnerable
+		Level2: Targeted
+		Level3: Persecuted
+	}
+
+	Level2Tooltip: Enemies are more likely to target you
+	Level3Tooltip: Damage taken is increased by {0}%
+}
