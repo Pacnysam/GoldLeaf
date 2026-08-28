@@ -3,21 +3,15 @@ using static Terraria.ModLoader.ModContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using GoldLeaf.Effects.Dusts;
-using Terraria.Localization;
 using Microsoft.Xna.Framework;
 using GoldLeaf.Core;
-using Mono.Cecil;
 using Terraria.DataStructures;
 using System;
-using System.Diagnostics.Metrics;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.Audio;
 using ReLogic.Content;
-using Terraria.Graphics.Shaders;
-using Terraria.GameContent.Drawing;
 using GoldLeaf.Core.CrossMod;
-using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 using GoldLeaf.Items.Grove.Boss.AetherComet;
 
 
@@ -189,12 +183,6 @@ namespace GoldLeaf.Items.Grove
                 target.AddBuff(BuffType<EveDropletBuff>(), Helper.TimeToTicks(8));
         }
 
-        /*public override void OnHitPlayer(Player target, Player.HurtInfo info)
-        {
-            if (!target.HasBuff(BuffType<AetherFlameBuff>()))
-                target.AddBuff(BuffType<EveDropletBuff>(), Helper.TimeToTicks(8), false);
-        }*/
-
         public override void OnKill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];
@@ -223,15 +211,12 @@ namespace GoldLeaf.Items.Grove
 
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
-            Main.pvpBuff[Type] = true;
         }
 
         public override void Update(NPC npc, ref int buffIndex)
         {
-            if (Main.rand.NextBool(2))
-            {
+            if (Main.rand.NextBool(2) && !Main.dedServ)
                 Dust.NewDust(npc.position, npc.width, npc.height, DustType<EveDust>(), 0f, Main.rand.NextFloat(0f, -4f));
-            }
         }
     }
     

@@ -170,26 +170,7 @@ namespace GoldLeaf.Core.CrossMod
             if (RedemptionLoaded(out Mod redemption))
                 redemption.Call("addNPCToElementTypeList", attributeString, npcType);
         }
-
-        public enum Element : int
-        {
-            None = 0,
-            Arcane = 1,
-            Fire = 2,
-            Water = 3,
-            Ice = 4,
-            Earth = 5,
-            Wind = 6,
-            Thunder = 7,
-            Holy = 8,
-            Shadow = 9,
-            Nature = 10,
-            Poison = 11,
-            Blood = 12,
-            Psychic = 13,
-            Celestial = 14,
-            Explosive = 15
-        }
+        
         public static class NPCAttributes
         {
             public const string Skeleton = "Skeleton";
@@ -211,5 +192,28 @@ namespace GoldLeaf.Core.CrossMod
             public const string Blood = "Blood";
             public const string Slime = "Slime";
         }
+    }
+}
+
+namespace GoldLeaf.Core
+{
+    public enum Element : int
+    {
+        None = 0,
+        Arcane = 1,
+        Fire = 2,
+        Water = 3,
+        Ice = 4,
+        Earth = 5,
+        Wind = 6,
+        Thunder = 7,
+        Holy = 8,
+        Shadow = 9,
+        Nature = 10,
+        Poison = 11,
+        Blood = 12,
+        Psychic = 13,
+        Celestial = 14,
+        Explosive = 15
     }
 }

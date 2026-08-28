@@ -140,7 +140,8 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
                 float sin = (float)(Math.Sin(Counter * 0.2175f) * 0.5f + 0.5f);
                 Color color = new Color(255, 119, 246) * Utils.Remap(ShotsFired, 10, 24, 0f, 1f) * 0.925f * sin;
 
-                Main.EntitySpriteDraw(bloomTex.Value, drawPos, null, color, Projectile.rotation, bloomTex.Size() / 2, Projectile.scale * Utils.Remap(ShotsFired, 10, 22, 1f, 1.45f) * 0.3f, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(bloomTex.Value, drawPos, null, color, Projectile.rotation, bloomTex.Size() / 2, Projectile.scale * Utils.Remap(ShotsFired, 10, 22, 1f, 1.45f) * 0.2f, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(bloomTex.Value, drawPos, null, color, Projectile.rotation, bloomTex.Size() / 2, Projectile.scale * Utils.Remap(ShotsFired, 10, 22, 1f, 1.45f) * 0.125f, SpriteEffects.None, 0f);
             } //bloom 
             if (ShotsFired >= 20 && Main.myPlayer == Projectile.owner)
             {

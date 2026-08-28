@@ -43,7 +43,7 @@ namespace GoldLeaf.Items.Forest.Lunar
             ItemID.Sets.GamepadExtraRange[Item.type] = 12;
             ItemID.Sets.GamepadSmartQuickReach[Item.type] = true;
 
-            Item.AddElements([RedemptionHelper.Element.Celestial]);
+            Item.AddElements([Element.Celestial]);
         }
 
         public override void SetDefaults()
@@ -140,7 +140,7 @@ namespace GoldLeaf.Items.Forest.Lunar
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
 
-            Projectile.AddElements([RedemptionHelper.Element.Celestial]);
+            Projectile.AddElements([Element.Celestial]);
         }
 
         const int MaxCharge = 60;
