@@ -11,7 +11,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.Audio;
 using ReLogic.Content;
-using GoldLeaf.Core.CrossMod;
 using GoldLeaf.Items.Grove.Boss.AetherComet;
 
 

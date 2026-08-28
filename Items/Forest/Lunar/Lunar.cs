@@ -3,11 +3,8 @@ using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
 using Terraria.ID;
 using Terraria.ModLoader;
-using GoldLeaf.Effects.Dusts;
-using Terraria.Localization;
 using Microsoft.Xna.Framework;
 using GoldLeaf.Core;
-using Mono.Cecil;
 using Terraria.DataStructures;
 using System;
 using Microsoft.Xna.Framework.Graphics;
@@ -15,11 +12,6 @@ using ReLogic.Content;
 using Terraria.GameContent;
 using Terraria.Enums;
 using Terraria.Audio;
-using GoldLeaf.Items.Underground;
-using System.IO;
-using Terraria.ModLoader.IO;
-using Terraria.Chat;
-using GoldLeaf.Core.CrossMod;
 
 namespace GoldLeaf.Items.Forest.Lunar
 {

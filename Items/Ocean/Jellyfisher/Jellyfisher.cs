@@ -2,7 +2,6 @@ using GoldLeaf.Core;
 using GoldLeaf.Core.CrossMod;
 using GoldLeaf.Core.Helpers;
 using GoldLeaf.Effects.Dusts;
-using GoldLeaf.Items.Dyes;
 using GoldLeaf.Items.Vanity;
 using GoldLeaf.Prefixes.Fishing;
 using Microsoft.Xna.Framework;
@@ -21,7 +20,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using static GoldLeaf.Core.ColorHelper;
-using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 using static GoldLeaf.Core.Helper;
 using static Terraria.ModLoader.ModContent;
 

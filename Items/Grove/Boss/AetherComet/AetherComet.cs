@@ -1,7 +1,5 @@
 using GoldLeaf.Core;
-using GoldLeaf.Core.CrossMod;
 using GoldLeaf.Effects.Dusts;
-using Microsoft.Build.Evaluation;
 using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,9 +11,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
-using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Items.Grove.Boss.AetherComet
@@ -384,20 +380,6 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
             Projectile.localNPCHitCooldown = 6;
 
             Projectile.DamageType = DamageClass.Magic;
-        }
-
-        public override void OnSpawn(IEntitySource source)
-        {
-            /*int repeats = Main.rand.Next(3, 5);
-            for (int i = 0; i < repeats + Projectile.ai[0]/40; i++)
-            {
-                if (Main.myPlayer == Projectile.owner)
-                    Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, (Main.rand.NextVector2Circular(7.5f, 6f) + new Vector2(0, -3.5f)) * Math.Clamp(Projectile.ai[0] / 75f, 0.35f, 1.25f), ProjectileType<AetherEmber>(), 0, 0, Projectile.owner).scale = Main.rand.NextFloat(0.75f, 1.25f);
-            }*/
-
-            /*ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.TrueExcalibur,
-                new ParticleOrchestraSettings { PositionInWorld = Projectile.Center },
-                Projectile.owner);*/
         }
 
         public override bool PreAI()

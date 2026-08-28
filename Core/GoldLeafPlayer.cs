@@ -36,7 +36,6 @@ namespace GoldLeaf.Core
         public int craftTimer = 0;
 
         public float itemSpeed;
-        public bool stunned = false;
 
         public float meleeCritDamageMod = 0f;
         public float rangedCritDamageMod = 0f;
@@ -112,8 +111,6 @@ namespace GoldLeaf.Core
             summonCritChance = 0;
             damageResistance = 0f;
 
-            stunned = false;
-
             #region minor variables
             royalGel = false;
             hiveCarcass = false;
@@ -138,30 +135,6 @@ namespace GoldLeaf.Core
 
             if (craftTimer > 0) { craftTimer--; }
         }
-
-        /*public override void PostUpdateBuffs()
-        {
-            if (stunned)
-            {
-                if (Player.velocity.Y != 0f)
-                {
-                    Player.velocity = new Vector2(0f, 1E-06f);
-                }
-                else
-                {
-                    Player.velocity = Vector2.Zero;
-                }
-                Player.jumpSpeedBoost = 0;
-                Player.blockExtraJumps = true;
-                //Player.jumpHeight = 0;
-                Player.gravity = 0f;
-                Player.moveSpeed = 0f;
-                Player.dash = 0;
-                Player.dashType = 0;
-                Player.noKnockback = true;
-                Player.RemoveAllGrapplingHooks();
-            }
-        }*/
 
         public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)
         {

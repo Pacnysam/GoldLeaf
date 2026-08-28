@@ -1,20 +1,16 @@
 ﻿using GoldLeaf.Core;
 using GoldLeaf.Core.CrossMod;
 using GoldLeaf.Effects.Dusts;
-using GoldLeaf.Items.Grove;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Metrics;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
@@ -22,7 +18,6 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using static GoldLeaf.Core.ColorHelper;
-using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 using static GoldLeaf.Core.Helper;
 using static Terraria.ModLoader.ModContent;
 
@@ -979,10 +974,7 @@ namespace GoldLeaf.Items.Underground
             Main.pvpBuff[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
-        {
-            player.GetModPlayer<GoldLeafPlayer>().stunned = true;
-        }
+        public override void Update(Player player, ref int buffIndex) => player.SetCCed();
 
         public override void Update(NPC npc, ref int buffIndex)
         {

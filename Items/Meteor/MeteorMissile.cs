@@ -5,16 +5,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using GoldLeaf.Items.Grove;
-using System.Diagnostics.Metrics;
 using System;
 using GoldLeaf.Effects.Dusts;
-using Terraria.DataStructures;
-using GoldLeaf.Core.CrossMod;
-using static GoldLeaf.Core.CrossMod.RedemptionHelper;
 using ReLogic.Content;
 
 namespace GoldLeaf.Items.Meteor
