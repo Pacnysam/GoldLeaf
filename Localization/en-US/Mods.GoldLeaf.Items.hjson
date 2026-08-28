@@ -230,7 +230,7 @@ Rattlestaff: {
 
 WaxCandle: {
 	DisplayName: Wax Candle
-	Tooltip: Enemies are less likely to target you when near wax candles
+	Tooltip:
 }
 
 Goonai: {

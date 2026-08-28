@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace GoldLeaf.Biomes
 {
-	public class WhisperingGroveSurface : ModBiome
+	public class WhisperingGrove : ModBiome
 	{
         //public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => Find<ModSurfaceBackgroundStyle>("GoldLeaf/Biomes/WhisperingGroveBackgroundStyle");
         public override string MapBackground => BackgroundPath;
@@ -24,7 +24,7 @@ namespace GoldLeaf.Biomes
 
         public override bool IsBiomeActive(Player player) 
         {
-			return (player.ZoneSkyHeight || player.ZoneOverworldHeight) && GetInstance<TileCount>().groveTileCount >= 150 && GetInstance<TileCount>().quarryTileCount < 500;
+			return (player.ZoneSkyHeight || player.ZoneOverworldHeight || player.ZoneDirtLayerHeight) && GetInstance<TileCount>().groveTileCount >= 150 && GetInstance<TileCount>().quarryTileCount < 300;
         }
 		public override void OnEnter(Player player) => player.GetModPlayer<GoldLeafPlayer>().ZoneGrove = true;
         public override void OnLeave(Player player) => player.GetModPlayer<GoldLeafPlayer>().ZoneGrove = false;

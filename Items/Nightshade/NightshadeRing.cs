@@ -32,7 +32,7 @@ namespace GoldLeaf.Items.Nightshade
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<GoldLeafPlayer>().itemSpeed *= 1f - (player.GetModPlayer<NightshadePlayer>().nightshade * 0.02f);
+            player.GetAttackSpeed(DamageClass.Generic) += player.GetModPlayer<NightshadePlayer>().nightshade * 0.02f;
             player.GetModPlayer<NightshadePlayer>().nightshadeRing = true;
         }
     }
