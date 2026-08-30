@@ -17,6 +17,7 @@ using ReLogic.Content;
 using GoldLeaf.Items.Grove.Boss;
 using GoldLeaf.Tiles.Decor;
 using GoldLeaf.Tiles.Grove;
+using GoldLeaf.Tiles.Grove.ChalcedonyCave;
 
 namespace GoldLeaf.Items.Grove
 {
@@ -75,14 +76,14 @@ namespace GoldLeaf.Items.Grove
             );
         }
 
-        public override void AddRecipes()
+        /*public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe()
-                .AddIngredient(ItemType<Echoslate>(), 25)
-                .AddIngredient(ItemType<EveDroplet>(), 60)
-                .AddTile(TileID.Anvils)
+                .AddIngredient(ItemType<Basanite>(), 10)
+                .AddIngredient(ItemType<Chalcedony>(), 25)
+                .AddTile(TileID.MythrilAnvil)
                 .Register();
-        }
+        }*/
     }
 
     public class GroveHookP : ModProjectile 

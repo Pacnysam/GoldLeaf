@@ -14,7 +14,7 @@ using ReLogic.Content;
 using GoldLeaf.Items.Grove.Boss.AetherComet;
 
 
-namespace GoldLeaf.Items.Grove
+namespace GoldLeaf.Items.Grove.EveDroplet
 {
 	public class EveDroplet : ModItem
 	{
@@ -84,7 +84,7 @@ namespace GoldLeaf.Items.Grove
             glo *= Main.essScale * 0.5f;
 
             if (!Main.dedServ)
-                Lighting.AddLight((int)((Item.position.X + (Item.width / 2)) / 16f), (int)((Item.position.Y + (Item.height / 2)) / 16f), ((238 / 255) * 0.2f) * glo, ((107 / 255) * 0.2f) * glo, ((192 / 255) * 0.2f) * glo);
+                Lighting.AddLight((int)((Item.position.X + Item.width / 2) / 16f), (int)((Item.position.Y + Item.height / 2) / 16f), 238 / 255 * 0.2f * glo, 107 / 255 * 0.2f * glo, 192 / 255 * 0.2f * glo);
         }
 
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
@@ -169,7 +169,7 @@ namespace GoldLeaf.Items.Grove
             {
                 var effects = Projectile.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
                 Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                Color color = Projectile.GetAlpha(lightColor) * (float)(((float)(Projectile.oldPos.Length - k) / Projectile.oldPos.Length) / 2);
+                Color color = Projectile.GetAlpha(lightColor) * (float)((float)(Projectile.oldPos.Length - k) / Projectile.oldPos.Length / 2);
 
                 Main.EntitySpriteDraw(texture, drawPos, new Microsoft.Xna.Framework.Rectangle?(texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), color, Projectile.rotation, drawOrigin, Projectile.scale, effects, 0f);
             }
@@ -296,8 +296,8 @@ namespace GoldLeaf.Items.Grove
 
                 if (!Main.dedServ)
                 {
-                    CameraSystem.QuickScreenShake(npc.Center, null, 10 + (explosionVolume * 0.1f), 5f, 30 + (int)(explosionVolume * 0.35f), 1500);
-                    CameraSystem.QuickScreenShake(npc.Center, 0f.ToRotationVector2(), 10 + (explosionVolume * 0.1f), 10f, 20 + (int)(explosionVolume * 0.25f), 1500);
+                    CameraSystem.QuickScreenShake(npc.Center, null, 10 + explosionVolume * 0.1f, 5f, 30 + (int)(explosionVolume * 0.35f), 1500);
+                    CameraSystem.QuickScreenShake(npc.Center, 0f.ToRotationVector2(), 10 + explosionVolume * 0.1f, 10f, 20 + (int)(explosionVolume * 0.25f), 1500);
 
                     for (int j = 0; j < 10 + explosionVolume / 6f; j++)
                     {
@@ -316,7 +316,7 @@ namespace GoldLeaf.Items.Grove
                         var dust = Dust.NewDustDirect(npc.Center, 0, 0, DustID.FireworksRGB, 0, 0, 10 + Main.rand.Next(60),
                             color.Alpha() * Main.rand.NextFloat(0.45f, 0.85f), Main.rand.NextFloat(0.6f, 0.9f));
                         dust.fadeIn = Main.rand.NextFloat(0.65f, 0.95f);
-                        dust.velocity = Main.rand.NextVector2Circular(7f + (explosionVolume / 12.5f), 4.5f + (explosionVolume / 12.5f));
+                        dust.velocity = Main.rand.NextVector2Circular(7f + explosionVolume / 12.5f, 4.5f + explosionVolume / 12.5f);
                         dust.velocity.Y -= 2.5f;
                         dust.noGravity = Main.rand.NextBool(2, 5);
                         dust.rotation = Main.rand.NextFloat(6.28f);

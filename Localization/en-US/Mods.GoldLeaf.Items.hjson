@@ -230,7 +230,7 @@ Rattlestaff: {
 
 WaxCandle: {
 	DisplayName: Wax Candle
-	Tooltip:
+	Tooltip: ""
 }
 
 Goonai: {

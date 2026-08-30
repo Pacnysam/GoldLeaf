@@ -7,7 +7,7 @@ using GoldLeaf.Items.Jungle.ToxicPositivity;
 using GoldLeaf.Items.Meteor;
 using GoldLeaf.Items.Ocean;
 using GoldLeaf.Items.Pickups;
-using GoldLeaf.Items.Underground;
+using GoldLeaf.Items.Underground.GemSickles;
 using GoldLeaf.Tiles.Grove;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

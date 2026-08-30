@@ -12,7 +12,6 @@ using System.Threading.Channels;
 using Terraria.ObjectData;
 using Terraria.Enums;
 using Terraria.DataStructures;
-using GoldLeaf.Items.Underground;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using GoldLeaf.Items.VanillaBossDrops;
@@ -21,6 +20,7 @@ using Terraria.Audio;
 using GoldLeaf.Effects.Dusts;
 using GoldLeaf.Items.Potions;
 using GoldLeaf.Items.Forest.OxeyeDaisy;
+using GoldLeaf.Items.Underground.GemSickles;
 
 namespace GoldLeaf.Core
 {

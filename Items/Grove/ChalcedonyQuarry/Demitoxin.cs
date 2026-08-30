@@ -26,7 +26,6 @@ namespace GoldLeaf.Items.Grove.ChalcedonyQuarry
             Item.ResearchUnlockCount = 25;
 
             ItemID.Sets.ItemNoGravity[Item.type] = true;
-            ItemID.Sets.ShimmerTransformToItem[Item.type] = ItemType<EveDroplet>();
         }
 
         public override void SetDefaults()

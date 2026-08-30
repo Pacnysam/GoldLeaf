@@ -9,8 +9,8 @@ using GoldLeaf.Effects.Dusts;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
 using System;
-using GoldLeaf.Items.Grove;
 using GoldLeaf.Tiles.Marble;
+using GoldLeaf.Items.Grove.EveDroplet;
 
 namespace GoldLeaf.Tiles.Grove.Crafted
 {

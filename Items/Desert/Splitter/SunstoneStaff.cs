@@ -14,7 +14,7 @@ using Terraria.ModLoader;
 using static GoldLeaf.Core.Helper;
 using static Terraria.ModLoader.ModContent;
 
-namespace GoldLeaf.Items.Sandstorm
+namespace GoldLeaf.Items.Desert.Splitter
 {
     public class SunstoneStaff : ModItem
     {
@@ -150,7 +150,7 @@ namespace GoldLeaf.Items.Sandstorm
 
             if (Projectile.Counter() >= Projectile.ai[0] * 100)
             {
-                Projectile.velocity += Vector2.Normalize(player.Center - Projectile.Center) * ((Projectile.ai[0] * 0.5f) + (Projectile.Counter() * 0.03f));
+                Projectile.velocity += Vector2.Normalize(player.Center - Projectile.Center) * (Projectile.ai[0] * 0.5f + Projectile.Counter() * 0.03f);
 
                 if (Projectile.velocity.Length() >= 9)
                 {
