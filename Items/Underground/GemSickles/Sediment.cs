@@ -40,7 +40,7 @@ namespace GoldLeaf.Items.Underground.GemSickles
         }
         public int gem = 0;
 
-        public override string Texture => "GoldLeaf/Items/Underground/SedimentFull";
+        public override string Texture => "GoldLeaf/Items/Underground/GemSickles/SedimentFull";
 
         public override void SetStaticDefaults()
         {
@@ -56,7 +56,6 @@ namespace GoldLeaf.Items.Underground.GemSickles
             Item.shootSpeed = 8f;
 
             Item.damage = 16;
-            //Item.GetGlobalItem<GoldLeafItem>().throwingDamageType = DamageClass.Melee;
             Item.DamageType = DamageClass.Melee;
 
             Item.width = 26;
@@ -222,15 +221,6 @@ namespace GoldLeaf.Items.Underground.GemSickles
             }
         }
 
-        /*public override void AddRecipes()
-        {
-            Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.StoneBlock, 20);
-            recipe.AddIngredient(ItemID.FallenStar, 5);
-            recipe.AddTile(TileID.Anvils);
-            recipe.Register();
-        }*/
-
         #region Save & Load Stuff
         protected override bool CloneNewInstances => true;
         public override ModItem Clone(Item item)
@@ -325,9 +315,9 @@ namespace GoldLeaf.Items.Underground.GemSickles
         public static Asset<Texture2D> glowTex;
         public override void Load()
         {
-            glowTex = Request<Texture2D>("GoldLeaf/Items/Underground/SedimentGlow");
+            glowTex = Request<Texture2D>("GoldLeaf/Items/Underground/GemSickles/SedimentGlow");
         }
-        public override string Texture => "GoldLeaf/Items/Underground/SedimentFull";
+        public override string Texture => "GoldLeaf/Items/Underground/GemSickles/SedimentFull";
 
         public override void SetStaticDefaults()
         {
@@ -342,7 +332,6 @@ namespace GoldLeaf.Items.Underground.GemSickles
         {
             Projectile.CloneDefaults(ProjectileID.WoodenBoomerang);
 
-            //Projectile.GetGlobalProjectile<GoldLeafProjectile>().throwingDamageType = DamageClass.Melee;
             Projectile.DamageType = DamageClass.Melee;
 
             Projectile.usesLocalNPCImmunity = true;
