@@ -15,7 +15,7 @@ namespace GoldLeaf.Core.Mechanics.HealerAggro
     public class HealerAggroPlayer : ModPlayer 
     {
         public int healingAggro = 0;
-        public static int MaxHealingAggro => 1000;
+        public static int MaxHealingAggro => 800;
         public static int PersecutionDamageMult => 25;
         public int HealingAggroStage 
         {
@@ -38,7 +38,7 @@ namespace GoldLeaf.Core.Mechanics.HealerAggro
                 healingAggro = 0;
         }
 
-        public static void AddHealingAggro(Player player, int amount = 10, int buffTime = 600)
+        public static void AddHealingAggro(Player player, int amount = 5, int buffTime = 600)
         {
             player.AddBuff(BuffType<HealerAggroBuff>(), buffTime);
             player.GetModPlayer<HealerAggroPlayer>().healingAggro += amount;

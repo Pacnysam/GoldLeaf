@@ -169,6 +169,7 @@ namespace GoldLeaf.Tiles.Decor
 
     public class WaxCandleBuff : ModBuff
     {
+        public override bool IsLoadingEnabled(Mod mod) => false;
         public override string Texture => CoolBuffTex(base.Texture);
 
         public override void SetStaticDefaults()

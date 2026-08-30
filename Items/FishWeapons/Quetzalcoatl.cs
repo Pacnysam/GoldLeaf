@@ -10,13 +10,13 @@ using Terraria.Graphics.Shaders;
 using Terraria.Graphics;
 using Terraria.DataStructures;
 using System;
-using GoldLeaf.Items.Underground;
 using Terraria.GameContent.Drawing;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria.GameContent;
 using static GoldLeaf.GoldLeaf;
 using GoldLeaf.Items.Grove.ChalcedonyQuarry;
+using GoldLeaf.Items.Underground.GemSickles;
 
 namespace GoldLeaf.Items.FishWeapons
 {

@@ -27,15 +27,8 @@ namespace GoldLeaf.Core
     {
         public float temp1, temp2, temp3;
 
-        public int Timer { get; private set; }
-
         public bool ZoneGrove = false;
-        //public bool ZoneCandle = false;
-
-        //public int platformTimer = 0;
         public int craftTimer = 0;
-
-        public float itemSpeed;
 
         public float meleeCritDamageMod = 0f;
         public float rangedCritDamageMod = 0f;
@@ -52,9 +45,6 @@ namespace GoldLeaf.Core
         public bool hasDoneHurtSound = false;
 
         #endregion minor variables
-
-        public override float UseTimeMultiplier(Item Item) => itemSpeed;
-        public override float UseAnimationMultiplier(Item item) => itemSpeed;
 
         public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)
         {
@@ -105,7 +95,6 @@ namespace GoldLeaf.Core
         {
             ResetEffectsEvent?.Invoke(Player);
 
-            itemSpeed = 1;
             critDamageMult = 1f;
             meleeCritDamageMod = rangedCritDamageMod = magicCritDamageMod = 0f;
             summonCritChance = 0;
@@ -123,26 +112,18 @@ namespace GoldLeaf.Core
             ResetEffectsEvent = null;
         }
 
-        public override void PreUpdateBuffs()
-        {
-            if (Player.InModBiome<ZoneCandle>()) Player.AddBuff(BuffType<WaxCandleBuff>(), 2);
-        }
-
         public override void PostUpdate()
         {
-            if (Main.netMode == NetmodeID.MultiplayerClient && Player == Main.LocalPlayer) GoldLeafWorld.rottime += (float)Math.PI / 60;
-            Timer++;
-
-            if (craftTimer > 0) { craftTimer--; }
+            if (craftTimer > 0) craftTimer--;
         }
 
         public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)
         {
-            switch (Main.LocalPlayer.name) 
+            switch (Main.LocalPlayer.name.ToLower()) 
             {
-                case "Pacnysam":
-                case "Pacny":
-                case "Pac":
+                case "pacnysam":
+                case "pacny":
+                case "pac":
                     {
                         return 
                             [
@@ -153,25 +134,24 @@ namespace GoldLeaf.Core
                             new Item(ItemType<WatcherCloak>())
                             ];
                     }
-                case "Scout":
-                case "Emperor":
-                case "Hunter":
-                case "Belos":
+                /*case "scout":
+                case "emperor":
+                case "hunter":
+                case "belos":
                     {
                         return Enumerable.Empty<Item>();
-                        //return [new Item(ItemType<EmperorScoutTrousers>()), new Item(ItemType<EmperorScoutTunic>()), new Item(ItemType<EmperorScoutHood>())];
-                    }
-                case "Cypher":
+                        return [new Item(ItemType<EmperorCovenTrousers>()), new Item(ItemType<EmperorCovenTunic>()), new Item(ItemType<EmperorCovenHood>())];
+                    }*/
+                /*case "cypher":
                     {
-                        return Enumerable.Empty<Item>();
-                        //return [new Item(ItemType<CypherHat>()), new Item(ItemType<CypherCoat>()), new Item(ItemType<CypherPants>())];
-                    }
-                case "Grant":
+                        return [new Item(ItemType<CypherHat>()), new Item(ItemType<CypherCoat>()), new Item(ItemType<CypherPants>())];
+                    }*/
+                case "grant":
                     {
                         return [new Item(ItemType<GrantMask>()), new Item(ItemType<GrantCuffs>()), new Item(ItemType<GrantPants>()), new Item(ItemType<GrantCloak>())];
                     }
-                case "Gameboy":
-                case "Game Boy":
+                case "gameboy":
+                case "game Boy":
                     {
                         return [new Item(ItemType<Gameboy>()), new Item(ItemType<RetroDye>(), 5)];
                     }

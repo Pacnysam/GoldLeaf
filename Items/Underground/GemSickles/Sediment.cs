@@ -21,7 +21,7 @@ using static GoldLeaf.Core.ColorHelper;
 using static GoldLeaf.Core.Helper;
 using static Terraria.ModLoader.ModContent;
 
-namespace GoldLeaf.Items.Underground
+namespace GoldLeaf.Items.Underground.GemSickles
 {
     public class Sediment : ModItem
     {
@@ -428,7 +428,7 @@ namespace GoldLeaf.Items.Underground
                     Projectile.SetElement(Element.Arcane, -1);
             }
 
-            Projectile.localAI[0] = MathHelper.SmoothStep(Projectile.localAI[0], (empowered && Gem != (int)Gems.None) ? 1f : 0f, 0.25f);
+            Projectile.localAI[0] = MathHelper.SmoothStep(Projectile.localAI[0], empowered && Gem != (int)Gems.None ? 1f : 0f, 0.25f);
 
             if (Gem == (int)Gems.Amethyst && empowered && Main.myPlayer == Projectile.owner)
             {
@@ -626,7 +626,7 @@ namespace GoldLeaf.Items.Underground
                 for (int k = 0; k < Projectile.oldPos.Length / 2f; k++)
                 {
                     Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                    Color color = Projectile.GetAlpha(lightColor) * (float)(((float)(Projectile.oldPos.Length - k) / Projectile.oldPos.Length / 2) - 0.2f) * (1f - Projectile.localAI[0]);
+                    Color color = Projectile.GetAlpha(lightColor) * (float)((float)(Projectile.oldPos.Length - k) / Projectile.oldPos.Length / 2 - 0.2f) * (1f - Projectile.localAI[0]);
 
                     Main.EntitySpriteDraw(texture, drawPos, new Microsoft.Xna.Framework.Rectangle?(texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), color, Projectile.oldRot[k], drawOrigin, Projectile.scale, effects, 0f);
                 }
@@ -636,7 +636,7 @@ namespace GoldLeaf.Items.Underground
                 for (int k = 0; k < Projectile.oldPos.Length; k++)
                 {
                     Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                    Main.EntitySpriteDraw(glowTex.Value, drawPos, null, GemColor((int)Gem).MultiplyAlpha(0.8f - (k * 0.05f)) * (0.35f - k * 0.025f) * Projectile.localAI[0], Projectile.oldRot[k], drawOrigin, Projectile.scale * (1.15f - k * 0.075f), effects, 0f);
+                    Main.EntitySpriteDraw(glowTex.Value, drawPos, null, GemColor((int)Gem).MultiplyAlpha(0.8f - k * 0.05f) * (0.35f - k * 0.025f) * Projectile.localAI[0], Projectile.oldRot[k], drawOrigin, Projectile.scale * (1.15f - k * 0.075f), effects, 0f);
                 }
                 //surrounding glow
                 Main.EntitySpriteDraw(glowTex.Value, projDrawPos, null, GemColor((int)Gem).MultiplyAlpha(0.65f) * Projectile.localAI[0], Projectile.rotation, drawOrigin, Projectile.scale * 1.1f, effects, 0f);
@@ -736,7 +736,7 @@ namespace GoldLeaf.Items.Underground
                 for (int k = 0; k < Projectile.oldPos.Length / 2f; k++)
                 {
                     Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                    Color color = Projectile.GetAlpha(lightColor) * (float)(((float)(Projectile.oldPos.Length - k) / Projectile.oldPos.Length / 2) - 0.2f) * (1f - Projectile.localAI[0]);
+                    Color color = Projectile.GetAlpha(lightColor) * (float)((float)(Projectile.oldPos.Length - k) / Projectile.oldPos.Length / 2 - 0.2f) * (1f - Projectile.localAI[0]);
 
                     Main.EntitySpriteDraw(texture, drawPos, new Microsoft.Xna.Framework.Rectangle?(texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame)), color, Projectile.oldRot[k], drawOrigin, Projectile.scale, effects, 0f);
                 }
@@ -746,7 +746,7 @@ namespace GoldLeaf.Items.Underground
                 for (int k = 0; k < Projectile.oldPos.Length; k++)
                 {
                     Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                    Main.EntitySpriteDraw(SedimentP.glowTex.Value, drawPos, null, GemColor(2).MultiplyAlpha(0.8f - (k * 0.05f)) * (0.35f - k * 0.025f) * Projectile.localAI[0], Projectile.oldRot[k], drawOrigin, Projectile.scale * (1f - k * 0.05f), effects, 0f);
+                    Main.EntitySpriteDraw(SedimentP.glowTex.Value, drawPos, null, GemColor(2).MultiplyAlpha(0.8f - k * 0.05f) * (0.35f - k * 0.025f) * Projectile.localAI[0], Projectile.oldRot[k], drawOrigin, Projectile.scale * (1f - k * 0.05f), effects, 0f);
                 }
             }
             //base sprite
@@ -921,7 +921,7 @@ namespace GoldLeaf.Items.Underground
             for (int k = 0; k < Projectile.oldPos.Length; k++)
             {
                 Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin;
-                Main.spriteBatch.Draw(tex, drawPos, null, Color.White.Alpha(60 + (20 * k)) * (1.0f - 0.15f * k), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(tex, drawPos, null, Color.White.Alpha(60 + 20 * k) * (1.0f - 0.15f * k), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
             }
             return true;
         }

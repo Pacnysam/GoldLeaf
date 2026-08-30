@@ -35,7 +35,7 @@ namespace GoldLeaf.NPCs.Night.Nightshade
             NPC.color = Color.DeepSkyBlue;
             NPC.noGravity = true;
 
-            SpawnModBiomes = [GetInstance<WhisperingGroveSurface>().Type];
+            SpawnModBiomes = [GetInstance<WhisperingGrove>().Type];
         }
         public override void AI()
         {

@@ -9,8 +9,9 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using ReLogic.Content;
 using GoldLeaf.Core.CrossMod;
+using GoldLeaf.Items.Blizzard;
 
-namespace GoldLeaf.Items.Blizzard.ColdSnap
+namespace GoldLeaf.Items.Snow.ColdSnap
 {
     public class ColdSnap : ModItem
     {

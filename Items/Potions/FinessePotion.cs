@@ -56,11 +56,11 @@ namespace GoldLeaf.Items.Potions
     {
         public override LocalizedText Description => base.Description.WithFormatArgs(ItemSpeed);
         public override string Texture => CoolBuffTex(base.Texture);
-        public static readonly float ItemSpeed = 15f;
+        public static readonly int ItemSpeed = 15;
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.GetModPlayer<GoldLeafPlayer>().itemSpeed *= 1f - (ItemSpeed * 0.01f);
+            player.GetAttackSpeed(DamageClass.Generic) += ItemSpeed * 0.01f;
         }
     }
 }

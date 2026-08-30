@@ -33,7 +33,6 @@ namespace GoldLeaf.Items.Grove.Boss
             Item.rare = ItemRarityID.Green;
 
             ItemID.Sets.ItemNoGravity[Item.type] = true;
-            ItemID.Sets.ShimmerTransformToItem[Item.type] = ItemType<EveDroplet>();
         }
 
         public List<Vector2> oldPos = [];
