@@ -83,28 +83,19 @@ namespace GoldLeaf.Core
                     }
                 case NPCID.DyeTrader:
                     {
-                        shop.Add<RetroDye>(GoldLeafConditions.UsingGameboy);
-                        //shop.Add<RetroDye>(Condition.NpcIsPresent(NPCID.GoblinTinkerer));
-
+                        shop.Add<RetroDye>(Condition.NpcIsPresent(NPCID.GoblinTinkerer));
                         shop.InsertAfter(ItemID.SilverDye, ItemType<BrassDye>());
                         break;
                     }
                 case NPCID.WitchDoctor:
                     {
-                        shop.InsertAfter(ItemID.PygmyNecklace, ItemType<ToxicPositivity>(), Condition.TimeDay);
+                        shop.InsertBefore(ItemID.PygmyNecklace, ItemType<ToxicPositivity>(), Condition.TimeDay);
                         break;
                     }
                 case NPCID.Stylist:
                     {
                         shop.Add(ItemType<AuroraHairDye>(), Condition.InSnow, Condition.TimeNight);
                         shop.Add(ItemType<SunstoneHairDye>(), Condition.InDesert, Condition.TimeDay);
-                        break;
-                    }
-                case NPCID.ArmsDealer:
-                    {
-                        //shop.Add(ItemID.TissueSample, GoldLeafConditions.HasClutterGlove);
-                        //shop.Add(ItemID.ShadowScale, GoldLeafConditions.HasClutterGlove);
-                        //shop.Add(ItemType<EveDroplet>(), GoldLeafConditions.HasClutterGlove, GoldLeafConditions.InSurface);
                         break;
                     }
                 case NPCID.Demolitionist:

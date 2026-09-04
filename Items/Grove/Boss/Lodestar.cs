@@ -1,20 +1,15 @@
+using GoldLeaf.Core;
+using GoldLeaf.Effects.Dusts;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using Terraria;
-using static Terraria.ModLoader.ModContent;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using GoldLeaf.Effects.Dusts;
-using Terraria.Localization;
-using Microsoft.Xna.Framework;
-using GoldLeaf.Core;
-using Mono.Cecil;
-using Terraria.DataStructures;
-using System;
-using System.Diagnostics.Metrics;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
-using Terraria.Audio;
-using System.IO;
-using System.Collections.Generic;
+using static Terraria.ModLoader.ModContent;
 
 namespace GoldLeaf.Items.Grove.Boss
 {
@@ -30,66 +25,32 @@ namespace GoldLeaf.Items.Grove.Boss
 			Item.width = 24;
 			Item.height = 24;
             Item.maxStack = Item.CommonMaxStack;
-            Item.rare = ItemRarityID.Green;
+            Item.rare = ItemRarityID.LightRed;
 
             ItemID.Sets.ItemNoGravity[Item.type] = true;
         }
 
-        public List<Vector2> oldPos = [];
-
-        public override void PostUpdate()
-        {
-            if (Item.velocity.Length() > 0)
-                oldPos.Add(Item.Center);
-
-            if (oldPos.Count > 15 || (oldPos.Count > 0 && Item.velocity.Length() <= 0.2f))
-            {
-                oldPos.RemoveAt(0);
-            }
-        }
-
         public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
-            Texture2D tex = TextureAssets.Item[Item.type].Value;
-
-            for (float k = 0f; k < 1f; k += 0.5f)
+            Texture2D texture = TextureAssets.Item[Item.type].Value;
+            
+            spriteBatch.Draw(texture, position, frame, Color.DarkViolet * 0.75f, 0, origin, scale, SpriteEffects.None, 0f); //shadow
+            for (float k = 0f; k < 1f; k += 1/3f)
             {
-                Color color = ColorHelper.AdditiveWhite() * (1 - (float)Math.Sin(Main.GlobalTimeWrappedHourly));
-                Main.spriteBatch.Draw
-                (
-                    tex,
-                    position + new Vector2(0f, 1f - (2f * (float)Math.Sin(Main.GlobalTimeWrappedHourly))).RotatedBy((k + (Main.GlobalTimeWrappedHourly * 1.5)) * ((float)Math.PI * 2f)),
-                    new Rectangle(0, 0, tex.Width, tex.Height),
-                    color * 0.4f,
-                    0,
-                    tex.Size() * 0.5f,
-                    scale,
-                    SpriteEffects.None,
-                    0f
-                );
-            }
-            for (float k = 0f; k < 1f; k += 0.5f)
-            {
-                Color color = ColorHelper.AdditiveWhite() * (1 - (float)Math.Cos(Main.GlobalTimeWrappedHourly));
-                Main.spriteBatch.Draw
-                (
-                    tex,
-                    position + new Vector2(0f, 1f - (2f * (float)Math.Cos(Main.GlobalTimeWrappedHourly))).RotatedBy((k + (Main.GlobalTimeWrappedHourly * -1.5)) * ((float)Math.PI * 2f)),
-                    new Rectangle(0, 0, tex.Width, tex.Height),
-                    color * 0.4f,
-                    0,
-                    tex.Size() * 0.5f,
-                    scale,
-                    SpriteEffects.None,
-                    0f
-                );
-            }
-            return true;
-        }
+                Color color = ColorHelper.QuickGradient([Color.Coral, Color.LightGoldenrodYellow, Color.HotPink], false)
+                    .GetColor((float)Math.Sin(Main.GlobalTimeWrappedHourly * 3f) * 0.5f + 0.5f).Alpha();
 
-        public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
-        {
-            spriteBatch.Draw(TextureAssets.Item[Item.type].Value, position, null, ColorHelper.AdditiveWhite() * ((float)Math.Sin(Main.GlobalTimeWrappedHourly * 3) * 0.65f), 0, origin, scale, SpriteEffects.None, 0f);
+                Vector2 drawPosition = position + new Vector2(0f, 1.5f + ((float)Math.Sin(Main.GlobalTimeWrappedHourly * 6f) * 0.5f + 0.5f) * (k * 4f))
+                    .RotatedBy(((-k * (MathHelper.Pi/5f)) + (Main.GlobalTimeWrappedHourly * 2f)) * ((float)Math.PI * 2f));
+                
+                spriteBatch.Draw(texture, drawPosition, frame, color * 0.35f, 0, origin, scale, SpriteEffects.None, 0f);
+            } //spinning effect
+            spriteBatch.Draw(texture, position, frame, Color.White.Alpha(225) * 0.85f, 0, origin, scale, SpriteEffects.None, 0f); //texture
+
+            //TODO: reuse effect for chalcedony
+            /*float pulseScale = (float)(Main.GlobalTimeWrappedHourly * 2f % 1f / 1f);
+            spriteBatch.Draw(texture, position, frame, Color.White.Alpha() * (1f - pulseScale) * 0.5f, 0, origin, (1f + (pulseScale * 1.25f)) * scale, SpriteEffects.None, 0f);*/
+            return false;
         }
     }
 }

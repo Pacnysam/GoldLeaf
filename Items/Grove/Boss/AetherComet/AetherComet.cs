@@ -299,11 +299,11 @@ namespace GoldLeaf.Items.Grove.Boss.AetherComet
 
                 for (int j = 0; j < 15 + (explosionVolume * 0.2f); j++)
                 {
-                    var dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustType<SpecialSmoke>(), Scale: Main.rand.NextFloat(0.85f, 1.75f) * Math.Clamp(explosionVolume / 90f, 0.85f, 1.5f));
+                    var dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustType<SpecialSmoke>(), Scale: Main.rand.NextFloat(1f, 1.75f) * Math.Clamp(explosionVolume / 90f, 0.85f, 1.65f));
                     dust.velocity = Main.rand.NextVector2Circular(9f, 9f) * Math.Clamp(explosionVolume / 65f, 1f, 3f);
-                    dust.position += dust.velocity * 3f;
+                    dust.position += dust.velocity * 2.5f;
                     dust.velocity *= 0.75f;
-                    dust.alpha = 80 + Main.rand.Next(60);
+                    dust.alpha = 90 + Main.rand.Next(60);
                     dust.shader = Projectile.GetDyeShader();
                     dust.customData = SpecialSmoke.aetherSmokeGradient;
                 } //smoke
