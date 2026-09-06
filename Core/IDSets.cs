@@ -2,7 +2,9 @@
 using GoldLeaf.Effects.Dusts;
 using GoldLeaf.Items.Blizzard;
 using GoldLeaf.Items.Blizzard.Armor;
+using GoldLeaf.Items.FishWeapons;
 using GoldLeaf.Items.Granite;
+using GoldLeaf.Items.Grove.Boss.AetherComet;
 using GoldLeaf.Items.Jungle.ToxicPositivity;
 using GoldLeaf.Items.Meteor;
 using GoldLeaf.Items.Ocean;
@@ -71,7 +73,7 @@ namespace GoldLeaf.Core
             ProjectileID.ShimmerFlare, ProjectileID.SpelunkerFlare, ProjectileID.RainFriendly, ProjectileID.BloodRain, ProjectileID.RainbowFront, ProjectileID.RainbowBack,
             ProjectileID.ClingerStaff, ProjectileID.StarCloakStar, ProjectileID.BeeCloakStar, ProjectileID.ManaCloakStar, ProjectileID.InsanityShadowFriendly, ProjectileID.VolatileGelatinBall,
             ProjectileID.BlackCounterweight, ProjectileID.BlueCounterweight, ProjectileID.GreenCounterweight, ProjectileID.PurpleCounterweight, ProjectileID.RedCounterweight, ProjectileID.YellowCounterweight, 
-            ProjectileType<BasicRubyBolt>(), ProjectileType<FallingEmerald>(), ProjectileType<MeteorMissileP>());
+            ProjectileType<BasicRubyBolt>(), ProjectileType<FallingEmerald>(), ProjectileType<MeteorMissileP>(), ProjectileType<Ember>(), ProjectileType<AetherEmber>(), ProjectileType<QuetzalShard>());
 
         public static bool[] SummonSpeedImmune = ProjectileID.Sets.Factory.CreateNamedSet("SummonSpeedImmune")
             .Description("Some minions break when increasing summon speed. Setting this to true will give these minions a damage bonus instead")

@@ -175,8 +175,9 @@ Constellation: {
 	DisplayName: Starstacker
 	Tooltip:
 		'''
+		{$CommonItemTooltip.PercentSummonTagDamage}
 		{$CommonItemTooltip.Whips}
-		Strike enemies to increase range and tag damage of whips
+		Strike enemies to increase whip range
 		'''
 }
 
@@ -452,7 +453,7 @@ AuroraGlassWallItem: {
 
 AuroraWaxCandleItem: {
 	DisplayName: Aurora Wax Candle
-	Tooltip: Enemies are less likely to target you when near wax candles
+	Tooltip: ""
 }
 
 ClutchRod: {

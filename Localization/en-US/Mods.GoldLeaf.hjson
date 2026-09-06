@@ -5,5 +5,3 @@ GoldLeafConditions: {
 	LearnedRecipe: Discovered
 	InLavaLayerHeight: In Lava Layer
 }
-
-Mechanics.LearnRecipe: Learned Recipe: {0}

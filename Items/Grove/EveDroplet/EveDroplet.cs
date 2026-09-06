@@ -30,7 +30,6 @@ namespace GoldLeaf.Items.Grove.EveDroplet
         {
             Item.ResearchUnlockCount = 99;
             ItemID.Sets.IsRangedSpecialistWeapon[Type] = true;
-            AmmoID.Sets.IsSpecialist[Type] = true;
 
             Item.AddElements([Element.Arcane, Element.Nature]);
         }
@@ -45,7 +44,6 @@ namespace GoldLeaf.Items.Grove.EveDroplet
 			Item.useAnimation = 20;
 			Item.maxStack = Item.CommonMaxStack;
 			Item.consumable = true;
-            Item.ammo = Item.type;
             Item.noMelee = true;
 			Item.noUseGraphic = true;
 			Item.useStyle = ItemUseStyleID.Swing;
