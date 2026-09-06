@@ -21,7 +21,8 @@ namespace GoldLeaf.Items.Sky
 {
     public class Constellation : ModItem
     {
-        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(ConstellationTag.TagDamageMult);
+        public static float TagDamageMult => 15;
+        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(TagDamageMult);
 
         private static Asset<Texture2D> glowTex;
         public override void Load()
@@ -349,8 +350,6 @@ namespace GoldLeaf.Items.Sky
     {
         public override string Texture => CoolBuffTex(base.Texture);
 
-        public static readonly float TagDamageMult = 15;
-
         public override void SetStaticDefaults()
         {
             BuffID.Sets.IsATagBuff[Type] = true;
@@ -358,14 +357,10 @@ namespace GoldLeaf.Items.Sky
             Main.buffNoSave[Type] = true;
         }
 
-        public override void Update(NPC npc, ref int buffIndex)
-        {
-            SummonTagNPC gNPC = npc.GetGlobalNPC<SummonTagNPC>();
-            gNPC.tagDamageMult += TagDamageMult * 0.01f;
-        }
+        public override void Update(NPC npc, ref int buffIndex) => npc.GetGlobalNPC<SummonTagNPC>().tagDamageMult += Constellation.TagDamageMult * 0.01f;
     }
     
-    public class ConstellationGore : ModGore
+    public class ConstellationGore : ModGore //TODO: reuse these for stargazers scope
     {
         public override void OnSpawn(Gore gore, IEntitySource source)
         {

@@ -31,13 +31,17 @@ namespace GoldLeaf.Items.Grove
 
         public override void SetDefaults()
         {
+            Item.CloneDefaults(ItemID.AmethystHook);
+
             Item.width = 26;
             Item.height = 40;
-            Item.CloneDefaults(ItemID.AmethystHook);
+
             Item.shootSpeed = 20f;
+
             Item.shoot = ProjectileType<GroveHookP>();
-            Item.rare = ItemRarityID.Green;
-            Item.value = Item.sellPrice(0, 0, 80, 0);
+            
+            Item.rare = ItemRarityID.Pink;
+            Item.value = Item.sellPrice(0, 2, 0, 0);
         }
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
