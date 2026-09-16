@@ -69,12 +69,12 @@ namespace GoldLeaf.Prefixes
     }
     public class Direct : CritDamagePrefix
     {
-        public override float CritDamageMult => 0.5f;
+        public override float CritDamageMult => 0.35f;
     }
     public class Burgeoning : CritDamagePrefix
     {
         public override PrefixCategory Category => PrefixCategory.Melee;
-        public override float CritDamageMult => 0.25f;
+        public override float CritDamageMult => -0.15f;
 
         public override void ModifyValue(ref float valueMult)
         {
@@ -83,15 +83,15 @@ namespace GoldLeaf.Prefixes
 
         public override void SetStats(ref float damageMult, ref float knockbackMult, ref float useTimeMult, ref float scaleMult, ref float shootSpeedMult, ref float manaMult, ref int critBonus)
         {
-            damageMult += 0.16f;
-            useTimeMult += 0.3f;
-            scaleMult += 0.45f;
-            knockbackMult += 0.15f;
+            damageMult += 0.15f;
+            useTimeMult += 0.35f;
+            scaleMult += 0.5f;
+            knockbackMult += 0.25f;
         }
     }
     public class Vindictive : CritDamagePrefix
     {
-        public override float CritDamageMult => 0.35f;
+        public override float CritDamageMult => 0.3f;
 
         public override void ModifyValue(ref float valueMult)
         {
@@ -112,7 +112,7 @@ namespace GoldLeaf.Prefixes
 
         public override void ModifyValue(ref float valueMult)
         {
-            valueMult *= 1f + (CritDamageMult / 5) + 0.4f;
+            valueMult *= 1f + (CritDamageMult / 5) + 0.5f;
         }
 
         public override void SetStats(ref float damageMult, ref float knockbackMult, ref float useTimeMult, ref float scaleMult, ref float shootSpeedMult, ref float manaMult, ref int critBonus)
@@ -147,7 +147,7 @@ namespace GoldLeaf.Prefixes
 
         public override IEnumerable<TooltipLine> GetTooltipLines(Item item)
         {
-            yield return new TooltipLine(Mod, "PrefixWeaponCritMult", CritMultTooltip.Format(CritDamageMult * 100))
+            yield return new TooltipLine(Mod, "PrefixWeaponCritMult", CritMultTooltip.Format(item.GetGlobalItem<GoldLeafItem>().critDamageMod * 100))
             {
                 IsModifier = true,
                 IsModifierBad = CritDamageMult < 0,
