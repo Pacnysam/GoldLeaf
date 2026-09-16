@@ -20,7 +20,7 @@ namespace GoldLeaf.Prefixes
     }
     public class Pinpoint : CritDamagePrefix
     {
-        public override float CritDamageMult => 0.75f;
+        public override float CritDamageMult => 0.5f;
 
         public override void SetStats(ref float damageMult, ref float knockbackMult, ref float useTimeMult, ref float scaleMult, ref float shootSpeedMult, ref float manaMult, ref int critBonus)
         {
@@ -33,12 +33,12 @@ namespace GoldLeaf.Prefixes
 
         public override void SetStats(ref float damageMult, ref float knockbackMult, ref float useTimeMult, ref float scaleMult, ref float shootSpeedMult, ref float manaMult, ref int critBonus)
         {
-            critBonus += 2;
+            critBonus += 4;
         }
     }
     public class Crooked : CritDamagePrefix
     {
-        public override float CritDamageMult => -0.25f;
+        public override float CritDamageMult => -0.15f;
 
         public override void ModifyValue(ref float valueMult)
         {
@@ -47,7 +47,7 @@ namespace GoldLeaf.Prefixes
 
         public override void SetStats(ref float damageMult, ref float knockbackMult, ref float useTimeMult, ref float scaleMult, ref float shootSpeedMult, ref float manaMult, ref int critBonus)
         {
-            damageMult -= 0.09f;
+            damageMult -= 0.14f;
             useTimeMult += 0.07f;
         }
     }
@@ -69,7 +69,7 @@ namespace GoldLeaf.Prefixes
     }
     public class Direct : CritDamagePrefix
     {
-        public override float CritDamageMult => 1f;
+        public override float CritDamageMult => 0.5f;
     }
     public class Burgeoning : CritDamagePrefix
     {
@@ -78,19 +78,20 @@ namespace GoldLeaf.Prefixes
 
         public override void ModifyValue(ref float valueMult)
         {
-            valueMult *= 1f + (CritDamageMult / 5) + 0.12f;
+            valueMult *= 1f + (CritDamageMult / 5) + 0.1f;
         }
 
         public override void SetStats(ref float damageMult, ref float knockbackMult, ref float useTimeMult, ref float scaleMult, ref float shootSpeedMult, ref float manaMult, ref int critBonus)
         {
             damageMult += 0.16f;
-            useTimeMult += 0.12f;
-            scaleMult += 0.32f;
+            useTimeMult += 0.3f;
+            scaleMult += 0.45f;
+            knockbackMult += 0.15f;
         }
     }
     public class Vindictive : CritDamagePrefix
     {
-        public override float CritDamageMult => 0.5f;
+        public override float CritDamageMult => 0.35f;
 
         public override void ModifyValue(ref float valueMult)
         {
@@ -111,14 +112,15 @@ namespace GoldLeaf.Prefixes
 
         public override void ModifyValue(ref float valueMult)
         {
-            valueMult *= 1f + (CritDamageMult / 5) + 0.35f;
+            valueMult *= 1f + (CritDamageMult / 5) + 0.4f;
         }
 
         public override void SetStats(ref float damageMult, ref float knockbackMult, ref float useTimeMult, ref float scaleMult, ref float shootSpeedMult, ref float manaMult, ref int critBonus)
         {
-            damageMult -= 0.08f;
-            useTimeMult -= 0.25f;
-            manaMult += 0.28f;
+            damageMult -= 0.15f;
+            useTimeMult -= 0.35f;
+            manaMult += 0.3f;
+            knockbackMult -= 0.1f;
         }
     }
 
