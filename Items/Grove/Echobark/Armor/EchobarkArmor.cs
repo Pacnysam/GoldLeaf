@@ -1,25 +1,15 @@
-﻿using static Terraria.ModLoader.ModContent;
-using GoldLeaf.Core;
-using static GoldLeaf.Core.Helper;
+﻿using GoldLeaf.Core;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using System.Diagnostics.Metrics;
 using System;
-using GoldLeaf.Effects.Dusts;
-using Terraria.Graphics.Effects;
-using Terraria.DataStructures;
 using ReLogic.Content;
 using Terraria.Localization;
-using GoldLeaf.Items.Blizzard.Armor;
 using System.Collections.Generic;
-using GoldLeaf.Items.Blizzard;
 using System.Linq;
-using GoldLeaf.Prefixes;
-using Terraria.Utilities;
+using static Terraria.ModLoader.ModContent;
+using static GoldLeaf.Core.Helper;
 
 namespace GoldLeaf.Items.Grove.Echobark.Armor
 {
@@ -33,13 +23,19 @@ namespace GoldLeaf.Items.Grove.Echobark.Armor
 
             Item.defense = 1;
         }
-
         public override void AddRecipes()
         {
             CreateRecipe()
                 .AddIngredient(ItemType<Echobark>(), 20)
                 .AddTile(TileID.WorkBenches)
                 .Register();
+        }
+        public override void ModifyTooltips(List<TooltipLine> tooltips) => EchobarkPlayer.AddEchobarkDefenseTooltip(Item, tooltips);
+        public override bool IsArmorSet(Item head, Item body, Item legs) => head.type == ItemType<EchobarkHelmet>() && body.type == ItemType<EchobarkBreastplate>() && legs.type == ItemType<EchobarkGreaves>();
+        public override void UpdateArmorSet(Player player)
+        {
+            player.setBonus = Language.GetTextValue("Mods.GoldLeaf.SetBonuses.Echobark");
+            player.GetModPlayer<EchobarkPlayer>().echobarkArmor = true;
         }
     }
 
@@ -53,7 +49,6 @@ namespace GoldLeaf.Items.Grove.Echobark.Armor
 
             Item.defense = 2;
         }
-
         public override void AddRecipes()
         {
             CreateRecipe()
@@ -61,17 +56,7 @@ namespace GoldLeaf.Items.Grove.Echobark.Armor
                 .AddTile(TileID.WorkBenches)
                 .Register();
         }
-
-        public override bool IsArmorSet(Item head, Item body, Item legs)
-        {
-            return head.type == ItemType<EchobarkHelmet>() && body.type == ItemType<EchobarkBreastplate>() && legs.type == ItemType<EchobarkGreaves>();
-        }
-
-        public override void UpdateArmorSet(Player player)
-        {
-            player.setBonus = Language.GetTextValue("Mods.GoldLeaf.SetBonuses.Echobark", player.GetModPlayer<EchobarkPlayer>().echobarkDefense);
-            player.GetModPlayer<EchobarkPlayer>().echobarkArmor = true;
-        }
+        public override void ModifyTooltips(List<TooltipLine> tooltips) => EchobarkPlayer.AddEchobarkDefenseTooltip(Item, tooltips);
     }
 
     [AutoloadEquip(EquipType.Legs)]
@@ -82,7 +67,7 @@ namespace GoldLeaf.Items.Grove.Echobark.Armor
             Item.width = 22;
             Item.height = 18;
 
-            Item.defense = 1;
+            Item.defense = 2;
         }
         public override void AddRecipes()
         {
@@ -91,79 +76,65 @@ namespace GoldLeaf.Items.Grove.Echobark.Armor
                 .AddTile(TileID.WorkBenches)
                 .Register();
         }
+        public override void ModifyTooltips(List<TooltipLine> tooltips) => EchobarkPlayer.AddEchobarkDefenseTooltip(Item, tooltips);
     }
 
     public class EchobarkPlayer : ModPlayer 
     {
+        private static int MaxEchobarkDefense => 15;
+        private static int EchobarkDecayTime => 30;
+
         public bool echobarkArmor = false;
         public int echobarkDefense = 0;
         public int echobarkCooldown = 0;
 
+        public static void AddEchobarkDefenseTooltip(Item item, List<TooltipLine> tooltips)
+        {
+            if (Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkArmor && Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkDefense > 0)
+            {
+                foreach (TooltipLine line in tooltips.Where(x => x.Mod == "Terraria" && x.Name == "Defense"))
+                    line.Text = item.defense + " (+" + Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkDefense + ")" + Language.GetTextValue("LegacyTooltip.25");
+            }
+        }
+
         public override void ResetEffects()
         {
             echobarkArmor = false;
-            echobarkDefense = Math.Clamp(echobarkDefense, 0, 15);
         }
 
         public override void PostUpdateEquips()
         {
-            if (echobarkArmor) 
-            {
-                Player.statDefense += echobarkDefense;
-            }
+            echobarkDefense = Math.Clamp(echobarkDefense, 0, MaxEchobarkDefense);
 
-            echobarkCooldown--;
-            if (echobarkCooldown <= 0 && echobarkDefense > 0)
+            if (echobarkArmor)
+                Player.statDefense += echobarkDefense;
+
+            if (echobarkCooldown-- <= 0 && echobarkDefense > 0)
             {
-                echobarkCooldown = 60;
+                echobarkCooldown = EchobarkDecayTime;
                 echobarkDefense--;
             }
         }
 
         public override void OnHurt(Player.HurtInfo info)
         {
-            if (echobarkArmor && info.Damage >= 10) 
+            if (echobarkArmor) 
             {
-                int amount = Math.Clamp(info.Damage / 10, 1, 10);
+                int amount = Math.Clamp((int)(info.Damage / 12.5f) + 1, 1, MaxEchobarkDefense);
 
-                int amountAdded;
                 if (echobarkDefense < 15)
                 {
-                    for (amountAdded = 0; amountAdded < amount && echobarkDefense < 15; amountAdded++)
+                    int amountAdded;
+                    for (amountAdded = 0; amountAdded < amount && echobarkDefense < MaxEchobarkDefense; amountAdded++)
                     {
-                        echobarkDefense ++;
+                        echobarkDefense++;
                     }
 
                     if (amountAdded > 0)
                         CombatText.NewText(Player.Hitbox, Color.LightGray, amountAdded, true, true);
                 }
-                echobarkCooldown = TimeToTicks(5);
-            }
-        }
-    }
-
-    public class EchobarkArmorItem : GlobalItem
-    {
-        public override bool InstancePerEntity => true;
-
-        public override bool AppliesToEntity(Item entity, bool lateInstantiation)
-        {
-            return entity.type == ItemType<EchobarkHelmet>() || entity.type == ItemType<EchobarkBreastplate>() || entity.type == ItemType<EchobarkGreaves>();
-        }
-
-        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
-        {
-            TooltipLine tipLine = tooltips.Find(n => n.Name == "Defense");
-
-            if (tipLine != null)
-            {
-                if (Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkArmor && Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkDefense > 0)
-                {
-                    int updatedDefense = item.defense + Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkDefense;
-                    string text = updatedDefense + " (+" + Main.LocalPlayer.GetModPlayer<EchobarkPlayer>().echobarkDefense + ")" + Language.GetTextValue("LegacyTooltip.25");
-
-                    tooltips.ElementAt(tooltips.IndexOf(tipLine)).Text = text;
-                }
+                echobarkCooldown = TimeToTicks(8);
+                Player.statDefense += echobarkDefense;
             }
         }
     }

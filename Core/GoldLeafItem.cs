@@ -49,28 +49,48 @@ namespace GoldLeaf.Core
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            switch (item.type) //TODO: make a system for this
+            GoldLeafPlayer goldLeafPlayer = Main.LocalPlayer.GetModPlayer<GoldLeafPlayer>();
+
+            if (item.ModItem != null && item.ModItem.Mod == GoldLeaf.Instance)
+            {
+                if (item.IsWeapon())
+                {
+                    if (item.sentry)
+                        tooltips.QuickTooltipLine(Language.GetTextValue("CommonItemTooltip.Sentry", item.ArmorPenetration), "SentryCommon", false);
+
+                    if (item.ArmorPenetration > 0)
+                        tooltips.QuickTooltipLine(Language.GetTextValue("Mods.GoldLeaf.CommonItemTooltip.IgnoresDefense", item.ArmorPenetration), "ArmorPenetration");
+                }
+                if (ItemID.Sets.IsFood[item.type])
+                {
+                    string foodQuality = item.buffType switch
+                    {
+                        BuffID.WellFed => "MinorStats",
+                        BuffID.WellFed2 => "MediumStats",
+                        BuffID.WellFed3 => "MajorStats",
+_                       => "",
+                    };
+                    if (foodQuality != "")
+                        tooltips.QuickTooltipLine(Language.GetTextValue($"CommonItemTooltip.{foodQuality}"), "FoodBuff", false);
+                }
+            } //automatic tooltips
+
+            switch (item.type)
             {
                 case ItemID.RoyalGel:
                     {
-                        if (!Main.LocalPlayer.HasItem(ItemType<Goonai>()))
-                            break;
-
-                        TooltipLine tooltipLine = tooltips.Find(n => n.Name == "Tooltip0");
-                        int index = tooltips.IndexOf(tooltipLine);
-
-                        if (tooltipLine != null)
-                            tooltips.Insert(index + 1, new TooltipLine(Mod, "RoyalGel", Language.GetTextValue("Mods.GoldLeaf.Items.Vanilla.RoyalGel", tooltipLine)));
+                        if (Main.LocalPlayer.HasItem(ItemType<Goonai>()))
+                            tooltips.QuickTooltipLine(Language.GetTextValue("Mods.GoldLeaf.Items.Vanilla.RoyalGel"), "TooltipGoonai");
                         break;
                     }
             }
 
-            GoldLeafPlayer glPlayer = Main.LocalPlayer.GetModPlayer<GoldLeafPlayer>();
+            #region crit damage multiplier
             float updatedCritMod = (2 + item.GetGlobalItem<GoldLeafItem>().critDamageMod) * Main.LocalPlayer.GetModPlayer<GoldLeafPlayer>().critDamageMult;
 
-            if (item.DamageType.CountsAsClass(DamageClass.Melee)) updatedCritMod += glPlayer.meleeCritDamageMod;
-            if (item.DamageType.CountsAsClass(DamageClass.Ranged)) updatedCritMod += glPlayer.rangedCritDamageMod;
-            if (item.DamageType.CountsAsClass(DamageClass.Magic)) updatedCritMod += glPlayer.magicCritDamageMod;
+            if (item.DamageType.CountsAsClass(DamageClass.Melee)) updatedCritMod += goldLeafPlayer.meleeCritDamageMod;
+            if (item.DamageType.CountsAsClass(DamageClass.Ranged)) updatedCritMod += goldLeafPlayer.rangedCritDamageMod;
+            if (item.DamageType.CountsAsClass(DamageClass.Magic)) updatedCritMod += goldLeafPlayer.magicCritDamageMod;
 
             if (updatedCritMod != 2 && updatedCritMod > 1 && Helper.IsWeapon(item))
             {
@@ -84,6 +104,7 @@ namespace GoldLeaf.Core
                 if (critLine != null || damageLine != null)
                     tooltips.Insert(index + 1, new TooltipLine(Mod, "CritMult", Language.GetTextValue("Mods.GoldLeaf.CommonItemTooltip.CriticalDamageMultiplier", updatedCritMod)));
             }
+            #endregion crit damage mult
 
             if (ItemSets.WorkInProgress[item.type])
                 tooltips.Add(new TooltipLine(Mod, "WorkInProgress", Language.GetTextValue("Mods.GoldLeaf.CommonItemTooltip.WorkInProgress")) { OverrideColor = Color.Red });
@@ -104,15 +125,15 @@ namespace GoldLeaf.Core
                 itemLoot.Add(ItemDropRule.FewFromOptions(5, 50, [ItemType<WatcherEyedrops>(), ItemType<WatcherCloak>(), ItemType<BatPlushie>(), ItemType<RedPlushie>(), ItemType<MadcapPainting>()]));
             }
 
-            switch (item.type)
+            /*switch (item.type)
             {
-                /*case ItemID.LavaCrate:
+                case ItemID.LavaCrate:
                 case ItemID.LavaCrateHard:
                     {
                         itemLoot.Add(ItemDropRule.Common(ItemType<HeatFlask>(), 4, 60, 75));
                         break;
-                    }*/
-            }
+                    }
+            }*/
         }
 
         public override void GrabRange(Item item, Player player, ref int grabRange)

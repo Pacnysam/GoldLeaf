@@ -45,6 +45,35 @@ namespace GoldLeaf.Core
             return false;
         }
 
+        public static void QuickTooltipLine(this List<TooltipLine> tooltips, string text, string name, bool afterVanilla = true)
+        {
+            TooltipLine tipline = tooltips.Find(tip => tip.Name.StartsWith("Tooltip"));
+
+            if (tipline != null && tipline.Visible)
+            {
+                if (!name.StartsWith("Tooltip"))
+                    name = "Tooltip" + name;
+
+                if (afterVanilla)
+                {
+                    int index = tooltips.FindLastIndex(tip => tip.Name.StartsWith("Tooltip")) + 1;
+
+                    tooltips.Insert(index, new TooltipLine(GoldLeaf.Instance, name, text));
+                    return;
+                }
+                foreach (TooltipLine tip in tooltips)
+                {
+                    int index = tooltips.IndexOf(tip);
+
+                    if (tip.Mod == "Terraria" && tip.Name.StartsWith("Tooltip"))
+                    {
+                        tooltips.Insert(index, new TooltipLine(GoldLeaf.Instance, name, text));
+                        return;
+                    }
+                }
+            }
+        }
+
         public static string EmptyTexString => "GoldLeaf/Textures/Empty";
         public static Texture2D EmptyTex => Request<Texture2D>("GoldLeaf/Textures/Empty").Value;
 
