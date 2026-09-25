@@ -18,6 +18,8 @@ namespace GoldLeaf.Items.Grove.Boss
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 3;
+
+            ItemID.Sets.ItemNoGravity[Item.type] = true;
         }
 
         public override void SetDefaults()
@@ -26,8 +28,6 @@ namespace GoldLeaf.Items.Grove.Boss
 			Item.height = 24;
             Item.maxStack = Item.CommonMaxStack;
             Item.rare = ItemRarityID.LightRed;
-
-            ItemID.Sets.ItemNoGravity[Item.type] = true;
         }
 
         public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
@@ -41,7 +41,7 @@ namespace GoldLeaf.Items.Grove.Boss
                     .GetColor((float)Math.Sin(Main.GlobalTimeWrappedHourly * 3f) * 0.5f + 0.5f).Alpha();
 
                 Vector2 drawPosition = position + new Vector2(0f, 1.5f + ((float)Math.Sin(Main.GlobalTimeWrappedHourly * 6f) * 0.5f + 0.5f) * (k * 4f))
-                    .RotatedBy(((-k * (MathHelper.Pi/5f)) + (Main.GlobalTimeWrappedHourly * 2f)) * ((float)Math.PI * 2f));
+                    .RotatedBy((3f * Main.GlobalTimeWrappedHourly) + (((-k * (MathHelper.Pi/5f)) + (Main.GlobalTimeWrappedHourly * 2f)) * ((float)Math.PI * 2f)));
                 
                 spriteBatch.Draw(texture, drawPosition, frame, color * 0.35f, 0, origin, scale, SpriteEffects.None, 0f);
             } //spinning effect

@@ -1,3 +1,5 @@
+Vanilla.RoyalGel: Goonai replenish on critical strikes
+
 BatPlushie: {
 	DisplayName: Bat Plushie
 	Tooltip: It's sooooooo cute!
@@ -188,7 +190,7 @@ Demitoxin: {
 
 Lodestar: {
 	DisplayName: Lodestar
-	Tooltip: A vestige of power long gone
+	Tooltip: "'A resilient spark, teeming with potential'"
 }
 
 Sediment: {
@@ -538,7 +540,6 @@ Jellyfisher: {
 	DisplayName: Jellyfisher
 	Tooltip:
 		'''
-		{$CommonItemTooltip.Sentry}
 		<right> to transform into a fishing rod
 		<right> to transform into a sentry
 		'''
@@ -561,7 +562,7 @@ EchobarkSword: {
 
 SunstoneStaff: {
 	DisplayName: Splitter
-	Tooltip: "{$CommonItemTooltip.IgnoresDefense}"
+	Tooltip: ""
 }
 
 RoyalCanister: {
@@ -596,11 +597,7 @@ ForbiddenFruit: {
 
 CrescentRoll: {
 	DisplayName: Crescent Roll
-	Tooltip:
-		'''
-		{$CommonItemTooltip.MediumStats}
-		Increases minion attack speed
-		'''
+	Tooltip: "{$JumpBoostPotion.Tooltip}"
 }
 
 WellspringWatch: {

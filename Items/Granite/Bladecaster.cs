@@ -8,6 +8,7 @@ using static Terraria.ModLoader.ModContent;
 using static GoldLeaf.Core.Helper;
 using ReLogic.Content;
 using GoldLeaf.Core.CrossMod;
+using GoldLeaf.Prefixes;
 
 namespace GoldLeaf.Items.Granite
 {

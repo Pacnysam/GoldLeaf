@@ -229,12 +229,12 @@ namespace GoldLeaf.Items.Ocean.Jellyfisher
         {
             if (!sentryMode)
             {
-                foreach (TooltipLine line in tooltips.Where(x => x.Mod == "Terraria" && (x.Name == "Damage" || x.Name == "Knockback" || x.Name == "Tooltip0" || x.Name == "Tooltip1")))
+                foreach (TooltipLine line in tooltips.Where(x => x.Mod == "Terraria" && (x.Name == "Damage" || x.Name == "Knockback" || x.Name == "SentryCommon" || x.Name == "Tooltip0")))
                     line.Hide();
             }
             else
             {
-                foreach (TooltipLine line in tooltips.Where(x => x.Mod == "Terraria" && (x.Name == "Tooltip2" || x.Name == "FishingPower" || x.Name == "NeedsBait")))
+                foreach (TooltipLine line in tooltips.Where(x => x.Mod == "Terraria" && (x.Name == "Tooltip1" || x.Name == "FishingPower" || x.Name == "NeedsBait")))
                     line.Hide();
             }
         }

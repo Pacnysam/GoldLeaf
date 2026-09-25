@@ -40,7 +40,7 @@ namespace GoldLeaf.Items.Food
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(BuffType<MinionSpeedPotionBuff>(), TimeToTicks(5, 0));
+            player.AddBuff(BuffType<JumpBoostPotionBuff>(), TimeToTicks(8, 0));
         }
 
         public override void AddRecipes()
