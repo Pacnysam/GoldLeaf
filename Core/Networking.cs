@@ -16,8 +16,8 @@ using GoldLeaf.Items.FishWeapons;
 using Terraria.Audio;
 using GoldLeaf.Effects.Dusts;
 using Microsoft.Xna.Framework;
-using GoldLeaf.Items.Sky;
 using GoldLeaf.Core.Helpers;
+using GoldLeaf.Items.Sky.StarStacker;
 
 namespace GoldLeaf
 {
@@ -27,7 +27,7 @@ namespace GoldLeaf
         {
             SoundSync,
             OverhealthSync,
-            ConstellationSync,
+            StarStackerSync,
             FrostSync,
             SnapFreeze,
             ControlsPlayer,
@@ -68,9 +68,9 @@ namespace GoldLeaf
                         overhealthPlayer.SyncPlayer(-1, whoAmI, false);
                     }
                     break;
-                case MessageType.ConstellationSync:
+                case MessageType.StarStackerSync:
                     
-                    ConstellationPlayer starWhipPlayer = Main.player[player].GetModPlayer<ConstellationPlayer>();
+                    StarStackerPlayer starWhipPlayer = Main.player[player].GetModPlayer<StarStackerPlayer>();
                     starWhipPlayer.ReceivePlayerSync(reader);
 
                     if (Main.netMode == NetmodeID.Server)

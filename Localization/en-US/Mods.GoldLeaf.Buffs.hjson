@@ -3,9 +3,9 @@ NightshadeHeist: {
 	Description: You're the getaway driver!
 }
 
-ConstellationTag: {
-	DisplayName: Star stacks
-	Description: Whip range is increased, whips inflict bonus tag damage
+StarStackerBuff: {
+	DisplayName: Star Stacks
+	Description: Whip range is increased
 }
 
 AmberStun: {
