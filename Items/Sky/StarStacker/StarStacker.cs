@@ -17,11 +17,11 @@ using Terraria.ModLoader;
 using static GoldLeaf.Core.Helper;
 using static Terraria.ModLoader.ModContent;
 
-namespace GoldLeaf.Items.Sky
+namespace GoldLeaf.Items.Sky.StarStacker
 {
-    public class Constellation : ModItem
+    public class StarStacker : ModItem
     {
-        public static float TagDamageMult => 15;
+        public static float TagDamageMult => 10;
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(TagDamageMult);
 
         private static Asset<Texture2D> glowTex;
@@ -38,7 +38,7 @@ namespace GoldLeaf.Items.Sky
 
         public override void SetDefaults()
         {
-            Item.DefaultToWhip(ProjectileType<ConstellationP>(), 18, 1.5f, 3.25f, 45);
+            Item.DefaultToWhip(ProjectileType<StarStackerP>(), 18, 1.5f, 3.25f, 45);
 
             Item.rare = ItemRarityID.Blue;
             Item.value = Item.sellPrice(0, 1, 0, 0);
@@ -46,14 +46,14 @@ namespace GoldLeaf.Items.Sky
         }
 
         public override float UseSpeedMultiplier(Player player)
-            => Utils.Remap(player.GetModPlayer<ConstellationPlayer>().extraSegments, 0, ConstellationPlayer.MaxExtraSegments, 4/3f, 1f);
+            => Utils.Remap(player.GetModPlayer<StarStackerPlayer>().extraSegments, 0, StarStackerPlayer.MaxExtraSegments, 4/3f, 1f);
 
         public override bool CanShoot(Player player) => player.ownedProjectileCounts[Item.shoot] == 0;
 
         public override bool MeleePrefix() => true;
     }
     
-    public class ConstellationP : ModProjectile
+    public class StarStackerP : ModProjectile
     {
         private static Asset<Texture2D> glowTex;
         private static Asset<Texture2D> bloomTex;
@@ -92,7 +92,7 @@ namespace GoldLeaf.Items.Sky
             Player player = Main.player[Projectile.owner];
             if (!hasSetup)
             {
-                Segments = player.GetModPlayer<ConstellationPlayer>().extraSegments;
+                Segments = player.GetModPlayer<StarStackerPlayer>().extraSegments;
                 Projectile.WhipSettings.RangeMultiplier += 0.07f * Segments;
                 hasSetup = true;
             }
@@ -113,7 +113,7 @@ namespace GoldLeaf.Items.Sky
 
                 if (Projectile.localAI[0] <= 0 && !Main.dedServ) 
                 {
-                    float dustSizeMult = 0.5f + (Segments / ConstellationPlayer.MaxExtraSegments * 0.5f);
+                    float dustSizeMult = 0.5f + (Segments / StarStackerPlayer.MaxExtraSegments * 0.5f);
 
                     Dust dust = Dust.NewDustDirect(rectangle.TopLeft(), rectangle.Width, rectangle.Height, DustType<TwinkleDust>(), 0f, 0f, Main.rand.Next(-5, 10), new Color(255, 251, 189).Alpha() * 0.65f, Main.rand.NextFloat(0.4f, 0.6f) * dustSizeMult);
                     dust.customData = new LightDust.LightDustData(Main.rand.NextFloat(0.85f, 0.935f), MathHelper.ToRadians(Main.rand.NextFloat(-8f, 8f)));
@@ -122,7 +122,7 @@ namespace GoldLeaf.Items.Sky
                     dust.fadeIn = Main.rand.NextFloat(-0.5f, 2f);
                     dust.velocity = (dust.velocity * Main.rand.NextFloat() * 0.55f) + (forwardVector.RotatedBy(MathHelper.PiOver4 * Math.Sign(Projectile.direction)) * 3f * flyTimer) * Main.rand.NextFloat(1f, 2.5f);
                     dust.velocity *= dustSizeMult;
-                    Projectile.localAI[0] = Main.rand.Next(1, 4) + (int)Utils.Remap(Segments, 0, ConstellationPlayer.MaxExtraSegments, 2, 0);
+                    Projectile.localAI[0] = Main.rand.Next(1, 4) + (int)Utils.Remap(Segments, 0, StarStackerPlayer.MaxExtraSegments, 2, 0);
                 }
             }
 
@@ -138,17 +138,17 @@ namespace GoldLeaf.Items.Sky
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Player player = Main.player[Projectile.owner];
-            target.AddBuff(BuffType<ConstellationTag>(), TimeToTicks(5));
+            target.AddBuff(BuffType<StarStackerBuff>(), TimeToTicks(5));
             player.MinionAttackTargetNPC = target.whoAmI;
 
-            if (player.GetModPlayer<ConstellationPlayer>().extraSegments < ConstellationPlayer.MaxExtraSegments && !target.friendly && !target.immortal && !target.dontTakeDamage && target.lifeMax > 5)
+            if (player.GetModPlayer<StarStackerPlayer>().extraSegments < StarStackerPlayer.MaxExtraSegments && !target.friendly && !target.immortal && !target.dontTakeDamage && target.lifeMax > 5)
             {
                 if (!HasStruckEnemy)
-                    player.GetModPlayer<ConstellationPlayer>().extraSegments++;
+                    player.GetModPlayer<StarStackerPlayer>().extraSegments++;
 
                 if (!Main.dedServ && false) //TODO: replace these particles for rework
                 {
-                    Gore gore = Gore.NewGoreDirect(null, target.Top, Vector2.Zero, GoreType<ConstellationGore>());
+                    Gore gore = Gore.NewGoreDirect(null, target.Top, Vector2.Zero, GoreType<StarStackerGore>());
                     gore.rotation = MathHelper.ToRadians(Main.rand.NextFloat(180, 380)).RandNeg();
                     gore.velocity.X *= 0.65f;
                     gore.velocity.Y = Main.rand.NextFloat(-5.5f, -4f);
@@ -157,7 +157,7 @@ namespace GoldLeaf.Items.Sky
 
                     for (int i = 0; i < 5; i++)
                     {
-                        Gore gore2 = Gore.NewGoreDirect(null, target.Top, Vector2.Zero, GoreType<ConstellationGore>());
+                        Gore gore2 = Gore.NewGoreDirect(null, target.Top, Vector2.Zero, GoreType<StarStackerGore>());
                         gore2.rotation = MathHelper.ToRadians(Main.rand.NextFloat(420, 820)).RandNeg();
                         gore2.velocity.X *= 1.85f;
                         gore2.velocity.Y = Main.rand.NextFloat(-3.5f, -2f);
@@ -172,7 +172,7 @@ namespace GoldLeaf.Items.Sky
 
                 if (!Main.dedServ && false)
                 {
-                    Gore gore = Gore.NewGoreDirect(null, target.Top, Vector2.Zero, GoreType<ConstellationGore>());
+                    Gore gore = Gore.NewGoreDirect(null, target.Top, Vector2.Zero, GoreType<StarStackerGore>());
                     gore.rotation = MathHelper.ToRadians(Main.rand.NextFloat(240, 420)).RandNeg();
                     gore.velocity.X *= 0.65f;
                     gore.velocity.Y = Main.rand.NextFloat(-5f, -3.5f);
@@ -181,7 +181,7 @@ namespace GoldLeaf.Items.Sky
 
                     for (int i = 0; i < 3; i++)
                     {
-                        Gore gore2 = Gore.NewGoreDirect(null, target.Top, Vector2.Zero, GoreType<ConstellationGore>());
+                        Gore gore2 = Gore.NewGoreDirect(null, target.Top, Vector2.Zero, GoreType<StarStackerGore>());
                         gore2.rotation = MathHelper.ToRadians(Main.rand.NextFloat(580, 780)).RandNeg();
                         gore2.velocity.X *= 1.85f;
                         gore2.velocity.Y = Main.rand.NextFloat(-3f, -1.5f);
@@ -191,11 +191,11 @@ namespace GoldLeaf.Items.Sky
                 }
             }
 
-            if (player.GetModPlayer<ConstellationPlayer>().extraSegments > 0)
-                player.AddBuff(BuffType<ConstellationTag>(), TimeToTicks(5));
+            if (player.GetModPlayer<StarStackerPlayer>().extraSegments > 0)
+                player.AddBuff(BuffType<StarStackerBuff>(), TimeToTicks(5));
 
-            if (!Main.dedServ && player.GetModPlayer<ConstellationPlayer>().extraSegments > 0)
-                SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/SuperStar/MirrorReflect") { Pitch = -0.65f + (player.GetModPlayer<ConstellationPlayer>().extraSegments * 0.15f), Volume = 0.7f }, player.Center);
+            if (!Main.dedServ && player.GetModPlayer<StarStackerPlayer>().extraSegments > 0)
+                SoundEngine.PlaySound(new SoundStyle("GoldLeaf/Sounds/SE/Kirby/SuperStar/MirrorReflect") { Pitch = -0.65f + (player.GetModPlayer<StarStackerPlayer>().extraSegments * 0.15f), Volume = 0.7f }, player.Center);
             
             if (!target.friendly && !target.immortal && !target.dontTakeDamage && target.lifeMax > 5)
                 HasStruckEnemy = true;
@@ -292,7 +292,7 @@ namespace GoldLeaf.Items.Sky
         }
     }
     
-    public class ConstellationPlayer : ModPlayer
+    public class StarStackerPlayer : ModPlayer
     {
         public int extraSegments = 0;
         public static int MaxExtraSegments => 5;
@@ -304,25 +304,17 @@ namespace GoldLeaf.Items.Sky
 
         public override void PostUpdateBuffs()
         {
-            if (!Player.HasBuff(BuffType<ConstellationTag>()))
+            if (!Player.HasBuff(BuffType<StarStackerBuff>()))
                 extraSegments = 0;
 
             if (extraSegments > 0) Player.whipRangeMultiplier += 0.135f * extraSegments;
-        }
-
-        public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
-        {
-            if (ProjectileID.Sets.IsAWhip[proj.type] && extraSegments > 0 && proj.type != ProjectileType<ConstellationP>())
-            {
-
-            }
         }
 
         #region networking stuff
         public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
         {
             ModPacket packet = Mod.GetPacket();
-            packet.Write((byte)GoldLeaf.MessageType.ConstellationSync);
+            packet.Write((byte)GoldLeaf.MessageType.StarStackerSync);
             packet.Write((byte)Player.whoAmI);
             packet.Write((byte)extraSegments);
             packet.Send(toWho, fromWho);
@@ -333,12 +325,12 @@ namespace GoldLeaf.Items.Sky
         }
         public override void CopyClientState(ModPlayer targetCopy)
         {
-            ConstellationPlayer clone = (ConstellationPlayer)targetCopy;
+            StarStackerPlayer clone = (StarStackerPlayer)targetCopy;
             clone.extraSegments = extraSegments;
         }
         public override void SendClientChanges(ModPlayer clientPlayer)
         {
-            ConstellationPlayer clone = (ConstellationPlayer)clientPlayer;
+            StarStackerPlayer clone = (StarStackerPlayer)clientPlayer;
 
             if (extraSegments != clone.extraSegments)
                 SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
@@ -346,7 +338,7 @@ namespace GoldLeaf.Items.Sky
         #endregion save & load stuff
     }
 
-    public class ConstellationTag : ModBuff
+    public class StarStackerBuff : ModBuff
     {
         public override string Texture => CoolBuffTex(base.Texture);
 
@@ -357,10 +349,10 @@ namespace GoldLeaf.Items.Sky
             Main.buffNoSave[Type] = true;
         }
 
-        public override void Update(NPC npc, ref int buffIndex) => npc.GetGlobalNPC<SummonTagNPC>().tagDamageMult += Constellation.TagDamageMult * 0.01f;
+        public override void Update(NPC npc, ref int buffIndex) => npc.GetGlobalNPC<SummonTagNPC>().tagDamageMult += StarStacker.TagDamageMult * 0.01f;
     }
     
-    public class ConstellationGore : ModGore //TODO: reuse these for stargazers scope
+    public class StarStackerGore : ModGore //TODO: reuse these for stargazers scope
     {
         public override void OnSpawn(Gore gore, IEntitySource source)
         {

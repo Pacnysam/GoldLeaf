@@ -1,18 +1,23 @@
-﻿using GoldLeaf.Core;
-using GoldLeaf.Core.Helpers;
-using GoldLeaf.Core.Mechanics.Overhealth;
-using GoldLeaf.Effects.Dusts;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Terraria.ID;
+using Terraria;
+using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
+using GoldLeaf.Core;
+using static GoldLeaf.Core.Helper;
+using GoldLeaf.Items.Blizzard.Armor;
 using GoldLeaf.Items.Blizzard;
 using GoldLeaf.Items.FishWeapons;
-using GoldLeaf.Items.Sky;
-using Microsoft.Xna.Framework;
-using System.IO;
-using Terraria;
 using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
-using static GoldLeaf.Core.Helper;
-using static Terraria.ModLoader.ModContent;
+using GoldLeaf.Effects.Dusts;
+using Microsoft.Xna.Framework;
+using GoldLeaf.Core.Helpers;
+using GoldLeaf.Items.Sky.StarStacker;
 
 namespace GoldLeaf
 {
@@ -22,7 +27,7 @@ namespace GoldLeaf
         {
             SoundSync,
             OverhealthSync,
-            ConstellationSync,
+            StarStackerSync,
             FrostSync,
             SnapFreeze,
             ControlsPlayer,
@@ -56,16 +61,16 @@ namespace GoldLeaf
                     break;
                 case MessageType.OverhealthSync:
                     OverhealthManager overhealthPlayer = Main.player[player].GetModPlayer<OverhealthManager>();
-                    //overhealthPlayer.ReceivePlayerSync(reader);
+                    overhealthPlayer.ReceivePlayerSync(reader);
 
                     if (Main.netMode == NetmodeID.Server)
                     {
                         overhealthPlayer.SyncPlayer(-1, whoAmI, false);
                     }
                     break;
-                case MessageType.ConstellationSync:
+                case MessageType.StarStackerSync:
                     
-                    ConstellationPlayer starWhipPlayer = Main.player[player].GetModPlayer<ConstellationPlayer>();
+                    StarStackerPlayer starWhipPlayer = Main.player[player].GetModPlayer<StarStackerPlayer>();
                     starWhipPlayer.ReceivePlayerSync(reader);
 
                     if (Main.netMode == NetmodeID.Server)

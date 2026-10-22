@@ -173,8 +173,8 @@ Echobark: {
 	DisplayName: Echobark
 }
 
-Constellation: {
-	DisplayName: Starstacker
+StarStacker: {
+	DisplayName: Star Stacker
 	Tooltip:
 		'''
 		{$CommonItemTooltip.PercentSummonTagDamage}
