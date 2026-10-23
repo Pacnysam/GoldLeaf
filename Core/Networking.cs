@@ -18,6 +18,7 @@ using GoldLeaf.Effects.Dusts;
 using Microsoft.Xna.Framework;
 using GoldLeaf.Core.Helpers;
 using GoldLeaf.Items.Sky.StarStacker;
+using GoldLeaf.Core.Mechanics.Overhealth;
 
 namespace GoldLeaf
 {
@@ -60,13 +61,7 @@ namespace GoldLeaf
                     }
                     break;
                 case MessageType.OverhealthSync:
-                    OverhealthManager overhealthPlayer = Main.player[player].GetModPlayer<OverhealthManager>();
-                    overhealthPlayer.ReceivePlayerSync(reader);
-
-                    if (Main.netMode == NetmodeID.Server)
-                    {
-                        overhealthPlayer.SyncPlayer(-1, whoAmI, false);
-                    }
+                    //TODO: this
                     break;
                 case MessageType.StarStackerSync:
                     
