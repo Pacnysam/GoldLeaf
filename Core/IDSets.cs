@@ -81,6 +81,10 @@ namespace GoldLeaf.Core
             ProjectileID.BlackCounterweight, ProjectileID.BlueCounterweight, ProjectileID.GreenCounterweight, ProjectileID.PurpleCounterweight, ProjectileID.RedCounterweight, ProjectileID.YellowCounterweight, 
             ProjectileType<BasicRubyBolt>(), ProjectileType<FallingEmerald>(), ProjectileType<MeteorMissileP>(), ProjectileType<Ember>(), ProjectileType<AetherEmber>(), ProjectileType<QuetzalShard>());
 
+        public static bool[] ProjectilePenetratesOverhealth = ProjectileID.Sets.Factory.CreateNamedSet("ProjectilePenetratesOverhealth")
+            .Description("Ignores overhealth when dealing damage")
+            .RegisterBoolSet(false);
+
         public static bool[] SummonSpeedImmune = ProjectileID.Sets.Factory.CreateNamedSet("SummonSpeedImmune")
             .Description("Some minions break when increasing summon speed. Setting this to true will give these minions a damage bonus instead")
             .RegisterBoolSet(false, ProjectileID.Spazmamini, ProjectileID.DeadlySphere);
@@ -103,6 +107,10 @@ namespace GoldLeaf.Core
             .RegisterCustomSet<bool?>(null, NPCID.Antlion, false, NPCID.BrainofCthulhu, true, NPCID.DesertDjinn, false, NPCID.DD2DrakinT2, false, NPCID.DD2DrakinT3, false, 
             NPCID.EyeballFlyingFish, false, NPCID.GrayGrunt, false, NPCID.HeadlessHorseman, false, NPCID.Paladin, false, NPCID.ShadowFlameApparition, false, NPCID.ThePossessed, false, 
             NPCID.Yeti, false, NPCID.ZombieMerman, false);
+
+        public static bool[] NPCPenetratesOverhealth = NPCID.Sets.Factory.CreateNamedSet("NPCPenetratesOverhealth")
+            .Description("Ignores overhealth when dealing damage")
+            .RegisterBoolSet(false, NPCID.RuneWizard); //lol
     }
 
     public static class BuffSets

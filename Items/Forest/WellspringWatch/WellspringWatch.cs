@@ -47,6 +47,24 @@ namespace GoldLeaf.Items.Forest.WellspringWatch
         {
             wellspringWatch = false;
         }
+
+        public override void PostUpdateEquips()
+        {
+            if (wellspringWatch)
+            {
+                if (ModLoader.TryGetMod("PacnyRefresh", out Mod pacnyRefresh) && pacnyRefresh.TryFind("RestorationBuff", out ModBuff restorationBuff) && Player.HasBuff(restorationBuff.Type)
+                && Player.buffTime[Player.FindBuffIndex(restorationBuff.Type)] % 30 == 0)
+                {
+                    Player.AddOverhealth<WellspringPool>(5, 180);
+                }
+
+                if (ModLoader.TryGetMod("Split", out Mod split) && split.TryFind("GelidRegeneration", out ModBuff gelidPotionBuff) && Player.HasBuff(gelidPotionBuff.Type)
+                && Player.buffTime[Player.FindBuffIndex(gelidPotionBuff.Type)] % 60 == 0)
+                {
+                    Player.AddOverhealth<WellspringPool>(5, 180);
+                }
+            }
+        }
     }
 
     public class WellspringWatchItem : GlobalItem 
@@ -68,8 +86,15 @@ namespace GoldLeaf.Items.Forest.WellspringWatch
         public override int MaxSize => 1000;
         public override int AmountToDecrement => Math.Max((int)(size / 50f), 1);
         public override int TimeToDecrement => 1;
-        public override int DefaultDuration => 180;
+        public override int DefaultDuration => 300;
         public override float Priority => 1f;
         public override bool IgnoreOverhealthPrevention => true;
+        public override bool PreUpdateTime(Player player)
+        {
+            if ((ModLoader.TryGetMod("PacnyRefresh", out Mod pacnyRefresh) && pacnyRefresh.TryFind("RestorationBuff", out ModBuff restorationBuff) && player.HasBuff(restorationBuff.Type))
+                || (ModLoader.TryGetMod("Split", out Mod split) && split.TryFind("GelidRegeneration", out ModBuff gelidPotionBuff) && player.HasBuff(gelidPotionBuff.Type))) return false;
+
+            return base.PreUpdateTime(player);
+        }
     }
 }

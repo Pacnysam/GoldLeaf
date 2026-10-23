@@ -282,7 +282,7 @@ FinessePotion: {
 
 VigorPotion: {
 	DisplayName: Vigor Potion
-	Tooltip: Avoiding damage generates overhealth
+	Tooltip: Avoiding damage generates shield health
 }
 
 ConsistencyPotion: {
@@ -602,7 +602,7 @@ CrescentRoll: {
 
 WellspringWatch: {
 	DisplayName: Wellspring Watch
-	Tooltip: Healing potions provide twice their healing amount in decaying overhealth
+	Tooltip: Healing potions provide decaying shield health
 }
 
 BulwarkBracelet: {

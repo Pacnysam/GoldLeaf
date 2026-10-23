@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ModLoader;
 using static GoldLeaf.Core.Helper;
 using static Terraria.ModLoader.ModContent;
@@ -143,14 +144,7 @@ namespace GoldLeaf.Core.Mechanics.Overhealth
         public static void SetOverhealth<T>(Player player, int size) where T : OverhealthPool, new()
         {
             T pool = new() { size = size }; pool.duration = pool.DefaultDuration;
-
-            OverhealthManager manager = player.GetModPlayer<OverhealthManager>();
-            var foundPool = manager.overhealthPools.Find(p => p.GetType() == pool.GetType());
-
-            if (foundPool == null && pool.size > 0)
-                manager.overhealthPools.Add(pool);
-            else
-                foundPool = pool;
+            SetOverhealth(player, pool);
         }
         public static void SetOverhealth(Player player, OverhealthPool pool)
         {
@@ -188,6 +182,11 @@ namespace GoldLeaf.Core.Mechanics.Overhealth
 
         public override void OnHurt(Player.HurtInfo info)
         {
+            if (info.DamageSource.TryGetCausingEntity(out Entity entity))
+            {
+                if ((entity is NPC npc && NPCSets.NPCPenetratesOverhealth[npc.type]) || (entity is Projectile projectile && ProjectileSets.ProjectilePenetratesOverhealth[projectile.type]))
+                    return;
+            }
             if (GetTotalOverhealth(Player) > 0)
             {
                 int totalOverhealthLost = 0;
@@ -195,13 +194,13 @@ namespace GoldLeaf.Core.Mechanics.Overhealth
                 foreach (OverhealthPool pool in overhealthPools)
                 {
                     int overhealthLost = Math.Min(pool.size, info.Damage - totalOverhealthLost);
-                    
+
                     totalOverhealthLost += overhealthLost;
                     pool.size -= overhealthLost;
-                    
+
                     pool.OnHurt(Player, info, overhealthLost);
 
-                    if (totalOverhealthLost >= info.Damage) 
+                    if (totalOverhealthLost >= info.Damage)
                         break;
                 }
                 Player.statLife += totalOverhealthLost;
@@ -211,7 +210,6 @@ namespace GoldLeaf.Core.Mechanics.Overhealth
 
                 if (Player.HasItem(ItemType<DebugItem>()))
                     Main.NewText("Overhealth Lost: " + totalOverhealthLost, ColorHelper.Overhealth);
-                return;
             }
             RemoveEmptyPools();
             UpdateVisualOverhealth();
