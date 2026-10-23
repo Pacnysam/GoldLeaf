@@ -62,6 +62,7 @@ namespace GoldLeaf.Core
             .RegisterBoolSet(false);
     }
 
+    [ReinitializeDuringResizeArrays]
     public static partial class ProjectileSets
     {
         public static bool[] BeastFangTargetOnHit = ProjectileID.Sets.Factory.CreateNamedSet("BeastFangTargetOnHit")
@@ -84,6 +85,7 @@ namespace GoldLeaf.Core
             .RegisterBoolSet(true, ProjectileID.DD2LightningAuraT1, ProjectileID.DD2LightningAuraT2, ProjectileID.DD2LightningAuraT3/*, ProjectileType<JellyfishSentry>()*/);
     }
 
+    [ReinitializeDuringResizeArrays]
     public static class NPCSets
     {
         public static bool[] BossServant = NPCID.Sets.Factory.CreateNamedSet("BossServant")
@@ -99,6 +101,7 @@ namespace GoldLeaf.Core
             NPCID.Yeti, false, NPCID.ZombieMerman, false);
     }
 
+    [ReinitializeDuringResizeArrays]
     public static class BuffSets
     {
         public static bool[] Cooldown = BuffID.Sets.Factory.CreateNamedSet("Cooldown")

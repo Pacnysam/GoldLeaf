@@ -18,7 +18,6 @@ using GoldLeaf.Effects.Dusts;
 using Microsoft.Xna.Framework;
 using GoldLeaf.Core.Helpers;
 using GoldLeaf.Items.Sky.StarStacker;
-using GoldLeaf.Core.Mechanics.Overhealth;
 
 namespace GoldLeaf
 {
